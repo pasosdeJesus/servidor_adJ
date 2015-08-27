@@ -164,9 +164,10 @@ mysql> exit
 		  (1) Conectándose a un puerto TCP/IP donde responda
 		  MariaDB, (2) poniendo el socket de MariaDB en un directorio
 		  dentro de la jaula del servidor web o (3) Corriendo MariaDB 
-		  denro de la jaula
-		  <literal>chroot</literal>.  </para>
+		  dentro de la jaula
+		  <literal>chroot</literal> (ver <ulink url="http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot">http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot</ulink>).  </para>
 	  <para>
+		  Para correro MariaDB dentro de
 		  A continuación documentamos como 
 		  ubicar el socket de MariaDB dentro de la jaula
 		  del servidor web (/var/www/).
