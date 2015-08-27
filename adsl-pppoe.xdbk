@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sect1 id="adsl-pppoe">
+  <title>Conexión a Internet ADSL con pppoe</title>
+
+  <para>En Colombia los proveedores de acceso a Internet en planes
+	  de Banda Ancha típicamente emplean dispositivos y configuraciones
+	  que permiten conectar un computador como si fuera un equipo
+	  más en una red Ethernet.  En tal caso basta conocer la
+	  IP que tendrá el computador (o si se usará dhcp), la mascara de 
+	  red y la dirección de la puerta de enlace, y configurar como se 
+	  explica en la sección de redes LAN Ethernet (ver <xref linkend="lan-ethernet"></xref>.
+  </para>
+  <para>
+       Puede ocurrir que su proveedor emplee un módem que requiera
+       el protocolo <literal>pppoe</literal> (e.g con un Módems Marconi).   
+	En tal caso el proveedor puede brindar dos opciones para
+	  la configuración del módem:
+	<itemizedlist>
+		<listitem>
+			<para>Enrutador (router): Se conecta a un HUB o a un 
+				computador y 
+				hace NAT para todos los computadores cliente 
+				conectados.  En la LAN basta configurar la IP
+				de cada equipo para que estén en la misma subred
+				del enrutador y que cada uno emplee como 
+				compuerta/pasarela al módem.
+</para>
+		</listitem>
+		<listitem>
+			<para>Puente (bridge): En esta configuración se requiere
+			un servidor que haga NAT y enrute. </para>
+		</listitem>
+	</itemizedlist>
+</para>
+<para>
+	Si el módem ADSL se conecta con un cable Ethernet y el proveedor 
+	ofrece ppp,
+	no debe configurarse la tarjeta de red, sino una interfaz nueva tun0
+	Por esto en el archivo de configuración de la tarjeta digamos
+	<filename>/etc/hostname.rl0</filename> (reemplazar 
+	<literal>rl0</literal> con interfaz en su caso, examinar
+	posibles interfaces con <command>ifconfig</command>) deje:
+	<screen>
+up
+	</screen>
+
+	Edite <filename>/etc/ppp/ppp.conf</filename> (si no existe
+	cópielo de <filename>/etc/ppp/ppp.conf.smaple</filename>), para que quede
+	una sección como la siguiente:
+	<screen>
+pppoe:
+ set log Phase Chat LCP IPCP CCP tun command
+ set redial 15 0
+ set reconnect 15 10000
+ set device "!/usr/sbin/pppoe -i rl0"
+ set mtu max 1492
+ set mru max 1492
+ set speed sync
+ disable acfcomp protocomp
+ deny acfcomp
+ enable lqr
+ set lqrperiod 5
+ set cd 5
+ set dial
+ set login
+ set timeout 0
+ set authname "usuario"
+ set authkey "miclave"
+ add! default HISADDR
+ enable mssfixup
+	</screen>
+
+	Cambiando la interfaz de red, el usuario y la clave.
+	Podrá probar la conexión con:
+	<screen>
+		ppp -ddial -nat pppoe
+	</screen>
+
+	Si desea que en cada arranque se conecte automáticamente,
+	tal como se explica en 	
+	<ulink url="http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html ">http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html</ulink>
+	agregue a <filename>/etc/rc.local</filename>:
+	<screen>
+IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
+if [ -z "$IPADSL" ]; then
+	echo -n "Estableciendo conexion PPPoE DSL"; ppp -ddial pppoe
+	for i in 10 9 8 7 6 5 4 3 2 1 0; do 
+	    sleep 5             
+	    echo -n "$i"        
+	    IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
+	    if [ -z "$IPADSL" ]; then
+	        	break
+	    fi                  
+	done     
+fi
+
+	</screen>
+</para>
+
+  <sect2 id="referencias-pppoe">
+    <title>Referencias y lecturas recomendadas</title>
+
+    <para>
+      Página del manual <literal>pppoe</literal>.
+    </para>
+    <para>
+	http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html 
+    </para>
+  </sect2>
+</sect1>

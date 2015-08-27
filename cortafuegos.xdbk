@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sect1 id="cortafuegos">
+<title>Cortafuegos: filtrado y túneles</title>
+
+<para>Un cortafuegos permite filtrar tráfico que puede llegar o
+salir a un computador conectado a una red como Internet.
+</para>
+
+	<para>El siguiente ejemplo muestra parte del archivo 
+		<filename>/etc/pf.conf</filename> para que
+permita toda conexión que salga de la red privada hacia Internet, y
+para que bloquee toda conexión que llegue excepto tráfico TCP
+por los puertos para ssh (22) y dns (53), también permite llegada de tráfico 
+UDP por el puerto 53 y tráfico ICMP (para responder <command>ping</command>). 
+Suponemos
+que ya se han configurado las variables <literal>int_if</literal> y 
+<literal>ext_if</literal> con las
+interfaces de red interna y externa respectivamente:
+<screen>
+servicios_tcp="{ssh,domain}
+servicios_udp="{domain}"
+servicios_icmp="echoreq"
+
+block in log all
+pass out keep state
+
+pass quick on { lo $int_if }
+antispoof quick for { lo $int_if }
+
+pass in on $ext_if inet proto tcp from any to ($ext_if) \
+        port $servicios_tcp keep state
+pass in on $ext_if inet proto udp from any to ($ext_if) \
+	        port $servicios_udp keep state
+pass in inet proto icmp all icmp-type $servicios_icmp keep state
+</screen>
+</para>
+
+<para>
+	Si tiene un servidor interno (por ejemplo en una DMZ con
+	IP 192.168.2.2) y necesita que este preste servicios visibles al 
+	exterior como:  web (80), https (443), imaps (993), smtp (25) y
+	ldap (389), deberá establecer un túnel para cada uno de
+	estos puertos, de forma que las conexiones que lleguen al
+	cortafuegos sean redirigidas al servidor interno.
+	El siguiente ejemplo presenta como puede hacerse:
+	<screen>
+serv_ip="192.168.2.2"
+servicios_serv="{ldap,smtp,www,https,imaps, 389}"
+
+match in on $ext_if proto tcp from any to any port www rdr-to $serv_ip port www
+match in on $ext_if proto tcp from any to any port https rdr-to $serv_ip port https
+match in on $ext_if proto tcp from any to any port 993 rdr-to $serv_ip port 993
+match in on $ext_if proto tcp from any to any port smtp rdr-to $serv_ip port smtp
+match in on $ext_if proto tcp from any to any port 389 rdr-to $serv_ip port 389
+
+
+pass in on $ext_if proto tcp from any to $serv_ip port $servicios_serv \
+        flags S/SA synproxy state
+	</screen>
+</para>
+
+	<sect2 id="referencias-cortafuegos">
+	<title>Referencias y lecturas recomendadas</title>
+
+	<para>
+	Las siguientes páginas man:
+	<citerefentry><refentrytitle>pf</refentrytitle>
+	<manvolnum>4</manvolnum></citerefentry>,
+	<citerefentry><refentrytitle>pfctl</refentrytitle>
+	<manvolnum>4</manvolnum></citerefentry>.
+	</para>
+	<para>
+		Guía del usuario de PF 
+		<citation><link linkend="PF">PF</link></citation>.
+  </para>
+	</sect2>
+
+	</sect1>

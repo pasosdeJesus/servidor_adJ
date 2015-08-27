@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+    <para>
+     Las redes de computadores constan de medios de transmisión (e.g
+     cables), dispositivos (e.g tarjetas de red) y programas (e.g
+     pila <acronym>TCP/IP</acronym> del kernel) que permiten
+     transmitir información entre computadores. Pueden clasificarse de
+     acuerdo al tamaño (<acronym>WAN</acronym> de cobertura amplia
+     como un país, <acronym>MAN</acronym> de cobertura metropolitana o
+     <acronym>LAN</acronym> para edificios o salones) o de acuerdo a
+     la estructura de sus protocolos (e.g el módelo
+     <acronym>OSI</acronym> que consta de 7 capas de
+     protocolos: física, enlace, red, transporte, sesión, presentación
+     y aplicación), o de acuerdo a la distribución física de los
+     medios de transmisión y dispositivos (e.g estrella, bus).</para>
+      
+    <para><acronym>LAN</acronym> es acrónimo de <foreignphrase>Local Area
+      Network</foreignphrase>, con este término se hace referencia a
+     redes pequeñas (comúnmente menos de 100 computadores) cuyos
+     computadores están generalmente en un mismo espacio físico. Los
+     principales usos de una red LAN son:
+     <itemizedlist>
+      <listitem>
+       <para>
+	Compartir información distribuida en los discos duros o medios de
+	almacenamiento de cada computador.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+	Emplear recursos de un computador desde otro, o recursos 
+	conectados en red (por ejemplo una impresora).
+       </para>
+      </listitem>
+      <listitem>
+       <para> Compartir una conexión a Internet.  
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+	Conformar una Intranet con servicios como correo,
+	<foreignphrase>web</foreignphrase>, <acronym>ftp</acronym>,
+	<foreignphrase>news</foreignphrase>.
+       </para>
+      </listitem>
+     </itemizedlist> 
+   </para>
+
+    <indexterm role="pal">
+     <primary>LAN</primary>
+    </indexterm>
+    <para role="sig" id="linred.capas.LAN" userlevel="3">Este tipo de redes, es
+      apropiada para conectar pocos computadores (menos de 100) en un 
+      espacio relativamente pequeño.
+    </para>
+
+      <para>
+	Un protocolo <footnote><para>Para ampliar el significado de los 
+       términos técnicos introducidos en estas guías (como
+      <foreignphrase>protocol</foreignphrase>), se sugiere consultar el
+      diccionario FOLDOC 
+      <ulink url="http://foldoc.doc.ic.ac.uk/foldoc">http://foldoc.doc.ic.ac.uk/foldoc</ulink> </para> </footnote>
+        es una serie de reglas que indican como debe ocurrir una
+	comunicación entre dos computadores de una red; las reglas de un
+	protocolo son seguidas por programas que se ejecutan en los
+	computadores interconectados. Su computador puede tener procesos
+	activos que esperan conexiones de otros computadores o procesos 
+	para iniciar protocolos (por ejemplo con <command>ps -ax</command> 
+	es posible que vea: <literal>sshd</literal>, 
+	<literal>inetd</literal>, <literal>httpd</literal>, 
+	<literal>postgres</literal>).
+	A estos programas, que esperan conexiones, se les llama 
+	servicios<footnote><para>También suele llamárseles 
+			<foreignphrase>daemons</foreignphrase> pero 
+			como puede resultar ofensivo
+			para cristian@s, procuramos no 
+			emplear ese término, ver <ulink url="http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service"></ulink>.</para></footnote>.  
+	Usted puede iniciar un protocolo con otro computador empleando el 
+	programa cliente adecuado, por ejemplo el cliente 
+	<command>ping</command> con:
+	<screen>
+ping 127.0.0.1
+	</screen>
+	iniciará el protocolo de ping (<literal>ICMP</literal>, 
+	<literal>ECHO_REQUEST</literal>) con el computador con dirección 
+	IP 127.0.0.1 (su propio computador),  un programa de su computador
+	estará pendiente de conexiones de este tipo y seguirá el
+	protocolo<footnote><para>El programa que sigue este protocolo hace 
+	    parte de la implementación de IPv4 en el kernel.</para></footnote>.
+    </para>
+
+    <indexterm role="pal">
+     <primary>protocolo</primary>
+    </indexterm>
+    <para role="sig" id="linred.capas.protocolo" userlevel="3">Conjunto de reglas que
+      determinan como se realiza la comunicación entre computadores
+      conectados a una red.
+    </para>
+
+
+
+     <para>Internet es una red mundial de redes que están
+     interconectadas vía satélite, por cables submarinos, fibra óptica
+     y muchos otros medios de transmisión financiados por estados y
+     organizaciones.  Las heterogeneidad de las redes que interconecta
+     (e.g una <acronym>LAN</acronym> de un colegio con Linux, una
+     <acronym>LAN</acronym> de una ONG con OpenBSD, una
+     <acronym>WAN</acronym> de un banco con X.25) es superada con los
+     protocolos <acronym>TCP/IP</acronym>.  Para facilitar la conexión 
+     de una <acronym>LAN</acronym> a
+     Internet, en esta sección se presenta una introducción a los
+     aspectos de redes de Internet; los temas introducidos serán
+     tratados en detalle en otras secciones aplicándolos especialmente
+     al caso de redes Ethernet (ver <link
+     linkend="dispositivos-interconexion"> Dispositivos
+     para interconexión</link>, <link
+     linkend="direcciones-enrutamiento-transporte">Direcciones,
+     enrutamiento y transporte</link> y <link
+     linkend="protocolos-soporte-usuario">Protocolos de
+     soporte y de usuario</link>).
+    </para>
+   
+   <sect1 id="Internet">
+     <title>Internet</title>
+     <para>Hay muchas personas que aportan su trabajo (muchos de forma
+      voluntaria) para mantener Internet en funcionamiento, para
+      solucionar problemas que ocurren y para planear su futuro.
+      Quienes dirigen el rumbo de Internet están organizados en
+      comités encargados de diversas actividades:
+      <variablelist>
+       <varlistentry>
+	<term>IETF Internet Engineering Task Force</term>
+	<listitem>
+	 <para>
+	  Compuesta enteramente de voluntarios autoorganizados que
+	  colaboran en la ingeniería requerida para la evolución de
+	  Internet, es decir identifican problemas y proponen
+	  soluciones.  Quien lo desee puede participar, asistir a las
+	  reuniones, ayudar a dar forma o proponer estándares.  La
+	  <acronym>IETF</acronym> recibe borradores
+	  (<foreignphrase>Internet Draft</foreignphrase>) de autores
+	  que renuncian al control del protocolo que proponen. Tras
+	  refinamiento estos borradores pueden llegar a ser 
+	  <acronym>RFC</acronym>
+	  (<foreignphrase>Request for Comment</foreignphrase>) de uno
+	  de estos tipos: estándar propuesto, protocolo
+	  experimental, documento informativo o estándar
+	  histórico.  Un estándar propuesto puede después
+	  convertirse en borrador de estándar y en casos muy
+	  contados en estándar de Internet. 
+	 </para>
+	</listitem>
+       </varlistentry>
+  	  <varlistentry>
+	<term>ISOC Internet Society</term>
+	<listitem>
+	 <para>Organización sin ánimo de lucro, da soporte legal y
+	  financiero a otros grupos.
+	 </para>
+	</listitem>
+       </varlistentry>
+       <varlistentry>
+	<term>IESG Internet Engineering Steering Group</term>
+	<listitem>
+	 <para>Ratifica o corrige estándares propuestos por la
+	 <acronym>IETF</acronym>.
+	 </para>
+	</listitem>
+       </varlistentry>
+       <varlistentry>
+	<term>IAB Internet Architecture Board</term>
+	<listitem>
+	 <para>Planeación a largo plazo y coordinación entre las
+	  diversas áreas.
+	 </para>
+	</listitem>
+       </varlistentry>
+       <varlistentry>
+	<term>IANA Internet Assigned Numbers Authority</term>
+	<listitem>
+	 <para>Mantienen registros de diversos nombres y números
+	  asignados a organizaciones. Es financiado por
+	  <acronym>ICANN</acronym> (<foreignphrase>Internet
+	  Corporation for Assigned Names and Numbers</foreignphrase>).
+	 </para>
+	</listitem>
+       </varlistentry>
+      </variablelist>
+     </para>
+
+     <para>La interconexión de las redes conectadas a Internet y su
+      mantenimiento se basa en el protocolo <acronym
+      role="protocol">IP</acronym>, que asigna a cada red y a cada
+      computador un número único (dirección <acronym
+      role="protocol">IP</acronym>) que permite identificarlo y
+      enviarle información.
+    </para>
+
+     <para>La asignación de direcciones IP<footnote><para> Puede verse
+	más sobre asignación de IPs en el <acronym>RFC</acronym> 2050
+	y sobre asignación de direcciones in redes
+	<acronym role="protocol">IP</acronym> privadas en 
+	<acronym>RFC</acronym> 1918.
+	</para>
+	</footnote>
+      es manejada por <acronym>IANA</acronym>, que a su vez la ha
+      delegado a registros en diversas regiones.  Las regiones de
+      América y Africa debajo del Sahara son manejadas por el registro
+      <acronym>ARIN</acronym> (<foreignphrase>American Registry for
+      Internet Numbers</foreignphrase>), que recibe solicitudes para
+      asignar bloques a proveedores de servicio a Internet
+      (<acronym>ISP</acronym>), estos proveedores deben contar con la
+      infraestructura para conectar sus computadores a Internet (e.g
+      con cables submarinos, vía satélite) y a su vez ofrecen bloques
+      de direcciones y conexión a otros proveedores o a
+      usuarios.</para>
+
+     <para>Dada que la comunicación de dos computadores es un proceso
+      complejo (aún más dada la variedad de redes conectadas a
+      Internet), además de una basta infraestructura física, Internet
+      se basa en varios protocolos que siguen todos los computadores y
+      enrutadores conectados.  Algunos de estos protocolos dependen de
+      otros, dando lugar a varias capas de protocolos: aplicación,
+      transporte, Internet, enlace<footnote><para>El
+      <acronym>RFC</acronym> 1122 presenta las capas de una red
+      <acronym>TCP/IP</acronym></para></footnote>.  El siguiente
+      diagrama presenta algunos protocolos en las diversas capas de
+      una red <acronym>TCP/IP</acronym> sobre una red física Ethernet
+      o sobre una conexión con modem:</para>
+
+
+<screen>
+Capa de aplicación:
+     Protocolos de usuario             FTP Telnet ssh   http   SMTP ...
+                                        |     |     |      |    | 
+     Protocolos de soporte    DNS       |     |     |      |    | 
+                             |   \      |     |     |      |    |
+Capa de transporte           UDP   TCP --------------------------
+                              \  /
+Capa de Internet (red):      IP -  ICMP                  
+                             ___|___
+                            /       \
+Capa de enlace:	          ARP        PPP
+                           |          |
+Capa física:	       Ethernet     Modem
+                        |              | 
+                     Par trenzado    Línea telef.
+</screen>
+    </sect1>
+
+    <sect1><title>Capas de una red <acronym>TCP/IP</acronym> sobre
+    algunos medios físicos</title>
+
+     <sect2>
+      <title>Capa física</title>
+  
+      <indexterm role="pal">
+     <primary>física</primary>
+    </indexterm>
+    <para role="sig" id="linred.capas.fisica" userlevel="2">Esta capa de red se refiere
+      a conexiones eléctrica y mecánicas de la red.  Por ejemplo
+      codificiación/decodificación de información y arbitramento en caso
+      de coliciones.
+    </para>
+
+
+      <para>Se refiere a las conexiones eléctricas y mecánicas de la
+       red.  Ejemplos de protocolos a este nivel son: Ethernet,
+       Inalámbrico <acronym>IEEE</acronym> 802.11, Modem y fibra
+       óptica.  La información por transmitir se codifica en últimas
+       como una señal electríca que debe transmitirse por cables o
+       como una señal electromagnética (luz, ondas).  En medios de
+       transmisión compartidos por más computadores (Ethernet, fibra
+       óptica, aire), el protocolo de este nivel debe tener en cuenta:
+       codificación/decodificación de información del bus al medio de
+       transmisión y arbitrar en caso de colisión de datos.  Este tipo
+       de protocolos es implementado por hardware, comúnmente por una
+       tarjeta o dispositivo dedicado que se debe conectar al bus de
+       cada computador. Las tarjetas de los computadores que se
+       comunican se conectan empleando el medio de transmisión. OpenBSD,
+       a nivel físico soporta dispositivos ethernet, fddi (fibra óptica) y
+       conexiones inalámbricas. En
+       caso particular de Ethernet, existen en el momento de este
+       escrito estándares para 10Mbps, 100Mbps, 1Gbps y 10Gbps, que
+       se emplean en topología de estrella (i.e. todos los
+       computadores conectados por cables de pares trenzados a un
+       concentrador), puede
+       configurarse como <foreignphrase>Half-duplex</foreignphrase> o
+       como <foreignphrase>Full-Duplex</foreignphrase>. Describiremos
+       el uso del esquema más popular y económico en este momento:
+       100Mbps, Full-duplex con cable de pares trenzados
+       <footnote>
+	<para>El estándar que define este esquema es
+	 <acronym>IEEE</acronym> 802.3, que se basa en el uso de un
+	 sólo medio de transmisión compartido por todos los
+	 dispositivos en el que sólo trasmite un sólo dispositivo
+	 durante un tiempo para evitar colisiones, se elige el
+	 siguiente dispositivo por transmitir con el algoritmo
+	 <acronym>CSMA/CD</acronym> --cuando un dispositivo detecta
+	 que la línea está libre transmite parte de la información si
+	 detecta colisión da oportunidad de transmisión a otros un
+	 intervalo aleatorio de tiempo.</para>
+       </footnote>.  Cada tarjeta Ethernet tiene una dirección única
+	 (llamada dirección <acronym>MAC</acronym>), que en una
+	 transmisión permite indicar tarjeta fuente y tarjeta destino
+	 (la dirección <acronym>MAC</acronym> de ambos es transmitida
+	 también).
+      </para>
+     </sect2>
+     
+     <sect2>
+      <title>Capa de enlace</title>
+
+      <indexterm role="pal">
+     <primary>ARP</primary>
+    </indexterm>
+    <para role="sig" id="linred.capas.ARP" userlevel="2">En el caso de redes 
+      Ethernet la capa de enlace corresponde al protocolo ...  Este
+      protocolo permite traducir direcciones IP a direcciones MAC.
+    </para>
+
+
+      <para>Los protocolos de esta capa permiten interconectar la capa
+       de internet (<acronym role="protocol">IP</acronym>) con la red
+       que se use.  En el caso de una red Ethernet se trata del
+       protocolo ARP<footnote><para><acronym>ARP</acronym> se define
+       en el <acronym>RFC</acronym> 826</para></footnote>,
+       y que se encarga de traducir
+       direcciones <acronym role="protocol">IP</acronym> a direcciones
+       <acronym>MAC</acronym>
+       <footnote><para> Un computador envía un
+	 mensaje a todos los demás de la red
+	 (<foreignphrase>broadcast</foreignphrase> que es posible en
+	 Ethernet), solicitando la dirección <acronym>MAC</acronym> de
+       una dirección <acronym role="protocol">IP</acronym>, el
+	 dispositivo con esa MAC responde enviando su dirección
+       <acronym>MAC</acronym> al dispositivo que hizo la solicitud.
+	</para></footnote>.
+      </para>
+
+      <para>Cada vez que un computador de una <acronym>LAN</acronym>
+       identifica una dirección <acronym role="protocol">IP</acronym>
+       de otro computador conectado a la <acronym>LAN</acronym> y su
+       correspondiente dirección <acronym>ARP</acronym>, almacena la
+       información en una tabla (se borra automáticamente después de
+       algunos minutos o manualmente por ejemplo con 
+       <literal>sudo arp -d 192.168.2.2</literal>).
+       La tabla puede consultarse con <literal>arp -a</literal>.</para>
+
+      <para>Para monitorear una red Ethernet y detectar nuevos
+       computadores que se conecten, puede emplearse el programa
+       <application>arpwatch</application> (paquete
+       <literal>arpwatch</literal>) que cada vez que detecta cambios
+       envía un correo a la cuenta root.</para>
+
+      <para>En el caso de una conexión por modem el protocolo es
+       <acronym>PPP</acronym><footnote><para>PPP se describe en el
+	 <acronym>RFC</acronym> 1661.</para></footnote>, que se encarga
+       de establecer, terminar y verificar la conexión.  Durante la
+	 conexión autentica el computador que se conecta ante el
+       servidor (bien con el protocolo <acronym>PAP</acronym> o con
+	 <acronym>CHAP</acronym>) y durante la operación prepara los
+       paquetes enviados por otros protocolos (como
+       <acronym role="protocol">IP</acronym>) para transmitirlos por modem.
+      </para>
+     </sect2>
+
+     <sect2>
+      <title>Capa de internet</title>
+
+    <indexterm role="pal">
+     <primary>IP</primary>
+    </indexterm>
+    <para role="sig" id="linred.capas.IP" userlevel="2">Este protocolo fragmenta
+      y envia información empleando la capa física.  Cada computador
+      se identifica con un número de 4 bytes (en la versión 4 de este 
+      protocolo).
+    </para>
+
+
+      <para>En esta capa la información es fragmentada y envíada
+       empleando el protocolo de la capa física. Los protocolos de
+       esta capa deben tener en cuenta la retransmisión de la
+       información en caso de error al enviar y el verificar
+       información recibida. En esta capa está el
+       <foreignphrase>Internet Protocol</foreignphrase> (<acronym
+       role="protocol">IP</acronym>) que es un protocolo diseñado para
+       Internet y del cual hay dos versiones: <acronym>IPv4</acronym>
+       e <acronym>IPv6</acronym>.
+       Describiremos la versión 4
+
+       <footnote> <para>El protocolo <acronym>IPv4</acronym> está
+	 descrito en el <acronym>RFC</acronym> 791, aunque puede verse
+	 una descripción en conjunto con otros protocolos en el
+	 <acronym>RFC</acronym> 1122</para> 
+       </footnote>
+       (la versión 6 fue diseñada para soportar más computadores
+       conectados a Internet y se espera que pronto se use
+       ampliamente
+       <footnote>
+	       <para>OpenBSD tiene soporte para IPv6</para>
+       </footnote>).
+      </para>
+      
+      <para>Este protocolo permite la transmisión de paquetes
+       (llamados datagramas) en redes donde cada computador
+       interconectado se identifica con una dirección única. Tales
+       direcciones están diseñadas para interconectar varias redes,
+       identificar los computadores que pertenecen a una red
+       (empleando una máscara de red que indica que parte de la
+       dirección del computador corresponde a la dirección de la red)
+       y facilitar el enrutamiento.  Si el medio de transmisión lo
+       requiere, el protocolo <acronym role="protocol">IP</acronym> se
+       encarga de la división de los datagramas en paquetes más
+       pequeños para su tranmisión y de la posterior reagrupación
+       (fragmentación), el tamaño máximo que un paquete puede tener
+       para un protocolo de nivel físico se llama
+       <acronym>MTU</acronym> (<foreignphrase>Maximal Transfer
+       Unit</foreignphrase>), en el caso de Ethernet es 1500
+       bytes.</para>
+       
+      <para>Cada datagrama por transmitir es pasado a la capa de
+       <acronym role="protocol">IP</acronym> por otro protocolo de una
+       capa superior (e.g <acronym>TCP</acronym>) junto con dirección
+       destino, <acronym role="protocol">IP</acronym> mantiene una
+       tabla de enrutamiento que asocia direcciones destino con
+       compuertas (computadores intermediarios en inglés
+       <foreignphrase>gateways</foreignphrase>). Así que envía el
+       datagrama empleando el nível físico a la dirección de la
+       compuerta que mantenga en su tabla de enrutamiento.  La tabla
+       de enrutamiento puede ser modificada manualmente (con 
+       <command>route show</command>) o puede ser modificada
+       automáticamente cuando una compuerta envía un mensaje indicando
+       la dirección de otra compuerta más apropiada para llegar a un
+       dirección.  Hay siempre una compuerta por defecto a la que se
+       envían paquetes que <acronym role="protocol">IP</acronym> no
+       sepa como enrutar. </para>
+      <indexterm role="pal">
+     <primary>route</primary>
+    </indexterm>
+    <para role="sig" id="linred.capas.route" userlevel="4">Con este 
+	    programa puede modificarse la tabla de enrutamiento del 
+	    protocolo IP.</para>
+
+
+      <para>IP no es protocolo fiable, porque no asegura que un paquete
+       llegue a su destino y no realiza retransmisiones. Aunque para informar
+       algunas situaciones anomalas emplea el protocolo
+       <acronym>ICMP</acronym>
+       <footnote>
+	<para>ICMP Internet Control Message Protocol, se describe en
+	 el RFC792, permite enviar mensajes de error (e.g dirección
+	 inalcanzable, tiempo excedido) y algunos mensajes para hacer
+	 consultas (e.g eco, estampilla de
+	 tiempo).</para>
+       </footnote>.</para>
+   
+       <indexterm role="pal">
+     <primary>ICMP</primary>
+    </indexterm>
+    <para role="sig" id="linred.capas.ICMP" userlevel="2">Este protocolo es empleado
+      por IP para transmitir mensajes de error y para realizar algunas
+      consultas para verificar el funcionamiento de una red o medir
+      (e.g eco, estampilla de tiempo).
+    </para>
+
+      
+      <para>OpenBSD cuenta con una excelente implementación
+	      de <acronym>IPv4</acronym> con posibilidad de 
+	      filtrar, redirigir, traducir direcciones, balancear
+	      carga y muchas otras opciones que se configuran de
+	      forma sencilla con PF.  Además implementa características
+	      no estándar como IPsec para transmisión encriptada y
+	      IPcomp para comprimir.
+      </para>
+     </sect2>
+
+     <sect2>
+      <title>Capa de transporte</title>
+
+   <indexterm role="pal">
+     <primary>TCP</primary>
+    </indexterm>
+    <para role="sig" id="linred.capas.TCP" userlevel="3">En Internet este protocolo
+      está en la capa de enlace, se encarga de procurar una conexión
+      continua,  libre de errores.
+    </para>
+
+ 
+      <para>Los protocolos de esta capa asegura una conexión continua
+       y posiblemente libre de errores entre emisor y receptor.  Un
+       protocolo de esta capa debe tener en cuenta mantener los
+       paquetes en orden y asegurar que están completos.  Esto se
+       requiere porque el nivel de red puede enrutar diversos paquetes
+       de forma diferente.  En esta capa hay dos 
+       protocolos: <acronym
+       role="protocol">TCP</acronym><footnote><para><acronym
+       role="protocol">TCP</acronym> se describe en el
+       <acronym>RFC</acronym> 793 y se complementa y corrige en el
+       <acronym>RFC</acronym> 1122</para></footnote> y
+   <acronym>UDP</acronym><footnote><para><acronym>UDP</acronym> está descrito 
+       en el <acronym>RFC</acronym> 768 y corregido en el
+       <acronym>RFC</acronym> 1122</para></footnote>.  El primero es
+       fiable, asegura que la transmisión enviada sea recibida,
+       <acronym role="protocol">UDP</acronym> por su parte no busca
+       confirmar que la información llegue a su destino (aunque
+       permite hacer difusión<footnote><para>Del inglés <foreignphrase>broadcast</foreignphrase></para></footnote> y multidifusión<footnote><para>Del
+		       inglés <foreignphrase>multicast</foreignphrase></para></footnote> mientras 
+       que <acronym role="protocol">TCP</acronym> no).  Ambos protocolos emplean
+       puertos para permitir más de una conexión con uno o más
+       computadores, un puerto se identifica con un número entre 0 y
+       65536, los primeros 1024 números sólo pueden ser usados por
+       servidores iniciados desde la cuenta root, los demás pueden ser
+       usados por todos los usuarios.
+       </para>
+    
+       <indexterm role="pal">
+	 <primary><filename>/proc/net/tcp</filename></primary>
+    </indexterm>
+    <para role="sig" id="linred.capas.proc-net-tcp" userlevel="1">En este archivo pueden
+      examinarse conexiones a puertos TCP.
+    </para>
+
+       <indexterm role="pal">
+	       <primary><command>sudo pfctl -sa</command></primary>
+    </indexterm>
+    <para role="sig" id="linred.capas.proc-net-udp" userlevel="1">Permite examinar entre otras, conexiones a puertos TCP y UDP.
+    </para>
+
+
+
+      <para>Puede examinar información sobre conexiones a puertos
+       <acronym role="protocol">TCP</acronym> y 
+	 <acronym
+		 role="protocol">UDP</acronym> con 
+	 <command>sudo pfctl -sa</command>
+      </para>
+     </sect2>
+      
+
+     <sect2>
+      <title>Capa de aplicación</title>
+
+      <para>Consta de protocolos empleados por aplicaciones con
+       propósitos específicos.  Emplean los protocolos de la capa de
+       transporte para establecer comunicación.  Los protocolos de
+       esta capa pueden dividirse a su vez en protocolos de usuario y
+       protocolos de soporte.  Los primeros son para programas
+       empleados directamente por usuarios y los segundos son
+       empleados por el sistema operativo o por otros
+       protocolos.</para>
+
+
+      <sect3>
+       <title>Protocolos de usuario</title>
+       <variablelist>
+	<varlistentry>
+	 <term>Telnet</term>
+	 <listitem>
+	  <para>
+	   Telnet está definido en el <acronym>RFC</acronym> 854 y
+	   complementado en el <acronym>RFC</acronym> 1123. Permite la
+	   operación remota de otro computador de forma insegura
+	   pues las claves se transmiten planas (ssh es un remplazo seguro, ver
+	   <xref linkend="servidor-ssh"></xref>),
+	   además
+	   puede usarse para interactuar con otros protocolos
+	   (por ejemplo puede interactuar con el protocolo de
+	   correo SMTP de su propio computador ---puerto 25---
+	   con <command>telnet localhost 25</command>).</para>
+	 </listitem>
+	</varlistentry>
+	
+	<varlistentry>
+	 <term>(<foreignphrase>File Transfer Protocol</foreignphrase>)
+	   <acronym role="protocol">FTP</acronym>
+	 </term>
+	 <listitem>
+
+	  <para><acronym role="protocol">FTP</acronym> está definido
+	   en el <acronym>RFC</acronym> 959 y complementado en el
+	   <acronym>RFC</acronym> 1123, permite transmisión de
+	   archivos de manera insegura pues las claves se transmiten
+	   planas (ver <xref linkend="servidor-ftp"></xref>).
+	  </para>
+	 </listitem>
+	</varlistentry>
+
+	<varlistentry>
+	 <term><acronym role="protocol">TFPT</acronym></term>
+	 <listitem>
+	  <para> Está definido en el <acronym>RFC</acronym> 1350
+	   (<foreignphrase>Trivial File Transfer
+	   Protocol</foreignphrase>), es análogo a <acronym
+	   role="protocol">FTP</acronym> pues permite transmitir
+	   archivos, aunque es mucho más simple, es apropiado para
+	   transmitir el sistema operativo a computadores sin disco
+	   duro que arrancan por red.</para>
+	 </listitem>
+	</varlistentry>
+	      
+	<varlistentry>
+	 <term><acronym role="protocol">SMTP</acronym></term>
+	 <listitem>
+
+	  <para><acronym role="protocol">SMTP</acronym> se definió en
+	   el <acronym>RFC</acronym> 822 y se complementó en el RFC
+	   1123 (<foreignphrase>Simple Mail Transfer
+	   Protocol</foreignphrase>) que especifica como se realiza la
+   transmisión de correo electrónico (ver 
+   <xref linkend="servicios-correo"></xref>).</para>
+	       </listitem>
+	</varlistentry>
+       </variablelist>
+      </sect3>
+
+
+      <sect3>
+       <title>Protocolos de soporte</title>
+       
+       <variablelist>
+	<varlistentry>
+	 <term>DNS</term>
+	 <listitem>
+	  <para>Definido en los <acronym>RFC</acronym> 1034 y 1035 y
+	   complementado en el <acronym>RFC</acronym> 1123.  Es empleado
+	   para dar nombres descriptivos a direcciones <acronym
+	   role="protocol">IP</acronym> (e.g structio.sourceforge.net
+	   es el nombre <acronym>DNS</acronym> de la dirección
+	   216.34.181.96).</para>
+	 </listitem>
+	</varlistentry>
+
+	<varlistentry>
+	 <term>BOOTP</term>
+	 <listitem>
+		 <para>Empleado por un computador en el que no ha iniciado 
+			 el sistema operativo para
+			 solicitar su dirección <acronym>IP</acronym> a un servidor
+		 de este protocolo.</para>
+	 </listitem>
+	</varlistentry>
+	<varlistentry>
+	 <term>SMMP</term>
+	 <listitem>
+	   <para>Empleado para monitorear uso de una red.</para>
+	 </listitem>
+	</varlistentry>
+       </variablelist>
+      </sect3>
+     </sect2>
+    </sect1>
+
+   <sect1 id="lecturas-redes-protocolos-internet">
+	   <title>Lecturas recomendadas</title> 
+    <itemizedlist>
+     <listitem>
+      <para>Puede consultar más sobre el <acronym>IETF</acronym> y
+	      otras organizaciones que mantienen Internet en 
+	      <xref linkend="taoietf"></xref> y en
+	      <xref linkend="osietf"></xref>.
+      </para>
+     </listitem>
+     
+     <listitem>
+	     <para>Puede consultar los <acronym>RFC</acronym> en
+		     <xref linkend="rfceditor"></xref>.
+		     También puede consultar versiones en castellano en 
+		     <xref linkend="rfces"></xref>
+      </para>
+     </listitem>
+     <listitem>
+	     <para>Páginas del manual <citerefentry><refentrytitle>netintro</refentrytitle><manvolnum>4</manvolnum></citerefentry>, 
+		     <citerefentry><refentrytitle>ip</refentrytitle><manvolnum>4</manvolnum></citerefentry>,
+		     <citerefentry><refentrytitle>inet</refentrytitle><manvolnum>4</manvolnum></citerefentry>, 
+		     <citerefentry><refentrytitle>ip</refentrytitle><manvolnum>4</manvolnum></citerefentry>
+      </para>
+     </listitem>
+    </itemizedlist>
+   
+   </sect1>
+  
+

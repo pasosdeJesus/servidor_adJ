@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sect1 id="servidor-ntp">
+  <title>Servidor <command>ntp</command></title>
+  <para>El protocolo NTP permite mantener sincronizado el reloj de
+    un computador con otro donde corra un servidor NTP. </para>
+  <para>Hay varios servidores en Internet que proveen este servicio
+    públicamente, algunos están conectados a relojes de alta precisión</para>
+  <para>OpenBSD (dese la versión 3.6) incluye una implementación del 
+	  cliente y servidor de este protocolo llamada OpenNTPD.
+	  Para configurar un cliente basta editar 
+	  <filename>/etc/rc.conf.local</filename> para agregar:
+<screen>
+ntpd_flags=""
+</screen>
+lo cual empleará el archivo de configuración <filename>/etc/ntpd.conf</filename>
+que por defecto especifica:
+<screen>
+servers pool.ntp.org
+</screen>
+con lo cual actua como cliente empleando aleatoriamente alguno de los
+servidores de NTP disponibles mundialmente en <literal>pool.ntp.org</literal>.
+   </para>
+
+  <sect2 id="referencias-ntp">
+    <title>Referencias y lecturas recomendadas</title>
+
+    <para>
+      Documentación disponible en <ulink url="http://www.openntpd.org"/>.
+    </para>
+  </sect2>
+</sect1>

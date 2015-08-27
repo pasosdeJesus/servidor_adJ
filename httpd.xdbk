@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sect2 id="openbsd-httpd">
+	<title>OpenBSD httpd</title>
+	<para>
+		A continuación describimos algunos casos de uso 
+		del nuevo <literal>httpd</literal> que soporta  
+		contenido estático, FastCGI sin reescritura y SSL.  
+		Sus fuentes se basan en las de <literal>relayd</literal>  que fue introducido y madurado en OpenBSD desde la versión 4.1 (inicialmente llamado <literal>hoststated</literal>).
+	</para>
+
+
+	<sect3 id="httpd-min">
+		<title>Configuración mínima</title>	
+		<para>
+			En el archivo <literal>/etc/rc.conf.local</literal> agregue:
+			<screen>
+	httpd_flags=""
+			</screen>
+			y en adJ agregue <literal>httpd</literal> a la variable <literal>pkg_scripts</literal>.
+		</para>
+
+		<para>
+			Se configura en el archivo <literal>/etc/httpd.conf</literal> cuya sintaxis tiene algunas similitudes con la de <literal>nginx</literal> y con la de <literal>relayd</literal>.  Puede constar de 4 secciones: macros, configuraciones globales, uno o más servidores y tipos.
+		</para>
+
+		<para>
+			La sintaxis de la sección de tipos es idéntica a la de <literal>nginx</literal> y como puede usarse <literal>include</literal> para incluir otro archivo de configuración, el siguiente es un ejemplo mínimo (incluyendo el macro <literal>ext_ip</literal>):
+			<screen>
+	ext_ip="200.201.202.203"
+	server "default" {
+		listen on $ext_ip port 80
+	}
+	include "/etc/nginx/mime.types"
+			</screen>
+		</para>
+		<para>
+			Podría probarlo iniciando en modo de depuración con:
+			<screen>
+	sudo httpd -vn
+			</screen>
+
+			Y examinando con un navegador la URL 
+			<literal>http://200.201.202.203</literal>, con lo que 
+			vería el archivo <literal>/var/www/htdocs/index.html</literal> 
+			y notaría que:
+			<itemizedlist>
+				<listitem>
+					<para>
+						Debido a la opción <literal>listen on $ext_ip port 80</literal> serviría por el puerto 80 de 200.201.202.203.  En lugar de $ext_ip puede usar una interfaz o incluso un grupo como <literal>egress</literal> para servir en todas las interfaces conectadas a Internet.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Por defecto pondría una jaula chroot en <literal>/var/www</literal>.  Esto podría modificarse en la sección de configuración, antes del primer <literal>server</literal> y después del macro con la opción <literal>chroot <emphasis>directorio</emphasis></literal>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Iniciaría 3 procesos para servir páginas.  Esto puede modificarse en la sección de configuración con la opción <literal>prefork <emphasis>numero</emphasis></literal>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Que serviría los archivos de <literal>/var/www/htdocs</literal>.  Esto puede modificarse  agregando la opción <literal>root <emphasis>directorio_relativo_a_jaula</emphasis></literal> dentro de la sección <literal>server</literal>.
+					</para>
+				</listitem>
+			</itemizedlist>
+		</para>
+
+	</sect3>
+
+	<sect3 id="httpd-ssl">
+		<title>Servidor con cifrado</title>
+
+		<para>
+			Al ejemplo de configuración mínima anterior bastaría agregarle ssl a la opción listen e indicar el puerto 443, que es el asignado por defecto para HTTPS:
+			<screen>
+	ext_ip="200.201.202.203"
+	server "default" {
+		listen on $ext_ip ssl port 443
+	}
+	include "/etc/nginx/mime.types"
+</screen>
+		</para>
+
+		<para>
+			El certificado que emplea por defecto es el par <literal>/etc/ssl/server.crt</literal> y <literal>/etc/ssl/private/server.key</literal>.  Podría especificarse otro par con las opciones <literal>ssl certificate <emphasis>archivo</emphasis></literal> y <literal>ssl key <emphasis>archivo</emphasis></literal> dentro de la sección server.
+		</para>
+
+	</sect3>
+
+	<sect3 id="httpd-dom">
+		<title>Dominios virtuales</title>
+		<para>
+			Si la misma IP debe servir diversos dominios, cree una sección <literal>server</literal> por cada dominio con el nombre del dominio y emplee la misma opcion <literal>listen</literal> para todos y si es el caso directorios raices diferentes. 
+		</para>
+		<para>
+			Si se configuraran los dominios www.miescuela.edu.co y www.otrodominio.co apuntando a la misma IP de los ejemplos anteriores y tiene las páginas de cada dominio en <literal>/var/www/htdocs/miescuela</literal> y <literal>/var/www/htdocs/otrodominio</literal>:
+
+			<screen>
+	ext_ip="200.201.202.203"
+	server "www.miescuela.edu.co" {
+		listen on $ext_ip port 80
+		root /htdocs/miescuela
+	}
+
+	server "www.otrodominio.co" {
+		listen on $ext_ip port 80
+		root /htdocs/otrodominio
+	}
+
+	include "/etc/nginx/mime.types"
+</screen>
+		</para>
+	</sect3>
+
+	<sect3 id="httpd-php">
+		<title>Sitio con PHP</title>
+
+		<para>
+			Es posible que sirva contenidos PHP usando php-fpm como FastCGI.  Sin embargo debe asegurar haber aplicado los parches más recientes para 5.6 (ya incluidos en binarios de adJ) y tener en cuenta que no soporta, y posiblemente no soportará reescritura de URLs.
+		</para>
+		<para>
+			Una configuración mínima para SIVeL 1.2 que opere en 192.168.1.1, con archivos en <literal>/var/www/htdcos/sivel</literal> y con SSL es:
+
+			<screen>
+	server "192.168.1.1" {
+		listen on egress ssl port 443
+
+		location "*.php" {
+			fastcgi socket "/run/php-fpm.sock"
+		}
+		root "/htdocs/sivel/"
+		include "/etc/nginx/mime.types"
+	}
+</screen>
+		</para>
+		<para>
+
+			Operará bien con la configuración por defecto de php-fpm, que puede instalar con:
+			<screen>
+	sudo pkg_add php-fpm
+	sudo cp /usr/local/share/examples/php-5.4/php-fpm.conf /etc/
+			</screen>
+			e iniciar con:
+			<screen>
+	sudo sh /etc/rc.d/php-fpm start
+			</screen>
+			o mejor en cada arranque de su sistema editando <literal>/etc/rc.conf.local</literal>
+			y agregando
+			<itemizedlist>
+				<listitem>
+					<para>
+						Agregar <literal>php_fpm_flags=""</literal>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						A la variable <literal>pkg_scripts</literal> añadir <literal>php-fpm</literal>
+					</para>
+				</listitem>
+			</itemizedlist>
+		</para>
+
+			</sect3>
+
+			<sect3 id="httpd-otros">
+				<title>Otros detalles de uso</title>
+				<para>
+					Si requiere volve a leer archivo de configuración, en lugar de reiniciar httpd puede ejecutar:
+					<screen>
+						pkill -HUP httpd
+					</screen>
+				</para>
+
+				<para>
+					El formato de las bitácoras por defecto es similar al de <literal>nginx</literal>
+				</para>
+			</sect3>
+
+			<!--!! 6. Referencias
+
+			* {1} Página man de httpd.
+			* {2} http://stackoverflow.com/questions/28023465/openbsd-httpd-php-execution
+			* {3} http://marc.info/?l=openbsd-misc&m=142016708910990&w=2
+			* {4} http://sivel.sf.net -->
+
+		</sect2>
+

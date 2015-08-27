@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sect1 id="mariadb">
+	<title>MariaDB</title>
+	<para>A partir de OpenBSD/adJ 5.7 remplaza a MySQL.  Según 
+		<ulink url="https://es.wikipedia.org/wiki/MariaDB">https://es.wikipedia.org/wiki/MariaDB</ulink> MariaDB fue
+		iniciada por el fundador de MySQL después de que Oracle 
+		compró Sun y MySQL, pues consideraba que Oracle había
+		comprado MySQL para reducir competencia a sus bases 
+		de datos.</para>
+  <para>Debe instalar los paquetes &p-mariadb-client; y
+	  &p-mariadb-server;. Aunque el nombre de los paquetes cambia
+	  los comandos para operarla siguen siendo los mismos.
+	  Tras instalar el servidor debe
+      ejecutar <command>mysql_install_db</command>.  
+  </para>
+  <para>
+      Inicialice el directorio donde estarán las bases de datos con
+      <screen>
+sudo /usr/local/bin/mysql_install_db
+      </screen>
+</para>
+  <para>
+    Después agregue a <filename>/etc/login.conf</filename>:
+    <screen>
+mysql:\
+	:openfiles-cur=2048:\
+	:openfiles-max=4096:\
+	:tc=daemon:
+</screen>
+que creará una clase de login ---tenga en cuenta no dejar espacios al 
+final de cada línea y que desde la segundan comiencen con el caracter
+tabulador. A continuación regenere el archivo binario  
+<filename>/etc/login.conf.db</filename> con
+<screen>
+cd /etc
+sudo cap_mkdb /etc/login.conf 
+</screen>
+A continuación agregue <literal>mysqld</literal> a 
+<literal>pkg_scripts</literal> en <filename>/etc/rc.conf.local</filename>.
+A continuación lance el servidor con:
+<screen>
+	sudo sh /etc/rc.d/mysqld start
+</screen>
+Los errores quedarán en <filename>/var/mysql/<replaceable>host</replaceable>.err</filename>.
+</para>
+<para>
+    Después puede establecer una clave para el usuario
+    <literal>root</literal> de MySQL cuando ingresa desde
+    <literal>localhost</literal> con:
+    <screen>
+/usr/local/bin/mysqladmin -u root  password 'nueva-clave' 
+/usr/local/bin/mysqladmin -u root -pnueva-clave -h &ESERV; password 'nueva-clave'
+    </screen>
+    Después puede iniciar una sesión, crear bases de datos, crear usuarios
+    y otorgarles privilegios.
+    </para>
+   <para>Para apagar el servidor mysql:
+    <screen>
+mysqladmin -u root -p shutdown
+    </screen>
+  </para>
+ 
+ <para>Si desea usar <application>mysql</application> con
+    <application>php</application>, instale además de los paquetes
+    básicos de php
+    (<filename>php-core-<replaceable>v</replaceable></filename> y
+    <filename>php-mysql-<replaceable>v</replaceable></filename>)
+  </para>
+   
+  <sect2 id="uso-mariadb">
+    <title>Uso básico</title>
+    <para>
+    <screen>
+mysql -u root -p 
+    </screen>
+    puede crear la base de datos <literal>datos</literal>, y un
+    usuario <literal>erfurt</literal> que la pueda administrar (i.e
+		    con todos los privilegios excepto GRANT) y con clave
+    <literal>vsewf</literal> usando:
+    <screen>
+CREATE DATABASE datos;
+GRANT ALL PRIVILEGES ON datos.* TO erfurt@localhost IDENTIFIED BY 'vsewf';
+    </screen>
+    </para>
+    <para>
+    Algunas operaciones usuales del administrador son:
+    <screen>
+SHOW DATABASES;
+    </screen>
+    que muestra todas las bases disponibles.
+    <screen>
+USE base1;
+    </screen>
+    que permite usar la base base1.
+    <screen>
+SHOW TABLES;
+    </screen>
+    que muestra todas las tablas de la base activa.
+    <screen>
+DESCRIBE tabla;
+SHOW CREATE TABLE tabla;
+    </screen>
+    que presentan estructura de la tabla.
+
+    </para>
+    </sect2>
+    
+  <sect2 id="clave-mysql">
+	  <title>Cambio de la clave de administrador</title>
+  <para>Si olvida la clave de root después de haberla establecido 
+    puede cambiarla entrando a la cuenta de administrador:
+    <itemizedlist>
+      <listitem>
+	<para>Detenga el servidor.</para>
+      </listitem>
+      <listitem>
+	<para>Inicie el servidor con 
+		<command>/usr/local/libexec/mysqld --user=root --skip-grant-tables</command></para>
+      </listitem>
+      <listitem>
+	<para>Ejecute:
+	  <screen>
+# mysql
+mysql> use mysql
+mysql> update user set password=password('supercosa') where user='root';
+mysql> flush privileges;
+mysql> exit
+	</screen></para>
+      </listitem>
+      <listitem>
+	<para>Vuelva a apagar el servidor y reinicielo con:
+	  <command>/usr/local/bin/mysqld_safe &amp;</command>
+	</para>
+      </listitem>
+    </itemizedlist>
+  </para>
+  </sect2>
+
+ 
+  <sect2 id="recuperacion-backups">
+	  <title>Recuperación y backups</title>
+	  <para>
+	  MySQL mantiene bases de datos en directorios y las tablas 
+	  en archivos.  No es recomendable que modifique tales archivos,
+	  al menos no, mientras el servidor esté activo.  
+  </para>
+  <para>
+	  Para sacar una copia de respaldo de todas las bases de datos con:
+	  <screen>
+# mysqldump --force -p --all-databases > /respaldomysql/dump-1nov2007.sql
+	  </screen>
+	  y posteriormente restaurarla con:
+	  <screen>
+# mysql &lt; /respaldomysql/dump-1nov2007.sql
+	  </screen>
+  </para>
+  </sect2>
+  <sect2 id="chroot-mysql">
+	  <title>MySQL y Apache con chroot</title>
+	  <para>Puede emplear aplicaciones para Apache en modo
+		  <literal>chroot</literal> que usen bases de datos 
+		  MySQL de tres formas:
+		  (1) Conectándose a un puerto TCP/IP donde responda
+		  MySQL, (2) poniendo el socket de MySQL en un directorio
+		  dentro de la jaula de Apache o (3) Corriendo MySQL en modo 
+		  <literal>chroot</literal>.
+	  </para>
+	  <sect3 id="socket-mysql">
+		  <title>Socket en la jaula de Apache</title>
+		  <para>
+			  Una vez instale <literal>mysql-server</literal> 
+			  cree el directorio en el cual ubicará
+			  el socket, digamos:
+			  <screen>
+mkdir -p /var/www/var/run/mysql/
+chown _mysql:_mysql /var/www/var/run/mysql/
+chmod a+w /var/www/var/run/mysql/
+chmod +t /var/www/var/run/mysql/
+			  </screen>
+			  y después inicie MySQL indicando la ruta del
+			  socket con la opción <literal>--socket</literal>,
+			  por ejemplo para que el cambio se efectúe en
+			  cada inicio, edite 
+			  <filename>/etc/rc.conf.local</filename> para
+			  agregar:
+<screen>
+mysqld_flags="--socket=/var/www/var/run/mysql/mysql.sock"
+</screen>
+e inicie desde <filename>/etc/rc.local</filename>
+con:
+<screen>
+pgrep mysqld > /dev/null
+if [ "$?" != 0  -a X"${mysqld_flags}" != X"NO" -a \
+	-x /usr/local/bin/mysqld_safe ]; then
+	echo -n ' mysqld ' 
+	/usr/local/bin/mysqld_safe ${mysqld_flags} &amp;
+fi
+</screen>
+
+Sus aplicaciones PHP pueden entonces conectarse con:
+<screen>
+$dbhost  = "localhost";
+$dbuname = "miusuario";
+$dbpass  = "miclave";
+mysql_connect($dbhost, $dbuname, $dbpass);
+</screen>
+</para>
+<para>Tenga en cuenta también que otros binarios de MySQL también requerirán
+	la opción <literal>--socket=/var/www/var/run/mysql/mysql.sock</literal>
+	al ejecutarse por ejemplo:
+	<screen>
+# mysqldump --socket=/var/www/var/run/mysql/mysql.sock  
+		\-p --all-databases
+	</screen>
+		  </para>
+	  </sect3>
+
+	  <sect3 id="mysql-chroot">
+		  <title>Corriendo MySQL chroot</title>
+		  <para>Asumimos un servidor apache corriendo chroot en /var/www/
+			  Nos proponemos instalar chroot en /var/www/ el servidor mysql.</para>
+<para>
+	He tomado como base el documento <citation><link linkend="SecMySQL">SecMySQL</link></citation>
+Este fue mi punto de partida, pero sobre la marcha hubo que
+añadirle cosas a este procedimiento. A continuación
+traduzco la parte pertinente y escribo las modificaciones en naranja. 
+</para>
+<para>
+	<emphasis>Nota: Este procedimiento
+surgió para Mauricio Rivera a través de un método de ensayo y error
+con base en documento que explicaba como instalar el
+servidor mysql en un freebsd. Después de varias pruebas
+logré correr el servidor mysql y conectarlo a traves de apache,
+seguramente la configuración no es la única ni la
+óptima pero fue una que me funcionó.
+</emphasis></para>
+<sect4 id="volviendo-chroot-el-servidor">
+	<title>Volviendo chroot el servidor</title>
+	<para>El primer paso para volver seguro a MySQL es preparar el 
+		ambiente de cambio de directorio, ambiente en el cual el 
+		servidor MySQL irá a correr.
+		<emphasis>En nuestro caso /var/www/ era el chroot.</emphasis>
+	</para>
+</sect4>
+		<sect4 id="sistema-operativo">
+			<title>Sistema operativo</title>
+			<para>
+			Como en artículos previos, el sistema 
+			operativo elegido es
+			FreeBSD
+			4.7. Sin embargo, los métodos presentados deberán de
+			poder aplicarse en la mayoría de sistemas UNIX modernos.
+</para>
+		</sect4>
+
+		<sect4 id="Prepara-ambiente-chroot">
+			<title>3.2 Preparar el ambiente chroot</title>
+			<para>En orden a preparar el ambiente chroot, 
+				debemos crear la siguiente estructura de 
+				directorios:
+<screen>
+mkdir -p /var/www/dev
+mkdir -p /var/www/etc
+mkdir -p /var/www/tmp
+mkdir -p /var/www/var/tmp
+mkdir -p /var/www/usr/local/mysql/libexec
+</screen>
+<screen>
+mkdir -p /var/www/usr/local/share/mysql/english
+mkdir -p /var/www/var/run/mysql
+mkdir -p /var/www/var/mysql/
+</screen>
+</para>
+		</sect4>
+		<sect4 id="establecer-derechos-de-acceso">
+			<title>Establecer derechos de acceso</title>
+			<para>
+The access rights to the above directories should be set as follows:
+<screen>
+chown -R root.daemon /var/www/
+chmod -R 755 /var/www/
+chmod 1777 /var/www/tmp
+</screen>
+	</para>
+</sect4>
+
+<sect4 id="crear-estructura-de-directorios">
+	<title>Crear estructura del directorio</title>
+	
+	<para>A continuación, los siguientes archivos han sido copiados 
+		en la nueva estructura de directorio: </para>
+	<screen>
+cp /usr/local/libexec/mysqld 
+/var/www/usr/local/mysql/libexec/
+cp /usr/local/share/mysql/english/errmsg.sys
+/var/www/mysql/usr/local/share/mysql/english/
+cp /etc/hosts /var/www/etc/
+cp /etc/host* /var/www/etc/
+cp /etc/resolv.conf /var/www/etc/
+grep mysql /etc/group &gt; /var/www/etc/group
+grep mysql /etc/master.passwd &gt; /var/www/etc/master.passwords
+grep mysql /etc/passwd &gt; /var/www/etc/passwd
+	</screen>
+</sect4>
+<sect4 id="filtrar-archivos-de-passwords-y-grupos">
+	<title>Filtrar archivos de passwords y grupos</title>
+	
+	<para> De los archivos: 
+		<filename>/var/www/etc/passwords</filename> y 
+		<filename>/var/www/etc/group</filename>
+debemos eliminar todas las líneas excepto las de la cuenta de
+mysql (este es _mysql). Esto ya se preparo con el grep anteriro. Luego,
+debemos construir la base de datos de contraseñas:
+<screen>
+cd /var/www/etc
+pwd_mkdb -d /var/www/mysql/etc passwords
+rm -rf /var/www/etc/master.passwd
+</screen>
+</para>
+</sect4>
+
+<sect4 id="consideraciones-especiales">
+	<title>Consideraciones especiales</title>
+	<para>
+Igual que en el caso del servidor Apache, debemos crear un archivo de
+dispositivo especial <filename>/dev/null</filename>:
+<screen>
+ls -al /dev/null
+crw-rw-rw-  1 root  sys    2,   2 Jun 21 18:31 /dev/null
+mknod /var/www/dev/null c 2 2
+chown root.sys /var/www/dev/null
+chmod 666 /var/wwww/dev/null
+</screen>
+Debemos de copiar la base de datos <command>mysql</command>, la cual contiene
+tablas creadas durante la instalacion de MySQL:
+<screen>
+cp -R /var/mysql/* /var/www/var/mysql/
+chown -R _mysql._mysql /var/www/var/mysql/
+</screen>
+</para>
+</sect4>
+
+ <sect4 id="corriendo-el-servidor">
+	 <title>Corriendo el servidor</title>
+	 <para>
+		 Ejecutamos la orden:
+		 <screen>
+mysqld_safe --user=_mysql --chroot=/var/www --datadir=/var/mysql &amp;
+		 </screen>
+		 Comprobamos que el servidor MySQL ese corriendo:
+		 <screen>
+ps -aux|grep -i mysql
+		 </screen>
+		 Corremos el cliente mysql, tenemos decirle que use un 
+		 diferente socket:
+			 <screen>
+mysql -S /var/www/var/run/mysql/mysql.sock
+			 </screen>
+aseguramos el acceso al servidor mysql con una clave:
+<screen>
+mysqladmin -S /var/www/var/run/mysql/mysql.sock password 'clave_secreta'
+</screen>
+Hacemos que el servidor mysql arranque cada vez que arranque el
+servidor, agregamos la anterior linea al final del archivo
+/etc/rc.local:
+<screen>
+mysqladmin -S /var/www/var/run/mysql/mysql.sock password 'clave_secreta'
+</screen>
+</para>
+</sect4>
+
+<sect4 id="habilitando-php-en-apache">
+	 <title>Habilitando php en el servidor apache</title>
+	 <para>
+		 Instalar paquete principal de PHP:
+			 <screen>
+pkg_add php4-core-4.3.5RC3.tgz
+			 </screen>
+			 Crear directorios donde iran las librerias de php para apache:
+			 <screen>
+mkdir -p /chroot/usr/local/lib/php
+			 </screen>
+Copiar la libreria libphp4.so al directorio correspondiente en el
+/chroot:
+<screen>
+cp -p /usr/local/lib/php/libphp4.so /chroot/usr/local/lib/php/
+</screen>
+</para>
+ </sect4>
+
+ <sect4 id="habilitando-mysql-con-php-en-apache">
+	 <title>Habilitando mysql con php en el servidor apache</title>
+
+	 <para>
+		 Instalar paquete php4-mysql-4.3.5RC3:
+		 <screen>
+pkg_add php4-mysql-4.3.5RC3.tgz
+		 </screen>
+Nota: A modo de prueba copié ciertas librerias mysql a chroot,
+que pueden necesitar en el chroot:
+<screen>
+mkdir -p /chroot/usr/local/lib/mysql/
+cp -p /usr/local/lib/mysql/* /chroot/usr/local/lib/mysql/
+</screen>
+	  </para>
+
+  </sect4>
+	  </sect3>
+  </sect2>
+
+
+  <sect2 id="lecutras-mysql">
+	  <title>Lecturas recomendadas</title>
+  <para>
+    Referencias:
+    <itemizedlist>
+      <listitem>
+	<para>Una explicación de algo de la instalación y el uso de 
+	  MySQL en OpenBSD: 
+	  <ulink
+	    url="http://www.sancho2k.net/filemgmt_data/files/mysql_notes.html"></ulink>
+	</para>
+      </listitem>
+      <listitem>
+	<para>El manual de MySQL: 
+	  <ulink
+	    url="http://www.mysql.com/documentation/mysql/bychapter/index.html"></ulink>
+	</para>
+      </listitem>
+      <listitem>
+	<para>Ayuda para cambiar clave de root en sistemas Linux:
+	  <ulink url="http://www.netadmintools.com/art90.html"></ulink>
+	</para>
+      </listitem>
+    </itemizedlist>
+
+  </para>
+
+  </sect2>
+</sect1>

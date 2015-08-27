@@ -1,0 +1,49 @@
+<sect3 id="dovecot">
+    <title>Implementación Dovecot de IMAPS y POP3S</title>
+
+    <para>
+	    Instale el paquete &p-dovecot; y asegurese de dejar
+	    <literal>dovecot</literal> en la variable 
+	    <literal>pkg_scripts</literal> de 
+	    <filename>/etc/rc.conf.local</filename> 
+	    para que se inicie en cada arranque.
+    </para>
+    <para>
+	    Puede generar un certificado autofirmado editando los
+	    datos para el certificado en el archivo 
+	    <filename>/etc/ssl/dovecot-openssl.cnf</filename> y 
+	    generandolo con
+	    <screen>
+/usr/local/sbin/dovecot-mkcert.sh
+	    </screen>
+	    que lo dejará en <filename>/etc/ssl/dovecotcert.pem</filename>
+	    y <filename>/etc/ssl/private/dovecot.pem</filename>.
+    </para>
+    <para>
+	    Edite el archivo <filename>/etc/dovecot/conf.d/auth-system.conf.ext</filename>
+	    y asegurse de que queden sin comentario las siguientes partes:
+	    <screen>
+passdb {                                                                        
+	driver = bsdauth    
+}
+userdb {                                                                        
+	driver = passwd                                                               
+}
+	    </screen>
+	   	Inicie el servicio con 
+		<screen>
+/etc/rc.d/dovecot start
+		</screen>	
+		y pruebelo en los puertos 143 (IAMP sin cifrar),
+		993 (IMAP sobre SSL), 110 (POP3 sin cifrar) y
+		995 (POP3 sobre SSL).
+	      	Por defecto dovecot intentará recuperar
+		correos en formato maildir de la carpeta 
+		<filename>Maildir</filename> de cada usuario.
+	</para>
+	<para>
+		Una vez confirme la operación recomendamos que sólo
+		abra el puerto 993  del cortafuegos
+		para permitir conexiones IMAP remotas sobre SSL.
+	</para>
+</sect3>

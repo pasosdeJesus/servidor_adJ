@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sect1 id="modem-isdn">
+  <title>Conexión a Internet con un módem o módem ISDN</title>
+
+  <para>Es posible conectar un sistema OpenBSD a Internet empleando
+	  un módem o un módem ISDN.  Para esto el módem que se emplea debe 
+	  estar soportado y debe
+	  configurarse <literal>ppp</literal> para realizar la conexión.
+  </para>
+
+  <para>Hay diversos tipos de módems (tarjetas ISA, PCI, módems
+    externos USB o seriales), los módems 
+    externos que se conectan a puerto serial son los más fáciles de 
+    configurar, algunos módems USB también son soportados (los 
+    que tengan comandos y datos multiplexados --como indica la página
+    del manual del controlador <literal>umodem</literal>) y eventualmente
+    es posible hacer funcionar tarjetas ISDN ISA o PCI (<ulink
+      url="http://people.freebsd.org/~hm/i4b-home/"></ulink>).
+  </para>
+  <para>
+	  Los módems y los módems ISDN reciben comandos AT y se configuran 
+	  empleando <command>ppp</command>.  
+    Por ejemplo el archivo <filename>/etc/ppp/ppp.conf</filename> podría
+    incluir porciones como las siguientes (remplazando el número de
+    teléfono, el nombre de la cuenta y  la clave por los correctos):
+    <screen>
+default:
+  set log Phase Chat LCP IPCP CCP tun command
+  set device /dev/cua01
+  set speed 115200
+  set dial "ABORT BUSY ABORT NO\\sCARRIER TIMEOUT 5 \"\" AT \
+    OK-AT-OK ATE1Q0 OK \\dATDT\\T TIMEOUT 40 CONNECT"
+
+
+PAP:
+ set phone 019478909891 
+ set authname micuenta@miproveedor.com
+ set authkey laclaveusada
+ set timeout 120
+ add default HISADDR
+ enable dns
+    </screen>
+    Para conectarse ejecute <command>/usr/sbin/ppp -ddial PAP</command>
+    desde una cuenta que pertenezca al grupo <literal>network</literal>.
+    Cuando se establezca la conexión quedará asociada una dirección IP a una
+    interfaz <literal>tun</literal> (e.g a <literal>tun0</literal>).  Puede
+    también emplear el siguiente script para realizar la conexión:
+    <screen>
+#!/bin/sh
+# Dominio público. 2004.
+
+# Usa configuracion de /etc/ppp/ppp.conf regla PAP
+
+netw=`groups | sed -e "s/.*network.*/1/g"`;
+if (test "$netw" != "1") then {
+	echo "Para usar PPP debe ser del grupo network";
+	exit 1;
+} fi;
+
+IP=`/sbin/ifconfig tun0 | tail -n 1 | sed -e "s/.*inet \([.0-9]*\) .*/\1/g"`;
+esta=`echo $IP | sed -e "s/^[0-9][.0-9]*$/SI/g"`
+if (test "$esta" = "SI") then {
+	echo "Ya está conectado, IP es $IP";
+	exit 0;
+} fi;
+/usr/sbin/ppp -ddial PAP
+while (test "$esta" != "SI") ; do
+	sleep 1;
+	IP=`/sbin/ifconfig tun0 | tail -n 1 | sed -e "s/.*inet \([.0-9]*\) .*/\1/g"`;
+	esta=`echo $IP | sed -e "s/^[0-9][.0-9]*$/SI/g"`
+done
+
+echo "Conectado. La IP es $IP";
+    </screen>
+    Y el siguiente que facilita la desconexión:
+    <screen>
+pid=`ps ax | grep "[p]pp" | sed -e "s/^[ ]*\([0-9]*\) .*$/\1/g"`;
+espid=`echo $pid | sed -e "s/^[0-9][0-9]*$/SI/g"`;
+if (test "$espid" != "SI") then {
+  echo "No está conectado";
+  exit 1;
+} fi;
+kill -HUP $pid
+echo "Desconectado";
+    </screen>
+  </para>
+  <!--  <sect2 id="conexion-supercable">
+    <title>Resolviendo problemas de conexión con Supercable en OpenBSD</title>
+    <para>Conectándose con Supercable en Bogotá se presenta un problema con el 
+	    nombre del servidor de DHCP.  Cuando la maquina intenta
+	    conectarse por dhcp presenta el mensaje de "Bogus server name".
+	    Se trata de una falla del proveedor y hasta tanto este no lo 
+	    resuelva toca hallarle una solución.  Esta es una solución 
+	    propuesta: bajar <filename>src.tar.gz</filename>, modificar el 
+	    programa <filename>dhclient.c</filename> y recompilar.
+	    <variablelist>
+		    <varlistentry><term>Bajar y descomprimir <filename>src.tar.gz</filename></term>
+			    <listitem>
+					    <screen>
+
+cd /usr/src 
+wget ftp://rt.fm/pub/OpenBSD/3.6/src.tar.gz
+tar -zxvf src.tar.gz
+					    </screen>
+			    </listitem>
+		    </varlistentry>
+		    <varlistentry><term>Buscar <filename>dhclient.c</filename></term>
+			    <listitem><para>
+					    <screen>
+find /usr/src -name dhclient
+					    </screen>
+	dhclient.c esta en sitio diferente según la version de OpenBSD.
+			    </para></listitem>
+		    </varlistentry>
+		    <varlistentry><term>Editar <filename>dhclient.c</filename></term>
+			    <listitem><para>
+					    <screen>
+cd sbin/dhclient
+					    </screen>
+					    Cambiar la rutina res_hnok. Esta 
+					    debe retornar 1 siempre
+			    </para></listitem>
+		    </varlistentry>
+		    <varlistentry><term>Compilar <filename>dhclient.c</filename></term>
+			    <listitem><screen>
+make
+			    </screen></listitem>
+		    </varlistentry>
+		    <varlistentry><term>Copiar <filename>dhclient</filename>
+				    a <filename>/sbin/dhclient</filename></term>
+			    <listitem><screen>
+cp /usr/src/sbin/dhclient/dhclient  /sbin/
+			    </screen></listitem>
+		    </varlistentry>
+	    </variablelist>
+    </para>
+  </sect2>
+
+  <sect2 id="referencias">
+    <title>Referencias y lecturas recomendadas</title>
+
+    <para>
+      Página del manual <literal>ppp</literal>.
+    </para>
+  </sect2> -->
+</sect1>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sect1 id="servidor-dns">
+  <title>Servidor DNS</title>
+  <sect2 id="resolucion-de-nombres">
+    <title>Resolución de nombres</title>
+    <para>Para resolver nombres OpenBSD emplea rutinas propias
+      de resolución incluidas en la librería de C, se configuran
+      en <filename>/etc/resolv.conf</filename>.  Este archivo
+      puede incluir, dominio (<literal>domain</literal>),
+      lista de servidores (<literal>nameserver</literal>),  orden de fuentes 
+      donde buscar (<literal>lookup</literal>), lista de dominios en los
+      cuales buscar (<literal>search</literal>), 
+      retornar direcciones IP en orden (<literal>sortlist</literal>),
+      opciones (<literal>options</literal>).   Un ejemplo del
+      archivo <filename>/etc/resolv.conf</filename> es:
+      <screen>
+search &EDOMINIO;
+nameserver 192.168.16.1
+lookup file bind
+      </screen>
+      <literal>lookup</literal> permite especificar un orden para
+      hacer resolución de acuerdo a uno o más de los siguientes 
+      argumentos separados por espacio:
+      <itemizedlist>
+	<listitem>
+	  <para><literal>bind</literal> que indica usar servidor de nombres
+	    (<literal>named</literal>)</para>
+	</listitem>
+	<listitem>
+	  <para><literal>file</literal> que indica buscar en
+	    <filename>/etc/hosts</filename></para>
+	</listitem>
+	<listitem>
+	  <para><literal>yp</literal> que indica emplear el sistema YP si
+	    <command>ypbind</command> está corriendo.</para>
+	</listitem>
+      </itemizedlist>
+    </para>
+  </sect2>
+
+  <sect2 id="named">
+    <title>named</title>
+    <para>OpenBSD incluye entre sus componentes básicos parte del servidor
+      BIND 9, bajo el nombre <literal>named</literal>, que por defecto corre
+      con <command>chroot</command> en el directorio
+      <filename>/var/named</filename>.  
+    </para>
+    <para>Puede configurarse y probarse antes de iniciarlo en cada
+      arranque.  Para configurarlo por primera vez pueden seguirse primero 
+      los pasos de <filename>/etc/rc</filename>.
+      El archivo de configuración es
+      <filename>/var/named/etc/named.conf</filename>.  Se sugiere
+      que se agregue información de zonas de las cuales es maestro en
+      en archivos del directorio
+      <filename>/var/named/master</filename>.
+      Pueden configurarse archivos como dice en <citation><link linkend="AA_Linux">AA_Linux</link></citation>
+      por ejemplo los datos un servidor DNS primario del dominio &EDOMINIO; 
+      pueden quedar en el archivo 
+      <filename>/var/named/master/&EDOMINIO;</filename>:
+      <screen>
+$TTL 1D
+@ IN  SOA  @  root.localhost. (
+	03091025 ; Serial
+	1D   ; Refresco secundario
+	6H   ; Reintento secundario
+	2D   ; Expiración secundaria
+	1D ) ; Cache de registro de recursos
+
+	NS  @
+
+	A       65.8.9.234
+
+	MX      5      correo.&EDOMINIO;.
+
+correo	IN      A       201.2.3.74
+ns1     IN      A       201.2.3.74
+www     IN      A       201.2.3.74
+</screen>
+
+Note que se declara el mismo dominio como servidor de nombre autoritario,
+se relaciona con la IP (65.8.9.234), el nombre
+<literal>correo.&EDOMINIO;</literal> identificara la misma máquina
+y es el nombre que se usará para intercambiar correos; el nombre
+<literal>www.&EDOMINIO;</literal> será un alias para el mismo servidor.
+Note que todo nombre que no termine con punto (.), será completado por
+<command>bind</command> con el dominio (i.e <literal>www</literal> será 
+completado a
+<literal>www.&EDOMINIO;</literal>, si se olvida el punto después
+de <literal>correo.&EDOMINIO;</literal>, <command>bind</command> lo 
+completará a
+<literal>correo.&EDOMINIO;.&EDOMINIO;</literal>).
+Recuerde aumentar el número serial cada vez que haga algún cambio, para que
+la información pueda ser actualizada en los servidores secundarios.
+Puede probar cada archivo de zonas que haga con:
+<screen>
+  named-checkzone &EDOMINIO; /var/named/master/&EDOMINIO;
+</screen>
+Agregue una referencia al archivo de zonas maestro en
+<filename>/var/named/etc/named.conf</filename>, en la sección para
+zonas maestras algo de la forma:
+<screen>
+zone "&EDOMINIO;" {
+  type master;
+  file "master/&EDOMINIO;";
+}
+</screen>
+</para>
+<para>
+Si desea que un servidor sea secundario de algún servidor primario,
+agregue en <filename>/var/named/etc/named.conf</filename> en la sección
+para zonas esclavas algo como:
+<screen>
+zone "&EDOMINIO;" {
+  type slave;
+  file "slave/&EDOMINIO;";
+  masters { 65.8.9.234; };
+}
+</screen>
+
+Cuando <command>named</command> lea de nuevo sus archivos de configuración 
+traerá la información del servidor primario y la dejará en el archivo
+<filename>/var/named/slave/&EDOMINIO;</filename>.
+</para>
+
+<para>
+      El servidor se inicia con
+      <screen>
+    sudo sh /etc/rc.d/named start</screen>
+      Los errores que se produzcan antes de hacer <command>chroot</command>
+      son enviados a <filename>/var/log/servicio</filename>.
+      Para probar el funcionamiento antes de modificar
+      <filename>/etc/resolv.conf</filename> puede usar:
+      <screen>
+	dig @localhost &EDOMINIO;
+      </screen>
+      Si requiere volver a leer los archivos de configuración 
+      (por ejemplo después de cambiar los archivos de zonas) puede
+      enviar la señal <literal>SIGHUP</literal> al proceso con:
+      <screen>
+	pkill -HUP named
+      </screen>
+      o con
+      <screen>
+	rndc reload
+      </screen>
+    </para>
+
+    <para>
+      Una vez compruebe que su servidor DNS está operando correctamente puede
+      indicar que se inicie en cada arranque agregando a
+      <filename>/etc/rc.conf.local</filename>:
+      <screen>
+named_flags="" </screen>
+      y en el mismo archivo en la definición de <literal>pkg_scripts</literal>
+      agregando <literal>named</literal>.
+    </para>
+
+    <sect3 id="vistas">
+	    <title>Vistas para resolver nombres interna y externamente</title>
+	    <para>Si cuenta con una LAN conectada a Internet por medio
+		    de un cortafuegos con OpenBSD que maneja el DNS
+		   	de su organización  y si además cuenta
+		    con una DMZ tal que las peticiones a algunos puertos
+		    del cortafuegos son redirigidas a uno o más servidores,
+		    seguramente tendrá inconvenientes al resolver
+		    nombres de su dominio en la LAN, pues el nombre de 
+		    su organización
+		    (digamos &EDOMINIO;) será resulto a la dirección externa,
+		    la cual conectará al cortafuegos por el puerto
+		    pedido y tratará de redirigir la conexión al
+		    servidor en la DMZ (i.e se reflejará).   Por este motivo
+		    desde su LAN en general no resolverá nombres de su dominio.
+	    </para>
+        <para>Una solución 
+            (ver <filename>/var/named/etc/named-dual.conf</filename>)  es 
+            configurar 
+		    <application>bind</application> para que tenga dos
+		    vistas, una para computadores fuera de la LAN y otra
+		    para computadores dentro de la LAN.  Un posible
+		    archivo de configuración (basado en los distribuidos
+		    con OpenBSD) es:
+		    <screen>
+acl clients {
+	localnets;
+	::1;
+};
+options {
+	version "";     
+	listen-on    { any; };
+	listen-on-v6 { any; };
+	allow-recursion { clients; };
+};
+logging {
+	category lame-servers { null; };
+};
+
+view "internal" {  // Para la red interna
+    match-clients { clients; };
+    match-recursive-only yes;
+    recursion yes;
+
+    zone "." {
+    	type hint;
+    	file "standard/root.hint";
+    };
+    zone "localhost" {
+    	type master;
+	file "standard/localhost";
+	allow-transfer { localhost; };
+    }
+    zone "127.in-addr.arpa" {
+    	type master;
+    	file "standard/loopback";
+    	allow-transfer { localhost; };
+    };
+    zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
+    	type master;
+    	file "standard/loopback6.arpa";
+    	allow-transfer { localhost; };
+    };
+    zone "com" {
+    	type delegation-only;
+    };
+    zone "net" {
+    	type delegation-only;
+    };
+
+    zone "&EDOMINIO;" {
+        type master;
+        file "refleja/&EDOMINIO;.org";
+    };
+};
+view "external" { // Para Internet
+    recursion no;
+    additional-from-auth no;
+    additional-from-cache no;
+    zone "&EDOMINIO;" {
+        type master;
+	file "master/&EDOMINIO;";
+    };
+    zone "168.74.245.200.IN-ADDR.ARPA" { // Para resolución inversa
+        type master;
+	file "master/db.168.74.245.200";
+    };
+};
+</screen>
+El archivo <filename>master/&EDOMINIO;</filename> sería el típico
+para resolver externamente, mientras que en 
+<filename>refleja/&EDOMINIO;</filename> tendría los mismo nombres del
+anterior pero con las direcciones de la red local. 
+<filename>master/db.167.74.245.200</filename> tendría datos para resolución
+de nombres inversa desde fuera de la organización, por ejemplo:
+<screen>
+$TTL 1D
+@ IN  SOA  @  root.localhost. (
+  49   ; Serial de Zona
+  1D   ; Refesco secundario
+  6H   ; Retintento secundario
+  2D   ; Expiración secundaria
+  1D ) ; Cache de registros de recurso
+
+@       IN      NS      cortafuegos.&EDOMINIO;.
+	IN      PTR     www.&EDOMINIO;.
+	IN      PTR     correo.&EDOMINIO;
+	IN      PTR     ns1.&EDOMINIO;
+</screen>
+	</para>
+    </sect3>
+  </sect2>
+  <sect2 id="referencias-dns">
+    <title>Referencias y lecturas recomendadas</title>
+
+    <para>
+      Sección sobre DNS de las guías Aprendiendo a aprender Linux.
+      <citation><link linkend="AA_Linux">AA_Linux</link></citation>
+      Referencia para administradores de BIND 9
+      <citation><link linkend="bind9arm">bind9arm</link></citation>.
+      Ayudas para configurar Bind incluido en OpenBSD.
+      Puede consultar más sobre vistas y reflexión de consultas DNS
+      en <ulink url="http://www.bind9.net/manual/bind/9.3.1/Bv9ARM.ch06.html#view_statement_grammar"/>.
+      <citation><link linkend="openbsdDnsDhcp">openbsdDnsDhcp</link></citation>.
+      Las siguientes páginas man:
+      <citerefentry><refentrytitle>named</refentrytitle>
+	<manvolnum>8</manvolnum></citerefentry>.
+      <citerefentry><refentrytitle>dig</refentrytitle>
+	<manvolnum>8</manvolnum></citerefentry>.
+    </para>
+  </sect2>
+</sect1>

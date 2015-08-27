@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sect1 id="syslog">
+  <title>syslog</title>
+
+  <para><command>syslogd</command> es un servidor que recibe mensajes
+    de depuración y trazas de diversos programas.
+    Su archivo de configuración es <filename>/etc/syslog.conf</filename>,
+    cada línea de este archivo especifica que hacer con los mensajes
+    recibidos por uno o más programas.
+  </para>
+
+  <para>Tras modificar <filename>/etc/syslog.conf</filename> puede
+    obligarse a <command>syslogd</command> a leerlo de nuevo enviado
+    la señal HUP, por ejemplo: <screen>
+# ps ax | grep syslogd
+7723 ??  Is      0:00.06 syslogd 
+# kill -HUP 7723
+    </screen>
+  </para>
+
+  <sect2 id="referencias-syslog">
+    <title>Referencias y lecturas recomendadas</title>
+
+    <para>
+      Las siguientes páginas man:
+      <citerefentry><refentrytitle>syslog.conf</refentrytitle>
+	<manvolnum>8</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>syslog</refentrytitle>
+	<manvolnum>3</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>syslogd</refentrytitle>
+	<manvolnum>8</manvolnum></citerefentry> y
+      <citerefentry><refentrytitle>logger</refentrytitle>
+	<manvolnum>1</manvolnum></citerefentry>.
+    </para>
+  </sect2>
+</sect1>

@@ -1,0 +1,203 @@
+
+RECOMENDACIONES PARA CONTINUAR DESARROLLO
+
+Antes de consultar este documento se sugiere consultar Leame.txt
+
+La información de este archivo es apropiada para quien desea continuar
+el desarrollo de estas fuentes DocBook (http://www.docbook.org) que emplean 
+las ayudas de repasa (http://structio.sourceforge.net/repasa).
+
+
+EDICIÓN DE FUENTES XML
+
+Después de hacer cambios a las fuentes XML es mejor verificar la validez con:
+	make valida
+
+Después de compilar, crear distribuciones o publicar, puede eliminar algunos
+archivos con:
+	make  limpia
+
+y todos los generables excepto los de configuración con:
+	make limpiamas
+
+Tenga en cuenta las siguientes recomendaciones al hacer modificaciones:
+
+* Emplee preferencialmente DocBook XML 4.1.2.  Puede consultar ayuda
+  en español sobre este formato en:
+	 http://lucas.hispalinux.es/Tutoriales/DOCBOOK/doctut/
+	
+* Emplee las convenciones de repasa para documentos DocBook en cuanto
+  a estructura, indicadores, logros, ejercicios y definiciones.  Consulte
+  estas convenciones en http://structio.sourceforge.net/repasa/doc
+  o si instaló repasa puede emplear
+	man db2rep
+  o consultar la documentación HTML que debe estar en 
+
+* Si requiere agregar un nuevo archivo xml (incluyendolo en el xml principal), 
+  añada también el nombre en la variables SOURCES del Makefile, de forma 
+  análoga si elimina un archivo xml también retirelo de esta variable.  
+
+* Si requiere añadir una gráfica, sugerimos que la agregue al directorio
+  img y a la variable IMAGES del Makefile (las reglas por defecto del 
+  Makefile se encargarán de hacer las conversiones necesarios y de copiarlas 
+  en el directorio apropiado antes de generar PDF, HTML o PostScript).
+  De forma análoga cuando elimine una gráfica del directorio img, también
+  retirela de la variable IMAGES.  Emplee de ser posible formato PNG (aunque 
+  JPG también es soportado).
+
+* Modifique el Makefile si requiere procesamiento adiciónal
+
+Por defecto las variables del archivo confv.sh (que resultán tras la
+configuración con conf.sh a partir del módelo confv.empty)  están disponibles 
+en:
+	* conf.sh para usarlas durante la configuración
+	* en el Makefile (que incluye el archivo generado Make.inc)
+	* y en las fuentes XML (que deberían incluir el archivo generado 
+	  confv.ent).  
+Así por ejemplo en sus fuentes XML puede referirse al nombre del proyecto 
+con &PROYECTO; o a la versión con &PRY_VERSION; 
+En el Makefile puede referirse a estos datos con $(PROYECTO) y
+$(PRY_VERSION).  
+
+
+GENERACIÓN DE OTROS ARCHIVOS Y PUBLICACION
+
+Es posible generar un comprimido con las páginas HTML con nombre
+servidor_OpenBSD-1.0_html.tgz usando:
+
+	make servidor_OpenBSD-1.0_html.tgz
+
+O un comprimido del PostScript  con nombre servidor_OpenBSD-1.0.ps.gz usando:
+	make imp/servidor_OpenBSD-1.0.ps.gz
+
+También puede generarse una distribución de fuentes (nombre 
+servidor_OpenBSD-1.0.tgz) con:
+
+	make dist
+
+La regla dist, primero chequeará las reglas definidas en la variable
+GENDIST  (por si algunos archivos que deben ir en la distribución de
+fuentes deben generarse).  Si en su proyecto ningún archivo requiere
+ser generado estas variables pueden ser:
+
+	GENDIST=$(SOURCES) $(IMAGES)
+
+Para publicar en un sitio de Internet, las reglas genéricas soportan
+copia de información usando scp (incluido con el paquete ssh).  Puede 
+configurar el nombre del servidor y dentro de este la ubicación en 
+el MAKEFILE en la variable ACTHOST por ejemplo:
+
+ACTHOST=shell.sourceforge.net:/home/groups/s/st/structio/htdocs/guias/servidor_OpenBSD
+
+Si el nombre de usuario con el que debe publicar es diferente al del
+login en la máquina donde trabaja puede agregar en el Makefile la
+variable USER con el login en el servidor donde publicará.
+
+La información que será copiada será la especificada en la variable
+GENDIST del Makefile, y la copia se realizará sólo despues de haber
+chequeado todas las reglas y archivos de la variable GENACT del Makefile.
+
+
+
+VERSIÓN Y OTRAS VARIABLES DE CONFIGURACIÓN 
+
+Las variables de configuración y sus valores por defecto antes de una
+configuración pueden verse en confv.empty.
+La labor de conf.sh es generar el archivo confv.sh con las variables
+de confv.empty, pero chequeando o buscando el valor de algunas (por ejemplo 
+ubicación de programas), completando el valor de otras (por ejemplo fecha 
+actual en FECHA_ACT) y copiando literalmente el resto de variables
+(por ejemplo PROYECTO y PRY_VERSION que tienen nombre y versión del
+proyecto).
+
+La versión añadida a las diversos archivos que pueden generarse, puede
+configurarse antes de publicar nuevas versiones en la variable PRY_VERSION
+de los archivos confv.emtpy y confv.sh (note que puede actualizar sólo
+confv.empty y borrar confv.sh pues este último es generado por conf.sh).
+Por ejemplo:
+
+	PRJ_VERSION=1.1
+
+Puede revisar todas las variables disponibles y su descripción en
+el archivo confv.empty (el primer comentario debajo de cada variable
+es la descripción, el segundo es un mensaje de ayuda para las variables que
+conf.sh modifica).
+
+
+
+CAMBIOS A LAS HOJAS DE ÉSTILO 
+
+Para hacer sus propias configuraciones a la apariencia de los documentos
+generados a partir de las fuentes DocBook, modifique la hoja de éstilo 
+apropiada de acuerdo al programa que esté realizando el procesamiento. 
+Tenga en cuenta que por defecto el PostScript se genera
+con OpenJade, el PDF se genera a partir del PostScript y las páginasl HTML 
+se generan con xsltproc o en su defecto con OpenJade:
+
+estilo.dsl	Usado por OpenJade para generar PostScript/PDF y 
+		HTML en varias páginas
+estilohtml.xsl	Usado por xsltproc para generar HTML en varias páginas
+
+Estas hojas de estilo incluyen las hojas de estilo de repasa
+(docbookrep_html.dsl, docbookrep_html.xsl, docbookrep_tex.dsl), que
+harán procesamiento por defecto para:
+	* Palabras con sus definiciones  (no presenta definiciones)
+	* Indicadores de logro
+	* Ejercicios (no presenta respuesta)
+
+
+
+CAMBIOS AL PROCEDIMIENTO DE GENERACIÓN DE PDF/PostScript/HTML
+
+El documento PostScript es generado usando la regla especificada en
+la variable de configuración PS_PROC.
+(que puede cambiar en confv.sh o en confv.empty si desea establecer
+un valor por defecto diferente).  Por ejemplo para la generación
+de PostScript, la regla por defecto que usa OpenJade se especifica con:
+	PS_PROC="dbdef_ps_jade"
+
+Para la generación del PDF se usa el valor de PDF_PROC. La regla por
+defecto genera el PDF a partir del Postscript y es:
+	PDF_PROC="dbdef_pdf_ps"
+
+Para la generación de HTML se usa el valor de HTML_PROC.  Por ejemplo
+	HTML_PROC="dbdef_html_xsltproc"
+especifica la regla que genera varias páginas HTML usando xsltproc. Para
+usar Jade/OpenJade puede usarse:
+	HTML_PROC="dbdef_html_jade"
+
+Si desea emplear otro método de generación cree una nueva regla en el
+Makefile y establezca el nombre en la variable de configuración apropiada.
+Tenga en cuenta que la regla para el PostScript debe generar el archivo 
+$(PRINT_DIR)/$(PROYECTO).ps, la regla para PDF debe generar 
+$(PRINT_DIR)/$(PROYECTO).pdf y la regla para HTML debe generar 
+$(HTML_TARGETS)  (normalmente $(HTML_DIR)/$(PROYECTO).html).
+
+
+CAMBIOS A LA INFRAESTRUCTURA
+
+Parte de la infraestructura de estas guías es del proyecto repasa, en
+particular:
+
+* Las convenciones para DocBook para logros, indicadores, definiciones y
+  ejercicios.
+* Algunos archivos genéricos
+	conf.sh, herram/confaux.sh  	
+		Establecer valor de variables de configuración 
+		en la plataforma donde se ejecuta
+	docbookrep_*	
+		Hojas de éstilo de repasa
+	herram/comdocbook.mak	
+		Porciones del Makefile para generar HTML/PS/PDF
+	herram/comdist.mak	
+		Porciones del Makefile para distribución 
+		y publicación
+
+Si modifica estos scripts o mejora las convenciones, eventualmente su
+cambio puede ser útil para la infraestructura de repasa.  Si lo desea
+puede desarrollar al tiempo tal infraestructura con su proyecto 
+instalando repasa y empleando enlaces en lugar de archivos separados.  
+Si lo desea, también puede compartir sus mejoras de dominio público 
+para que pueda ser integradas a repasa y beneficiar las instituciones 
+que emplean ese proyecto, puede enviar sus mejoras a 
+	structio-devel@lists.sourceforge.net

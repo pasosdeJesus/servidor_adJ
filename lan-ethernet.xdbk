@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+  <sect1 id="lan-ethernet">
+    <title>Uso y configuración en una red LAN Ethernet</title>
+    <!--    <indexterm>
+	<primary>intro</primary>
+      </indexterm>
+      <para></para>
+      -->
+
+      <para>La red local (LAN) Ethernet más simple puede conformarse con 
+	      2 computadores
+	      cada uno con tarjeta ethernet interconectados por un cable UTP
+	      cruzado.  Sin embargo típicamente una red ethernet
+	      consta de varios computadores con tarjetas Ethernet 
+	      interconectados por uno o más<footnote><para>Pueden ponerse concentradores en cascada.</para></footnote>
+	      concentradores (también llamado <foreignphrase>hub</foreignphrase> o 
+	      <foreignphrase>switch</foreignphrase>) y cables UTP
+	      directos de cada computador a algún concentrador.  La velocidad
+	      de la red depende de la velocidad de las tarjetas de red,
+	      la velocidad de los concentradores y la categoria de los cables.
+	      Esta velocidad se mide en Megabits (millones de bits por segundo),
+	      y sus valores típicos son 10Mb, 100Mb, 1000Mb o 1Gb y 
+	      recientemente 10Gb.
+      </para>
+
+	<sect2 id="tarjetas-ethernet">
+		<title>Tarjetas Ethernet</title>
+		<para>La inmensa mayoría de tarjetas Ethernet de 10MB, 100MB
+			y 1000MB, así como algunas de 10G  son soportadas por 
+			OpenBSD, la lista completa 
+			la puede consultar en:
+			<ulink url="http://www.openbsd.org/amd64.html"/>.
+			Por su parte las tarjetas populares que hemos 
+			identificado como no soportadas son: 
+			Encore ENL832-TX-RENT,
+			Encore ENL832-TX-EN.
+		</para>
+
+      <para>
+       	En cada computador, cada dispositivo de interconexión se asocia 
+	a una interfaz de red cuando es detectado en el momento del 
+	arranque (o por demanda
+      como en el caso de <literal>tun0</literal>).  Estas interfaces se 
+      administran con <command>ifconfig</command>, por ejemplo
+      para listarlas todas utilice:
+      <screen>
+ifconfig -a
+</screen>
+A continuación se presenta un ejemplo de la salida de este comando:
+<screen>
+lo0: flags=8049&lt;UP,LOOPBACK,RUNNING,MULTICAST&gt; mtu 33160
+	priority: 0
+	groups: lo
+	inet 127.0.0.1 netmask 0xff000000
+	inet6 ::1 prefixlen 128
+	inet6 fe80::1%lo0 prefixlen 64 scopeid 0x6
+re0: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	lladdr 00:14:d1:1a:cf:b2
+	priority: 0
+	groups: egress
+	media: Ethernet autoselect (100baseTX full-duplex,rxpause,txpause)
+	status: active
+	inet 189.148.51.41 netmask 0xffffff00 broadcast 189.148.51.255
+	inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
+re1: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	lladdr 00:14:d1:1a:ce:93
+	priority: 0
+	media: Ethernet autoselect (1000baseT full-duplex)
+	status: active
+	inet 192.168.2.1 netmask 0xffffff00 broadcast 192.168.2.255
+	inet6 fe80::214:d1ff:fe1a:ce93%re1 prefixlen 64 scopeid 0x2
+re2: flags=8802&lt;BROADCAST,SIMPLEX,MULTICAST> mtu 1500
+	lladdr 00:14:d1:1a:cf:af
+	priority: 0
+	media: Ethernet autoselect (10baseT half-duplex)
+	status: no carrier
+vr0: flags=8843&lg;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	lladdr 00:19:db:82:8f:93
+	priority: 0
+	media: Ethernet autoselect (100baseTX full-duplex)
+	status: active
+	inet 192.168.1.1 netmask 0xffffff00 broadcast 192.168.1.255
+	inet6 fe80::219:dbff:fe82:8f93%vr0 prefixlen 64 scopeid 0x4
+enc0: flags=0&lg;> mtu 1536
+	priority: 0
+pflog0: flags=141&lg;UP,RUNNING,PROMISC> mtu 33160
+	priority: 0
+	groups: pflog
+</screen>
+Es como una tabla con 2 columnas, en la de la izquierda se lista el nombre
+de la interfaz de red (en este ejemplo <literal>lo0</literal>, 
+<literal>re0</literal>, <literal>re1</literal>, 
+<literal>re2</literal>, <literal>vr0</literal>, 
+<literal>enc0</literal>, <literal>pflog0</literal>),
+y a la derecha las características de cada interfaz, por ejemplo las
+características de la interfaz <literal>re0</literal> son:
+<screen>
+	flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+	lladdr 00:14:d1:1a:cf:b2
+	priority: 0
+	groups: egress
+	media: Ethernet autoselect (100baseTX full-duplex,rxpause,txpause)
+	status: active
+	inet 189.148.51.41 netmask 0xffffff00 broadcast 189.148.51.255
+	inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
+</screen>
+</para>
+<para>
+Algunas de las interfaces corresponden a tarjetas de red (en este ejemplo
+<literal>re0</literal>, <literal>re1</literal>, <literal>re2</literal> y
+<literal>vr0</literal>) mientras que otras son virtuales, como
+<literal>lo0</literal> que representa el mismo computador,
+<literal>enc0</literal> que sirve para cifrados con IPSec y 
+<literal>pflog0</literal> que permite examinar en tiempo real actividad
+del cortafuegos <literal>pf</literal>.
+</para>
+<para>Con respecto a las propiedades de cada interfaz física, resaltamos 
+	<variablelist>
+		<varlistentry><term><literal>status</literal></term>
+			<listitem>
+				<para>Puede ser <literal>active</literal>
+	para indicar que hay cable conectado a la tarjeta en un extremo
+	y el otro extremo está conectado a algún concentrador (o a otro 
+	computador si es cruzado).  Note que en el ejemplo la interfaz 
+	<literal>re2</literal> no está conectada.
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry><term><literal>lladdr</literal></term>
+			<listitem><para>Con la dirección MAC de la tarjeta
+	de red (un número único para cada tarjeta fabricada). 
+</para></listitem>
+		</varlistentry>
+		<varlistentry><term><literal>inet</literal></term>
+			<listitem><para>Propiedades IPv4, por ejemplo:
+	<screen>
+inet 189.148.51.41 netmask 0xffffff00 broadcast 189.148.51.255
+</screen>
+Indica que la IP es 189.148.51.41, con mascara de red 255.255.255.0
+(en hexadecimal 255 es <literal>ff</literal>), y dirección para envíos 
+masivos (broadcast) 189.148.51.255.
+			</para></listitem>
+		</varlistentry>
+		<varlistentry><term><literal>inet6</literal></term>
+			<listitem><para>Propiedades IPv6, por ejemplo:
+					<screen>
+inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
+</screen>
+Indica que la dirección IPv6 es <literal>fe80::214:d1ff:fe1a:cfb2</literal>
+			</para></listitem>
+		</varlistentry>
+		<varlistentry><term><literal>media</literal></term>
+			<listitem><para>Que indica tipo de medio físico que
+está conectado o configurado en esa interfaz. En el ejemplo presentado
+las interfaces <literal>re0</literal> y <literal>vr0</literal> están
+operando a 100Mb (Megabit), mientras que la interfaz <literal>re1</literal> 
+está operando a 1Gb (Gigabit). </para></listitem>
+		</varlistentry>
+		<varlistentry><term><literal>flags</literal></term>
+			<listitem><para>Que indica banderas que tiene 
+activa la interfaz y la MTU (Unidad de transferencia máxima). 
+Note que <literal>lo0</literal>
+es la única que tiene la bandera <literal>LOOPBACK</literal> la
+cual indica que esa interfaz es virtual y se refiere al mismo
+computador.</para></listitem> 
+		</varlistentry>
+	</variablelist>
+</para>
+	<para>
+	Los dispositivos reconocidos en el momento del arranque 
+	que se asocian a interfaces de red, así como los que no logran
+	configurarse, pueden verse con:
+	<screen>
+dmesg | less
+	</screen>
+	Un ejemplo típico de una tarjeta Ethernet reconocida es:
+	<screen>
+re0 at pci0 dev 8 function 0 "Realtek 8169" rev 0x10: RTL8169/8110SB (0x1000), apic 2 int 16 (irq 10), address 00:14:d1:1a:cf:b2
+	</screen>
+	Note que se lista el nombre de la interfaz (i.e 
+	<literal>re0</literal>),
+	los recursos de hardware que emplea y la dirección MAC (i.e
+	<literal>00:14:d1:1a:cf:b2</literal>).
+	</para>
+
+	<para>
+	OpenBSD incluye documentación completa para cada tipo de dispositivo 
+	detectable (por ejemplo opciones); para el caso del controlador 
+	del ejemplo anterior puede verse con:
+	<screen>
+man re
+	</screen>
+</para>
+	</sect2>
+	<sect2 id="configuracion-interfaz">
+		<title>Configuración de una interfaz de red</title>
+		<para>Debe configurar cada interfaz de red en un 
+			archivo con un nombre  de la forma
+			<filename>/etc/hostname.<replaceable>interfaz</replaceable></filename>.   
+			Por ejemplo para el caso de la tarjeta con controlador
+			<literal>re</literal> e interfaz asignada por
+			el kernel en el arranque  <literal>re0</literal>,
+			seria
+			<filename>/etc/hostname.re0</filename>.
+		</para>
+		<para>Como se explica en 
+			<command>man hostname.if</command> en el caso
+			de una red IPv4 con DHCP basta que ese archivo tenga
+			la línea:
+			<screen>
+dhcp
+			</screen>
+		</para>
+		<para>
+			Si el direccionamiento en la red local es estático,
+			tal archivo debe tener en una línea separados por un 
+			espacio los siguientes datos (en este orden):
+			<itemizedlist>
+				<listitem>
+					<para>Familia de direcciones.
+						Tìpicamente
+						<literal>inet</literal></para>
+				</listitem>
+				<listitem>
+					<para>IP (e.g 
+						<literal>189.148.51.41</literal>)</para>
+				</listitem>
+				<listitem>
+					<para>Mascara de red (e.g 
+						<literal>255.255.255.0</literal>)</para>
+				</listitem>
+				<listitem>
+					<para>Dirección de broadcast  
+						o la palabra <literal>NONE</literal></para>
+				</listitem>
+				<listitem>
+					<para>Eventualmente opciones</para>
+				</listitem>
+			</itemizedlist>
+			La línea completa sería:
+			<screen>
+inet 189.148.51.41 255.255.255.0 NONE
+			</screen>
+		</para>
+		<para>Un archivo como estos lo puede crear y/o editar con
+			cualquier editor de texto (por ejemplo <literal>mg</literal> 
+			o <literal>vim</literal>).   Si tiene sesión de 
+			X-Window puede emplear desde una terminal 
+			<screen>
+sudo touch /etc/hostname.re0; sudo xfw /etc/hostname.re0
+			</screen>
+			Estas ediciones también las puede hacer 
+			en adJ con botón derecho sobre el
+			escritorio Dispositivos->Red->Configurar Interfaces,
+			que le permitirá editar cada uno de los archivos
+			de cada interfaz de red detectada por ifconfig
+			(excepto lo0, enc0, pflog0, tun).
+
+			<warning><para>
+Es importante que la línea del archivo
+<filename>/etc/hostname.re0</filename> que configura sus propiedades IPv4, 
+termine con el caracter fin de línea, es decir que en el
+editor con el que la edite termine la línea con la tecla RETORNO.
+			</para></warning>
+		</para>
+		<para>
+			Y la IP de la compuerta de su red 
+			(ver <xref linkend="ipv4"></xref>) se configura en 
+<filename>/etc/mygate</filename> que también
+debe editar con su editor preferido y que también debe terminar con
+fin de línea. Un ejemplo típico del contenido sería una línea con:
+<screen>
+189.148.51.1
+</screen>
+Con adJ puede hacer botón derecho sobre el escritorio 
+Dispositivos->Red->Configurar Puerta de Enlace.
+		</para>
+		<para>Después de hacer cambios a la configuración de
+			red es posible que pueda reiniciar el sistema de 
+			redes con:
+			<screen>
+$ sudo sh /etc/netstart
+			</screen>
+			aunque en algunos casos es necesario reiniciar
+			el computador.
+		</para>
+		<para>Note que si ha cambiado una tarjeta de red es
+			posible que antes de reinicar debe reconfigurar el
+			cortafuegos en el archivo <filename>/etc/pf.conf</filename></para>
+	</sect2>
+	<sect2 id="protocolo-arp">
+		<title>Protocolo ARP</title>
+      <para>La tabla del protocolo ARP asocia direcciones físicas de
+	    tarjetas de red conectadas a su red con direcciones IP. Para
+	    examinar tal tabla use:
+	    <screen>
+arp -a 
+	    </screen> 
+	    es posible agregar entradas de manera permanente o eliminarlas
+	    con las opciones <literal>-s</literal> y <literal>-d</literal>
+	    respectivamente.
+    	</para>
+    </sect2>
+
+   <sect2 id="cableado">
+     <title>Cableado de una red local</title>
+     
+     <sect3><title>Planeación</title>
+      <para>
+Necesitará un concentrador preferiblemente de 1Gb con suficientes 
+puertos para todos los computadores que tenga o varios interconectados en 
+cascada, cable UTP categoria 5e o 6 con conectores RJ-45
+y en cada computador deberá tener una tarjeta Ethernet (preferiblemente
+de 1GB) con un puerto para un conector
+RJ-45 (ver <xref linkend="configuracion-interfaz"></xref>).  </para>
+
+
+      <para>El espacio físico en el que esté la red será la primera
+       restricción que debe tener en cuenta.  Haga un plano de ese
+       espacio con las distancias a escala, ubique los computadores y
+       diseñe el recorrido de los cables al concentrador.  Hay varias
+       recomendaciones que puede tener en cuenta al diseñar el mapa:
+       </para>
+      <itemizedlist>
+       <listitem>
+	<para>Es aconsejable por estética y seguridad que los cables vayan
+	 por canaletas.
+	</para>
+       </listitem>
+       <listitem>
+	<para>La longitud máxima de cada cable (para unir concentrador y
+	 computador) es de 100 m.
+       </para>
+   <indexterm role="pal">
+     <primary>100</primary>
+    </indexterm>
+    <para role="sig" id="redbas.tarjeta.cien" userlevel="3">Longitud máxima de un
+      cable entre un computador y un concentrador en una
+      red Ethernet.</para>
+
+
+       </listitem>
+       <listitem>
+	<para>Busque que los cables/canaletas vayan por las paredes
+	 del recinto y estén resguardadas (para evitar que alguien se
+	 tropiece).
+	</para>
+       </listitem>
+      </itemizedlist>
+      <para>En el mapa que haga también puede consignar las
+       direcciones <acronym>IP</acronym> que planee usar en cada
+       computador.  Emplee direcciones asignadas para redes privadas,
+       por ejemplo 192.168.1.1 al servidor y los clientes 192.168.1.2,
+       192.168.1.3 y así sucesivamente. Cómo compuerta emplee en todos
+       los clientes la dirección del servidor y como máscara de red
+       emplee <literal>255.255.255.0</literal> (ver <xref linkend="ipv4"></xref>
+	).
+    </para>
+
+     </sect3>
+
+     <sect3 id="adquisicion-de-hardware">
+      <title>Adquisición de Hardware</title>
+      
+      <para>Para hacer la adquisición de Hardware tenga en cuenta:
+      </para>
+      <itemizedlist>
+     <listitem>
+       <para>Los nombres de los componentes pueden variar de
+	 un almacén a otro, algunos sinónimos son:
+	 <itemizedlist>
+	   <listitem>
+	     <para>tarjeta ethernet, tarjeta con conectores RJ45</para>
+	   </listitem>
+	  <listitem>
+	   <para>concentrador o <foreignphrase>hub</foreignphrase> o
+	   <foreignphrase>switch</foreignphrase> repetidor</para>
+	  </listitem>
+	  <listitem>
+	   <para>cable de pares trenzados, par trenzado, twisted pair,
+	    cable Ethernet, <acronym>UTP</acronym>
+	    (<foreignphrase>Unshielded Twisted
+	    Pair</foreignphrase>).</para>
+	  </listitem>
+	 </itemizedlist>
+	</para>
+       </listitem>
+       <listitem>
+	<para>Use el plano de red para determinar la longitud de cada
+	 cable, recuerde que todo computador debe tener un cable que
+	 lo una con el concentrador (compre un poco más de la longitud
+	 que midió pues al intentar ensamblar los conectores podría
+	 perder algo de cable en cada intento).
+	</para>
+       </listitem>
+       <listitem>
+	<para>El concentrador debe tener suficientes puertos para todos
+	 los computadores (pueden ponerse varios concentradores en cascada).
+	</para>
+       </listitem>
+       <listitem>
+	<para>Cada computador debe tener una tarjeta de red Ethernet
+	 preferiblemente 1Gb que pueda usar desde
+	 OpenBSD (ver <xref linkend="configuracion-interfaz"></xref>) 
+	 ---recordar que las más incompatibles son las
+	 populares Encore.
+       </para>
+       </listitem>
+       <listitem>
+	<para>Cada cable debe tener dos conectores RJ-45.  Uno para
+	 conectarlo al computador y el otro para conectarlo al
+	 concentrador.  (Compre varios conectores RJ-45 adicionales
+	 pues al intentar ensamblar podría perder algunos).
+       </para>
+   <indexterm role="pal">
+     <primary>RJ45</primary>
+    </indexterm>
+    <para role="sig" id="redbas.tarjeta.RJ45" userlevel="3">Este es el tipo de 
+      conectores que debe ir en cada extremo de un cable UTP en
+      una red Ethernet como la que sugerimos.
+    </para>
+
+
+       </listitem>
+      </itemizedlist>
+     </sect3>
+     
+     <sect3 id="instalacion-de-cables-y-concentrador">
+      <title>Instalación</title>
+   
+      <para>
+       Una vez tenga instaladas las tarjetas de red debe conectar los
+       cables a tales tarjetas y al concentrador.  Como eventualmente
+       usted mismo hará los cables, en esta sección damos
+       instrucciones para que le resulte fácil el proceso.  Requerirá
+       unas pinzas especiales
+       <footnote>
+	<para>En Colombia a tal "pinza especial" se le conoce como
+	 "ponchadora".
+	</para>
+       </footnote> para conectores RJ-45 y un probador
+       (<foreignphrase>tester</foreignphrase>) para comprobar que
+       fluye corriente en los cables que haga.
+      </para>
+
+      <para>Ubique en el espacio para la red los computadores y los
+       cables (verifique que las medidas de su plano hayan sido
+       correctas).
+      </para>
+
+      <para>Ponga en cada extremo de cada uno de los cables un conector
+       RJ-45 empleando unas pinzas especiales.  Como el cable UTP
+       se compone de 8 cablecitos de colores tenga en cuenta:</para>
+
+      <procedure>
+      <step>
+	<para>Deje entre 8mm y 12 mm de los 8 cables al descubierto.
+	 <footnote><para>Pablo Chamorro nos indicó que "algunas pinzas
+	   tienen un tope, entonces al colocar las puntas de los cables
+	   junto al tope, el corte de la envoltura del cable siempre se
+	   realiza en el mismo punto para que ni sobre ni falte y así no
+	   hay que preocuparse por estimar el punto de corte."  </para>
+	 </footnote>
+	</para>
+      </step>
+      <step>
+		      		<para>
+			Al preparar los cables tenga en cuenta que las
+			tarjetas de 100MB y 1000MB requieren un orden
+			especial de los cables que conforman un UTP 5, UTP
+			5e o UTP 6, si no aplica este orden,
+			con algunos cables de varios metros puede tener
+			problemas de comunicación (ni siquiera podrá resolver
+			ARP).  En redes de 10MB y 100MB 
+			puede usar cualquier de estos tipos de cables, pero
+			para redes de 1000MB debe usar UTP 5e o UTP 6.	
+			Hay dos secuencias estandarizadas para los cables
+			que conforman un UTP 5/5e/6, de las cuales la más 
+			común es la TIA/EIA-568-B: 
+			<itemizedlist>
+				<listitem>
+					<para>Para cables directos (que unen 
+						por ejemplo un computador a un 
+concentrador), los dos extremos del cable se ponen en el conector RJ-45 siguiendo
+la misma secuencia: 1 - blanco/naranja, 2 - naranja, 3 - blanco/verde, 4 - azul,
+5 - blanco/azul, 6 - verde, 7 - blanco/cafe, 8 - cafe</para>
+				</listitem>
+				<listitem>
+					<para>Para un cable cruzado (que 
+						permite unir dos computadores o 
+						en algunos casos 2 concentradores):
+Lado 1: 1 - blanco/naranja, 2 - naranja, 3 - blanco/verde, 4 - azul,
+5 - blanco/azul, 6 - verde, 7 - blanco/cafe, 8 - cafe.  
+Lado 2:  1 - blanco/verde, 2 - verde , 3 - blanco/naranja, 4 - blanco/cafe,
+5 - cafe, 6 - naranja, 7 - azul, 8 - blanco/azul.  
+					</para>
+				</listitem>
+			</itemizedlist>	
+		</para>
+		<para>
+		      Empareje los 8 cablecitos antes de intentar ponerlos en el
+		      conector RJ-45. Pongalos en el orden antes indicado para cables 
+		      directos.
+	</para>
+       </step>
+       <step>
+	<para>El conector RJ45 tiene varios canales, por cada uno de
+	 esos canales debe pasar un cablecito de color.  Empuje bien los 
+	 cablecitos hasta el fondo del conector RJ-45 y con las pinzas 
+	 especiales baje los contactos del conector y asegure el cable.  
+	</para>
+       </step>
+       <step>
+	<para>Después de ensamblar el primer extremo verifique con un
+	 probador que todos los cablecitos hagan contacto.  Después
+	 ensamble el segundo extremo empleando la misma secuencia de
+	 colores y después verifique que estén haciendo buen contacto
+   	 con un probador.</para>
+       </step>
+      </procedure>
+
+      <para>
+       Una vez tenga los cables verifique que la tarjeta de red de 
+       cada computador esté bien instalada (algunas tienen luces
+       <footnote><para>Luces es traducción de <foreignphrase>LED 
+	(Light emitting diode)</foreignphrase>.  </para></footnote> 
+       que se encienden cuando transmite o recibe información por el cable),
+       y conecte con cables todas las tarjetas al concentrador.
+      </para>
+      
+      <para>Verifique también que cada tarjeta de red sea reconocida
+       por el kernel y asigne la <acronym>IP</acronym> que planeó para
+       cada una (ver <xref linkend="configuracion-interfaz"></xref>).</para>
+
+      <para>Finalmente verifique la instalación transmitiendo paquetes
+       de un computador a otro. Por ejemplo desde el servidor (tal vez
+       con <acronym>IP</acronym> 192.168.1.1) intente conectarse a un
+       cliente (tal vez <acronym>IP</acronym> 192.168.1.2) con 
+       <command>ping</command> :
+	  <screen>
+ping 192.168.1.2	
+	  </screen>
+	  y viceversa.
+	</para>
+    </sect3>
+   </sect2>
+   
+
+      <sect2 id="referencias-lan">
+	      <title>Referencias</title>
+	      <para>
+	      <itemizedlist>
+		      <listitem>
+			      <para>FAQ de OpenBSD Sección 6.</para>
+		      </listitem>
+		      <listitem>
+			      <para>Páginas <command>man</command> de
+				      <command>arp</command>,
+				      <command>route</command>,
+				      <command>ifconfig</command>,
+				      <command>hostname.if</command></para>
+		      </listitem>
+		      <listitem>
+			      <para>Sobre cables Ethernet puede
+				      consultarse en 
+				      <citation><xref linkend="ethernet-cables"></xref></citation></para>
+		      </listitem>
+	      </itemizedlist>
+		</para>
+      </sect2>
+	
+  </sect1>
+
+

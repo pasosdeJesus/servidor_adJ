@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sect1 id="servidor-dictd">
+  <title>Servidor <command>dictd</command></title>
+  <para>Instalar dictd y diccionarios dictd-dics.
+    Copiar /usr/local/share/dictd/dictd.conf a /etc/dictd.conf
+
+    Editar /etc/dict.conf para que sea:
+server localhost
+
+    Editar /etc/rc.local para agregar:
+/usr/local/sbin/dictd -c /etc/dictd.conf
+
+</para>
+
+  <sect2 id="referencias-dictd">
+    <title>Referencias y lecturas recomendadas</title>
+
+    <para>
+      Las siguientes páginas man:
+      <citerefentry><refentrytitle>sshd</refentrytitle>
+	<manvolnum>8</manvolnum></citerefentry>.
+    </para>
+  </sect2>
+</sect1>

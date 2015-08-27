@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<sect1 id="dhcp">
+  <title>Protocolo <command>DHCP</command></title>
+  <para>El protocolo DHCP se describen en el RFC 2131 (ver <xref linkend="rfc2131"></xref>),
+	  se trata de un modelo cliente-servidor en el que el servidor DHCP
+	  localiza direcciones IP libres en una red y envia parámetros de 
+	  configuración a computadores cliente que se configuran 
+	  dinámicamente. Entre los parámetros de configuración que un
+	  servidor puede enviar están: IP por asignar al computador, IP
+	  de la puerta de enlace, IPs de servidores de nombres, 
+	  nombre del dominio por utilizar.
+  </para>
+  <para>
+	  En su modo de operación dinámico el servidor
+	  le asigna una IP a un sólo cliente por cierto periodo de tiempo, al
+	  cabo del cual podría asignarle otra IP<footnote><para>Típicamente 
+			  un cliente
+			  enviará un paquete DHCPDISCOVER a toda la red (opcionalmente
+			  con sugerencia de la IP que quiere), un servidor que
+	  reciba tal paquete le responderá con un DHCPOFFER con una oferta
+	  de parámetros de configuración, el cliente puede responder con
+	  DHCPREQUEST para confirmar los parámetros y el servidor responde
+	  con un DHCPACK para confirmar asignación.</para></footnote>.
+  </para>
+  <sect2 id="cliente-DHCP">
+	  <title>Configuración de un cliente DHCP</title>
+	  <para>La configuración de un computador para operar como
+		  cliente de DHCP depende del sistema operativo, en el caso
+		  de Windows en las propiedades TCP/IPv4 de la tarjeta puede
+		  especificarse obtener dirección automáticamente. 
+		  En el caso de Linux 
+		  Ubuntu al Editar las Conexiones de Red puede especificarse
+		  que una tarjeta de red usará DHCP.  Un OpenBSD con una
+		  interfaz de red (digamos <literal>rl0</literal>) 
+		  se configura como cliente de DHCP desde la línea
+		  de comandos con:
+		  <screen>
+sudo dhclient rl0 
+		  </screen>
+		  que lee parámetros de configuración de
+		  <filename>/etc/dhclient.conf</filename> (el cual por defecto
+		  está configurado para solicitar mascara de red, servidores 
+		  de nombres, dirección de difusión --broadcast--, 
+		  nombre del dominio,
+		  nombre del computador y puerta de enlace).
+		  Puede configurarse de manera permanente para que en
+		  cada arranque se use este protocolo en una interfaz 
+		  (remplazar <literal>rl0</literal> por la de su caso)
+		  dejando en el archivo
+		  <filename>/etc/hostname.rl0</filename> la línea:
+		  <screen>
+dhcp
+		  </screen>
+	  	</para>
+  </sect2>
+
+  <sect2 id="servidor-DHCP">
+	  <title>Configuración de un servidor DHCP</title>
+  <para>Una configuración típica para un servidor DHCP que servirá
+	  direcciones para la red local 192.168.17.x en el rango
+	  192.168.17.142 a 192.168.17.164 y que enviará además
+	  entre los parámetros el dominio, la puerta de enlace y la
+	  IP del servidor de nombres,
+	  se hace en el archivo <filename>/etc/dhcpd.conf</filename> con:
+  <screen>
+shared-network LOCAL-NET {
+        option  domain-name "&EDOMINIO;";
+        option  domain-name-servers 192.168.17.1;
+        subnet 192.168.17.0 netmask 255.255.255.0 {
+                option routers 192.168.17.1;
+                range 192.168.17.142 192.168.17.164;
+        }
+}
+  </screen>
+	También asegurese de iniciar el servicio DHCP editando
+	<filename>/etc/rc.conf.local</filename> para agregar:
+	<screen>
+dhcpd_flags=""
+	</screen>
+	o en lugar de "" puede especificar las interfaces de red 
+	que el servidor debe atender separadas por espacio.
+</para>
+  </sect2>
+
+  <sect2 id="referencias-dhcpd">
+    <title>Referencias y lecturas recomendadas</title>
+
+    <para>
+	    Las siguientes páginas man:
+	    <citerefentry><refentrytitle>dhcp</refentrytitle><manvolnum>8</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>dhclient</refentrytitle>
+	      <manvolnum>8</manvolnum></citerefentry>,
+      <citerefentry><refentrytitle>dhclient.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>, 
+      <citerefentry><refentrytitle>dhcpd</refentrytitle><manvolnum>8</manvolnum></citerefentry> y 
+      <citerefentry><refentrytitle>dhcpd.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+    </para>
+    <para>El RFC 2131 (ver <xref linkend="rfc2131"></xref>).</para>
+  </sect2>
+</sect1>

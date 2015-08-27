@@ -1,0 +1,55 @@
+
+1. Configuración:
+
+	conf.sh
+
+El configurador determinará si todos los programas requeridos están 
+presentes, informará los que no encuentré con ídeas para que pueda
+obtenerlos.
+
+Puede especificar un prefijo para la ruta de instalación con la opción -p 
+(la ruta por defecto es "/usr/local"), por ejemplo:
+	./conf.sh -p /home/pepe/doc
+
+
+
+2. Generación de documentos:
+
+	make
+
+que producirá
+
+	* Páginas HTML apropiadas para consultar con un navegador en el 
+	  directorio html/
+	* PostScript apropiados para imprimir en imp/servidor_OpenBSD.ps
+	* PDF apropiado para imprimir en imp/servidor_OpenBSD.pdf
+
+también puede generar sólo un tipo de documentación con:
+
+	make html/servidor_OpenBSD.html
+	make imp/servidor_OpenBSD.ps
+	make imp/servidor_OpenBSD.pdf
+
+
+3. Opcional.  Consulte los documentos generados. Por ejemplo:
+
+	browsex html/servidor_OpenBSD.html
+	gv imp/servidor_OpenBSD.ps
+	xpdf imp/servidor_OpenBSD.pdf
+
+
+4. Instalación:
+
+Aunque no es indispensable, es recomendable en caso de que esta documentación 
+vaya a ser empleada por varios usuarios en su sistema:
+
+	make instala
+
+Esto instalará los 3 tipos de documentos en $prefijo/share/doc/servidor_OpenBSD
+(donde $prefijo es /usr/local o el que haya especificado durante la 
+configuración).
+
+
+
+5. Retroalimentación y ayuda
+
