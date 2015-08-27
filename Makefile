@@ -45,17 +45,14 @@ INDEX=indice.$(EXT_DOCBOOK)
 GENDIST=Derechos.txt $(SOURCES) $(IMAGES)
 # Dependencias por cumplir antes de generar distribución
 
-ACTHOST=web.sourceforge.net
+ACTHOST=git@github.com:pasosdeJesus/
 # Sitio en Internet donde actualizar. Método indicado por ACT_PROC de confv.sh
 
-ACTDIR=/home/groups/s/st/structio/htdocs/guias/servidor_adJ
+ACTDIR=servidor_adJ
 # Directorio en ACTHOST por actualizar
 
-USER=$(LOGNAME),structio
-# Usuario en ACTHOST.  Si es el mismo que en la máquina local comentar.
 
-
-GENACT=cvsall $(PROYECTO)-$(PRY_VERSION)_html.tar.gz #$(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf 
+GENACT=ghtodo $(PROYECTO)-$(PRY_VERSION)_html.tar.gz #$(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf 
 # Dependencias por cumplir antes de actualizar sitio en Internet al publicar
 
 FILESACT=$(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(HTML_DIR)/* #$(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf 
@@ -63,9 +60,13 @@ FILESACT=$(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)_html.tar.g
 
 all: $(HTML_TARGET) #$(PRINT_DIR)/$(PROYECTO).ps $(PRINT_DIR)/$(PROYECTO).pdf
 
-cvsall: distcvs 
+cvstodo: distcvs 
 	rm -rf $(PROYECTO)-$(PRY_VERSION)
 	tar xvfz $(PROYECTO)-$(PRY_VERSION).tar.gz
+	(cd $(PROYECTO)-$(PRY_VERSION); ./conf.sh; make $(PROYECTO)-$(PRY_VERSION)_html.tar.gz)
+	cp $(PROYECTO)-$(PRY_VERSION)/$(PROYECTO)-$(PRY_VERSION)_html.tar.gz .
+
+ghtodo: distgh
 	(cd $(PROYECTO)-$(PRY_VERSION); ./conf.sh; make $(PROYECTO)-$(PRY_VERSION)_html.tar.gz)
 	cp $(PROYECTO)-$(PRY_VERSION)/$(PROYECTO)-$(PRY_VERSION)_html.tar.gz .
 

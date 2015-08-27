@@ -69,9 +69,10 @@ No se ofrece garantía alguna, por el contrario se aprecia
 que se envíen correcciones y sugerencias al autor.  Este
 escrito se dedica a Dios por su infinita sabiduría.</para>
       <para>
-	La versión publicada más reciente está disponible tanto
-	<ulink url="&URLSITE;">en línea</ulink> como
-	<ulink url="&PROYECTO;-&PRY-VERSION;_html.tar.gz">en archivo comprimido</ulink>.
+	La versión publicada más reciente está tanto
+	<ulink url="&URLSITE;">en línea</ulink>  como
+	<ulink url="&PROYECTO;-&PRY-VERSION;_html.tar.gz">en archivo comprimido</ulink> 
+	y como <ulink url="http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/&PRY-VERSION;/paquetes/servidor_adJ-&PRY-VERSION;.tar.gz">paquete para adJ/OpenBSD</ulink>.
 	<!--, como <ulink
 	  url="&URLSITE;/&PROYECTO;-&PRY-VERSION;.ps.gz">PostScript
 	  comprimido</ulink> y como 

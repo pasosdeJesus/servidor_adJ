@@ -18,6 +18,11 @@
 # limpiadist 	Que debe limpiar todo excepto los archivos que deben ir
 # 		en una distribución de fuentes.
 
+distgh:
+	git clone $(ACTHOST)$(PROYECTO) 
+	$(RM) -rf $(PROYECTO)-$(PRY_VERSION) 
+	$(MV) $(PROYECTO) $(PROYECTO)-$(PRY_VERSION)
+
 
 distcvs:
 	$(CVS) -z3 co $(PRECVS)$(PROYECTO) 
@@ -70,7 +75,8 @@ act-ncftpput:
 act-gh:
 	rm -rf $(PROYECTO)_gh-pages
 	git clone -b gh-pages git@github.com:pasosdeJesus/$(PROYECTO) $(PROYECTO)_gh-pages
-	rsync -ravz html/ $(PROYECTO)_gh-pages/
+	rsync -rvz html/ $(PROYECTO)_gh-pages/
+	cp $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(PROYECTO)_gh-pages/
 	(cd $(PROYECTO)_gh-pages/;\
 	git add *; \
 	git commit -m "Actualiza HTML" -a;\
