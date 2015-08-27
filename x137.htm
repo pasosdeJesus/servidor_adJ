@@ -1,0 +1,1147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Capas de una red TCP/IP sobre
+    algunos medios físicos</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Redes, protocolos e Internet"
+HREF="c28.htm"><LINK
+REL="PREVIOUS"
+TITLE="Redes, protocolos e Internet"
+HREF="c28.htm"><LINK
+REL="NEXT"
+TITLE="Lecturas recomendadas"
+HREF="x331.htm"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c28.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Capítulo 2. Redes, protocolos e Internet</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x331.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="AEN137"
+>Capas de una red <ACRONYM
+CLASS="acronym"
+>TCP/IP</ACRONYM
+> sobre
+    algunos medios físicos</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN140"
+>Capa física</A
+></H2
+><A
+NAME="AEN142"
+></A
+><P
+>Esta capa de red se refiere
+      a conexiones eléctrica y mecánicas de la red.  Por ejemplo
+      codificiación/decodificación de información y arbitramento en caso
+      de coliciones.
+    </P
+><P
+>Se refiere a las conexiones eléctricas y mecánicas de la
+       red.  Ejemplos de protocolos a este nivel son: Ethernet,
+       Inalámbrico <ACRONYM
+CLASS="acronym"
+>IEEE</ACRONYM
+> 802.11, Modem y fibra
+       óptica.  La información por transmitir se codifica en últimas
+       como una señal electríca que debe transmitirse por cables o
+       como una señal electromagnética (luz, ondas).  En medios de
+       transmisión compartidos por más computadores (Ethernet, fibra
+       óptica, aire), el protocolo de este nivel debe tener en cuenta:
+       codificación/decodificación de información del bus al medio de
+       transmisión y arbitrar en caso de colisión de datos.  Este tipo
+       de protocolos es implementado por hardware, comúnmente por una
+       tarjeta o dispositivo dedicado que se debe conectar al bus de
+       cada computador. Las tarjetas de los computadores que se
+       comunican se conectan empleando el medio de transmisión. OpenBSD,
+       a nivel físico soporta dispositivos ethernet, fddi (fibra óptica) y
+       conexiones inalámbricas. En
+       caso particular de Ethernet, existen en el momento de este
+       escrito estándares para 10Mbps, 100Mbps, 1Gbps y 10Gbps, que
+       se emplean en topología de estrella (i.e. todos los
+       computadores conectados por cables de pares trenzados a un
+       concentrador), puede
+       configurarse como <I
+CLASS="foreignphrase"
+>Half-duplex</I
+> o
+       como <I
+CLASS="foreignphrase"
+>Full-Duplex</I
+>. Describiremos
+       el uso del esquema más popular y económico en este momento:
+       100Mbps, Full-duplex con cable de pares trenzados
+       <A
+NAME="AEN149"
+HREF="#FTN.AEN149"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>.  Cada tarjeta Ethernet tiene una dirección única
+	 (llamada dirección <ACRONYM
+CLASS="acronym"
+>MAC</ACRONYM
+>), que en una
+	 transmisión permite indicar tarjeta fuente y tarjeta destino
+	 (la dirección <ACRONYM
+CLASS="acronym"
+>MAC</ACRONYM
+> de ambos es transmitida
+	 también).
+      </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN155"
+>Capa de enlace</A
+></H2
+><A
+NAME="AEN157"
+></A
+><P
+>En el caso de redes 
+      Ethernet la capa de enlace corresponde al protocolo ...  Este
+      protocolo permite traducir direcciones IP a direcciones MAC.
+    </P
+><P
+>Los protocolos de esta capa permiten interconectar la capa
+       de internet (<ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+>) con la red
+       que se use.  En el caso de una red Ethernet se trata del
+       protocolo ARP<A
+NAME="AEN162"
+HREF="#FTN.AEN162"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>,
+       y que se encarga de traducir
+       direcciones <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> a direcciones
+       <ACRONYM
+CLASS="acronym"
+>MAC</ACRONYM
+>
+       <A
+NAME="AEN168"
+HREF="#FTN.AEN168"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+>.
+      </P
+><P
+>Cada vez que un computador de una <ACRONYM
+CLASS="acronym"
+>LAN</ACRONYM
+>
+       identifica una dirección <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+>
+       de otro computador conectado a la <ACRONYM
+CLASS="acronym"
+>LAN</ACRONYM
+> y su
+       correspondiente dirección <ACRONYM
+CLASS="acronym"
+>ARP</ACRONYM
+>, almacena la
+       información en una tabla (se borra automáticamente después de
+       algunos minutos o manualmente por ejemplo con 
+       <TT
+CLASS="literal"
+>sudo arp -d 192.168.2.2</TT
+>).
+       La tabla puede consultarse con <TT
+CLASS="literal"
+>arp -a</TT
+>.</P
+><P
+>Para monitorear una red Ethernet y detectar nuevos
+       computadores que se conecten, puede emplearse el programa
+       <SPAN
+CLASS="application"
+>arpwatch</SPAN
+> (paquete
+       <TT
+CLASS="literal"
+>arpwatch</TT
+>) que cada vez que detecta cambios
+       envía un correo a la cuenta root.</P
+><P
+>En el caso de una conexión por modem el protocolo es
+       <ACRONYM
+CLASS="acronym"
+>PPP</ACRONYM
+><A
+NAME="AEN186"
+HREF="#FTN.AEN186"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+>, que se encarga
+       de establecer, terminar y verificar la conexión.  Durante la
+	 conexión autentica el computador que se conecta ante el
+       servidor (bien con el protocolo <ACRONYM
+CLASS="acronym"
+>PAP</ACRONYM
+> o con
+	 <ACRONYM
+CLASS="acronym"
+>CHAP</ACRONYM
+>) y durante la operación prepara los
+       paquetes enviados por otros protocolos (como
+       <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+>) para transmitirlos por modem.
+      </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN192"
+>Capa de internet</A
+></H2
+><A
+NAME="AEN194"
+></A
+><P
+>Este protocolo fragmenta
+      y envia información empleando la capa física.  Cada computador
+      se identifica con un número de 4 bytes (en la versión 4 de este 
+      protocolo).
+    </P
+><P
+>En esta capa la información es fragmentada y envíada
+       empleando el protocolo de la capa física. Los protocolos de
+       esta capa deben tener en cuenta la retransmisión de la
+       información en caso de error al enviar y el verificar
+       información recibida. En esta capa está el
+       <I
+CLASS="foreignphrase"
+>Internet Protocol</I
+> (<ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+>) que es un protocolo diseñado para
+       Internet y del cual hay dos versiones: <ACRONYM
+CLASS="acronym"
+>IPv4</ACRONYM
+>
+       e <ACRONYM
+CLASS="acronym"
+>IPv6</ACRONYM
+>.
+       Describiremos la versión 4
+
+       <A
+NAME="AEN202"
+HREF="#FTN.AEN202"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+>
+       (la versión 6 fue diseñada para soportar más computadores
+       conectados a Internet y se espera que pronto se use
+       ampliamente
+       <A
+NAME="AEN207"
+HREF="#FTN.AEN207"
+><SPAN
+CLASS="footnote"
+>[6]</SPAN
+></A
+>).
+      </P
+><P
+>Este protocolo permite la transmisión de paquetes
+       (llamados datagramas) en redes donde cada computador
+       interconectado se identifica con una dirección única. Tales
+       direcciones están diseñadas para interconectar varias redes,
+       identificar los computadores que pertenecen a una red
+       (empleando una máscara de red que indica que parte de la
+       dirección del computador corresponde a la dirección de la red)
+       y facilitar el enrutamiento.  Si el medio de transmisión lo
+       requiere, el protocolo <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> se
+       encarga de la división de los datagramas en paquetes más
+       pequeños para su tranmisión y de la posterior reagrupación
+       (fragmentación), el tamaño máximo que un paquete puede tener
+       para un protocolo de nivel físico se llama
+       <ACRONYM
+CLASS="acronym"
+>MTU</ACRONYM
+> (<I
+CLASS="foreignphrase"
+>Maximal Transfer
+       Unit</I
+>), en el caso de Ethernet es 1500
+       bytes.</P
+><P
+>Cada datagrama por transmitir es pasado a la capa de
+       <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> por otro protocolo de una
+       capa superior (e.g <ACRONYM
+CLASS="acronym"
+>TCP</ACRONYM
+>) junto con dirección
+       destino, <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> mantiene una
+       tabla de enrutamiento que asocia direcciones destino con
+       compuertas (computadores intermediarios en inglés
+       <I
+CLASS="foreignphrase"
+>gateways</I
+>). Así que envía el
+       datagrama empleando el nível físico a la dirección de la
+       compuerta que mantenga en su tabla de enrutamiento.  La tabla
+       de enrutamiento puede ser modificada manualmente (con 
+       <B
+CLASS="command"
+>route show</B
+>) o puede ser modificada
+       automáticamente cuando una compuerta envía un mensaje indicando
+       la dirección de otra compuerta más apropiada para llegar a un
+       dirección.  Hay siempre una compuerta por defecto a la que se
+       envían paquetes que <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> no
+       sepa como enrutar. </P
+><A
+NAME="AEN220"
+></A
+><P
+>Con este 
+	    programa puede modificarse la tabla de enrutamiento del 
+	    protocolo IP.</P
+><P
+>IP no es protocolo fiable, porque no asegura que un paquete
+       llegue a su destino y no realiza retransmisiones. Aunque para informar
+       algunas situaciones anomalas emplea el protocolo
+       <ACRONYM
+CLASS="acronym"
+>ICMP</ACRONYM
+>
+       <A
+NAME="AEN225"
+HREF="#FTN.AEN225"
+><SPAN
+CLASS="footnote"
+>[7]</SPAN
+></A
+>.</P
+><A
+NAME="AEN227"
+></A
+><P
+>Este protocolo es empleado
+      por IP para transmitir mensajes de error y para realizar algunas
+      consultas para verificar el funcionamiento de una red o medir
+      (e.g eco, estampilla de tiempo).
+    </P
+><P
+>OpenBSD cuenta con una excelente implementación
+	      de <ACRONYM
+CLASS="acronym"
+>IPv4</ACRONYM
+> con posibilidad de 
+	      filtrar, redirigir, traducir direcciones, balancear
+	      carga y muchas otras opciones que se configuran de
+	      forma sencilla con PF.  Además implementa características
+	      no estándar como IPsec para transmisión encriptada y
+	      IPcomp para comprimir.
+      </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN232"
+>Capa de transporte</A
+></H2
+><A
+NAME="AEN234"
+></A
+><P
+>En Internet este protocolo
+      está en la capa de enlace, se encarga de procurar una conexión
+      continua,  libre de errores.
+    </P
+><P
+>Los protocolos de esta capa asegura una conexión continua
+       y posiblemente libre de errores entre emisor y receptor.  Un
+       protocolo de esta capa debe tener en cuenta mantener los
+       paquetes en orden y asegurar que están completos.  Esto se
+       requiere porque el nivel de red puede enrutar diversos paquetes
+       de forma diferente.  En esta capa hay dos 
+       protocolos: <ACRONYM
+CLASS="acronym"
+>TCP</ACRONYM
+><A
+NAME="AEN239"
+HREF="#FTN.AEN239"
+><SPAN
+CLASS="footnote"
+>[8]</SPAN
+></A
+> y
+   <ACRONYM
+CLASS="acronym"
+>UDP</ACRONYM
+><A
+NAME="AEN245"
+HREF="#FTN.AEN245"
+><SPAN
+CLASS="footnote"
+>[9]</SPAN
+></A
+>.  El primero es
+       fiable, asegura que la transmisión enviada sea recibida,
+       <ACRONYM
+CLASS="acronym"
+>UDP</ACRONYM
+> por su parte no busca
+       confirmar que la información llegue a su destino (aunque
+       permite hacer difusión<A
+NAME="AEN251"
+HREF="#FTN.AEN251"
+><SPAN
+CLASS="footnote"
+>[10]</SPAN
+></A
+> y multidifusión<A
+NAME="AEN254"
+HREF="#FTN.AEN254"
+><SPAN
+CLASS="footnote"
+>[11]</SPAN
+></A
+> mientras 
+       que <ACRONYM
+CLASS="acronym"
+>TCP</ACRONYM
+> no).  Ambos protocolos emplean
+       puertos para permitir más de una conexión con uno o más
+       computadores, un puerto se identifica con un número entre 0 y
+       65536, los primeros 1024 números sólo pueden ser usados por
+       servidores iniciados desde la cuenta root, los demás pueden ser
+       usados por todos los usuarios.
+       </P
+><A
+NAME="AEN258"
+></A
+><P
+>En este archivo pueden
+      examinarse conexiones a puertos TCP.
+    </P
+><A
+NAME="AEN262"
+></A
+><P
+>Permite examinar entre otras, conexiones a puertos TCP y UDP.
+    </P
+><P
+>Puede examinar información sobre conexiones a puertos
+       <ACRONYM
+CLASS="acronym"
+>TCP</ACRONYM
+> y 
+	 <ACRONYM
+CLASS="acronym"
+>UDP</ACRONYM
+> con 
+	 <B
+CLASS="command"
+>sudo pfctl -sa</B
+>
+      </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="AEN270"
+>Capa de aplicación</A
+></H2
+><P
+>Consta de protocolos empleados por aplicaciones con
+       propósitos específicos.  Emplean los protocolos de la capa de
+       transporte para establecer comunicación.  Los protocolos de
+       esta capa pueden dividirse a su vez en protocolos de usuario y
+       protocolos de soporte.  Los primeros son para programas
+       empleados directamente por usuarios y los segundos son
+       empleados por el sistema operativo o por otros
+       protocolos.</P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN273"
+>Protocolos de usuario</A
+></H3
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>Telnet</DT
+><DD
+><P
+>&#13;	   Telnet está definido en el <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 854 y
+	   complementado en el <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1123. Permite la
+	   operación remota de otro computador de forma insegura
+	   pues las claves se transmiten planas (ssh es un remplazo seguro, ver
+	   <A
+HREF="x1198.htm"
+>la sección de nombre <I
+>Servidor <B
+CLASS="command"
+>ssh</B
+></I
+> en Capítulo 5</A
+>),
+	   además
+	   puede usarse para interactuar con otros protocolos
+	   (por ejemplo puede interactuar con el protocolo de
+	   correo SMTP de su propio computador ---puerto 25---
+	   con <B
+CLASS="command"
+>telnet localhost 25</B
+>).</P
+></DD
+><DT
+>(<I
+CLASS="foreignphrase"
+>File Transfer Protocol</I
+>)
+	   <ACRONYM
+CLASS="acronym"
+>FTP</ACRONYM
+></DT
+><DD
+><P
+><ACRONYM
+CLASS="acronym"
+>FTP</ACRONYM
+> está definido
+	   en el <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 959 y complementado en el
+	   <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1123, permite transmisión de
+	   archivos de manera insegura pues las claves se transmiten
+	   planas (ver <A
+HREF="x2006.htm"
+>la sección de nombre <I
+>Servidor <TT
+CLASS="literal"
+>ftp</TT
+></I
+> en Capítulo 5</A
+>).
+	  </P
+></DD
+><DT
+><ACRONYM
+CLASS="acronym"
+>TFPT</ACRONYM
+></DT
+><DD
+><P
+> Está definido en el <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1350
+	   (<I
+CLASS="foreignphrase"
+>Trivial File Transfer
+	   Protocol</I
+>), es análogo a <ACRONYM
+CLASS="acronym"
+>FTP</ACRONYM
+> pues permite transmitir
+	   archivos, aunque es mucho más simple, es apropiado para
+	   transmitir el sistema operativo a computadores sin disco
+	   duro que arrancan por red.</P
+></DD
+><DT
+><ACRONYM
+CLASS="acronym"
+>SMTP</ACRONYM
+></DT
+><DD
+><P
+><ACRONYM
+CLASS="acronym"
+>SMTP</ACRONYM
+> se definió en
+	   el <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 822 y se complementó en el RFC
+	   1123 (<I
+CLASS="foreignphrase"
+>Simple Mail Transfer
+	   Protocol</I
+>) que especifica como se realiza la
+   transmisión de correo electrónico (ver 
+   <A
+HREF="x1282.htm"
+>la sección de nombre <I
+>Servidor de correo electrónico</I
+> en Capítulo 5</A
+>).</P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="AEN311"
+>Protocolos de soporte</A
+></H3
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>DNS</DT
+><DD
+><P
+>Definido en los <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1034 y 1035 y
+	   complementado en el <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1123.  Es empleado
+	   para dar nombres descriptivos a direcciones <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> (e.g structio.sourceforge.net
+	   es el nombre <ACRONYM
+CLASS="acronym"
+>DNS</ACRONYM
+> de la dirección
+	   216.34.181.96).</P
+></DD
+><DT
+>BOOTP</DT
+><DD
+><P
+>Empleado por un computador en el que no ha iniciado 
+			 el sistema operativo para
+			 solicitar su dirección <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> a un servidor
+		 de este protocolo.</P
+></DD
+><DT
+>SMMP</DT
+><DD
+><P
+>Empleado para monitorear uso de una red.</P
+></DD
+></DL
+></DIV
+></DIV
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notas</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN149"
+HREF="x137.htm#AEN149"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>El estándar que define este esquema es
+	 <ACRONYM
+CLASS="acronym"
+>IEEE</ACRONYM
+> 802.3, que se basa en el uso de un
+	 sólo medio de transmisión compartido por todos los
+	 dispositivos en el que sólo trasmite un sólo dispositivo
+	 durante un tiempo para evitar colisiones, se elige el
+	 siguiente dispositivo por transmitir con el algoritmo
+	 <ACRONYM
+CLASS="acronym"
+>CSMA/CD</ACRONYM
+> --cuando un dispositivo detecta
+	 que la línea está libre transmite parte de la información si
+	 detecta colisión da oportunidad de transmisión a otros un
+	 intervalo aleatorio de tiempo.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN162"
+HREF="x137.htm#AEN162"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+><ACRONYM
+CLASS="acronym"
+>ARP</ACRONYM
+> se define
+       en el <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 826</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN168"
+HREF="x137.htm#AEN168"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+> Un computador envía un
+	 mensaje a todos los demás de la red
+	 (<I
+CLASS="foreignphrase"
+>broadcast</I
+> que es posible en
+	 Ethernet), solicitando la dirección <ACRONYM
+CLASS="acronym"
+>MAC</ACRONYM
+> de
+       una dirección <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+>, el
+	 dispositivo con esa MAC responde enviando su dirección
+       <ACRONYM
+CLASS="acronym"
+>MAC</ACRONYM
+> al dispositivo que hizo la solicitud.
+	</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN186"
+HREF="x137.htm#AEN186"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>PPP se describe en el
+	 <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1661.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN202"
+HREF="x137.htm#AEN202"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>El protocolo <ACRONYM
+CLASS="acronym"
+>IPv4</ACRONYM
+> está
+	 descrito en el <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 791, aunque puede verse
+	 una descripción en conjunto con otros protocolos en el
+	 <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1122</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN207"
+HREF="x137.htm#AEN207"
+><SPAN
+CLASS="footnote"
+>[6]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>OpenBSD tiene soporte para IPv6</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN225"
+HREF="x137.htm#AEN225"
+><SPAN
+CLASS="footnote"
+>[7]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>ICMP Internet Control Message Protocol, se describe en
+	 el RFC792, permite enviar mensajes de error (e.g dirección
+	 inalcanzable, tiempo excedido) y algunos mensajes para hacer
+	 consultas (e.g eco, estampilla de
+	 tiempo).</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN239"
+HREF="x137.htm#AEN239"
+><SPAN
+CLASS="footnote"
+>[8]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+><ACRONYM
+CLASS="acronym"
+>TCP</ACRONYM
+> se describe en el
+       <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 793 y se complementa y corrige en el
+       <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1122</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN245"
+HREF="x137.htm#AEN245"
+><SPAN
+CLASS="footnote"
+>[9]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+><ACRONYM
+CLASS="acronym"
+>UDP</ACRONYM
+> está descrito 
+       en el <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 768 y corregido en el
+       <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1122</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN251"
+HREF="x137.htm#AEN251"
+><SPAN
+CLASS="footnote"
+>[10]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Del inglés <I
+CLASS="foreignphrase"
+>broadcast</I
+></P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN254"
+HREF="x137.htm#AEN254"
+><SPAN
+CLASS="footnote"
+>[11]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Del
+		       inglés <I
+CLASS="foreignphrase"
+>multicast</I
+></P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c28.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x331.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Redes, protocolos e Internet</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c28.htm"
+ACCESSKEY="U"
+>Subir</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Lecturas recomendadas</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

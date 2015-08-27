@@ -1,0 +1,58 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Capítulo 6. Otros servicios que puede prestar el servidor</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="prev" href="sevidorweb.html" title="7. Servidor Web"><link rel="next" href="postgresql.html" title="2. Motor de bases de datos PostgreSQL"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 6. Otros servicios que puede prestar el servidor</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sevidorweb.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="postgresql.html">Siguiente</a></td></tr></table><hr></div><div class="chapter" lang="es"><div class="titlepage"><div><div><h2 class="title"><a name="otros-servicios-de-un-servidor"></a>Capítulo 6. Otros servicios que puede prestar el servidor</h2></div></div></div><div class="toc"><p><b>Tabla de contenidos</b></p><dl><dt><span class="sect1"><a href="otros-servicios-de-un-servidor.html#cuotas">1. Cuotas</a></span></dt><dd><dl><dt><span class="sect2"><a href="otros-servicios-de-un-servidor.html#referencias-quota">1.1. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="postgresql.html">2. Motor de bases de datos PostgreSQL</a></span></dt><dd><dl><dt><span class="sect2"><a href="postgresql.html#primera-instalacion">2.1. Primera instalación del servidor</a></span></dt><dt><span class="sect2"><a href="postgresql.html#autenticacion">2.2. Habilitando autenticación</a></span></dt><dt><span class="sect2"><a href="postgresql.html#creacion-base">2.3. Creación de una base de datos</a></span></dt><dt><span class="sect2"><a href="postgresql.html#uso-base">2.4. Uso de una base de datos</a></span></dt><dt><span class="sect2"><a href="postgresql.html#postgresql-cotejacion">2.5. Cotejación en PostgreSQL</a></span></dt><dt><span class="sect2"><a href="postgresql.html#respaldo-postgresql">2.6. Copias de respaldo</a></span></dt><dt><span class="sect2"><a href="postgresql.html#referencias-postgresql">2.7. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="mariadb.html">3. MariaDB</a></span></dt><dd><dl><dt><span class="sect2"><a href="mariadb.html#uso-mariadb">3.1. Uso básico</a></span></dt><dt><span class="sect2"><a href="mariadb.html#clave-mysql">3.2. Cambio de la clave de administrador</a></span></dt><dt><span class="sect2"><a href="mariadb.html#recuperacion-backups">3.3. Recuperación y backups</a></span></dt><dt><span class="sect2"><a href="mariadb.html#chroot-mysql">3.4. MySQL y Apache con chroot</a></span></dt><dd><dl><dt><span class="sect3"><a href="mariadb.html#socket-mysql">3.4.1. Socket en la jaula de Apache</a></span></dt><dt><span class="sect3"><a href="mariadb.html#mysql-chroot">3.4.2. Corriendo MySQL chroot</a></span></dt></dl></dd><dt><span class="sect2"><a href="mariadb.html#lecutras-mysql">3.5. Lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="servidor-ldapd.html">4. Servidor ldapd</a></span></dt><dd><dl><dt><span class="sect2"><a href="servidor-ldapd.html#instalacion-ldapd">4.1. Instalación de ldapd</a></span></dt><dt><span class="sect2"><a href="servidor-ldapd.html#pruebas-openldap">4.2. Pruebas Iniciales con openldap-client</a></span></dt><dt><span class="sect2"><a href="servidor-ldapd.html#datos-iniciales-ldapd">4.3. Adición de datos iniciales</a></span></dt><dt><span class="sect2"><a href="servidor-ldapd.html#phpldapadmin">4.4. Instalación y configuración de <code class="literal">phpldapadmin</code></a></span></dt><dt><span class="sect2"><a href="servidor-ldapd.html#referencias-ldapd">4.5. Referencias y lecturas recomendadas</a></span></dt></dl></dd></dl></div><p></p><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cuotas"></a>1. Cuotas</h2></div></div></div><p>Pueden emplearse cuotas para limitar el espacio en disco 
+    y la cantidad de archivos que un usuario o un grupo puede
+    tener.</p><p>Para usarlo debe: (1) especificar sistemas de archivos en
+    los que se usará cuota (2) especificar cuota por usuario o grupo y
+    (3) activar chequeo de cuota durante el arranque.
+  </p><p>
+    Indique los sistemas de archivos en los que usará cuota,
+    en <code class="filename">/etc/fstab</code> agregando como opción del sistema
+    de archivos: <code class="literal">userquota</code> y/o <code class="literal">groupquota</code>.
+    Por ejemplo:</p><pre class="screen">
+/dev/wd0d /home ffs rw,nodev,nosuid,userquota 1 2
+    </pre><p>
+    Después active el sistema de cuotas con:</p><pre class="screen">
+# quotaon -a
+    </pre><p>
+  </p><p>
+    Para especificar la cuota por usuario o por grupo emplee
+    <code class="literal">edquota</code>, por ejemplo:</p><pre class="screen">
+# edquota pabram
+    </pre><p>
+    que lo dejará en un editor en el que podrá cambiar las especificaciones
+    de la cuota en cada sistema de archivos con cuotas:
+    </p><pre class="screen">
+Quotas for user pabram:
+/home: blocks in use: 1292980, limits (soft = 1000000, hard = 2000000)
+       inodes in use: 142318, limits (soft = 0, hard = 0)
+     </pre><p>
+     el límite blando podrá extenderse para cada usuario por un periodo de 
+     tiempo (en este ejemplo), tras el cual se convertirá en un límite duro. 
+     Límites en 0 indican que no hay restricción.
+   </p><p>
+    Puede replicar la configuración de cuotas en otros usuarios con:
+    </p><pre class="screen">
+# edquota -p pabram pedgar juamar margo
+    </pre><p>
+    Después de especificar las cuotas de los usuarios puede verificar
+    la política de cuotas con:</p><pre class="screen">
+# repquota -a
+    </pre><p>
+    o chequear que se cumplan todas las cuotas con:</p><pre class="screen">
+quotacheck -a
+    </pre><p>
+  </p><p>Para activar sistema de cuotas y que las cuotas sean verificadas 
+    cada vez que el sistema inicia agregue la siguiente línea al 
+    archivo <code class="filename">/etc/rc.conf.local</code>:</p><pre class="screen">
+check_quotas=YES
+    </pre><p>
+  </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-quota"></a>1.1. Referencias y lecturas recomendadas</h3></div></div></div><p>
+      Las siguientes páginas del manual de OpenBSD:
+      <a href=""><span class="citerefentry"><span class="refentrytitle">quota</span>(1)</span></a>,
+      <a href=""><span class="citerefentry"><span class="refentrytitle">edquota</span>(8)</span></a>,
+      <a href=""><span class="citerefentry"><span class="refentrytitle">quotaon</span>(8)</span></a>,
+      <a href=""><span class="citerefentry"><span class="refentrytitle">quotaoff</span>(8)</span></a>,
+      <a href=""><span class="citerefentry"><span class="refentrytitle">quotacheck</span>(8)</span></a> y
+      <a href=""><span class="citerefentry"><span class="refentrytitle">repquota</span>(8)</span></a>.
+	En el FAQ de OpenBSD hay una sección sobre quotas:
+<a href="http://www.openbsd.org/faq/faq10.html#Quotas" target="_top">http://www.openbsd.org/faq/faq10.html#Quotas</a>
+    </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sevidorweb.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="postgresql.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">7. Servidor Web </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 2. Motor de bases de datos PostgreSQL</td></tr></table></div></body></html>

@@ -1,0 +1,222 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>5. Red Local Inalámbrica: uso y configuración</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="up" href="dispositivos-interconexion.html" title="Capítulo 3. Dispositivos de interconexión"><link rel="prev" href="lan-ethernet.html" title="4. Uso y configuración en una red LAN Ethernet"><link rel="next" href="direcciones-enrutamiento-transporte.html" title="Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5. Red Local Inalámbrica: uso y configuración</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="lan-ethernet.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Dispositivos de interconexión</th><td width="20%" align="right"> <a accesskey="n" href="direcciones-enrutamiento-transporte.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="red-inalambrica"></a>5. Red Local Inalámbrica: uso y configuración</h2></div></div></div><p>Las redes inalámbrica emplean ondas electromagnéticas transmitidas
+	      por aire, por lo que no se requieren cables, aunque el rango
+	      de alcance es limitado por el tipo de antenas que
+	      se empleen y los obstáculos (sin antenas especiales
+	      piense en menos de 50 metros con línea de vista y menos 
+	      cuando hay paredes y otros obstáculos).  
+      </p><p>
+	      Para redes locales los protocolos más utilizados
+	      son IEEE 802.11a, 802.11b y 802.11g, que emplean
+	      rangos del espectro electromagnético (como 2.4GHz)
+	      los cuales pueden usarse sin requerir permiso en Colombia
+	      y dan tasas de transferencia entre 11Mbps y 54Mbps.
+      </p><p>
+      	Una red local inalámbrica requiere un Punto de Acceso Inalámbrico
+	      (en inglés <span class="emphasis"><em>Acces Point</em></span>) que atienda
+	      peticiones y de respuestas  a todos los computadores
+	      cliente que se conecten.  Tal Punto de Acceso Inalámbrico puede 
+	      ser un dispositivo dedicado o bien un computador
+	      con OpenBSD que cuente con una tarjeta de inalámbrica 
+	      que soporte el modo <code class="literal">hostap</code>.
+      </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="cliente-inalambrico"></a>5.1. OpenBSD como cliente en una red inalámbrica</h3></div></div></div><p>Hay una amplia gama de tarjetas de red inalámbricas
+			(tanto PCI, como USB) con controladores para OpenBSD, 
+			sin embargo varias
+			tarjetas de red populares no
+			son soportadas, por lo que antes de comprar 
+			examine el listado de tarjetas soportadas en:
+			<a href="http://dhobsd.pasosdejesus.org/?id=CompatibilidadHardware" target="_top">http://dhobsd.pasosdejesus.org/?id=CompatibilidadHardware</a>.
+			Una vez conecte su tarjeta de red inalámbrica,
+			búsque la interfaz de red asociada con
+			</p><pre class="screen">
+ifconfig
+			</pre><p>
+			o algunos detalles de lo que se ve del hardware con
+				</p><pre class="screen">
+dmess | less
+			</pre><p>
+			Por ejemplo una Intel PRO/Wireless se ve así:
+			</p><pre class="screen">
+wpi0 at pci3 dev 0 function 0 "Intel PRO/Wireless 3945ABG" rev 0x02: irq 10, MoW1, address 00:1b:77:d6:52:ee
+			</pre><p>
+			y una D-Link USB típica se ve:
+			</p><pre class="screen">
+rum0 at uhub0 port 5 "Ralink 802.11 bg WLAN" rev 2.00/0.01 addr 2
+rum0: MAC/BBP RT2573 (rev 0x2573a), RF RT2528, address 00:1e:58:b0:db:68
+			</pre><p>
+			En algunos casos OpenBSD incluye el controlador
+			completo de fuentes abiertas para a la tarjeta (por
+			ejemplo <code class="literal">rum0</code>) pero 
+			en otros es necesario descargar firmware adicional
+			(por ejemplo <code class="literal">wpi0</code>).
+			Vea la página del controlador 
+			para encontrar detalles, por ejemplo en el caso
+			de <code class="literal">wpi0</code> al examinar
+			<span><strong class="command">man wpi</strong></span> se ve que esta tarjeta 
+			requiere firmware adicional que debe instalar con:
+			</p><pre class="screen">
+sudo pkg_add http://damien.bergamini.free.fr/packages/openbsd/wpi-firmware-3.2.tgz
+			</pre><p>
+
+			Después de tener controlador completo puede buscar
+			redes inalámbricas cercanas con
+			</p><pre class="screen">
+sudo ifconfig rum0 scan	
+			</pre><p>
+			remplazando <code class="literal">rum0</code> por la
+			interfaz de su tarjeta.  Verá un listado de
+			redes próximas con identificación, calidad
+			de la señal, velocidad y tipo de encripción.
+		</p><p>
+			Para conectarse a una red basta configurar
+			la tarjeta con la identificación, tipo de encripción
+			y clave apropiadas y posteriormente asignar
+			una IP en la red inalámbrica, bien manualmente
+			o bien por DHCP si el Access Point lo soporta (como
+			ocurre típicamente).  Para configurar a una
+			red de nombre MIRED que no emplea encripción:
+			</p><pre class="screen">
+sudo ifconfig rum0 nwid MIRED 
+			</pre><p>
+			Si la red emplea encripción WEP (un mecanismo de
+			encripción débil), puede especificar la llave
+			de encripción en hexadecimal:
+			</p><pre class="screen">
+sudo ifconfig rum0 nwid MIRED nwkey 0x123498a2d2
+			</pre><p>
+			o en ASCII:
+			</p><pre class="screen">
+sudo ifconfig rum0 nwid MIRED nwkey "clave"
+			</pre><p>
+			Si la red emplea encripción WAP (un mecanismo de
+			encripción más fuerte):
+			</p><pre class="screen">
+sudo ifconfig rum0 nwid MIRED wpakey MICLAVE
+			</pre><p>
+			Después puede examinar nuevamente con <span><strong class="command">ifconfig</strong></span> si ya se ve estado Activo en la interfaz de red lo cual le confirma
+			que logró conexión y posteriormente puede
+			establecer la IP bien manualmente si conoce
+			el segmente de red:
+			</p><pre class="screen">
+ifconfig rum0 192.168.1.15
+			</pre><p>
+			o bien automáticamente si el Acess Point soporta
+			DHCP con:
+			</p><pre class="screen">
+sudo dhclient rum0
+			</pre><p>
+
+			Tras esto al examinar con <span><strong class="command">ifconfig</strong></span> 
+			se ve algo como:
+			</p><pre class="screen">
+rum0: flags=8c43&lt;UP,BROADCAST,RUNNING,OACTIVE,SIMPLEX,MULTICAST&gt; mtu 1500
+        lladdr 00:1e:58:b0:db:68
+        priority: 4
+        groups: wlan egress
+        media: IEEE802.11 autoselect (OFDM36 mode 11g)
+        status: active
+        ieee80211: nwid MIRED chan 1 bssid 00:02:6f:5f:f8:6a 117dB nwkey &lt;not displayed&gt; 100dBm
+        inet 192.168.44.50 netmask 0xffffff00 broadcast 192.168.44.255
+        inet6 fe80::21e:58ff:feb0:db68%rum0 prefixlen 64 scopeid 0x6
+</pre><p>
+		</p><p>Si requiere conectarse en cada arranque del
+			computador configure en <code class="filename">hostname.rum0</code>
+			(cambiando rum0 por su interfaz). Por ejemplo si
+			tiene una IP fija con:
+			</p><pre class="screen">
+inet 192.168.44.50 255.255.255.0 NONE nwid "MIRED" nwkey "clave"
+			</pre><p>
+			o si requiere DHCP:
+			</p><pre class="screen">
+dhcp NONE NONE NONE nwid "MIRED" nwkey "0x1112131415"
+			</pre><p>
+			o si es WPA con DHCP:
+			</p><pre class="screen">
+dhcp nwid "MIRED" wpakey "clave"
+			</pre><p>
+		</p><p>
+			El tráfico de red inalámbrico puede examinarse
+			con el paquete <span><strong class="command">kismet</strong></span>, el
+			cual tiene un archivo de configuración 
+			(<code class="filename">/etc/kismet.conf</code>) 
+			en el que debe especificarse el controlador usado.
+		</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="dispositivo-AP"></a>5.2. Dispositivo dedicado que obra como Punto de Acceso Inalámbrico </h3></div></div></div><p>Estos dispositivo cuentan con una antena (típicamente
+			pequeña) para
+			la red inalámbrica y un conector para cable 
+			Ethernet que se conecta a la red cableada, la
+	       		cual típicamente va a Internet.	</p><p>Normalmente los dispositivos que obran como Punto
+			de Acceso Inalámbrico (Acces Point) cuentan con un 
+			servicio de configuración que opera
+	      sobre HTTP por lo que pueden conectarse a un computador
+	      y emplear un navegador web. 
+      </p><p>Para conectarlo a un computador basta que ponga un
+	      cable Ethernet sin cruzar entre ambos y que 
+	      ambos estén en el mismo segmento de red con IPs diferentes.
+	      La IP inicial de su Punto de Acceso Inalámbrico seguramente 
+	      la podrá ver en
+	      el manual del usuario (típicamente es 192.168.0.1 o 
+	      192.1681.1.1 con máscara de red 255.255.255.0).  Para determinar
+	      la IP de un Punto de Accesos Inalámbrico también 
+	      puede intentar conectándolo
+	      a un computador y usando <span><strong class="command">tcpdump</strong></span> para 
+	      examinar el tráfico que pasa por la interfaz de red a la 
+	      cual conecte el Punto de Acceso Inalámbrico.
+      </p><p>Una vez determine la IP del Punto de Acceso Inalámbrico ponga 
+	      el computador con el que configurará en el mismo segmento de 
+	      red.  Por ejemplo si el Access Point tiene
+	      IP 192.168.1.1 y lo conectó a la interfaz 
+	      <code class="literal">rl0</code>, configure
+	      esa interfaz de red por ejemplo con:
+	      </p><pre class="screen">
+ifconfig rl0 192.168.1.2 
+	      </pre><p>
+	      tras lo cual ya debe poder ejecutar:
+	      </p><pre class="screen">
+ping 192.168.1.1
+	      </pre><p>
+	      obtener respuesta del Punto de Acceso Inalámbrico y 
+	      configurarlo abriendo en un navegador el URL 
+	      <code class="literal">http://192.168.1.1</code>.
+      </p><p>El Punto de Acceso Inalámbrico normalmente obrará como enrutador 
+	      y hará NAT
+	      a una nueva red que será independiente de la red cableada
+	      a la cual lo conecte.
+	      Por ejemplo si lo conecta por cable Ethernet a una red con 
+	      IPs 192.168.190/24, podrá 
+	      enrutar y hacer NAT a otra red como la 192.168.1/24.  Algunos
+	      Puntos de Acceso Inalámbricos (como el EnGenius EOC 1650)
+	      soportan un modo puente que permite distribuir con DHCP 
+	      algunas direcciones de la misma red cableada.   
+	      Esto tiene
+	      la ventaja de dejar tanto la red inalámbrica como la cableada
+	      en el mismo segmento de red.
+      </p><p>Las particularidades de configuración de cada Punto
+	      de Accesso Inalámbrico varían de un modelo a otro, pero normalmente
+	      debe especificar: 
+	      </p><div class="itemizedlist"><ul type="disc"><li><p>IP, máscara de red, puerta de enlace y servidor
+	      DNS en la red cableada.
+		      </p></li><li><p>IP, máscara de red y rango de direcciones
+		      por repartir en la red inalámbrica.</p></li></ul></div><p>
+      </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="PAI"></a>5.3. OpenBSD como Punto de Acceso Inalámbrico </h3></div></div></div><p>Si cuenta con una tarjeta de red inalámbrica
+			con controladores para OpenBSD y que soporte el modo
+			<code class="literal">hostap</code> (como puede consultar
+			en la página del manual del controlador) es sencillo 
+			configurar un 
+			Punto de Acceso Inalámbrico, continuando las
+			instrucciones de la sección <a href="red-inalambrica.html#cliente-inalambrico" title="5.1. OpenBSD como cliente en una red inalámbrica">Sección 5.1, “OpenBSD como cliente en una red inalámbrica”</a>.
+		</p><p>Supongamos que su tarjeta esta asociada a la
+			interfaz <code class="literal">ath0</code>, que desea 
+			emplear el segmento 192.168.3/24, llamar
+			a la red CASA con encripción WEP y clave
+			"uvwxy". Basta que en 
+			<code class="filename">/etc/hostname.ath0</code> configure:
+			</p><pre class="screen">
+inet 192.168.3.1 255.255.255.0 NONE media autoselect \
+        mediaopt hostap nwid CASA chan 11 nwkey "uvwxy"
+</pre><p>
+Tras esto desde los portatiles y computadores cercanos debe poder ver
+la red CASA y conectarse con WEP y la clave uvwxy.
+		</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-wlan"></a>5.4. Referencias</h3></div></div></div><p>
+		      </p><div class="itemizedlist"><ul type="disc"><li><p>Páginas <span><strong class="command">man</strong></span> de
+				      <span><strong class="command">ifconfig</strong></span>,
+				      <span><strong class="command">wpi</strong></span></p></li><li><p>Ver [<a href="bi01.html#wndw" title="[wndw]">wndw</a>]</p></li></ul></div><p>
+		</p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="lan-ethernet.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="dispositivos-interconexion.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="direcciones-enrutamiento-transporte.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">4. Uso y configuración en una red LAN Ethernet </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos</td></tr></table></div></body></html>

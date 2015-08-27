@@ -1,0 +1,213 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Capítulo 3. Dispositivos de interconexión</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="prev" href="lecturas-redes-protocolos-internet.html" title="3. Lecturas recomendadas"><link rel="next" href="modem-isdn.html" title="2. Conexión a Internet con un módem o módem ISDN"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 3. Dispositivos de interconexión</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="lecturas-redes-protocolos-internet.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="modem-isdn.html">Siguiente</a></td></tr></table><hr></div><div class="chapter" lang="es"><div class="titlepage"><div><div><h2 class="title"><a name="dispositivos-interconexion"></a>Capítulo 3. Dispositivos de interconexión</h2></div></div></div><div class="toc"><p><b>Tabla de contenidos</b></p><dl><dt><span class="sect1"><a href="dispositivos-interconexion.html#modem-nulo">1. Conexión con un módem nulo</a></span></dt><dd><dl><dt><span class="sect2"><a href="dispositivos-interconexion.html#modem-nulo-hardware">1.1. Módem Nulo</a></span></dt><dt><span class="sect2"><a href="dispositivos-interconexion.html#servidor">1.2. Servidor</a></span></dt><dt><span class="sect2"><a href="dispositivos-interconexion.html#Terminal">1.3. Terminal</a></span></dt><dt><span class="sect2"><a href="dispositivos-interconexion.html#ppp-sobre-modem-nulo">1.4. PPP sobre Módem Nulo</a></span></dt><dt><span class="sect2"><a href="dispositivos-interconexion.html#referencias-modem-nulo">1.5. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="modem-isdn.html">2. Conexión a Internet con un módem o módem ISDN</a></span></dt><dt><span class="sect1"><a href="adsl-pppoe.html">3. Conexión a Internet ADSL con pppoe</a></span></dt><dd><dl><dt><span class="sect2"><a href="adsl-pppoe.html#referencias-pppoe">3.1. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="lan-ethernet.html">4. Uso y configuración en una red LAN Ethernet</a></span></dt><dd><dl><dt><span class="sect2"><a href="lan-ethernet.html#tarjetas-ethernet">4.1. Tarjetas Ethernet</a></span></dt><dt><span class="sect2"><a href="lan-ethernet.html#configuracion-interfaz">4.2. Configuración de una interfaz de red</a></span></dt><dt><span class="sect2"><a href="lan-ethernet.html#protocolo-arp">4.3. Protocolo ARP</a></span></dt><dt><span class="sect2"><a href="lan-ethernet.html#cableado">4.4. Cableado de una red local</a></span></dt><dd><dl><dt><span class="sect3"><a href="lan-ethernet.html#idm1396819472">4.4.1. Planeación</a></span></dt><dt><span class="sect3"><a href="lan-ethernet.html#adquisicion-de-hardware">4.4.2. Adquisición de Hardware</a></span></dt><dt><span class="sect3"><a href="lan-ethernet.html#instalacion-de-cables-y-concentrador">4.4.3. Instalación</a></span></dt></dl></dd><dt><span class="sect2"><a href="lan-ethernet.html#referencias-lan">4.5. Referencias</a></span></dt></dl></dd><dt><span class="sect1"><a href="red-inalambrica.html">5. Red Local Inalámbrica: uso y configuración</a></span></dt><dd><dl><dt><span class="sect2"><a href="red-inalambrica.html#cliente-inalambrico">5.1. OpenBSD como cliente en una red inalámbrica</a></span></dt><dt><span class="sect2"><a href="red-inalambrica.html#dispositivo-AP">5.2. Dispositivo dedicado que obra como Punto de Acceso Inalámbrico </a></span></dt><dt><span class="sect2"><a href="red-inalambrica.html#PAI">5.3. OpenBSD como Punto de Acceso Inalámbrico </a></span></dt><dt><span class="sect2"><a href="red-inalambrica.html#referencias-wlan">5.4. Referencias</a></span></dt></dl></dd></dl></div><p>Durante el arranque, OpenBSD detecta la gran mayoría de 
+      dispositivos conectados a un computador.  Una vez en operación
+      puede examinar la detección con <code class="literal">dmesg</code>.  
+    </p><p>Si durante el arranque algún dispositivo no es detectado
+      o es detectado incorrectamente, puede intentar hacer modificaciones
+      durante el arranque iniciando con <code class="literal">bsd -c</code> cuando
+      esté en el prompt de arranque del programa <span><strong class="command">boot</strong></span>
+      (ver [<span class="citation">usuario_OpenBSD</span>]).
+    </p><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="modem-nulo"></a>1. Conexión con un módem nulo</h2></div></div></div><p> Para conectar una terminal a un sistema OpenBSD puede emplearse
+    un módem nulo.  La terminal puede ser un computador con OpenBSD o con
+    cualquier otro sistema operativo y un programa que permita ver la
+    información que llegue a un puerto serial y enviar la que se teclee
+    (por ejemplo sirven varios programas para comunicarse vía módem).
+  </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="modem-nulo-hardware"></a>1.1. Módem Nulo</h3></div></div></div><p>
+	    Un módem nulo es un cable serial que tiene en sus extremos dos 
+	    conectores hembra para puerto serial y que intercambia algunas 
+	    conexiones. Si ambos conectores son de 25 pines, todos los cables 
+	    deben estar sueltos excepto: 
+      </p><div class="itemizedlist"><ul type="disc"><li><p>(DSR) 6 &amp; (DCD) 8 -- 20,</p></li><li><p>(TxD) 2 -- 3,</p></li><li><p>(RxD) 3 -- 2, </p></li><li><p>(RTS) 4 -- 5,</p></li><li><p>(CTS) 5 -- 4,</p></li><li><p>(SG) 7 -- 7, </p></li><li><p>(DTR) 20 -- 6 &amp; 8.</p></li></ul></div><p>  
+
+      En un conector de 9 pines la nomenclatura es: 
+      1 DCD, 2 TxD, 3 RxD, 4 DTR, 5 SG, 6 DSR, 7 RTS y 8 CTS. 
+    </p><p>Un módem nulo mínimo sólo requiere que se conecten SG - SG
+      (tierra), TxD - RxD (transmisión de uno con recepción del
+      otro) y RxD - TxD.  Sin embargo para poder efectuar control
+      de flujo también deben conectarse los demás.
+    </p><p>Aunque en el comercio es posible comprar un módem nulo, también es
+      relativamente fácil ensamblar uno, una vez tenga conectores,  
+      cable y cautín.  Si hace su propio módem nulo puede probar 
+      que la conexión haya quedado bien empleando un ohmiometro.
+    </p><p>
+      Una vez se conecte un módem nulo puede probarlo enviando mensajes
+      por el puerto serial del uno y viendo lo que recibe en el otro. 
+      Por ejemplo si conecta dos sistemas OpenBSD empleando en ambos
+      el primer puerto serial, en uno de los dos puede ejecutar 
+      (como usuario <code class="literal">root</code>)
+      </p><pre class="screen">
+	cat &lt; /dev/cua00</pre><p>
+      mientras que en el otro ejecute
+      </p><pre class="screen">
+	cat &gt; /dev/cua00</pre><p>
+      cuando escriba en el segundo y presione ENTER, en el primero recibirá
+      el mensaje y líneas en blanco (<code class="literal">cat</code> no es el
+      programa apropiado para establecer la comunicación, sólo para probar).
+    </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor"></a>1.2. Servidor</h3></div></div></div><p>Con un módem nulo conectado y funcionado puede configurarse
+      un sistema OpenBSD como servidor para que permita conectar 
+      terminales a un puerto serial.  Debe configurarse el 
+      programa <span><strong class="command">init</strong></span> para que durante el arranque ejecute un
+      programa que reciba conexiones por el puerto serial (tal programa
+      normalmente es <code class="filename">getty</code>).
+    </p><p>
+      Basta editar el archivo <code class="filename">/etc/ttys</code>, quitar el 
+      comentario a la línea apropiada para que quede:
+      </p><pre class="screen">
+tty00   "/usr/libexec/getty std.9600"   vt220 on secure
+      </pre><p>
+      Después puede reiniciar el sistema o reiniciar <span><strong class="command">init</strong></span>
+      con: <span><strong class="command">kill -HUP 1</strong></span>.
+    </p><p>
+      En la línea modificada a <code class="filename">/etc/ttys</code>,
+      <code class="literal">tty00</code> se refiere a
+      <code class="filename">/dev/tty00</code> (i.e el dispositivo
+      del primer puerto serial); <code class="literal">/usr/libexec/getty std.9600</code>
+      es el comando por ejecutar al arranque para manejar ese 
+      dispositivo<sup>[<a name="idm325531152" href="#ftn.idm325531152">17</a>]</sup>;
+      <code class="literal">vt220</code> indica el tipo de terminal que se conectará;
+      <span><strong class="command">on</strong></span> y <span><strong class="command">secure</strong></span> son 
+      banderas<sup>[<a name="idm325532176" href="#ftn.idm325532176">18</a>]</sup> para
+      <span><strong class="command">init</strong></span>, el primero indica que se esperan conexiones por
+      esa línea tty y el segundo indica que puede iniciar conexiones el
+      usuario root.
+    </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="Terminal"></a>1.3. Terminal</h3></div></div></div><p>Una vez conectado su módem nulo a un servidor
+      OpenBSD ya configurado para recibir conexiones por el puerto
+      serial, puede conectar una terminal.</p><p>Si la terminal cuenta con un sistema operativo, puede emplear 
+      un programa de comunicaciones.  Con este debe poder ver los mensajes 
+      de login del servidor.
+      Desde ahí puede entrar como un usuario de ese sistema y trabajar
+      como en una de las consolas virtuales (sin ambiente X).
+    </p><p>Si el computador que va a conectar es un sistema OpenBSD puede
+      emplear el programa <span><strong class="command">tip</strong></span> como usuario root:
+      </p><pre class="screen">
+tip tty0 </pre><p>
+      Es posible que tenga que intentar varias veces, si configura el
+      servidor con una velocidad diferente puede especificarla por ejemplo
+      con <span><strong class="command">tip -38400 tty0</strong></span>
+    </p><p>
+      <span><strong class="command">tip</strong></span> empleará la descripción de <code class="literal">tty0</code>
+      disponible en <code class="filename">/etc/remote</code> (que por defecto
+      está configurado para representar el primer puerto serial).
+      Le permitirá ver la información que el servidor envíe,
+      enviar información al servidor y hacer algunas operaciones
+      especiales comenzando con el carácter '~'. Por ejemplo terminar
+      la sesión con '~.', enviar un archivo con '~p' o recibir un
+      archivo con '~g'.
+    </p><p>Dado que puede haber inconvenientes enviando o recibiendo
+      archivos de 8 bits, los archivos (especialmente binarios) que envíe 
+      o reciba con <span><strong class="command">tip</strong></span> debe codificarlos antes con 
+      <span><strong class="command">uuencode</strong></span> y decodificarlos después de transmitidos
+      con <span><strong class="command">uudecode</strong></span>.  Para codificar un archivo
+      <code class="filename">prog.tgz</code> y dejarlo codificado en
+      <code class="filename">prog.tgz.uue</code>:
+      </p><pre class="screen">
+uuencode prog.tgz &lt; prog.tgz &gt; prog.tgz.uue</pre><p>
+      posteriormente para decodificarlo:
+      </p><pre class="screen">
+uudecode prog.tgz.uue
+      </pre><p>
+    </p><p>El inconveniente del método descrito es que <span><strong class="command">tip</strong></span>
+      no verifica la información transmitida. Una alternativa es
+      emplear un protocolo como Zmodem.  Para eso instale tanto en cliente
+      como en servidor el paquete <code class="literal">zmtx-zmrx</code>
+      (o <code class="literal">lrzsz</code>).  Cuando desee transmitir
+      un archivo del servidor al cliente, inicie la transmisión
+      en el servidor: </p><pre class="screen">
+zmtx Mattich2.pdf
+      </pre><p>
+      y en el cliente desde <span><strong class="command">tip</strong></span> use
+      <code class="literal">~C zmrx</code>.  Para enviar un archivo del cliente
+      al servidor ejecute en el servidor:  <span><strong class="command">zmrx</strong></span> y
+      después desde <span><strong class="command">tip</strong></span> use:
+      <code class="literal">~C zmtx miarchivo.txt</code>
+    </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="ppp-sobre-modem-nulo"></a>1.4. PPP sobre Módem Nulo</h3></div></div></div><p>Una vez esté conectado un cliente con un servidor OpenBSD,
+	    es posible emplear el protocolo PPP<sup>[<a name="idp1829297904" href="#ftn.idp1829297904">19</a>]</sup> 
+	    para permitirle al computador
+      cliente acceder a Internet o a la red a la que esté conectado
+      el servidor.
+    </p><p>Una forma posible para lograr conectividad a Internet en una
+	    Intranet es asignando una dirección
+      estática de la red al cliente y empleando el servidor para
+      que actúe como proxy a nivel ARP.</p><p>En el servidor asegúrese de tener en el archivo
+	<code class="filename">/etc/ppp/ppp.conf</code>:
+
+      </p><pre class="screen">
+default:
+  set log Phase Chat LCP IPCP CCP tun command
+  set device /dev/cua00
+  set speed 115200
+  set ctsrts on
+  set dial ""
+
+modemnulo:
+  set timeout 0
+  set lqrperiod 10
+  enable proxy
+  enable lqr
+  accept lqr
+  allow users SuLogin
+       </pre><p>
+
+       Remplazando <code class="literal">SuLogin</code>, <code class="literal">SuClave</code>
+       y las direcciones de red por las apropiadas.
+       Por su parte el archivo <code class="filename">/etc/ppp/ppp.conf</code>
+       del cliente debe contener:
+       </p><pre class="screen">
+default:
+ set log Phase Chat LCP IPCP CCP tun command
+ set device /dev/cua00
+ set speed 115200
+ set ctsrts on
+ set dial ""
+
+modemnulo:
+  set dial ""
+  set authkey SuClave
+  set login "TIMEOUT 3 ogin:-\\r-login: SuLogin word: \\P $ ppp\\s\\-direct\\smodemnulo\\r"
+  set lqrperiod 10
+  set timeout 0
+  set ifaddr 192.168.16.20 192.168.16.131
+  add default HISADDR
+  enable lqr
+  accept lqr
+  enable dns
+       </pre><p>
+
+       Después pude iniciar la comunicación desde el cliente con:
+       </p><pre class="screen">
+ppp -ddial modemnulo
+       </pre><p>
+
+     </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-modem-nulo"></a>1.5. Referencias y lecturas recomendadas</h3></div></div></div><p>
+      Puede consultar más sobre la conexión física de un módem nulo
+      en [<span class="citation"><a href="bi01.html#CablesModemNulo">CablesModemNulo</a></span>].
+      Puede consultar sobre comunicaciones seriales en FreeBSD (similar
+      a OpenBSD) en el capítulo "Serial Communications" de
+      [<span class="citation"><a href="bi01.html#FreeBSDHandbook">FreeBSDHandbook</a></span>]
+      Para emplear un sistema OpenBSD mínimo como consola de algunos
+      eventos de un servidor OpenBSD puede consultar 
+      [<span class="citation"><a href="bi01.html#SerialOpenBSD">SerialOpenBSD</a></span>].
+      La configuración del servidor OpenBSD que le permite atender
+      conexiones por el puerto serial puede verse en las siguientes
+      páginas man:
+      <a href=""><span class="citerefentry"><span class="refentrytitle">init</span>(8)</span></a>,
+      <a href=""><span class="citerefentry"><span class="refentrytitle">ttys</span>(5)</span></a> y
+      <a href=""><span class="citerefentry"><span class="refentrytitle">getty</span>(8)</span></a>.
+      La configuración de un cliente OpenBSD para funcionar como
+      consola puede consultarse en:
+      <a href=""><span class="citerefentry"><span class="refentrytitle">tip</span>(1)</span></a> y
+      <a href=""><span class="citerefentry"><span class="refentrytitle">remote</span>(5)</span></a>.
+      Para conocer más sobre PPP puede consultarse
+      el <a href="ftp://ftp.rfc-editor.org/in-notes/rfc1661.txt" target="_top">RFC
+	1661</a>, la implementación particular de el protocolo
+      de usuario en OpenBSD en la página del manual.  El archivo
+      de configuración por defecto también cuenta con comentarios
+      que ayudan.
+    </p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm325531152" href="#idm325531152">17</a>] </sup>Como parámetro getty recibe
+	  características de la línea que deben estar especificadas en
+	  <code xmlns="" class="filename">/etc/gettytab</code>.  En este caso
+	  <code xmlns="" class="literal">std.9600</code> especifica la velocidad de
+	  transmisión. Empleando un módem nulo con control de flujo es 
+	  posible emplear velocidades mayores hasta
+	  <code xmlns="" class="literal">std.115200</code>.
+      </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm325532176" href="#idm325532176">18</a>] </sup>banderas del inglés <span xmlns="" class="emphasis"><em>flags</em></span>
+      </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1829297904" href="#idp1829297904">19</a>] </sup>PPP es un protocolo especificado en el RFC 1661.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="lecturas-redes-protocolos-internet.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="modem-isdn.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">3. Lecturas recomendadas </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 2. Conexión a Internet con un módem o módem ISDN</td></tr></table></div></body></html>

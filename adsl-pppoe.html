@@ -1,0 +1,89 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>3. Conexión a Internet ADSL con pppoe</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="up" href="dispositivos-interconexion.html" title="Capítulo 3. Dispositivos de interconexión"><link rel="prev" href="modem-isdn.html" title="2. Conexión a Internet con un módem o módem ISDN"><link rel="next" href="lan-ethernet.html" title="4. Uso y configuración en una red LAN Ethernet"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3. Conexión a Internet ADSL con pppoe</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="modem-isdn.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Dispositivos de interconexión</th><td width="20%" align="right"> <a accesskey="n" href="lan-ethernet.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="adsl-pppoe"></a>3. Conexión a Internet ADSL con pppoe</h2></div></div></div><p>En Colombia los proveedores de acceso a Internet en planes
+	  de Banda Ancha típicamente emplean dispositivos y configuraciones
+	  que permiten conectar un computador como si fuera un equipo
+	  más en una red Ethernet.  En tal caso basta conocer la
+	  IP que tendrá el computador (o si se usará dhcp), la mascara de 
+	  red y la dirección de la puerta de enlace, y configurar como se 
+	  explica en la sección de redes LAN Ethernet (ver <a href="lan-ethernet.html" title="4. Uso y configuración en una red LAN Ethernet">Sección 4, “Uso y configuración en una red LAN Ethernet”</a>.
+  </p><p>
+       Puede ocurrir que su proveedor emplee un módem que requiera
+       el protocolo <code class="literal">pppoe</code> (e.g con un Módems Marconi).   
+	En tal caso el proveedor puede brindar dos opciones para
+	  la configuración del módem:
+	</p><div class="itemizedlist"><ul type="disc"><li><p>Enrutador (router): Se conecta a un HUB o a un 
+				computador y 
+				hace NAT para todos los computadores cliente 
+				conectados.  En la LAN basta configurar la IP
+				de cada equipo para que estén en la misma subred
+				del enrutador y que cada uno emplee como 
+				compuerta/pasarela al módem.
+</p></li><li><p>Puente (bridge): En esta configuración se requiere
+			un servidor que haga NAT y enrute. </p></li></ul></div><p>
+</p><p>
+	Si el módem ADSL se conecta con un cable Ethernet y el proveedor 
+	ofrece ppp,
+	no debe configurarse la tarjeta de red, sino una interfaz nueva tun0
+	Por esto en el archivo de configuración de la tarjeta digamos
+	<code class="filename">/etc/hostname.rl0</code> (reemplazar 
+	<code class="literal">rl0</code> con interfaz en su caso, examinar
+	posibles interfaces con <span><strong class="command">ifconfig</strong></span>) deje:
+	</p><pre class="screen">
+up
+	</pre><p>
+
+	Edite <code class="filename">/etc/ppp/ppp.conf</code> (si no existe
+	cópielo de <code class="filename">/etc/ppp/ppp.conf.smaple</code>), para que quede
+	una sección como la siguiente:
+	</p><pre class="screen">
+pppoe:
+ set log Phase Chat LCP IPCP CCP tun command
+ set redial 15 0
+ set reconnect 15 10000
+ set device "!/usr/sbin/pppoe -i rl0"
+ set mtu max 1492
+ set mru max 1492
+ set speed sync
+ disable acfcomp protocomp
+ deny acfcomp
+ enable lqr
+ set lqrperiod 5
+ set cd 5
+ set dial
+ set login
+ set timeout 0
+ set authname "usuario"
+ set authkey "miclave"
+ add! default HISADDR
+ enable mssfixup
+	</pre><p>
+
+	Cambiando la interfaz de red, el usuario y la clave.
+	Podrá probar la conexión con:
+	</p><pre class="screen">
+		ppp -ddial -nat pppoe
+	</pre><p>
+
+	Si desea que en cada arranque se conecte automáticamente,
+	tal como se explica en 	
+	<a href="http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html%20" target="_top">http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html</a>
+	agregue a <code class="filename">/etc/rc.local</code>:
+	</p><pre class="screen">
+IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
+if [ -z "$IPADSL" ]; then
+	echo -n "Estableciendo conexion PPPoE DSL"; ppp -ddial pppoe
+	for i in 10 9 8 7 6 5 4 3 2 1 0; do 
+	    sleep 5             
+	    echo -n "$i"        
+	    IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
+	    if [ -z "$IPADSL" ]; then
+	        	break
+	    fi                  
+	done     
+fi
+
+	</pre><p>
+</p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-pppoe"></a>3.1. Referencias y lecturas recomendadas</h3></div></div></div><p>
+      Página del manual <code class="literal">pppoe</code>.
+    </p><p>
+	http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html 
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="modem-isdn.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="dispositivos-interconexion.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="lan-ethernet.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">2. Conexión a Internet con un módem o módem ISDN </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 4. Uso y configuración en una red LAN Ethernet</td></tr></table></div></body></html>

@@ -1,0 +1,210 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>2. Capas de una red TCP/IP sobre
+    algunos medios físicos</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="up" href="redes-protocolos-internet.html" title="Capítulo 2. Redes, protocolos e Internet"><link rel="prev" href="redes-protocolos-internet.html" title="Capítulo 2. Redes, protocolos e Internet"><link rel="next" href="lecturas-redes-protocolos-internet.html" title="3. Lecturas recomendadas"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2. Capas de una red <span class="acronym">TCP/IP</span> sobre
+    algunos medios físicos</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="redes-protocolos-internet.html">Anterior</a> </td><th width="60%" align="center">Capítulo 2. Redes, protocolos e Internet</th><td width="20%" align="right"> <a accesskey="n" href="lecturas-redes-protocolos-internet.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idp1457349744"></a>2. Capas de una red <span class="acronym">TCP/IP</span> sobre
+    algunos medios físicos</h2></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idp1457348464"></a>2.1. Capa física</h3></div></div></div><a class="indexterm" name="idp1929098352"></a><p>Se refiere a las conexiones eléctricas y mecánicas de la
+       red.  Ejemplos de protocolos a este nivel son: Ethernet,
+       Inalámbrico <span class="acronym">IEEE</span> 802.11, Modem y fibra
+       óptica.  La información por transmitir se codifica en últimas
+       como una señal electríca que debe transmitirse por cables o
+       como una señal electromagnética (luz, ondas).  En medios de
+       transmisión compartidos por más computadores (Ethernet, fibra
+       óptica, aire), el protocolo de este nivel debe tener en cuenta:
+       codificación/decodificación de información del bus al medio de
+       transmisión y arbitrar en caso de colisión de datos.  Este tipo
+       de protocolos es implementado por hardware, comúnmente por una
+       tarjeta o dispositivo dedicado que se debe conectar al bus de
+       cada computador. Las tarjetas de los computadores que se
+       comunican se conectan empleando el medio de transmisión. OpenBSD,
+       a nivel físico soporta dispositivos ethernet, fddi (fibra óptica) y
+       conexiones inalámbricas. En
+       caso particular de Ethernet, existen en el momento de este
+       escrito estándares para 10Mbps, 100Mbps, 1Gbps y 10Gbps, que
+       se emplean en topología de estrella (i.e. todos los
+       computadores conectados por cables de pares trenzados a un
+       concentrador), puede
+       configurarse como <span class="foreignphrase"><em class="foreignphrase">Half-duplex</em></span> o
+       como <span class="foreignphrase"><em class="foreignphrase">Full-Duplex</em></span>. Describiremos
+       el uso del esquema más popular y económico en este momento:
+       100Mbps, Full-duplex con cable de pares trenzados
+       <sup>[<a name="idp1929097712" href="#ftn.idp1929097712">6</a>]</sup>.  Cada tarjeta Ethernet tiene una dirección única
+	 (llamada dirección <span class="acronym">MAC</span>), que en una
+	 transmisión permite indicar tarjeta fuente y tarjeta destino
+	 (la dirección <span class="acronym">MAC</span> de ambos es transmitida
+	 también).
+      </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idp1965173872"></a>2.2. Capa de enlace</h3></div></div></div><a class="indexterm" name="idp602038640"></a><p>Los protocolos de esta capa permiten interconectar la capa
+       de internet (<span class="acronym">IP</span>) con la red
+       que se use.  En el caso de una red Ethernet se trata del
+       protocolo ARP<sup>[<a name="idm1934023568" href="#ftn.idm1934023568">7</a>]</sup>,
+       y que se encarga de traducir
+       direcciones <span class="acronym">IP</span> a direcciones
+       <span class="acronym">MAC</span>
+       <sup>[<a name="idp1296285424" href="#ftn.idp1296285424">8</a>]</sup>.
+      </p><p>Cada vez que un computador de una <span class="acronym">LAN</span>
+       identifica una dirección <span class="acronym">IP</span>
+       de otro computador conectado a la <span class="acronym">LAN</span> y su
+       correspondiente dirección <span class="acronym">ARP</span>, almacena la
+       información en una tabla (se borra automáticamente después de
+       algunos minutos o manualmente por ejemplo con 
+       <code class="literal">sudo arp -d 192.168.2.2</code>).
+       La tabla puede consultarse con <code class="literal">arp -a</code>.</p><p>Para monitorear una red Ethernet y detectar nuevos
+       computadores que se conecten, puede emplearse el programa
+       <span class="application">arpwatch</span> (paquete
+       <code class="literal">arpwatch</code>) que cada vez que detecta cambios
+       envía un correo a la cuenta root.</p><p>En el caso de una conexión por modem el protocolo es
+       <span class="acronym">PPP</span><sup>[<a name="idp602038000" href="#ftn.idp602038000">9</a>]</sup>, que se encarga
+       de establecer, terminar y verificar la conexión.  Durante la
+	 conexión autentica el computador que se conecta ante el
+       servidor (bien con el protocolo <span class="acronym">PAP</span> o con
+	 <span class="acronym">CHAP</span>) y durante la operación prepara los
+       paquetes enviados por otros protocolos (como
+       <span class="acronym">IP</span>) para transmitirlos por modem.
+      </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idp1836623088"></a>2.3. Capa de internet</h3></div></div></div><a class="indexterm" name="idp2318321776"></a><p>En esta capa la información es fragmentada y envíada
+       empleando el protocolo de la capa física. Los protocolos de
+       esta capa deben tener en cuenta la retransmisión de la
+       información en caso de error al enviar y el verificar
+       información recibida. En esta capa está el
+       <span class="foreignphrase"><em class="foreignphrase">Internet Protocol</em></span> (<span class="acronym">IP</span>) que es un protocolo diseñado para
+       Internet y del cual hay dos versiones: <span class="acronym">IPv4</span>
+       e <span class="acronym">IPv6</span>.
+       Describiremos la versión 4
+
+       <sup>[<a name="idp144363504" href="#ftn.idp144363504">10</a>]</sup>
+       (la versión 6 fue diseñada para soportar más computadores
+       conectados a Internet y se espera que pronto se use
+       ampliamente
+       <sup>[<a name="idp1836623728" href="#ftn.idp1836623728">11</a>]</sup>).
+      </p><p>Este protocolo permite la transmisión de paquetes
+       (llamados datagramas) en redes donde cada computador
+       interconectado se identifica con una dirección única. Tales
+       direcciones están diseñadas para interconectar varias redes,
+       identificar los computadores que pertenecen a una red
+       (empleando una máscara de red que indica que parte de la
+       dirección del computador corresponde a la dirección de la red)
+       y facilitar el enrutamiento.  Si el medio de transmisión lo
+       requiere, el protocolo <span class="acronym">IP</span> se
+       encarga de la división de los datagramas en paquetes más
+       pequeños para su tranmisión y de la posterior reagrupación
+       (fragmentación), el tamaño máximo que un paquete puede tener
+       para un protocolo de nivel físico se llama
+       <span class="acronym">MTU</span> (<span class="foreignphrase"><em class="foreignphrase">Maximal Transfer
+       Unit</em></span>), en el caso de Ethernet es 1500
+       bytes.</p><p>Cada datagrama por transmitir es pasado a la capa de
+       <span class="acronym">IP</span> por otro protocolo de una
+       capa superior (e.g <span class="acronym">TCP</span>) junto con dirección
+       destino, <span class="acronym">IP</span> mantiene una
+       tabla de enrutamiento que asocia direcciones destino con
+       compuertas (computadores intermediarios en inglés
+       <span class="foreignphrase"><em class="foreignphrase">gateways</em></span>). Así que envía el
+       datagrama empleando el nível físico a la dirección de la
+       compuerta que mantenga en su tabla de enrutamiento.  La tabla
+       de enrutamiento puede ser modificada manualmente (con 
+       <span><strong class="command">route show</strong></span>) o puede ser modificada
+       automáticamente cuando una compuerta envía un mensaje indicando
+       la dirección de otra compuerta más apropiada para llegar a un
+       dirección.  Hay siempre una compuerta por defecto a la que se
+       envían paquetes que <span class="acronym">IP</span> no
+       sepa como enrutar. </p><a class="indexterm" name="idp144365680"></a><p>IP no es protocolo fiable, porque no asegura que un paquete
+       llegue a su destino y no realiza retransmisiones. Aunque para informar
+       algunas situaciones anomalas emplea el protocolo
+       <span class="acronym">ICMP</span>
+       <sup>[<a name="idp144366320" href="#ftn.idp144366320">12</a>]</sup>.</p><a class="indexterm" name="idm1933696016"></a><p>OpenBSD cuenta con una excelente implementación
+	      de <span class="acronym">IPv4</span> con posibilidad de 
+	      filtrar, redirigir, traducir direcciones, balancear
+	      carga y muchas otras opciones que se configuran de
+	      forma sencilla con PF.  Además implementa características
+	      no estándar como IPsec para transmisión encriptada y
+	      IPcomp para comprimir.
+      </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm187379088"></a>2.4. Capa de transporte</h3></div></div></div><a class="indexterm" name="idp1837171696"></a><p>Los protocolos de esta capa asegura una conexión continua
+       y posiblemente libre de errores entre emisor y receptor.  Un
+       protocolo de esta capa debe tener en cuenta mantener los
+       paquetes en orden y asegurar que están completos.  Esto se
+       requiere porque el nivel de red puede enrutar diversos paquetes
+       de forma diferente.  En esta capa hay dos 
+       protocolos: <span class="acronym">TCP</span><sup>[<a name="idp1837169776" href="#ftn.idp1837169776">13</a>]</sup> y
+   <span class="acronym">UDP</span><sup>[<a name="idm1866172816" href="#ftn.idm1866172816">14</a>]</sup>.  El primero es
+       fiable, asegura que la transmisión enviada sea recibida,
+       <span class="acronym">UDP</span> por su parte no busca
+       confirmar que la información llegue a su destino (aunque
+       permite hacer difusión<sup>[<a name="idp1837173616" href="#ftn.idp1837173616">15</a>]</sup> y multidifusión<sup>[<a name="idp1837170032" href="#ftn.idp1837170032">16</a>]</sup> mientras 
+       que <span class="acronym">TCP</span> no).  Ambos protocolos emplean
+       puertos para permitir más de una conexión con uno o más
+       computadores, un puerto se identifica con un número entre 0 y
+       65536, los primeros 1024 números sólo pueden ser usados por
+       servidores iniciados desde la cuenta root, los demás pueden ser
+       usados por todos los usuarios.
+       </p><a class="indexterm" name="idm187378320"></a><a class="indexterm" name="idm144043280"></a><p>Puede examinar información sobre conexiones a puertos
+       <span class="acronym">TCP</span> y 
+	 <span class="acronym">UDP</span> con 
+	 <span><strong class="command">sudo pfctl -sa</strong></span>
+      </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idp1737293552"></a>2.5. Capa de aplicación</h3></div></div></div><p>Consta de protocolos empleados por aplicaciones con
+       propósitos específicos.  Emplean los protocolos de la capa de
+       transporte para establecer comunicación.  Los protocolos de
+       esta capa pueden dividirse a su vez en protocolos de usuario y
+       protocolos de soporte.  Los primeros son para programas
+       empleados directamente por usuarios y los segundos son
+       empleados por el sistema operativo o por otros
+       protocolos.</p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm144041232"></a>2.5.1. Protocolos de usuario</h4></div></div></div><div class="variablelist"><dl><dt><span class="term">Telnet</span></dt><dd><p>
+	   Telnet está definido en el <span class="acronym">RFC</span> 854 y
+	   complementado en el <span class="acronym">RFC</span> 1123. Permite la
+	   operación remota de otro computador de forma insegura
+	   pues las claves se transmiten planas (ssh es un remplazo seguro, ver
+	   <a href="servidor-ssh.html" title="2. Servidor ssh">Sección 2, “Servidor <span><strong class="command">ssh</strong></span>”</a>),
+	   además
+	   puede usarse para interactuar con otros protocolos
+	   (por ejemplo puede interactuar con el protocolo de
+	   correo SMTP de su propio computador ---puerto 25---
+	   con <span><strong class="command">telnet localhost 25</strong></span>).</p></dd><dt><span class="term">(<span class="foreignphrase"><em class="foreignphrase">File Transfer Protocol</em></span>)
+	   <span class="acronym">FTP</span>
+	 </span></dt><dd><p><span class="acronym">FTP</span> está definido
+	   en el <span class="acronym">RFC</span> 959 y complementado en el
+	   <span class="acronym">RFC</span> 1123, permite transmisión de
+	   archivos de manera insegura pues las claves se transmiten
+	   planas (ver <a href="servidor-ftp.html" title="6. Servidor ftp">Sección 6, “Servidor <code class="literal">ftp</code>”</a>).
+	  </p></dd><dt><span class="term"><span class="acronym">TFPT</span></span></dt><dd><p> Está definido en el <span class="acronym">RFC</span> 1350
+	   (<span class="foreignphrase"><em class="foreignphrase">Trivial File Transfer
+	   Protocol</em></span>), es análogo a <span class="acronym">FTP</span> pues permite transmitir
+	   archivos, aunque es mucho más simple, es apropiado para
+	   transmitir el sistema operativo a computadores sin disco
+	   duro que arrancan por red.</p></dd><dt><span class="term"><span class="acronym">SMTP</span></span></dt><dd><p><span class="acronym">SMTP</span> se definió en
+	   el <span class="acronym">RFC</span> 822 y se complementó en el RFC
+	   1123 (<span class="foreignphrase"><em class="foreignphrase">Simple Mail Transfer
+	   Protocol</em></span>) que especifica como se realiza la
+   transmisión de correo electrónico (ver 
+   <a href="servicios-correo.html" title="5. Servidor de correo electrónico">Sección 5, “Servidor de correo electrónico”</a>).</p></dd></dl></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm911566224"></a>2.5.2. Protocolos de soporte</h4></div></div></div><div class="variablelist"><dl><dt><span class="term">DNS</span></dt><dd><p>Definido en los <span class="acronym">RFC</span> 1034 y 1035 y
+	   complementado en el <span class="acronym">RFC</span> 1123.  Es empleado
+	   para dar nombres descriptivos a direcciones <span class="acronym">IP</span> (e.g structio.sourceforge.net
+	   es el nombre <span class="acronym">DNS</span> de la dirección
+	   216.34.181.96).</p></dd><dt><span class="term">BOOTP</span></dt><dd><p>Empleado por un computador en el que no ha iniciado 
+			 el sistema operativo para
+			 solicitar su dirección <span class="acronym">IP</span> a un servidor
+		 de este protocolo.</p></dd><dt><span class="term">SMMP</span></dt><dd><p>Empleado para monitorear uso de una red.</p></dd></dl></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1929097712" href="#idp1929097712">6</a>] </sup>El estándar que define este esquema es
+	 <span xmlns="" class="acronym">IEEE</span> 802.3, que se basa en el uso de un
+	 sólo medio de transmisión compartido por todos los
+	 dispositivos en el que sólo trasmite un sólo dispositivo
+	 durante un tiempo para evitar colisiones, se elige el
+	 siguiente dispositivo por transmitir con el algoritmo
+	 <span xmlns="" class="acronym">CSMA/CD</span> --cuando un dispositivo detecta
+	 que la línea está libre transmite parte de la información si
+	 detecta colisión da oportunidad de transmisión a otros un
+	 intervalo aleatorio de tiempo.</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1934023568" href="#idm1934023568">7</a>] </sup><span xmlns="" class="acronym">ARP</span> se define
+       en el <span xmlns="" class="acronym">RFC</span> 826</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1296285424" href="#idp1296285424">8</a>] </sup> Un computador envía un
+	 mensaje a todos los demás de la red
+	 (<span xmlns="" class="foreignphrase"><em class="foreignphrase">broadcast</em></span> que es posible en
+	 Ethernet), solicitando la dirección <span xmlns="" class="acronym">MAC</span> de
+       una dirección <span xmlns="" class="acronym">IP</span>, el
+	 dispositivo con esa MAC responde enviando su dirección
+       <span xmlns="" class="acronym">MAC</span> al dispositivo que hizo la solicitud.
+	</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp602038000" href="#idp602038000">9</a>] </sup>PPP se describe en el
+	 <span xmlns="" class="acronym">RFC</span> 1661.</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp144363504" href="#idp144363504">10</a>] </sup>El protocolo <span xmlns="" class="acronym">IPv4</span> está
+	 descrito en el <span xmlns="" class="acronym">RFC</span> 791, aunque puede verse
+	 una descripción en conjunto con otros protocolos en el
+	 <span xmlns="" class="acronym">RFC</span> 1122</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1836623728" href="#idp1836623728">11</a>] </sup>OpenBSD tiene soporte para IPv6</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp144366320" href="#idp144366320">12</a>] </sup>ICMP Internet Control Message Protocol, se describe en
+	 el RFC792, permite enviar mensajes de error (e.g dirección
+	 inalcanzable, tiempo excedido) y algunos mensajes para hacer
+	 consultas (e.g eco, estampilla de
+	 tiempo).</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1837169776" href="#idp1837169776">13</a>] </sup><span xmlns="" class="acronym">TCP</span> se describe en el
+       <span xmlns="" class="acronym">RFC</span> 793 y se complementa y corrige en el
+       <span xmlns="" class="acronym">RFC</span> 1122</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1866172816" href="#idm1866172816">14</a>] </sup><span xmlns="" class="acronym">UDP</span> está descrito 
+       en el <span xmlns="" class="acronym">RFC</span> 768 y corregido en el
+       <span xmlns="" class="acronym">RFC</span> 1122</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1837173616" href="#idp1837173616">15</a>] </sup>Del inglés <span xmlns="" class="foreignphrase"><em class="foreignphrase">broadcast</em></span></p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1837170032" href="#idp1837170032">16</a>] </sup>Del
+		       inglés <span xmlns="" class="foreignphrase"><em class="foreignphrase">multicast</em></span></p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="redes-protocolos-internet.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="redes-protocolos-internet.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="lecturas-redes-protocolos-internet.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">Capítulo 2. Redes, protocolos e Internet </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 3. Lecturas recomendadas</td></tr></table></div></body></html>

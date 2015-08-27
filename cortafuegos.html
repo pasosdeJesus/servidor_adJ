@@ -1,0 +1,59 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>3. Cortafuegos: filtrado y túneles</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="up" href="direcciones-enrutamiento-transporte.html" title="Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos"><link rel="prev" href="nat.html" title="2. NAT (Network Address Translation)"><link rel="next" href="ftpproxy.html" title="4. ftp-proxy: para usar ftp desde la red interna"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3. Cortafuegos: filtrado y túneles</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="nat.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos</th><td width="20%" align="right"> <a accesskey="n" href="ftpproxy.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cortafuegos"></a>3. Cortafuegos: filtrado y túneles</h2></div></div></div><p>Un cortafuegos permite filtrar tráfico que puede llegar o
+salir a un computador conectado a una red como Internet.
+</p><p>El siguiente ejemplo muestra parte del archivo 
+		<code class="filename">/etc/pf.conf</code> para que
+permita toda conexión que salga de la red privada hacia Internet, y
+para que bloquee toda conexión que llegue excepto tráfico TCP
+por los puertos para ssh (22) y dns (53), también permite llegada de tráfico 
+UDP por el puerto 53 y tráfico ICMP (para responder <span><strong class="command">ping</strong></span>). 
+Suponemos
+que ya se han configurado las variables <code class="literal">int_if</code> y 
+<code class="literal">ext_if</code> con las
+interfaces de red interna y externa respectivamente:
+</p><pre class="screen">
+servicios_tcp="{ssh,domain}
+servicios_udp="{domain}"
+servicios_icmp="echoreq"
+
+block in log all
+pass out keep state
+
+pass quick on { lo $int_if }
+antispoof quick for { lo $int_if }
+
+pass in on $ext_if inet proto tcp from any to ($ext_if) \
+        port $servicios_tcp keep state
+pass in on $ext_if inet proto udp from any to ($ext_if) \
+	        port $servicios_udp keep state
+pass in inet proto icmp all icmp-type $servicios_icmp keep state
+</pre><p>
+</p><p>
+	Si tiene un servidor interno (por ejemplo en una DMZ con
+	IP 192.168.2.2) y necesita que este preste servicios visibles al 
+	exterior como:  web (80), https (443), imaps (993), smtp (25) y
+	ldap (389), deberá establecer un túnel para cada uno de
+	estos puertos, de forma que las conexiones que lleguen al
+	cortafuegos sean redirigidas al servidor interno.
+	El siguiente ejemplo presenta como puede hacerse:
+	</p><pre class="screen">
+serv_ip="192.168.2.2"
+servicios_serv="{ldap,smtp,www,https,imaps, 389}"
+
+match in on $ext_if proto tcp from any to any port www rdr-to $serv_ip port www
+match in on $ext_if proto tcp from any to any port https rdr-to $serv_ip port https
+match in on $ext_if proto tcp from any to any port 993 rdr-to $serv_ip port 993
+match in on $ext_if proto tcp from any to any port smtp rdr-to $serv_ip port smtp
+match in on $ext_if proto tcp from any to any port 389 rdr-to $serv_ip port 389
+
+
+pass in on $ext_if proto tcp from any to $serv_ip port $servicios_serv \
+        flags S/SA synproxy state
+	</pre><p>
+</p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-cortafuegos"></a>3.1. Referencias y lecturas recomendadas</h3></div></div></div><p>
+	Las siguientes páginas man:
+	<a href=""><span class="citerefentry"><span class="refentrytitle">pf</span>(4)</span></a>,
+	<a href=""><span class="citerefentry"><span class="refentrytitle">pfctl</span>(4)</span></a>.
+	</p><p>
+		Guía del usuario de PF 
+		[<span class="citation"><a href="bi01.html#PF">PF</a></span>].
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="nat.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="direcciones-enrutamiento-transporte.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ftpproxy.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">2. NAT (Network Address Translation) </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 4. ftp-proxy: para usar ftp desde la red interna</td></tr></table></div></body></html>

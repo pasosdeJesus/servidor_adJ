@@ -1,0 +1,77 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>3. Protocolo DHCP</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="up" href="protocolos-soporte-usuario.html" title="Capítulo 5. Protocolos de soporte y de usuario"><link rel="prev" href="servidor-ssh.html" title="2. Servidor ssh"><link rel="next" href="servidor-ntp.html" title="4. Servidor ntp"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3. Protocolo <span><strong class="command">DHCP</strong></span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="servidor-ssh.html">Anterior</a> </td><th width="60%" align="center">Capítulo 5. Protocolos de soporte y de usuario</th><td width="20%" align="right"> <a accesskey="n" href="servidor-ntp.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="dhcp"></a>3. Protocolo <span><strong class="command">DHCP</strong></span></h2></div></div></div><p>El protocolo DHCP se describen en el RFC 2131 (ver [<a href="bi01.html#rfc2131" title="[rfc2131]">rfc2131</a>]),
+	  se trata de un modelo cliente-servidor en el que el servidor DHCP
+	  localiza direcciones IP libres en una red y envia parámetros de 
+	  configuración a computadores cliente que se configuran 
+	  dinámicamente. Entre los parámetros de configuración que un
+	  servidor puede enviar están: IP por asignar al computador, IP
+	  de la puerta de enlace, IPs de servidores de nombres, 
+	  nombre del dominio por utilizar.
+  </p><p>
+	  En su modo de operación dinámico el servidor
+	  le asigna una IP a un sólo cliente por cierto periodo de tiempo, al
+	  cabo del cual podría asignarle otra IP<sup>[<a name="idp1401638128" href="#ftn.idp1401638128">25</a>]</sup>.
+  </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="cliente-DHCP"></a>3.1. Configuración de un cliente DHCP</h3></div></div></div><p>La configuración de un computador para operar como
+		  cliente de DHCP depende del sistema operativo, en el caso
+		  de Windows en las propiedades TCP/IPv4 de la tarjeta puede
+		  especificarse obtener dirección automáticamente. 
+		  En el caso de Linux 
+		  Ubuntu al Editar las Conexiones de Red puede especificarse
+		  que una tarjeta de red usará DHCP.  Un OpenBSD con una
+		  interfaz de red (digamos <code class="literal">rl0</code>) 
+		  se configura como cliente de DHCP desde la línea
+		  de comandos con:
+		  </p><pre class="screen">
+sudo dhclient rl0 
+		  </pre><p>
+		  que lee parámetros de configuración de
+		  <code class="filename">/etc/dhclient.conf</code> (el cual por defecto
+		  está configurado para solicitar mascara de red, servidores 
+		  de nombres, dirección de difusión --broadcast--, 
+		  nombre del dominio,
+		  nombre del computador y puerta de enlace).
+		  Puede configurarse de manera permanente para que en
+		  cada arranque se use este protocolo en una interfaz 
+		  (remplazar <code class="literal">rl0</code> por la de su caso)
+		  dejando en el archivo
+		  <code class="filename">/etc/hostname.rl0</code> la línea:
+		  </p><pre class="screen">
+dhcp
+		  </pre><p>
+	  	</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-DHCP"></a>3.2. Configuración de un servidor DHCP</h3></div></div></div><p>Una configuración típica para un servidor DHCP que servirá
+	  direcciones para la red local 192.168.17.x en el rango
+	  192.168.17.142 a 192.168.17.164 y que enviará además
+	  entre los parámetros el dominio, la puerta de enlace y la
+	  IP del servidor de nombres,
+	  se hace en el archivo <code class="filename">/etc/dhcpd.conf</code> con:
+  </p><pre class="screen">
+shared-network LOCAL-NET {
+        option  domain-name "miescuela.edu.co";
+        option  domain-name-servers 192.168.17.1;
+        subnet 192.168.17.0 netmask 255.255.255.0 {
+                option routers 192.168.17.1;
+                range 192.168.17.142 192.168.17.164;
+        }
+}
+  </pre><p>
+	También asegurese de iniciar el servicio DHCP editando
+	<code class="filename">/etc/rc.conf.local</code> para agregar:
+	</p><pre class="screen">
+dhcpd_flags=""
+	</pre><p>
+	o en lugar de "" puede especificar las interfaces de red 
+	que el servidor debe atender separadas por espacio.
+</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-dhcpd"></a>3.3. Referencias y lecturas recomendadas</h3></div></div></div><p>
+	    Las siguientes páginas man:
+	    <a href=""><span class="citerefentry"><span class="refentrytitle">dhcp</span>(8)</span></a>,
+      <a href=""><span class="citerefentry"><span class="refentrytitle">dhclient</span>(8)</span></a>,
+      <a href=""><span class="citerefentry"><span class="refentrytitle">dhclient.conf</span>(5)</span></a>, 
+      <a href=""><span class="citerefentry"><span class="refentrytitle">dhcpd</span>(8)</span></a> y 
+      <a href=""><span class="citerefentry"><span class="refentrytitle">dhcpd.conf</span>(5)</span></a>.
+    </p><p>El RFC 2131 (ver [<a href="bi01.html#rfc2131" title="[rfc2131]">rfc2131</a>]).</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1401638128" href="#idp1401638128">25</a>] </sup>Típicamente 
+			  un cliente
+			  enviará un paquete DHCPDISCOVER a toda la red (opcionalmente
+			  con sugerencia de la IP que quiere), un servidor que
+	  reciba tal paquete le responderá con un DHCPOFFER con una oferta
+	  de parámetros de configuración, el cliente puede responder con
+	  DHCPREQUEST para confirmar los parámetros y el servidor responde
+	  con un DHCPACK para confirmar asignación.</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="servidor-ssh.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="protocolos-soporte-usuario.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="servidor-ntp.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">2. Servidor <span><strong class="command">ssh</strong></span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 4. Servidor <span><strong class="command">ntp</strong></span></td></tr></table></div></body></html>

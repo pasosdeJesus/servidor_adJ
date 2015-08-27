@@ -1,0 +1,1033 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Motor de bases de datos PostgreSQL</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Otros servicios que puede prestar el servidor"
+HREF="c2304.htm"><LINK
+REL="PREVIOUS"
+TITLE="Otros servicios que puede prestar el servidor"
+HREF="c2304.htm"><LINK
+REL="NEXT"
+TITLE="MariaDB"
+HREF="x2546.htm"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c2304.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Capítulo 6. Otros servicios que puede prestar el servidor</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2546.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="postgresql"
+>Motor de bases de datos PostgreSQL</A
+></H1
+><P
+> PostgreSQL es un motor de bases de datos relacionales (RDBMS) que
+	  verifica integridad referencial con gran funcionalidad como
+	  base de datos, aunque un poco más lenta que otros motores. Su
+	  licencia es tipo BSD.  En esta sección describimos brevemente 
+	  la instalación y uso en un sistema adJ.
+</P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="primera-instalacion"
+>Primera instalación del servidor</A
+></H2
+><P
+>Este motor de bases de datos se instala con el archivo
+	    de ordenes
+	    <TT
+CLASS="filename"
+>/inst-adJ.sh</TT
+> que en instalaciones
+	    tipicas de adJ basta ejecutar y volver a ejecutar para
+	    actualizar o para volver a inicializar PostgreSQL u otro
+	    paquete de esta distribución. En caso de actualizar este
+	    archivo sacará respaldo de la información de la base de 2
+	    formas (copiando directorios de PostgreSQL y sacando
+	    un volcado de toda la base).</P
+><P
+>A continuación se dan detalles del proceso de instalación y
+	    uso de PostgreSQL en caso de que requiera instalar por
+	    su cuenta o aprender más sobre este motor de bases de datos.</P
+><P
+>Para emplearlo por primera vez instale el paquete
+    <TT
+CLASS="literal"
+>postgresql-server-9.4.4</TT
+> (también es recomendable 
+    <TT
+CLASS="literal"
+>postgresql-docs</TT
+>).</P
+><P
+>Este paquete deja instrucciones específicas para
+    inicializar la base de datos, permitir conexiones de
+    red e inicializar la base de datos cada vez que
+    arranque el sistema en:
+    <TT
+CLASS="filename"
+>/usr/local/share/doc/postgresql/README.OpenBSD</TT
+>.
+    Los pasos que este escrito describe son:
+    <P
+></P
+><UL
+><LI
+><P
+>Opcional. El paquete de PostgreSQL disponible 
+		      crea el usuario del sistema
+		      <TT
+CLASS="literal"
+>_postgresql</TT
+>, sin embargo si está
+		      actualizando o lo requiere puede crearlo con:
+	  <PRE
+CLASS="screen"
+>&#13;# useradd -c "Administrador de PostgreSQL" -g =uid -m -d /var/postgresql \
+  -s /bin/sh -u 503 _postgresql 
+# passwd _postgresql
+	  </PRE
+> 
+	</P
+></LI
+><LI
+><P
+>A diferencia de versiones anteriores, este paquete ya no
+			inicializa la base.  Inicialicela con:
+			<PRE
+CLASS="screen"
+>&#13;# mkdir -p /var/postgresql/data
+# chown -R _postgresql:_postgresql /var/postgresql
+# su - _postgresql
+$ initdb -D /var/postgresql/data -Upostgres --encoding=ISO8859-1
+	    </PRE
+>
+	    En adJ se
+	    emplea por defecto autenticación md5, que requiere suministrar
+	    clave cada vez que se carga la interfaz <TT
+CLASS="literal"
+>psql</TT
+>
+	    o abre conexiones.     Si no desea autenticación md5, al
+	   inicializar la base con <B
+CLASS="command"
+>initdb</B
+> emplee la opción 
+	    <CODE
+CLASS="option"
+>--auth=trust</CODE
+>.  Una vez inicializada puede 
+	    cambiar de un método a otro en el archivo
+	    <TT
+CLASS="filename"
+>/var/postgresql/data/pg_hba.conf</TT
+>
+	  </P
+></LI
+><LI
+><P
+>Altamente Recomendado.  Agregue a 
+		  <TT
+CLASS="filename"
+>/etc/sysctl.conf</TT
+>:
+		  <PRE
+CLASS="screen"
+>&#13;kern.seminfo.semmni=256
+kern.seminfo.semmns=2048
+kern.shminfo.shmmax=50331648
+		  </PRE
+>
+	  </P
+></LI
+><LI
+><P
+>Configurar servicio 
+		  para que inicie en el arranque y 
+		  se detenga al apagar.
+		  En <TT
+CLASS="filename"
+>/etc/rc.conf.local</TT
+> agregue: <PRE
+CLASS="screen"
+>&#13;pg_ctl_flags="start \
+	-D /var/postgresql/data -l /var/postgresql/logfile \
+	-o '-D /var/postgresql/data'"
+</PRE
+>
+y en el mismo archivo en la línea donde se define 
+<TT
+CLASS="literal"
+>pkg_scripts</TT
+> agregue postgresql, así un
+computador donde estén configuradas las particiones cifradas,
+respaldo cifrado y los servicios httpd, cupsd dirá:
+<PRE
+CLASS="screen"
+>&#13;pkg_scripts="cron montaencres montaencpos postgresql httpd cupsd"
+</PRE
+>
+	  </P
+></LI
+></UL
+>
+
+    Inicialmente el servidor queda configurado 
+    con sockets Unix (solo desde la misma máquina).  
+    Puede comprobar que está corriendo el servidor (postmaster) con:
+    <PRE
+CLASS="screen"
+>&#13;# pgrep post
+    </PRE
+>
+    y revisar el socket examinando la presencia del archivo
+    <TT
+CLASS="filename"
+>/var/www/tmp/.s.PGSQL.5432</TT
+> (otra
+    ubicación puede ser <TT
+CLASS="filename"
+>/tmp/.s.PGSQL.5432</TT
+>).
+    </P
+><P
+>Para emplear el protocolo TCP/IP para conexiones desde 
+	    algunas máquinas de su elección, 
+	    edite <TT
+CLASS="filename"
+>/var/postgresql/data/pg_hba.conf</TT
+>
+    y agregue por ejemplo máquinas y usuarios que puedan hacer
+    conexiones.  También edite 
+    <TT
+CLASS="filename"
+>/var/postgresql/data/postgresql.conf</TT
+> para
+    que incluya líneas de configuración como:<PRE
+CLASS="screen"
+>&#13;max_connections = 100
+port = 5432
+    </PRE
+>
+  </P
+><P
+>&#13;    Para mejorar desempeño especialmente en sitios que atiendan 
+    bastantes conexiones simultáneamente, consulte primero
+    <TT
+CLASS="filename"
+>/usr/local/share/doc/postgresql/README.OpenBSD</TT
+>.
+  </P
+><P
+>&#13;	  En adJ por seguridad (e.g cuando ejecuta Apache con 
+	  <B
+CLASS="command"
+>chroot</B
+> en 
+	  <TT
+CLASS="filename"
+>/var/www</TT
+>)
+	  no se permiten conexiones TCP/IP y se emplea una ruta 
+	  para los sockets diferente a la ruta por defecto (i.e 
+	  <TT
+CLASS="filename"
+>/tmp</TT
+>), se trata de
+	  <TT
+CLASS="filename"
+>/var/www/tmp</TT
+>, que se define en
+	  el archivo de configuración de PostgreSQL con:
+<PRE
+CLASS="screen"
+>&#13;unix_socket_directory = '/var/www/tmp'
+</PRE
+>
+   Antes de reiniciar PostgreSQL asegúrese
+    de crear el directorio:
+    <PRE
+CLASS="screen"
+>&#13;# mkdir	/var/www/tmp
+# chmod a+w /var/www/tmp
+# chmod +t /var/www/tmp
+    </PRE
+> 
+    También tenga en cuenta que las diversas herramientas reciben como
+    parámetro adicional <CODE
+CLASS="option"
+>-h <TT
+CLASS="replaceable"
+><I
+>ruta</I
+></TT
+></CODE
+>.
+    Por ejemplo si ejecuta Apache con <B
+CLASS="command"
+>chroot</B
+> en 
+    <TT
+CLASS="filename"
+>/var/www/</TT
+>
+    puede tener configurado su directorio para sockets en 
+    <TT
+CLASS="filename"
+>/var/www/tmp</TT
+>, en ese caso puede iniciar 
+    <B
+CLASS="command"
+>psql</B
+> con la base <TT
+CLASS="literal"
+>prueba</TT
+> usando:
+<PRE
+CLASS="screen"
+>&#13;psql -h /var/www/tmp prueba
+</PRE
+>
+  </P
+><P
+>En paquetes anteriores al de adJ 4.1 el superusuario de la base 
+	coincidía con el usuario del sistema <TT
+CLASS="literal"
+>_postgresql</TT
+>,
+	desde 4.1 el superusuario de la base es <TT
+CLASS="literal"
+>postgres</TT
+>,
+	así que para realizar operaciones  debe agregarse la opción
+	<CODE
+CLASS="option"
+>-U postgres</CODE
+>.  
+	El instalador de adJ seleccionará una clave con el programa
+	<B
+CLASS="command"
+>apg</B
+> y la dejará en
+	el archivo <TT
+CLASS="filename"
+>/var/postgresql/.pgpass</TT
+> en
+	una línea de la forma:
+	<PRE
+CLASS="screen"
+>&#13;*:*:*:postgres:clave
+	</PRE
+>
+	De esta manera desde la cuenta <TT
+CLASS="literal"
+>_postgresql</TT
+>
+	no necesitará dar la clave del usuario <TT
+CLASS="literal"
+>postgres</TT
+>.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="autenticacion"
+>Habilitando autenticación</A
+></H2
+><P
+>Por defecto la forma de inicializar PostgreSQL no establecerá
+		  una clave de administrador ni exigirá
+		  autenticación para cuentas que se conecten desde la misma
+		  máquina.  Sin embargo esto debe mejorarse si tiene varias 
+		  cuentas en el mismo servidor.</P
+><P
+>Una manera es en el momento de la inicialización de la base 
+		  de datos  con las opciones <CODE
+CLASS="option"
+>--auth</CODE
+> 
+		  y <CODE
+CLASS="option"
+>--pwfile</CODE
+> o <CODE
+CLASS="option"
+>-W</CODE
+>
+		  de <B
+CLASS="command"
+>initdb</B
+>, por ejemplo:
+		  <PRE
+CLASS="screen"
+>&#13;su - _postgresql
+echo "MiClave" &#62; clave.txt
+initdb -Upostgres --auth=md5 --pwfile=clave.txt -D/var/postgresql/data
+		  </PRE
+>
+		que inicializará PostgreSQL con autenticación md5 y clave
+		de administrador <TT
+CLASS="literal"
+>MiClave</TT
+>
+	  </P
+><P
+>Otra posibilidad es cambiar la configuración después de haber
+		  inicializado sin autenticación. Para esto cambie la clave del 
+		  administrador con<A
+NAME="AEN2429"
+HREF="#FTN.AEN2429"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>:
+		  <PRE
+CLASS="screen"
+>&#13;# psql -U postgres template1 
+template1=# alter user postgres with password 'MiClave';
+</PRE
+>
+Después edite <TT
+CLASS="filename"
+>/var/postgresql/data/pg_hba.conf</TT
+> 
+y cambie en las lineas de acceso la palabra <TT
+CLASS="literal"
+>trusted</TT
+>
+por <TT
+CLASS="literal"
+>md5</TT
+>, por ejemplo:
+<PRE
+CLASS="screen"
+>&#13;local   all         all                               md5
+host    all         all         127.0.0.1/32          md5
+host    all         all         ::1/128               md5
+</PRE
+>
+Detenga el servidor y vuelvalo a iniciar, notará que todo intento de
+ingreso exige la clave. 
+</P
+><P
+>&#13;	El listado de bases de datos puede consultarse con:
+	<PRE
+CLASS="screen"
+>&#13;SELECT * FROM pg_database ;
+	</PRE
+>
+	y el listado de los usuarios con:
+	<PRE
+CLASS="screen"
+>&#13;SELECT username FROM pg_users;
+	</PRE
+>
+	Las claves de los diversos usuarios pueden cambiarse de
+	forma análoga a la presentada para <TT
+CLASS="literal"
+>postgres</TT
+>:
+	<PRE
+CLASS="screen"
+>&#13;ALTER ROLE pablo with UNENCRYPTED PASSWORD 'clave-plana';
+	</PRE
+>
+</P
+><P
+>&#13; 	Desde PostgreSQL 8.1 se emplea un esquema de roles que unifica
+	los conceptos de usuario y grupo. 
+	Además de exigir clave para cada ingreso, cada rol de 
+	PostgreSQL que crea objetos puede modificar permisos para 
+	restringir o dar acceso a otros roles.   
+	Por ejemplo para restringir el acceso a una tabla 
+	<TT
+CLASS="literal"
+>cuenta</TT
+>:
+	<PRE
+CLASS="screen"
+>&#13;REVOKE ALL ON cuenta FROM PUBLIC;
+	</PRE
+>
+	Cuando un rol crea una base de datos, queda como dueño de todas
+	las tablas y en principio es el único que puede acceder a estas.
+	Otro rol en principio no podrá ni siquiera examinar los datos
+	de las tablas:
+	<PRE
+CLASS="screen"
+>&#13;SELECT * FROM solicitud;
+ERROR:  permission denied for relation solicitud
+	</PRE
+>
+	Para dar permiso a otro rol puede usarse:
+	<PRE
+CLASS="screen"
+>&#13;GRANT ALL on solicitud TO rodrigo;
+	</PRE
+>
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="creacion-base"
+>Creación de una base de datos</A
+></H2
+><P
+>&#13;	    Para crear la base de datos <TT
+CLASS="literal"
+>prueba</TT
+> puede
+	    usar el superusuario con la opción
+	    <CODE
+CLASS="option"
+>-U postgres</CODE
+> o desde una cuenta que tenga 
+	    permiso para crear bases de datos:
+<PRE
+CLASS="screen"
+>&#13;	createdb prueba
+	psql prueba
+</PRE
+>
+      Desde la interfaz <B
+CLASS="command"
+>psql</B
+>, pueden darse comandos
+      SQL y otros específicos de PostgreSQL (ver <A
+HREF="x2350.htm#uso-base"
+>la sección de nombre <I
+>Uso de una base de datos</I
+></A
+>).
+      En particular el usuario <TT
+CLASS="literal"
+>postgres</TT
+> y desde
+      cuentas con permiso para crear usuarios, puede crear
+      otros usuarios (globales para todas las 
+      bases de datos manejadas por el servidor).  Por ejemplo para
+      crear un usuario normal sin clave, desde <TT
+CLASS="literal"
+>psql</TT
+>
+      ingresar: <PRE
+CLASS="screen"
+>&#13;	CREATE USER usejemplo
+      </PRE
+>
+      El comando <TT
+CLASS="literal"
+>CREATE USER</TT
+> presentado puede ir seguido 
+      de <TT
+CLASS="literal"
+>CREATEUSER</TT
+> para
+      crear un superusuario (sin restricción alguna), o
+      <TT
+CLASS="literal"
+>CREATEDB</TT
+> para crear un usuario que pueda
+      crear bases de datos o <TT
+CLASS="literal"
+>PASSWORD 'clave'</TT
+> para
+      crear un usuario con una clave (emplea autenticación
+      configurada).
+      Desde la línea de comandos puede crearse un usuario con:<PRE
+CLASS="screen"
+>&#13;createuser usejemplo
+      </PRE
+>
+    </P
+><P
+>&#13;      Para eliminar un usuario desde <B
+CLASS="command"
+>psql</B
+> se usa:<PRE
+CLASS="screen"
+>&#13;DROP USER usejemplo;
+      </PRE
+>
+      y para eliminarlo desde línea de comandos:
+<PRE
+CLASS="screen"
+>&#13;dropuser usejemplo
+      </PRE
+>
+
+    </P
+><P
+>Puede ejecutarse un script SQL (<TT
+CLASS="filename"
+>crea.sql</TT
+>) 
+	    desde la línea de comandos
+      a un base de datos con<PRE
+CLASS="screen"
+>&#13;	psql -d test -U ejusuario --password -f crea.sql
+      </PRE
+>
+  </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="uso-base"
+>Uso de una base de datos</A
+></H2
+><P
+>Puede emplear <B
+CLASS="command"
+>psql</B
+>, la interfaz texto que
+	acepta comandos SQL y que se distribuye con PostgreSQL. 
+	Para esto, entre a una base (digamos <TT
+CLASS="literal"
+>b1908</TT
+>) 
+        como un usuario (digamos <TT
+CLASS="literal"
+>u1908</TT
+>)
+	con:
+<PRE
+CLASS="screen"
+>&#13;psql -U u1908 -d b1908
+</PRE
+>
+	En esta interfaz puede dar comandos SQL y algunos comandos internos
+ 	que puede listar con <B
+CLASS="command"
+>\h</B
+>.
+	Algunos ejemplos de operaciones útiles son:
+      <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="literal"
+>\dt</TT
+></DT
+><DD
+><P
+>para ver tablas disponibles.</P
+></DD
+><DT
+><TT
+CLASS="literal"
+>\d usuarios</TT
+></DT
+><DD
+><P
+>Describe la estructura de la tabla
+	      <TT
+CLASS="literal"
+>usuarios</TT
+></P
+></DD
+><DT
+><TT
+CLASS="literal"
+>SELECT victim_nombre,victim_apellido FROM victimas WHERE victim_edad&#60;=12;</TT
+></DT
+><DD
+><P
+>Que muestre los nombres de niños de 12 años o menos listados en la tabla <TT
+CLASS="literal"
+>victimas</TT
+></P
+></DD
+><DT
+><TT
+CLASS="literal"
+>\h update</TT
+></DT
+><DD
+><P
+>Da ayuda sobre el comando <TT
+CLASS="literal"
+>update</TT
+> 
+				(que permite actualizar registros de 
+				una tabla.) </P
+></DD
+></DL
+></DIV
+>
+
+      Es recomendable que los usuarios del sistema que también son
+      usuarios de PostgreSQL creen el archivo
+      <TT
+CLASS="filename"
+>~/.pgpass</TT
+> donde puede almacenarse la
+      clave que usa en PostgreSQL ---de forma que las diversas
+      herramientas no la solicitaran--- con una línea de la forma:
+      <PRE
+CLASS="screen"
+>&#13;*:*:*:usuario:clave
+      </PRE
+>
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="postgresql-cotejacion"
+>Cotejación en PostgreSQL</A
+></H2
+><P
+>&#13;	Desde adJ 5.2 se incluye un porte de PostgreSQL (la
+	versión incluida en adJ 5.7 es
+	postgresql-server-9.4.4)
+	que soporta cotejaciones de acuerdo al locale, y por defecto se crean 
+	cotejaciones para todos los países de habla hispana, con
+	nombres de la forma <TT
+CLASS="literal"
+>es_CO_UTF_8</TT
+>.
+	Donde <TT
+CLASS="literal"
+>CO</TT
+> 
+	representa Colombia, pero se pueden emplear otras abreviaturas
+	de países como se usan en Internet (estándar ISO-3166-1):
+	ES CO PE VE EC GT CU BO HN PY SV CR PA GQ MX AR CH DO NI UY PR.
+</P
+><P
+>Puede examinar las cotejaciones disponibles ingresando al interprete 
+	<TT
+CLASS="literal"
+>psql</TT
+> y ejecutando:
+	<PRE
+CLASS="screen"
+>&#13;SELECT * FROM pg_collation;
+	</PRE
+>
+</P
+><P
+>&#13;	Puede crear una cotejación (digamos <TT
+CLASS="literal"
+>esp</TT
+>) para un locale 
+	soportado por el sistema operativo y con la misma codificación
+	de su base de datos (digamos 
+	<TT
+CLASS="literal"
+>es_CO.ISO8859-1</TT
+>) con: 
+	<PRE
+CLASS="screen"
+>&#13;CREATE COLLATION esp (LOCALE='es_CO.ISO8859-1');
+	</PRE
+>
+</P
+><P
+>&#13;	Una vez creada puede realizar operaciones empleándola por ejemplo:
+
+	<PRE
+CLASS="screen"
+>&#13;SELECT 'Á' &#60; 'B' COLLATE "esp";
+...
+SELECT nombre FROM clase ORDER BY nombre COLLATE "esp";
+	</PRE
+>
+	la primera sentencia dará:
+	<PRE
+CLASS="screen"
+>&#13; ?column? 
+ ----------
+ t
+ (1 row)
+</PRE
+>
+</P
+><P
+>&#13;	Puede crear columnas de tablas especificando el tipo de cotejación por 
+	defecto para operaciones con esa columna.
+	<PRE
+CLASS="screen"
+>&#13;CREATE TABLE ejc (
+  nombre VARCHAR(100) COLLATE "esp"
+);
+</PRE
+>
+o cambiar las existentes:
+<PRE
+CLASS="screen"
+>&#13;ALTER TABLE clase ALTER nombre TYPE VARCHAR(500) COLLATE "esp";
+</PRE
+>
+También podrá renombrar cotejaciones que haya creado con
+<TT
+CLASS="literal"
+>ALTER COLLATION esp RENAME TO es_CO_ISO8859_1;</TT
+>,
+así como borrarlas
+con <TT
+CLASS="literal"
+>DROP COLLATION esp;</TT
+>. Puede consultar
+más en
+<A
+HREF="http://www.postgresql.org/docs/9.1/static/collation.html"
+TARGET="_top"
+>http://www.postgresql.org/docs/9.1/static/collation.html</A
+>.
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="respaldo-postgresql"
+>Copias de respaldo</A
+></H2
+><P
+>Para sacar una copia de respaldo de todas las 
+		  base de datos manejadas con PostgreSQL (y suponiendo
+		  que el socket está en <TT
+CLASS="filename"
+>/var/www/tmp</TT
+>):
+		  ingrese a la cuenta del administrador:
+		  <PRE
+CLASS="screen"
+>&#13;sudo su - _postgresql
+pg_dumpall -U postgres -h /var/www/tmp/ \
+      --inserts --attribute-inserts &#62; /respaldos/pgdump.sql
+		  </PRE
+>
+
+		  Puede restablecer una copia con
+		  <PRE
+CLASS="screen"
+>&#13;psql -U postgres -h /var/www/tmp/ \
+	-f /respaldos/pgdump.sql template1
+</PRE
+>
+	</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="referencias-postgresql"
+>Referencias y lecturas recomendadas</A
+></H2
+><P
+> 
+      <P
+></P
+><UL
+><LI
+><P
+>Documentación del paquete postgresql (README.OpenBSD, INSTALL).
+	  </P
+></LI
+><LI
+><P
+>Documentación disponible en el paquete 
+	    <TT
+CLASS="literal"
+>postgresql-doc</TT
+> (ver 
+	    [<SPAN
+CLASS="citation"
+>postgresql-doc</SPAN
+>]) y en
+	    <A
+HREF="http://www.postgresql.org/docs"
+TARGET="_top"
+>http://www.postgresql.org/docs</A
+>.
+	  </P
+></LI
+><LI
+><P
+>Páginas del manual de Unix:
+	    <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>psql</SPAN
+>(1)</SPAN
+></P
+></LI
+></UL
+>
+    </P
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notas</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN2429"
+HREF="x2350.htm#AEN2429"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Note que de esta forma 
+				  puede cambiar la clave de otros usuarios 
+				  de PostgreSQL.</P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c2304.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2546.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Otros servicios que puede prestar el servidor</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c2304.htm"
+ACCESSKEY="U"
+>Subir</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>MariaDB</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,47 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>4. ftp-proxy: para usar ftp desde la red interna</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="up" href="direcciones-enrutamiento-transporte.html" title="Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos"><link rel="prev" href="cortafuegos.html" title="3. Cortafuegos: filtrado y túneles"><link rel="next" href="ejemplopf.html" title="5. Ejemplo del uso de PF en una DMZ"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4. ftp-proxy: para usar ftp desde la red interna</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="cortafuegos.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos</th><td width="20%" align="right"> <a accesskey="n" href="ejemplopf.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ftpproxy"></a>4. ftp-proxy: para usar ftp desde la red interna</h2></div></div></div><p>Las características del protocolo ftp hacen que sea difícil
+	emplearlo desde una red interna con un cortafuegos que hace
+	NAT.  <span class="application">pf</span> ofrece facilidades para
+	lograrlo en conjunto con el programa
+	<code class="filename">/usr/sbin/ftp-proxy</code> que redirige
+	conexiones ftp a su destino y automáticamente agrega reglas a 
+	<span class="application">pf</span> que permitan la conexión.
+</p><p>El siguiente ejemplo ejemplifica parte del archivo 
+		<code class="filename">/etc/pf.conf</code> para esto:
+</p><pre class="screen">
+# En la sección nat/rdr
+pass on $int_if proto tcp from $lan to any port 21 
+match in on $int_if proto tcp from $lan to any port 21 rdr-to 127.0.0.1 port 8021
+
+# En la sección de reglas de filtrado
+pass out proto tcp from $ext_ip to any port 21
+</pre><p>
+
+</p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Aviso]" src="./warning.png"></td><th align="left">Aviso</th></tr><tr><td align="left" valign="top"><p>Para emplear <span class="application">ftp-proxy</span> asegurese
+	que entre las reglas de su cortafuegos no esté:
+	</p><pre class="screen">
+set skip $int_if
+	</pre><p>
+	porque esto impediría la redirección al puerto 8021 (por defecto
+	usado por ftp-proxy) del cortafuegos cuando se hacen peticiones de 
+	ftp.
+</p></td></tr></table></div><p>
+	Además de las reglas del cortafuegos (recuerde reiniciar 
+	<span class="application">pf</span>
+con <span><strong class="command">pfctl -f /etc/pf.conf</strong></span> para que surtan efecto)
+debe iniciar el proxy con:
+</p><pre class="screen">
+	/usr/sbin/ftp-proxy
+</pre><p>
+y para que se efectúe en cada arranque del servidor agregar
+a <code class="filename">/etc/rc.conf.local</code>:
+</p><pre class="screen">
+ftpproxy_flags=""
+</pre><p>
+</p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-ftpproxy"></a>4.1. Referencias y lecturas recomendadas</h3></div></div></div><p>
+	Las siguientes páginas man:
+	<a href=""><span class="citerefentry"><span class="refentrytitle">ftp-proxy</span>(8)</span></a>,
+	<a href=""><span class="citerefentry"><span class="refentrytitle">pf</span>(4)</span></a>.
+	</p><p>
+		Guía del usuario de PF 
+		[<span class="citation"><a href="bi01.html#PF">PF</a></span>].
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="cortafuegos.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="direcciones-enrutamiento-transporte.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="ejemplopf.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">3. Cortafuegos: filtrado y túneles </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 5. Ejemplo del uso de PF en una DMZ</td></tr></table></div></body></html>

@@ -1,0 +1,126 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="prev" href="red-inalambrica.html" title="5. Red Local Inalámbrica: uso y configuración"><link rel="next" href="nat.html" title="2. NAT (Network Address Translation)"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="red-inalambrica.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="nat.html">Siguiente</a></td></tr></table><hr></div><div class="chapter" lang="es"><div class="titlepage"><div><div><h2 class="title"><a name="direcciones-enrutamiento-transporte"></a>Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos</h2></div></div></div><div class="toc"><p><b>Tabla de contenidos</b></p><dl><dt><span class="sect1"><a href="direcciones-enrutamiento-transporte.html#ipv4">1. Introducción a TCP/IPv4</a></span></dt><dd><dl><dt><span class="sect2"><a href="direcciones-enrutamiento-transporte.html#tabla-enrutamiento">1.1. Tabla de Enrutamiento</a></span></dt><dt><span class="sect2"><a href="direcciones-enrutamiento-transporte.html#configuracion-OpenBSD">1.2. Otros aspectos de configuración de redes en OpenBSD</a></span></dt></dl></dd><dt><span class="sect1"><a href="nat.html">2. NAT (Network Address Translation)</a></span></dt><dd><dl><dt><span class="sect2"><a href="nat.html#referencias-nat">2.1. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="cortafuegos.html">3. Cortafuegos: filtrado y túneles</a></span></dt><dd><dl><dt><span class="sect2"><a href="cortafuegos.html#referencias-cortafuegos">3.1. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="ftpproxy.html">4. ftp-proxy: para usar ftp desde la red interna</a></span></dt><dd><dl><dt><span class="sect2"><a href="ftpproxy.html#referencias-ftpproxy">4.1. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="ejemplopf.html">5. Ejemplo del uso de PF en una DMZ</a></span></dt><dd><dl><dt><span class="sect2"><a href="ejemplopf.html#referencias-ejemplopf">5.1. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="control-de-ancho-de-banda.html">6. Control de ancho de banda</a></span></dt><dd><dl><dt><span class="sect2"><a href="control-de-ancho-de-banda.html#referencias-control-ancho-banda">6.1. Referencias y lecturas recomendadas</a></span></dt></dl></dd></dl></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="ipv4"></a>1. Introducción a TCP/IPv4</h2></div></div></div><p>
+     En una red TCP/IPv4, cada computador tiene como identificación una
+     dirección <span class="acronym">IP</span> única.  Esta dirección consta de
+     32 bits, y suele escribirse como 4 números/bytes separando unos
+     de otros por punto (cada uno es un número entre 0 y 255), por
+     ejemplo 66.35.250.209.  Cómo TCP/IP se diseño para interconectar
+     redes, una dirección <span class="acronym">IP</span> consta de una parte
+     que identifica de forma única la red y otra que identifica de
+     forma única el computador dentro de la red.  Una máscara de red
+     determina que parte identifica la red y cuáles computadores en la
+     red puede denotarse con el número de bits del comienzo de la
+     dirección que identifican la red (e.g 16 si los primeros 16 bits
+     identifican la red) o como otra dirección que al hacer la
+     operación lógica y con la dirección <span class="acronym">IP</span> dará la
+     dirección de red (por ejemplo 255.255.0.0 es una máscara que
+     indica que los primeros 16 bits de una dirección IP son la
+     dirección de red).
+    </p><a class="indexterm" name="idp587326960"></a><p>Al diseñar una red debe escogerse una dirección de red junto
+     con la máscara de acuerdo al número de computadores, algunas
+     posibilidades son:</p><div class="variablelist"><dl><dt><span class="term">/8 o 255.0.0.0</span></dt><dd><p>16777216 computadores</p></dd><dt><span class="term">/12 o 255.242.0.0</span></dt><dd><p>1048576 computadores</p></dd><dt><span class="term">/16 o 255.255.0.0</span></dt><dd><p>65536 computadores</p></dd><dt><span class="term">/24 o 255.255.255.0</span></dt><dd><p>255 computadores</p></dd></dl></div><p>Además la dirección de red que escoja debe ser única para no
+     producir conflictos con otras redes en caso de conectarse a
+     Internet y puede facilitar la interconexión de diversas redes y
+     el enrutamiento al interior de una organización.  La labor de
+     asignación de direcciones IP en una red local la puede hacer un 
+     administrador de red o puede hacerse dinámicamente con el protocolo 
+     DHCP. </p><p>Para facilitar la adopción de redes TCP/IPv4 en
+     organizaciones, el <span class="acronym">RFC</span> 1918 destinó algunas
+     direcciones de red para usar al interior de organizaciones (no
+     puede haber computadores en Internet con esas direcciones):
+     </p><div class="variablelist"><dl><dt><span class="term">10.0.0.0 - 10.255.255.255</span></dt><dd><p>máscara /8</p></dd><dt><span class="term">172.16.0.0 - 172.31.255.255</span></dt><dd><p>máscara /12</p></dd><dt><span class="term">192.168.0.0 - 192.168.255.255</span></dt><dd><p>máscara /16</p></dd></dl></div><p>Por ejemplo en su red local puede emplear
+     direcciones entre 192.168.1.1 y 192.168.1.255 con máscara de red
+     /24 o 255.255.255.0.  O en caso de contar con más redes en la
+     misma organización, la segunda con direcciones entre 192.168.2.1 y
+     192.168.2.255 y así sucesivamente.  Además de usar direcciones
+     privadas, se facilita el crecimiento de la infraestructura de
+     redes y la configuración del enrutamiento entre unas y
+     otras.</p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="tabla-enrutamiento"></a>1.1. Tabla de Enrutamiento</h3></div></div></div><p>Como se presentó en la descripción de las capas en redes
+     TCP/IP (ver <a href="redes-protocolos-internet.html" title="Capítulo 2. Redes, protocolos e Internet">Redes,
+     protocolos e Internet</a>), el protocolo <span class="acronym">IP</span>
+     mantiene una tabla de enrutamiento que asocia direcciones de red
+     con compuertas, es decir con computadores conectados a la misma
+     red que pueden retransmitir información a la red destino.  En
+     una red de área local no es necesario configurarla, pero si se
+     requiere por ejemplo para interconectar varias redes de área local en 
+     una misma organización.</p><p>Puede ver la tabla de enrutamiento estático en con
+     <span><strong class="command">route -n show</strong></span> o con <span><strong class="command">netstat -r</strong></span>.
+     Entre los campos de cada entrada de esta tabla están: red
+     destino, puerta de enlace, banderas, uso, MTU, interfaz por la cual
+     enviar/recibir paquetes con ese destino, 
+     </p><p>Hay un destino por defecto (<code class="literal">default</code>) al
+     que se envia todo paquete que no tiene un destino en la tabla de
+     enrutamiento. Este destino por defecto o puerta de enlace se
+     configura en el archivo <code class="filename">/etc/mygate</code>. En una
+     red local conectada a Internet, el servidor debe emplear como
+     puerta de enlace la que le haya dado el proveedor de Internet, y
+     cada computador de la red local debe emplear la IP del servidor.
+    </p><p>De requerirse pueden agregarse compuertas con
+     <span><strong class="command">route add</strong></span> por ejemplo,
+     para agregar una ruta a la red 192.168.2.0/24 
+     usando como compuerta 192.168.1.60 que está en la misma
+     red:</p><pre class="screen">
+sudo route add 192.168.2/24 192.168.1.60
+	 </pre><p>
+     Y pueden eliminarse de forma análoga con <span><strong class="command">route
+      delete</strong></span>.
+    </p><p>
+     Para determinar problemas de enrutamiento o en general de la red, 
+     puede emplear algunas herramientas de diagnóstico por ejemplo:
+
+     </p><div class="variablelist"><dl><dt><span class="term"><span><strong class="command">traceroute</strong></span></span></dt><dd><p>Presenta las direcciones de
+	 los computadores y enrutadores que transmiten un paquete
+	 hasta llegar a su destino. Por ejemplo
+		 </p><pre class="screen">
+traceroute 192.168.2.2</pre><a class="indexterm" name="idp1703374704"></a></dd><dt><span class="term"><span><strong class="command">netstat -s</strong></span></span></dt><dd><p>Éste presenta estadísticas sobre <span class="acronym">IP</span>,
+	 <span class="acronym">ICMP</span> y <span class="acronym">TCP</span></p></dd><dt><span class="term"><span><strong class="command">arp -an</strong></span></span></dt><dd><p>Que presenta direcciones MAC junto con IPs asociadas
+	 </p></dd><dt><span class="term"><span><strong class="command">tcpdump</strong></span></span></dt><dd><p>Permite analizar el tráfico de una red TCP/IP.  Desde la
+	 cuenta root puede usarse este programa para examinar todo el
+	 tráfico que circule por una red.  Por ejemplo para verificar
+	 lo que se transmite por la interfaz re0:
+	 </p><pre class="screen">
+sudo tcpdump -i re0 -n -ttt
+	 </pre><p>
+       </p><a class="indexterm" name="idm1552195088"></a></dd></dl></div><p>
+    </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="configuracion-OpenBSD"></a>1.2. Otros aspectos de configuración de redes en OpenBSD</h3></div></div></div><p>Fuera de las tablas de enrutamiento y ARP, la funcionalidad de 
+	    redes a nivel de kernel se puede controlar con:
+
+     </p><div class="variablelist"><dl><dt><span class="term"><code class="filename">/etc/hosts</code></span></dt><dd><p>En este archivo se listan nombres asociados a
+       la dirección <span class="acronym">IP</span> de algunos computadores, por
+       ejemplo:
+	 
+		 </p><pre class="screen">
+127.0.0.1       localhost
+192.168.1.1    Jesus.miescuela.edu.co Jesus
+		 </pre><p>
+	     </p></dd><dt><span class="term"><span><strong class="command">sysctl</strong></span></span></dt><dd><p>Para configurar algunas variables del
+		       kernel relacionadas con redes.
+		       Los cambios pueden hacerse permanentes modificando
+		       el archivo <code class="literal">/etc/sysctl.conf</code>.
+		       Resaltamos la variable <code class="literal">net.inet.ip.forwarding</code> que debe activarse para que un sistema opere como enrutador.
+	</p></dd><dt><span class="term">pf</span></dt><dd><p>Que permite controlar el 
+tráfico de paquetes en el kernel y por tanto controlar
+la funcionalidad de
+cortafuegos<sup>[<a name="idp1184170096" href="#ftn.idp1184170096">24</a>]</sup>.
+Se configura de manera permanente en el archivo <code class="filename">/etc/pf.conf</code> (o el archivo especificado
+en la variable <code class="literal">pf_rules</code> de 
+<code class="filename">rc.conf.local</code> o <code class="filename">rc.conf</code>).  Para
+que <span><strong class="command">pf</strong></span> entre en operación en cada arranque del 
+sistema, agregue a <code class="filename">rc.conf.local</code> la línea:
+</p><pre class="screen">
+pf=""
+</pre><p>
+</p><p>
+	    Una vez esté operando si hace cambios al archivo de configuración
+	    puede lograr que reinicie y vuelva a leerlo con:
+	    </p><pre class="screen">
+# sudo pfctl -f /etc/pf.conf
+	    </pre><p>
+    </p><p>El archivo de configuración <code class="filename">/etc/pf.conf</code> 
+	    tiene una sintaxis bastante entendible que permite definir 
+	    variables y tablas. </p></dd></dl></div><p>
+     
+    </p><p>Las secciones de este capítulo explican algunas configuraciones
+	    típicas que pueden hacerse con <span class="application">pf</span>
+	    y los correspondientes cambios a su archivo de configuración.
+    </p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1184170096" href="#idp1184170096">24</a>] </sup>Cortafuego del inglés
+<span xmlns="" class="foreignphrase"><em class="foreignphrase">firewall</em></span></p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="red-inalambrica.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="nat.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">5. Red Local Inalámbrica: uso y configuración </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 2. NAT (Network Address Translation)</td></tr></table></div></body></html>

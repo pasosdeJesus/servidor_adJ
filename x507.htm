@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Conexión a Internet ADSL con pppoe</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Dispositivos de interconexión"
+HREF="c358.htm"><LINK
+REL="PREVIOUS"
+TITLE="Conexión a Internet con un módem o módem ISDN"
+HREF="x490.htm"><LINK
+REL="NEXT"
+TITLE="Uso y configuración en una red LAN Ethernet"
+HREF="x535.htm"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x490.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Capítulo 3. Dispositivos de interconexión</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x535.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="adsl-pppoe"
+>Conexión a Internet ADSL con pppoe</A
+></H1
+><P
+>En Colombia los proveedores de acceso a Internet en planes
+	  de Banda Ancha típicamente emplean dispositivos y configuraciones
+	  que permiten conectar un computador como si fuera un equipo
+	  más en una red Ethernet.  En tal caso basta conocer la
+	  IP que tendrá el computador (o si se usará dhcp), la mascara de 
+	  red y la dirección de la puerta de enlace, y configurar como se 
+	  explica en la sección de redes LAN Ethernet (ver <A
+HREF="x535.htm"
+>la sección de nombre <I
+>Uso y configuración en una red LAN Ethernet</I
+></A
+>.
+  </P
+><P
+>&#13;       Puede ocurrir que su proveedor emplee un módem que requiera
+       el protocolo <TT
+CLASS="literal"
+>pppoe</TT
+> (e.g con un Módems Marconi).   
+	En tal caso el proveedor puede brindar dos opciones para
+	  la configuración del módem:
+	<P
+></P
+><UL
+><LI
+><P
+>Enrutador (router): Se conecta a un HUB o a un 
+				computador y 
+				hace NAT para todos los computadores cliente 
+				conectados.  En la LAN basta configurar la IP
+				de cada equipo para que estén en la misma subred
+				del enrutador y que cada uno emplee como 
+				compuerta/pasarela al módem.
+</P
+></LI
+><LI
+><P
+>Puente (bridge): En esta configuración se requiere
+			un servidor que haga NAT y enrute. </P
+></LI
+></UL
+>
+</P
+><P
+>&#13;	Si el módem ADSL se conecta con un cable Ethernet y el proveedor 
+	ofrece ppp,
+	no debe configurarse la tarjeta de red, sino una interfaz nueva tun0
+	Por esto en el archivo de configuración de la tarjeta digamos
+	<TT
+CLASS="filename"
+>/etc/hostname.rl0</TT
+> (reemplazar 
+	<TT
+CLASS="literal"
+>rl0</TT
+> con interfaz en su caso, examinar
+	posibles interfaces con <B
+CLASS="command"
+>ifconfig</B
+>) deje:
+	<PRE
+CLASS="screen"
+>&#13;up
+	</PRE
+>
+
+	Edite <TT
+CLASS="filename"
+>/etc/ppp/ppp.conf</TT
+> (si no existe
+	cópielo de <TT
+CLASS="filename"
+>/etc/ppp/ppp.conf.smaple</TT
+>), para que quede
+	una sección como la siguiente:
+	<PRE
+CLASS="screen"
+>&#13;pppoe:
+ set log Phase Chat LCP IPCP CCP tun command
+ set redial 15 0
+ set reconnect 15 10000
+ set device "!/usr/sbin/pppoe -i rl0"
+ set mtu max 1492
+ set mru max 1492
+ set speed sync
+ disable acfcomp protocomp
+ deny acfcomp
+ enable lqr
+ set lqrperiod 5
+ set cd 5
+ set dial
+ set login
+ set timeout 0
+ set authname "usuario"
+ set authkey "miclave"
+ add! default HISADDR
+ enable mssfixup
+	</PRE
+>
+
+	Cambiando la interfaz de red, el usuario y la clave.
+	Podrá probar la conexión con:
+	<PRE
+CLASS="screen"
+>&#13;		ppp -ddial -nat pppoe
+	</PRE
+>
+
+	Si desea que en cada arranque se conecte automáticamente,
+	tal como se explica en 	
+	<A
+HREF="http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html "
+TARGET="_top"
+>http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html</A
+>
+	agregue a <TT
+CLASS="filename"
+>/etc/rc.local</TT
+>:
+	<PRE
+CLASS="screen"
+>&#13;IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
+if [ -z "$IPADSL" ]; then
+	echo -n "Estableciendo conexion PPPoE DSL"; ppp -ddial pppoe
+	for i in 10 9 8 7 6 5 4 3 2 1 0; do 
+	    sleep 5             
+	    echo -n "$i"        
+	    IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
+	    if [ -z "$IPADSL" ]; then
+	        	break
+	    fi                  
+	done     
+fi
+
+	</PRE
+>
+</P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="referencias-pppoe"
+>Referencias y lecturas recomendadas</A
+></H2
+><P
+>&#13;      Página del manual <TT
+CLASS="literal"
+>pppoe</TT
+>.
+    </P
+><P
+>&#13;	http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html 
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x490.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x535.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Conexión a Internet con un módem o módem ISDN</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c358.htm"
+ACCESSKEY="U"
+>Subir</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Uso y configuración en una red LAN Ethernet</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

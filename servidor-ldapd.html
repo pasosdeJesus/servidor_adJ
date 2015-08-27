@@ -1,0 +1,228 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>4. Servidor ldapd</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="up" href="otros-servicios-de-un-servidor.html" title="Capítulo 6. Otros servicios que puede prestar el servidor"><link rel="prev" href="mariadb.html" title="3. MariaDB"><link rel="next" href="novedades.html" title="Apéndice A. Novedades"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4. Servidor ldapd</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="mariadb.html">Anterior</a> </td><th width="60%" align="center">Capítulo 6. Otros servicios que puede prestar el servidor</th><td width="20%" align="right"> <a accesskey="n" href="novedades.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="servidor-ldapd"></a>4. Servidor ldapd</h2></div></div></div><p>
+		LDAP (Lightweight Directory Access Protocol) es un protocolo para mantener e intercambiar información almacenada en directorios (i.e bases de datos especiales),
+		su versión 3 se define en los RFC 2251, 2256, 2829, 2830 y 3377.
+	</p><p>
+		Un uso típico de LDAP es mantener en un servidor información de los usuarios 
+		de una organización para permitir su autenticación en otros servicios 
+		(e.g nombres, apellidos, dirección, teléfono, login, clave).
+	</p><p>
+		OpenBSD incluye (desde OpenBSD 4.8) un servidor para LDAP versión 3, 
+		<code class="literal">ldapd</code>. No incluye cliente para LDAP pero desde la 
+		línea de comandos puede emplearse el paquete 
+		<code class="literal">openldap-client</code> o como interfaz web 
+		<code class="literal">phpldapadmin</code><sup>[<a name="idm1920139280" href="#ftn.idm1920139280">30</a>]</sup>.
+	</p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="instalacion-ldapd"></a>4.1. Instalación de ldapd</h3></div></div></div><p>
+			No necesita instalar paquetes para la operación como servidor.
+		</p><p>
+			La configuración que se presenta emplea LDAPS para conexiones en la 
+			red local, empleando un certificados cuyas llaves pública y privada 
+			debe copiarse a <code class="filename">/etc/ldap/certs</code> y ejecutar:
+</p><pre class="screen">
+    cd /etc/ldap/certs
+    chown _ldapd:_ldapd *
+    chmod 0640 /etc/ldap/certs/*key
+    chmod 0644 /etc/ldap/certs/*crt 
+</pre><p>
+      Para configurar el servidor, verifique que exista el usuario 
+			<code class="literal">_ldapd</code> y el grupo <code class="literal">_ldapd</code> 
+			y edite <code class="literal">/etc/ldapd.conf</code>:
+</p><pre class="screen">
+schema "/etc/ldap/core.schema"                                                  
+schema "/etc/ldap/inetorgperson.schema"                                         
+schema "/etc/ldap/nis.schema"                                                   
+ 
+lan_if = "re1"
+
+listen on $lan_if ldaps certificate www.pasosdeJesus.org
+listen on lo0 secure
+listen on "/var/run/ldapi"
+
+namespace "dc=www,dc=pasosdeJesus,dc=org" {
+        rootdn          "cn=root,dc=www,dc=pasosdeJesus,dc=org"
+        rootpw          "secret"
+        index           sn
+        index           givenName
+        index           cn
+        index           mail
+        index           objectClass
+        index           sn
+        fsync           on
+}                                                                               
+</pre><p>
+
+     Recuerde que la clave del directorio debe ser mejor que la presentada 
+		 (i.e remplace <code class="literal">secret</code> por una buena clave). En lugar 
+		 de poner la clave plana también es posible poner la cadena generada con:
+</p><pre class="screen">
+    # slappasswd -v -u -h {CRYPT} -s secret
+</pre><p>
+      que en el caso de la clave '<code class="literal">secret</code>' es 
+      '<code class="literal">{CRYPT}uPUCy906TIu/k</code>'
+    </p><p>
+			La configuración por defecto emplea <code class="literal">/var/db/ldap</code> como 
+			directorio para mantener las bases de datos y mantiene una por cada 
+			espacio de nombres (namespace).  Las conexiones no cifradas por defecto 
+			operan en el puerto 389 y deben autenticarse con SASL (a menos que 
+			tengan la opción <code class="literal">secure</code> para permitir autenticación 
+			plana) y las que empleen certificado iran cifradas en el puerto 636.
+		</p><p>
+			Cada vez que modifique el archivo de configuración del servidor, puede 
+			verificarlo con:
+			</p><pre class="screen">
+    $ sudo ldapd -n
+</pre><p>
+      Para iniciar el servidor LDAP en modo de depuración para ver posibles 
+			errores:
+</p><pre class="screen">
+    $ sudo ldadpd -dv
+</pre><p>
+      Tras verificar el funcionamiento, para que en cada arranque se 
+			inicie el servidor puede agregar a <code class="literal">/etc/rc.conf.local</code>:
+</p><pre class="screen">
+    ldapd_flags=""
+    pkg_scripts = "ldapd"
+</pre><p>
+
+E iniciar el servicio con <code class="literal">/etc/rc.d/ldapd start</code> 
+y detenerlo con <code class="literal">/etc/rc.d/ldadp stop</code>
+    </p><p>
+
+			Es muy recomendable que agregue el esquema LDAP de Courier, de esta forma tomada de {3}:
+			</p><div class="itemizedlist"><ul type="disc"><li><p>
+Descarguelo y renombrelo:
+</p><pre class="screen">
+sudo ftp -o /etc/ldap/courier.schema \
+http://courier.cvs.sourceforge.net/viewvc/courier/libs/authlib/authldap.schema
+</pre><p>
+					</p></li><li><p>
+Edite /etc/ldap/courier.schema y quite comentario a las líneas:
+</p><pre class="screen">
+attributetype ( 1.3.6.1.4.1.10018.1.1.14 NAME 'mailhost'                        
+        DESC 'Host to which incoming POP/IMAP connections should be proxied'
+        EQUALITY caseIgnoreIA5Match                                        
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )  
+</pre><p>
+					</p></li><li><p>Reinicie ldapd</p></li></ul></div><p>
+    </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="pruebas-openldap"></a>4.2. Pruebas Iniciales con openldap-client</h3></div></div></div><p>
+Instale el paquete con:
+</p><pre class="screen">
+    # pkg_add openldap-client
+</pre><p>
+Verifique localmente que el servidor no cifrado corre con:
+</p><pre class="screen">
+     ldapsearch -x -b 'dc=www,dc=pasosdeJesus,dc=org' '(objectclass=*)'
+</pre><p>
+Respecto al servidor cifrado puede analizar la conexión SSL con:
+</p><pre class="screen">
+     openssl s_client -connect 192.168.2.1:465
+</pre><p>
+Puede verificar sus certificados contra la entidad que los expide siguiendo 
+instrucciones de {4}.    
+</p><p>
+	Puede deshabilitar la verificación de certificados de ldapsearch 
+	poniendo en <code class="literal">/etc/openldap/ldap.conf</code>:
+</p><pre class="screen">
+    TLS_REQCERT never
+</pre><p>
+
+Para hacer pruebas desde otro computador, tenga en cuenta que en OpenBSD 
+ldapsearch utiliza openssl mientras que por ejemplo en Ubuntu emplea 
+GNUTLS, por esto eventualmente puede requerir descargar certificado de 
+autoridad certificadora (digamos gd.pem) y ejecutar:
+</p><pre class="screen">
+    sudo cat /etc/ssl/certs/gd.pem &gt;&gt; /etc/ssl/certs/ca-certificates.crt
+</pre><p>
+
+Además de modificar <code class="filename">/etc/ldap/ldap.conf</code> para agregar
+</p><pre class="screen">
+    TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
+</pre><p>
+
+  	</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="datos-iniciales-ldapd"></a>4.3. Adición de datos iniciales</h3></div></div></div><p>
+
+			Una vez esté corriendo <code class="literal">ldapd</code> deberá iniciar un 
+			directorio para su organización y los usuarios que se autenticarán. 
+			Puede agregar estos datos con el programa <code class="literal">ldapadd</code> 
+			que hace parte de openldap-client. Programa que recibe datos en 
+			formato ldif, por ejemplo leidos de un archivo. Un primer archivo con 
+			datos de la organización puede ser <code class="literal">org.ldif</code> y contener:
+</p><pre class="screen">
+dn:     dc=www,dc=pasosdeJesus,dc=org
+objectClass:    dcObject
+objectClass:    organization
+o:      Pasos de Jesús
+dc:     correo
+
+dn: cn=admin,dc=correo,dc=pasosdeJesus,dc=org
+objectClass: organizationalRole
+cn: admin
+
+dn:ou=gente, dc=correo,dc=pasosdeJesus,dc=org
+objectClass:    top
+objectClass:    organizationalUnit
+ou:     gente
+
+dn:ou=grupos,dc=correo,dc=pasosdeJesus,dc=org
+objectClass:    top
+objectClass:    organizationalUnit
+ou:     grupos
+
+dn:ou=sendmail,dc=www,dc=pasosdeJesus,dc=org
+ou: sendmail
+objectClass: top
+objectClass: organizationalUnit
+userPassword: sendmail
+</pre><p>
+
+Nota: Al agregar información verifique no dejar espacios en blanco al final de cada línea.
+
+Se pueden agregar <code class="literal">org.ldif</code> con:
+</p><pre class="screen">
+ldapadd -x -D "cn=admin,dc=www,dc=pasosdeJesus,dc=org" -W \
+  -h www.pasosdeJesus.org -f org.ldif
+</pre><p>
+
+Además de poder revisar los mensajes que <code class="literal">slapd</code> genere al ejecutarse en modo de depuración, podrá consultar los datos ingresados al directorio con:
+</p><pre class="screen">
+ldapsearch -x -b 'dc=www,dc=pasosdeJesus,dc=org' '(objectclass=*)'
+</pre><p>
+
+  	</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="phpldapadmin"></a>4.4. Instalación y configuración de <code class="literal">phpldapadmin</code></h3></div></div></div><p>
+
+			Instale el paquete y siga las instrucciones que de (por ejemplo 
+			activar <code class="literal">php-ldap</code>):
+</p><pre class="screen">
+# pkg_add phpldapadmin
+</pre><p>
+
+También debe asegurar que pueden emplearse los dispositivos de generación 
+de números aleatorios en la jaula chroot de Apache (esto lo hace
+por defecto el instalador de adJ 5.5).  Para esto verifique 
+que en <code class="literal">/etc/fstab</code> al montar la partición 
+<code class="literal">/var</code> este permitiendo dispositivos (que no este la 
+opción <code class="literal">nodev</code>) y ejecute:
+</p><pre class="screen">
+cd /var/www
+sudo mkdir -p dev
+cd dev
+/dev/MAKEDEV arandom
+</pre><p>
+    </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-ldapd"></a>4.5. Referencias y lecturas recomendadas</h3></div></div></div><p>
+			</p><div class="itemizedlist"><ul type="disc"><li><p>Las siguientes páginas man:
+      <a href=""><span class="citerefentry"><span class="refentrytitle">ldapd</span>(8)</span></a>.
+      <a href=""><span class="citerefentry"><span class="refentrytitle">ldapctl</span>(8)</span></a>.
+      <a href=""><span class="citerefentry"><span class="refentrytitle">ldapd.conf</span>(5)</span></a>.
+					</p></li><li><p>
+						<a href="http://dhobsd.pasosdejesus.org/index.php?id=ldapd" target="_top">http://dhobsd.pasosdejesus.org/index.php?id=ldapd</a>.
+					</p></li><li><p>
+<a href="http://www.cyberciti.biz/faq/test-ssl-certificates-diagnosis-ssl-certificate/" target="_top">http://www.cyberciti.biz/faq/test-ssl-certificates-diagnosis-ssl-certificate/</a>.
+					</p></li><li><p>
+<a href="http://www.tumfatig.net/20120817/monitoring-openbsds-ldap-daemon/" target="_top">http://www.tumfatig.net/20120817/monitoring-openbsds-ldap-daemon/</a>.
+					</p></li><li><p>
+<a href="http://openbsd.7691.n7.nabble.com/dev-random-as-chrooted-named-s-entropy-source-current-td64344.html" target="_top">http://openbsd.7691.n7.nabble.com/dev-random-as-chrooted-named-s-entropy-source-current-td64344.html</a>.
+					</p></li></ul></div><p>
+    </p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1920139280" href="#idm1920139280">30</a>] </sup>
+			Si emplea un adJ 5.2 y planea conectarse desde clientes digamos en 
+			Ubuntu reciente requerirá el parche descrito en 
+			<a xmlns="" href="http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html" target="_top">http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</a>
+		</p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="mariadb.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="otros-servicios-de-un-servidor.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="novedades.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">3. MariaDB </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> Apéndice A. Novedades</td></tr></table></div></body></html>
