@@ -1,8 +1,8 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>3. MariaDB</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="otros-servicios-de-un-servidor.html" title="Capítulo 6. Otros servicios que puede prestar el servidor"><link rel="prev" href="postgresql.html" title="2. Motor de bases de datos PostgreSQL"><link rel="next" href="servidor-ldapd.html" title="4. Servidor ldapd"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3. MariaDB</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="postgresql.html">Anterior</a> </td><th width="60%" align="center">Capítulo 6. Otros servicios que puede prestar el servidor</th><td width="20%" align="right"> <a accesskey="n" href="servidor-ldapd.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mariadb"></a>3. MariaDB</h2></div></div></div><p>A partir de OpenBSD/adJ 5.7 remplaza a MySQL.  Según 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>3. MariaDB</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="otros-servicios-de-un-servidor.html" title="Capítulo 6. Otros servicios que puede prestar el servidor"><link rel="prev" href="postgresql.html" title="2. Motor de bases de datos PostgreSQL"><link rel="next" href="servidor-ldapd.html" title="4. Servidor ldapd"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3. MariaDB</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="postgresql.html">Anterior</a> </td><th width="60%" align="center">Capítulo 6. Otros servicios que puede prestar el servidor</th><td width="20%" align="right"> <a accesskey="n" href="servidor-ldapd.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mariadb"></a>3. MariaDB</h2></div></div></div><p>A partir de OpenBSD/adJ 5.7 MariaDB remplaza a MySQL.  Según 
 		<a href="https://es.wikipedia.org/wiki/MariaDB" target="_top">https://es.wikipedia.org/wiki/MariaDB</a> MariaDB fue
 		iniciada por el fundador de MySQL después de que Oracle 
 		compró Sun y MySQL, pues consideraba que Oracle había
-		comprado MySQL para reducir competencia a sus bases 
+		hecho la compra para reducir competencia de sus bases 
 		de datos.</p><p>Debe instalar los paquetes mariadb-client-10.0.16v0 y
 	  mariadb-server-10.0.16v0. Aunque el nombre de los paquetes cambia
 	  los comandos para operarla siguen siendo los mismos.
@@ -38,7 +38,7 @@ A continuación lance el servidor con:
 Los errores quedarán en <code class="filename">/var/mysql/<em class="replaceable"><code>host</code></em>.err</code>.
 </p><p>
     Después puede establecer una clave para el usuario
-    <code class="literal">root</code> de MySQL cuando ingresa desde
+    <code class="literal">root</code> de MariaDB cuando ingresa desde
     <code class="literal">localhost</code> con:
     </p><pre class="screen">
 /usr/local/bin/mysqladmin -u root  password 'nueva-clave' 
@@ -101,7 +101,7 @@ mysql&gt; exit
 	  <span><strong class="command">/usr/local/bin/mysqld_safe &amp;</strong></span>
 	</p></li></ul></div><p>
   </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="recuperacion-backups"></a>3.3. Recuperación y backups</h3></div></div></div><p>
-	  MySQL mantiene bases de datos en directorios y las tablas 
+	  MariaDB mantiene bases de datos en directorios y las tablas 
 	  en archivos.  No es recomendable que modifique tales archivos,
 	  al menos no, mientras el servidor esté activo.  
   </p><p>
@@ -113,15 +113,16 @@ mysql&gt; exit
 	  </p><pre class="screen">
 # mysql &lt; /respaldomysql/dump-1nov2007.sql
 	  </pre><p>
-  </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="chroot-mysql"></a>3.4. MySQL y Apache con chroot</h3></div></div></div><p>Puede emplear aplicaciones para Apache en modo
+  </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="chroot-mysql"></a>3.4. MariaDB y servidor web con chroot</h3></div></div></div><p>Puede emplear aplicaciones para Apache en modo
 		  <code class="literal">chroot</code> que usen bases de datos 
-		  MySQL de tres formas:
+		  MariaDB de tres formas:
 		  (1) Conectándose a un puerto TCP/IP donde responda
-		  MySQL, (2) poniendo el socket de MySQL en un directorio
-		  dentro de la jaula del servidor web o (3) Corriendo MySQL en modo 
-		  <code class="literal">chroot</code>.  
+		  MariaDB, (2) poniendo el socket de MariaDB en un directorio
+		  dentro de la jaula del servidor web o (3) Corriendo MariaDB 
+		  denro de la jaula
+		  <code class="literal">chroot</code>.  </p><p>
 		  A continuación documentamos como 
-		  ubicar el socket de MySQL dentro de la jaula
+		  ubicar el socket de MariaDB dentro de la jaula
 		  del servidor web (/var/www/).
 	  </p><p>
 			  Una vez instale <code class="literal">maria-server</code> 
@@ -133,7 +134,7 @@ chown _mysql:_mysql /var/www/var/run/mysql/
 chmod a+w /var/www/var/run/mysql/
 chmod +t /var/www/var/run/mysql/
 			  </pre><p>
-			  y después inicie MySQL indicando la ruta del
+			  y después inicie MariaDB indicando la ruta del
 			  socket con la opción <code class="literal">--socket</code>,
 			  por ejemplo para que el cambio se efectúe en
 			  cada inicio, edite 
@@ -160,7 +161,7 @@ $dbuname = "miusuario";
 $dbpass  = "miclave";
 mysql_connect($dbhost, $dbuname, $dbpass);
 </pre><p>
-</p><p>Tenga en cuenta también que otros binarios de MySQL también requerirán
+</p><p>Tenga en cuenta también que otros binarios de MariaDB también requerirán
 	la opción <code class="literal">--socket=/var/www/var/run/mysql/mysql.sock</code>
 	al ejecutarse por ejemplo:
 	</p><pre class="screen">
@@ -172,8 +173,8 @@ mysql_connect($dbhost, $dbuname, $dbpass);
     </p><div class="itemizedlist"><ul type="disc"><li><p>Una explicación de algo de la instalación y el uso de 
 	  MySQL en OpenBSD: 
 	  <a href="http://www.sancho2k.net/filemgmt_data/files/mysql_notes.html" target="_top">http://www.sancho2k.net/filemgmt_data/files/mysql_notes.html</a>
-	</p></li><li><p>El manual de MySQL: 
-	  <a href="http://www.mysql.com/documentation/mysql/bychapter/index.html" target="_top">http://www.mysql.com/documentation/mysql/bychapter/index.html</a>
+	</p></li><li><p>La documentación de MariaDB : 
+	  <a href="https://mariadb.com/kb/en/mariadb/documentation/" target="_top">https://mariadb.com/kb/en/mariadb/documentation/</a>
 	</p></li><li><p>Ayuda para cambiar clave de root en sistemas Linux:
 	  <a href="http://www.netadmintools.com/art90.html" target="_top">http://www.netadmintools.com/art90.html</a>
 	</p></li></ul></div><p>
