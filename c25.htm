@@ -1,0 +1,720 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Redes, protocolos e Internet</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Introducción"
+HREF="c16.htm"><LINK
+REL="NEXT"
+TITLE="Capas de una red TCP/IP sobre
+    algunos medios físicos"
+HREF="x134.htm"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c16.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x134.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="redes-protocolos-internet"
+></A
+>Capítulo 2. Redes, protocolos e Internet</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Tabla de contenidos</B
+></DT
+><DT
+><A
+HREF="c25.htm#Internet"
+>Internet</A
+></DT
+><DT
+><A
+HREF="x134.htm"
+>Capas de una red <ACRONYM
+CLASS="acronym"
+>TCP/IP</ACRONYM
+> sobre
+    algunos medios físicos</A
+></DT
+><DT
+><A
+HREF="x328.htm"
+>Lecturas recomendadas</A
+></DT
+></DL
+></DIV
+><P
+>&#13;     Las redes de computadores constan de medios de transmisión (e.g
+     cables), dispositivos (e.g tarjetas de red) y programas (e.g
+     pila <ACRONYM
+CLASS="acronym"
+>TCP/IP</ACRONYM
+> del kernel) que permiten
+     transmitir información entre computadores. Pueden clasificarse de
+     acuerdo al tamaño (<ACRONYM
+CLASS="acronym"
+>WAN</ACRONYM
+> de cobertura amplia
+     como un país, <ACRONYM
+CLASS="acronym"
+>MAN</ACRONYM
+> de cobertura metropolitana o
+     <ACRONYM
+CLASS="acronym"
+>LAN</ACRONYM
+> para edificios o salones) o de acuerdo a
+     la estructura de sus protocolos (e.g el módelo
+     <ACRONYM
+CLASS="acronym"
+>OSI</ACRONYM
+> que consta de 7 capas de
+     protocolos: física, enlace, red, transporte, sesión, presentación
+     y aplicación), o de acuerdo a la distribución física de los
+     medios de transmisión y dispositivos (e.g estrella, bus).</P
+><P
+><ACRONYM
+CLASS="acronym"
+>LAN</ACRONYM
+> es acrónimo de <I
+CLASS="foreignphrase"
+>Local Area
+      Network</I
+>, con este término se hace referencia a
+     redes pequeñas (comúnmente menos de 100 computadores) cuyos
+     computadores están generalmente en un mismo espacio físico. Los
+     principales usos de una red LAN son:
+     <P
+></P
+><UL
+><LI
+><P
+>&#13;	Compartir información distribuida en los discos duros o medios de
+	almacenamiento de cada computador.
+       </P
+></LI
+><LI
+><P
+>&#13;	Emplear recursos de un computador desde otro, o recursos 
+	conectados en red (por ejemplo una impresora).
+       </P
+></LI
+><LI
+><P
+> Compartir una conexión a Internet.  
+       </P
+></LI
+><LI
+><P
+>&#13;	Conformar una Intranet con servicios como correo,
+	<I
+CLASS="foreignphrase"
+>web</I
+>, <ACRONYM
+CLASS="acronym"
+>ftp</ACRONYM
+>,
+	<I
+CLASS="foreignphrase"
+>news</I
+>.
+       </P
+></LI
+></UL
+> 
+   </P
+><A
+NAME="AEN48"
+></A
+><P
+>Este tipo de redes, es
+      apropiada para conectar pocos computadores (menos de 100) en un 
+      espacio relativamente pequeño.
+    </P
+><P
+>&#13;	Un protocolo <A
+NAME="AEN52"
+HREF="#FTN.AEN52"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>
+        es una serie de reglas que indican como debe ocurrir una
+	comunicación entre dos computadores de una red; las reglas de un
+	protocolo son seguidas por programas que se ejecutan en los
+	computadores interconectados. Su computador puede tener procesos
+	activos que esperan conexiones de otros computadores o procesos 
+	para iniciar protocolos (por ejemplo con <B
+CLASS="command"
+>ps -ax</B
+> 
+	es posible que vea: <TT
+CLASS="literal"
+>sshd</TT
+>, 
+	<TT
+CLASS="literal"
+>inetd</TT
+>, <TT
+CLASS="literal"
+>httpd</TT
+>, 
+	<TT
+CLASS="literal"
+>postgres</TT
+>).
+	A estos programas, que esperan conexiones, se les llama 
+	servicios<A
+NAME="AEN61"
+HREF="#FTN.AEN61"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>.  
+	Usted puede iniciar un protocolo con otro computador empleando el 
+	programa cliente adecuado, por ejemplo el cliente 
+	<B
+CLASS="command"
+>ping</B
+> con:
+	<PRE
+CLASS="screen"
+>&#13;ping 127.0.0.1
+	</PRE
+>
+	iniciará el protocolo de ping (<TT
+CLASS="literal"
+>ICMP</TT
+>, 
+	<TT
+CLASS="literal"
+>ECHO_REQUEST</TT
+>) con el computador con dirección 
+	IP 127.0.0.1 (su propio computador),  un programa de su computador
+	estará pendiente de conexiones de este tipo y seguirá el
+	protocolo<A
+NAME="AEN69"
+HREF="#FTN.AEN69"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+>.
+    </P
+><A
+NAME="AEN71"
+></A
+><P
+>Conjunto de reglas que
+      determinan como se realiza la comunicación entre computadores
+      conectados a una red.
+    </P
+><P
+>Internet es una red mundial de redes que están
+     interconectadas vía satélite, por cables submarinos, fibra óptica
+     y muchos otros medios de transmisión financiados por estados y
+     organizaciones.  Las heterogeneidad de las redes que interconecta
+     (e.g una <ACRONYM
+CLASS="acronym"
+>LAN</ACRONYM
+> de un colegio con Linux, una
+     <ACRONYM
+CLASS="acronym"
+>LAN</ACRONYM
+> de una ONG con OpenBSD, una
+     <ACRONYM
+CLASS="acronym"
+>WAN</ACRONYM
+> de un banco con X.25) es superada con los
+     protocolos <ACRONYM
+CLASS="acronym"
+>TCP/IP</ACRONYM
+>.  Para facilitar la conexión 
+     de una <ACRONYM
+CLASS="acronym"
+>LAN</ACRONYM
+> a
+     Internet, en esta sección se presenta una introducción a los
+     aspectos de redes de Internet; los temas introducidos serán
+     tratados en detalle en otras secciones aplicándolos especialmente
+     al caso de redes Ethernet (ver <A
+HREF="c355.htm"
+> Dispositivos
+     para interconexión</A
+>, <A
+HREF="c848.htm"
+>Direcciones,
+     enrutamiento y transporte</A
+> y <A
+HREF="c1093.htm"
+>Protocolos de
+     soporte y de usuario</A
+>).
+    </P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="Internet"
+>Internet</A
+></H1
+><P
+>Hay muchas personas que aportan su trabajo (muchos de forma
+      voluntaria) para mantener Internet en funcionamiento, para
+      solucionar problemas que ocurren y para planear su futuro.
+      Quienes dirigen el rumbo de Internet están organizados en
+      comités encargados de diversas actividades:
+      <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>IETF Internet Engineering Task Force</DT
+><DD
+><P
+>&#13;	  Compuesta enteramente de voluntarios autoorganizados que
+	  colaboran en la ingeniería requerida para la evolución de
+	  Internet, es decir identifican problemas y proponen
+	  soluciones.  Quien lo desee puede participar, asistir a las
+	  reuniones, ayudar a dar forma o proponer estándares.  La
+	  <ACRONYM
+CLASS="acronym"
+>IETF</ACRONYM
+> recibe borradores
+	  (<I
+CLASS="foreignphrase"
+>Internet Draft</I
+>) de autores
+	  que renuncian al control del protocolo que proponen. Tras
+	  refinamiento estos borradores pueden llegar a ser 
+	  <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+>
+	  (<I
+CLASS="foreignphrase"
+>Request for Comment</I
+>) de uno
+	  de estos tipos: estándar propuesto, protocolo
+	  experimental, documento informativo o estándar
+	  histórico.  Un estándar propuesto puede después
+	  convertirse en borrador de estándar y en casos muy
+	  contados en estándar de Internet. 
+	 </P
+></DD
+><DT
+>ISOC Internet Society</DT
+><DD
+><P
+>Organización sin ánimo de lucro, da soporte legal y
+	  financiero a otros grupos.
+	 </P
+></DD
+><DT
+>IESG Internet Engineering Steering Group</DT
+><DD
+><P
+>Ratifica o corrige estándares propuestos por la
+	 <ACRONYM
+CLASS="acronym"
+>IETF</ACRONYM
+>.
+	 </P
+></DD
+><DT
+>IAB Internet Architecture Board</DT
+><DD
+><P
+>Planeación a largo plazo y coordinación entre las
+	  diversas áreas.
+	 </P
+></DD
+><DT
+>IANA Internet Assigned Numbers Authority</DT
+><DD
+><P
+>Mantienen registros de diversos nombres y números
+	  asignados a organizaciones. Es financiado por
+	  <ACRONYM
+CLASS="acronym"
+>ICANN</ACRONYM
+> (<I
+CLASS="foreignphrase"
+>Internet
+	  Corporation for Assigned Names and Numbers</I
+>).
+	 </P
+></DD
+></DL
+></DIV
+>
+     </P
+><P
+>La interconexión de las redes conectadas a Internet y su
+      mantenimiento se basa en el protocolo <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+>, que asigna a cada red y a cada
+      computador un número único (dirección <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+>) que permite identificarlo y
+      enviarle información.
+    </P
+><P
+>La asignación de direcciones IP<A
+NAME="AEN118"
+HREF="#FTN.AEN118"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+>
+      es manejada por <ACRONYM
+CLASS="acronym"
+>IANA</ACRONYM
+>, que a su vez la ha
+      delegado a registros en diversas regiones.  Las regiones de
+      América y Africa debajo del Sahara son manejadas por el registro
+      <ACRONYM
+CLASS="acronym"
+>ARIN</ACRONYM
+> (<I
+CLASS="foreignphrase"
+>American Registry for
+      Internet Numbers</I
+>), que recibe solicitudes para
+      asignar bloques a proveedores de servicio a Internet
+      (<ACRONYM
+CLASS="acronym"
+>ISP</ACRONYM
+>), estos proveedores deben contar con la
+      infraestructura para conectar sus computadores a Internet (e.g
+      con cables submarinos, vía satélite) y a su vez ofrecen bloques
+      de direcciones y conexión a otros proveedores o a
+      usuarios.</P
+><P
+>Dada que la comunicación de dos computadores es un proceso
+      complejo (aún más dada la variedad de redes conectadas a
+      Internet), además de una basta infraestructura física, Internet
+      se basa en varios protocolos que siguen todos los computadores y
+      enrutadores conectados.  Algunos de estos protocolos dependen de
+      otros, dando lugar a varias capas de protocolos: aplicación,
+      transporte, Internet, enlace<A
+NAME="AEN128"
+HREF="#FTN.AEN128"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+>.  El siguiente
+      diagrama presenta algunos protocolos en las diversas capas de
+      una red <ACRONYM
+CLASS="acronym"
+>TCP/IP</ACRONYM
+> sobre una red física Ethernet
+      o sobre una conexión con modem:</P
+><PRE
+CLASS="screen"
+>&#13;Capa de aplicación:
+     Protocolos de usuario             FTP Telnet ssh   http   SMTP ...
+                                        |     |     |      |    | 
+     Protocolos de soporte    DNS       |     |     |      |    | 
+                             |   \      |     |     |      |    |
+Capa de transporte           UDP   TCP --------------------------
+                              \  /
+Capa de Internet (red):      IP -  ICMP                  
+                             ___|___
+                            /       \
+Capa de enlace:	          ARP        PPP
+                           |          |
+Capa física:	       Ethernet     Modem
+                        |              | 
+                     Par trenzado    Línea telef.
+</PRE
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notas</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN52"
+HREF="c25.htm#AEN52"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Para ampliar el significado de los 
+       términos técnicos introducidos en estas guías (como
+      <I
+CLASS="foreignphrase"
+>protocol</I
+>), se sugiere consultar el
+      diccionario FOLDOC 
+      <A
+HREF="http://foldoc.doc.ic.ac.uk/foldoc"
+TARGET="_top"
+>http://foldoc.doc.ic.ac.uk/foldoc</A
+> </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN61"
+HREF="c25.htm#AEN61"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>También suele llamárseles 
+			<I
+CLASS="foreignphrase"
+>daemons</I
+> pero 
+			como puede resultar ofensivo
+			para cristian@s, procuramos no 
+			emplear ese término, ver <A
+HREF="http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service"
+TARGET="_top"
+>http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service</A
+>.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN69"
+HREF="c25.htm#AEN69"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>El programa que sigue este protocolo hace 
+	    parte de la implementación de IPv4 en el kernel.</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN118"
+HREF="c25.htm#AEN118"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+> Puede verse
+	más sobre asignación de IPs en el <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 2050
+	y sobre asignación de direcciones in redes
+	<ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> privadas en 
+	<ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1918.
+	</P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN128"
+HREF="c25.htm#AEN128"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>El
+      <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1122 presenta las capas de una red
+      <ACRONYM
+CLASS="acronym"
+>TCP/IP</ACRONYM
+></P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c16.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x134.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Introducción</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Capas de una red <ACRONYM
+CLASS="acronym"
+>TCP/IP</ACRONYM
+> sobre
+    algunos medios físicos</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
