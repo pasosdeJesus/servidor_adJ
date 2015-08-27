@@ -22,109 +22,109 @@
 
 <indexentry>
   <primaryie>/proc/net/tcp,
-    <ulink url="x137.htm#AEN232" role="AEN258">Capa de transporte</ulink>
+    <ulink url="x134.htm#AEN229" role="AEN255">Capa de transporte</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>100,
-    <ulink url="x535.htm#AEN670" role="AEN680">Planeación</ulink>
+    <ulink url="x532.htm#AEN667" role="AEN677">Planeación</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>ARP,
-    <ulink url="x137.htm#AEN155" role="AEN157">Capa de enlace</ulink>
+    <ulink url="x134.htm#AEN152" role="AEN154">Capa de enlace</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>física,
-    <ulink url="x137.htm#AEN140" role="AEN142">Capa física</ulink>
+    <ulink url="x134.htm#AEN137" role="AEN139">Capa física</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>ICMP,
-    <ulink url="x137.htm#AEN192" role="AEN227">Capa de internet</ulink>
+    <ulink url="x134.htm#AEN189" role="AEN224">Capa de internet</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>IP,
-    <ulink url="x137.htm#AEN192" role="AEN194">Capa de internet</ulink>
+    <ulink url="x134.htm#AEN189" role="AEN191">Capa de internet</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>LAN,
-    <ulink url="c28.htm" role="AEN51">Redes, protocolos e Internet</ulink>
+    <ulink url="c25.htm" role="AEN48">Redes, protocolos e Internet</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>mascara de red,
-    <ulink url="c851.htm#ipv4" role="AEN859">Introducción a TCP/IPv4</ulink>
+    <ulink url="c848.htm#ipv4" role="AEN856">Introducción a TCP/IPv4</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>MTA,
-    <ulink url="x1282.htm#smtp" role="AEN1296">Protocolo SMTP</ulink>
+    <ulink url="x1279.htm#smtp" role="AEN1293">Protocolo SMTP</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>MUA,
-    <ulink url="x1282.htm#smtp" role="AEN1302">Protocolo SMTP</ulink>
+    <ulink url="x1279.htm#smtp" role="AEN1299">Protocolo SMTP</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>protocolo,
-    <ulink url="c28.htm" role="AEN74">Redes, protocolos e Internet</ulink>
+    <ulink url="c25.htm" role="AEN71">Redes, protocolos e Internet</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>RJ45,
-    <ulink url="x535.htm#adquisicion-de-hardware" role="AEN715">Adquisición de Hardware</ulink>
+    <ulink url="x532.htm#adquisicion-de-hardware" role="AEN712">Adquisición de Hardware</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>route,
-    <ulink url="x137.htm#AEN192" role="AEN220">Capa de internet</ulink>
+    <ulink url="x134.htm#AEN189" role="AEN217">Capa de internet</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>SMTP,
-    <ulink url="x1282.htm#smtp" role="AEN1292">Protocolo SMTP</ulink>
+    <ulink url="x1279.htm#smtp" role="AEN1289">Protocolo SMTP</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>sudo pfctl -sa,
-    <ulink url="x137.htm#AEN232" role="AEN262">Capa de transporte</ulink>
+    <ulink url="x134.htm#AEN229" role="AEN259">Capa de transporte</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>TCP,
-    <ulink url="x137.htm#AEN232" role="AEN234">Capa de transporte</ulink>
+    <ulink url="x134.htm#AEN229" role="AEN231">Capa de transporte</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>tcpdump,
-    <ulink url="c851.htm#tabla-enrutamiento" role="AEN945">Tabla de Enrutamiento</ulink>
+    <ulink url="c848.htm#tabla-enrutamiento" role="AEN942">Tabla de Enrutamiento</ulink>
   </primaryie>
 </indexentry>
 
 <indexentry>
   <primaryie>traceroute,
-    <ulink url="c851.htm#tabla-enrutamiento" role="AEN922">Tabla de Enrutamiento</ulink>
+    <ulink url="c848.htm#tabla-enrutamiento" role="AEN919">Tabla de Enrutamiento</ulink>
   </primaryie>
 </indexentry>
 

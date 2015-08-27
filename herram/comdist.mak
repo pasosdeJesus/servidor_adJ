@@ -68,8 +68,9 @@ act-ncftpput:
 
 # Publica en github.io
 act-gh:
-	if (test ! -d ../$(PROYECTO)_gh-pages/) then { echo "Crear primero ../$(PROYECTO)_gh-pages/ y vincularlo a rama gh-pages de repositorio en github.com"; exit 1; } fi;
-	rsync --delete -ravz html/ ../$(PROYECTO)_gh-pages/
-	cd ../$(PROYECTO)_gh-pages/
-	git commit -m "Actualiza HTML" -a
-	git push origin gh-pages
+	rm -rf $(PROYECTO)_gh-pages
+	git clone -b gh-pages git@github.com:pasosdeJesus/$(PROYECTO) $(PROYECTO)_gh-pages
+	rsync -ravz html/ $(PROYECTO)_gh-pages/
+	(cd $(PROYECTO)_gh-pages/;\
+	git commit -m "Actualiza HTML" -a;\
+	git push origin gh-pages)
