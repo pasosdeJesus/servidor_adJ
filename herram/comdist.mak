@@ -72,5 +72,6 @@ act-gh:
 	git clone -b gh-pages git@github.com:pasosdeJesus/$(PROYECTO) $(PROYECTO)_gh-pages
 	rsync -ravz html/ $(PROYECTO)_gh-pages/
 	(cd $(PROYECTO)_gh-pages/;\
+	git add *; \
 	git commit -m "Actualiza HTML" -a;\
 	git push origin gh-pages)

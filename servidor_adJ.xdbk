@@ -69,22 +69,15 @@ No se ofrece garantía alguna, por el contrario se aprecia
 que se envíen correcciones y sugerencias al autor.  Este
 escrito se dedica a Dios por su infinita sabiduría.</para>
       <para>
-	Este documento se ha escrito en el marco del proyecto
-	<ulink url="http://structio.sourceforge.net/">Structio</ulink>. 
 	La versión publicada más reciente está disponible tanto
-	en <ulink url="&URLSITE;">HTML</ulink> y
-	<ulink url="&PROYECTO;-&PRY-VERSION;_html.tar.gz">comprimido</ulink>.
+	<ulink url="&URLSITE;">en línea</ulink> como
+	<ulink url="&PROYECTO;-&PRY-VERSION;_html.tar.gz">en archivo comprimido</ulink>.
 	<!--, como <ulink
 	  url="&URLSITE;/&PROYECTO;-&PRY-VERSION;.ps.gz">PostScript
 	  comprimido</ulink> y como 
   <ulink url="&URLSITE;/&PROYECTO;-&PRY-VERSION;.pdf">PDF</ulink>. -->
-	También están publicadas
-	<ulink url="&URLSITE;/&PROYECTO;-&PRY-VERSION;.tar.gz">sus fuentes en
-	  DocBook comprimidas</ulink>.  La versión de desarrollo está 
-	en el
-	<ulink
-	  url="http://cvs.sourceforge.net/viewcvs.py/structio/guias/servidor_adJ/">
-	  repositorio CVS de Structio</ulink>.
+	Sus fuentes en DocBook están disponibles en 
+	<ulink url="https://github.com/pasosdeJesus/servidor_adJ/">https://github.com/pasosdeJesus/servidor_adJ/</ulink>.
       </para>
     </legalnotice>
   </bookinfo>
