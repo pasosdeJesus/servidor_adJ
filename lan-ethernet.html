@@ -1,9 +1,9 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>4. Uso y configuración en una red LAN Ethernet</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"><link rel="up" href="dispositivos-interconexion.html" title="Capítulo 3. Dispositivos de interconexión"><link rel="prev" href="adsl-pppoe.html" title="3. Conexión a Internet ADSL con pppoe"><link rel="next" href="red-inalambrica.html" title="5. Red Local Inalámbrica: uso y configuración"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4. Uso y configuración en una red LAN Ethernet</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="adsl-pppoe.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Dispositivos de interconexión</th><td width="20%" align="right"> <a accesskey="n" href="red-inalambrica.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="lan-ethernet"></a>4. Uso y configuración en una red LAN Ethernet</h2></div></div></div><p>La red local (LAN) Ethernet más simple puede conformarse con 
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>4. Uso y configuración en una red LAN Ethernet</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="dispositivos-interconexion.html" title="Capítulo 3. Dispositivos de interconexión"><link rel="prev" href="adsl-pppoe.html" title="3. Conexión a Internet ADSL con pppoe"><link rel="next" href="red-inalambrica.html" title="5. Red Local Inalámbrica: uso y configuración"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4. Uso y configuración en una red LAN Ethernet</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="adsl-pppoe.html">Anterior</a> </td><th width="60%" align="center">Capítulo 3. Dispositivos de interconexión</th><td width="20%" align="right"> <a accesskey="n" href="red-inalambrica.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="lan-ethernet"></a>4. Uso y configuración en una red LAN Ethernet</h2></div></div></div><p>La red local (LAN) Ethernet más simple puede conformarse con 
 	      2 computadores
 	      cada uno con tarjeta ethernet interconectados por un cable UTP
 	      cruzado.  Sin embargo típicamente una red ethernet
 	      consta de varios computadores con tarjetas Ethernet 
-	      interconectados por uno o más<sup>[<a name="idm1861016720" href="#ftn.idm1861016720">20</a>]</sup>
+	      interconectados por uno o más<sup>[<a name="idp2830546416" href="#ftn.idp2830546416">20</a>]</sup>
 	      concentradores (también llamado <span class="foreignphrase"><em class="foreignphrase">hub</em></span> o 
 	      <span class="foreignphrase"><em class="foreignphrase">switch</em></span>) y cables UTP
 	      directos de cada computador a algún concentrador.  La velocidad
@@ -228,7 +228,7 @@ arp -a
 	    es posible agregar entradas de manera permanente o eliminarlas
 	    con las opciones <code class="literal">-s</code> y <code class="literal">-d</code>
 	    respectivamente.
-    	</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="cableado"></a>4.4. Cableado de una red local</h3></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1396819472"></a>4.4.1. Planeación</h4></div></div></div><p>
+    	</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="cableado"></a>4.4. Cableado de una red local</h3></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idp2956186224"></a>4.4.1. Planeación</h4></div></div></div><p>
 Necesitará un concentrador preferiblemente de 1Gb con suficientes 
 puertos para todos los computadores que tenga o varios interconectados en 
 cascada, cable UTP categoria 5e o 6 con conectores RJ-45
@@ -243,7 +243,7 @@ RJ-45 (ver <a href="lan-ethernet.html#configuracion-interfaz" title="4.2. Config
 	 por canaletas.
 	</p></li><li><p>La longitud máxima de cada cable (para unir concentrador y
 	 computador) es de 100 m.
-       </p><a class="indexterm" name="idp511304944"></a></li><li><p>Busque que los cables/canaletas vayan por las paredes
+       </p><a class="indexterm" name="idp1150781552"></a></li><li><p>Busque que los cables/canaletas vayan por las paredes
 	 del recinto y estén resguardadas (para evitar que alguien se
 	 tropiece).
 	</p></li></ul></div><p>En el mapa que haga también puede consignar las
@@ -278,13 +278,13 @@ RJ-45 (ver <a href="lan-ethernet.html#configuracion-interfaz" title="4.2. Config
 	 conectarlo al computador y el otro para conectarlo al
 	 concentrador.  (Compre varios conectores RJ-45 adicionales
 	 pues al intentar ensamblar podría perder algunos).
-       </p><a class="indexterm" name="idp610988912"></a></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-de-cables-y-concentrador"></a>4.4.3. Instalación</h4></div></div></div><p>
+       </p><a class="indexterm" name="idp1348991216"></a></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-de-cables-y-concentrador"></a>4.4.3. Instalación</h4></div></div></div><p>
        Una vez tenga instaladas las tarjetas de red debe conectar los
        cables a tales tarjetas y al concentrador.  Como eventualmente
        usted mismo hará los cables, en esta sección damos
        instrucciones para que le resulte fácil el proceso.  Requerirá
        unas pinzas especiales
-       <sup>[<a name="idp610989040" href="#ftn.idp610989040">21</a>]</sup> para conectores RJ-45 y un probador
+       <sup>[<a name="idp1348991344" href="#ftn.idp1348991344">21</a>]</sup> para conectores RJ-45 y un probador
        (<span class="foreignphrase"><em class="foreignphrase">tester</em></span>) para comprobar que
        fluye corriente en los cables que haga.
       </p><p>Ubique en el espacio para la red los computadores y los
@@ -293,7 +293,7 @@ RJ-45 (ver <a href="lan-ethernet.html#configuracion-interfaz" title="4.2. Config
       </p><p>Ponga en cada extremo de cada uno de los cables un conector
        RJ-45 empleando unas pinzas especiales.  Como el cable UTP
        se compone de 8 cablecitos de colores tenga en cuenta:</p><div class="procedure"><ol type="1"><li><p>Deje entre 8mm y 12 mm de los 8 cables al descubierto.
-	 <sup>[<a name="idp610987760" href="#ftn.idp610987760">22</a>]</sup>
+	 <sup>[<a name="idm80720400" href="#ftn.idm80720400">22</a>]</sup>
 	</p></li><li><p>
 			Al preparar los cables tenga en cuenta que las
 			tarjetas de 100MB y 1000MB requieren un orden
@@ -334,7 +334,7 @@ Lado 2:  1 - blanco/verde, 2 - verde , 3 - blanco/naranja, 4 - blanco/cafe,
    	 con un probador.</p></li></ol></div><p>
        Una vez tenga los cables verifique que la tarjeta de red de 
        cada computador esté bien instalada (algunas tienen luces
-       <sup>[<a name="idp517625584" href="#ftn.idp517625584">23</a>]</sup> 
+       <sup>[<a name="idm80718480" href="#ftn.idm80718480">23</a>]</sup> 
        que se encienden cuando transmite o recibe información por el cable),
        y conecte con cables todas las tarjetas al concentrador.
       </p><p>Verifique también que cada tarjeta de red sea reconocida
@@ -356,11 +356,11 @@ ping 192.168.1.2
 				      <span><strong class="command">hostname.if</strong></span></p></li><li><p>Sobre cables Ethernet puede
 				      consultarse en 
 				      [<span class="citation">[<a href="bi01.html#ethernet-cables" title="[ethernet-cables]">ethernet-cables</a>]</span>]</p></li></ul></div><p>
-		</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1861016720" href="#idm1861016720">20</a>] </sup>Pueden ponerse concentradores en cascada.</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp610989040" href="#idp610989040">21</a>] </sup>En Colombia a tal "pinza especial" se le conoce como
+		</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2830546416" href="#idp2830546416">20</a>] </sup>Pueden ponerse concentradores en cascada.</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1348991344" href="#idp1348991344">21</a>] </sup>En Colombia a tal "pinza especial" se le conoce como
 	 "ponchadora".
-	</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp610987760" href="#idp610987760">22</a>] </sup>Pablo Chamorro nos indicó que "algunas pinzas
+	</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm80720400" href="#idm80720400">22</a>] </sup>Pablo Chamorro nos indicó que "algunas pinzas
 	   tienen un tope, entonces al colocar las puntas de los cables
 	   junto al tope, el corte de la envoltura del cable siempre se
 	   realiza en el mismo punto para que ni sobre ni falte y así no
-	   hay que preocuparse por estimar el punto de corte."  </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp517625584" href="#idp517625584">23</a>] </sup>Luces es traducción de <span xmlns="" class="foreignphrase"><em class="foreignphrase">LED 
+	   hay que preocuparse por estimar el punto de corte."  </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm80718480" href="#idm80718480">23</a>] </sup>Luces es traducción de <span xmlns="" class="foreignphrase"><em class="foreignphrase">LED 
 	(Light emitting diode)</em></span>.  </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="adsl-pppoe.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="dispositivos-interconexion.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="red-inalambrica.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">3. Conexión a Internet ADSL con pppoe </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 5. Red Local Inalámbrica: uso y configuración</td></tr></table></div></body></html>
