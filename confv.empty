@@ -17,7 +17,7 @@ PRY_VERSION="5.7"
 # Versión
 #
 
-PRY_DESC="La distribución Aprendiendo de Jesús de OpenBSD como servidor y cortafuegos"
+PRY_DESC="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
 # Descripcion corta
 #
 
