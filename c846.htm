@@ -1,0 +1,636 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Direcciones, enrutamiento, transporte y cortafuegos</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Red Local Inalámbrica: uso y configuración"
+HREF="x767.htm"><LINK
+REL="NEXT"
+TITLE="NAT (Network Address Translation)"
+HREF="x982.htm"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x767.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x982.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="direcciones-enrutamiento-transporte"
+></A
+>Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Tabla de contenidos</B
+></DT
+><DT
+><A
+HREF="c846.htm#ipv4"
+>Introducción a TCP/IPv4</A
+></DT
+><DT
+><A
+HREF="x982.htm"
+>NAT (Network Address Translation)</A
+></DT
+><DT
+><A
+HREF="x1011.htm"
+>Cortafuegos: filtrado y túneles</A
+></DT
+><DT
+><A
+HREF="x1034.htm"
+>ftp-proxy: para usar ftp desde la red interna</A
+></DT
+><DT
+><A
+HREF="x1065.htm"
+>Ejemplo del uso de PF en una DMZ</A
+></DT
+><DT
+><A
+HREF="x1075.htm"
+>Control de ancho de banda</A
+></DT
+></DL
+></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="ipv4"
+>Introducción a TCP/IPv4</A
+></H1
+><P
+>&#13;     En una red TCP/IPv4, cada computador tiene como identificación una
+     dirección <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> única.  Esta dirección consta de
+     32 bits, y suele escribirse como 4 números/bytes separando unos
+     de otros por punto (cada uno es un número entre 0 y 255), por
+     ejemplo 66.35.250.209.  Cómo TCP/IP se diseño para interconectar
+     redes, una dirección <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> consta de una parte
+     que identifica de forma única la red y otra que identifica de
+     forma única el computador dentro de la red.  Una máscara de red
+     determina que parte identifica la red y cuáles computadores en la
+     red puede denotarse con el número de bits del comienzo de la
+     dirección que identifican la red (e.g 16 si los primeros 16 bits
+     identifican la red) o como otra dirección que al hacer la
+     operación lógica y con la dirección <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> dará la
+     dirección de red (por ejemplo 255.255.0.0 es una máscara que
+     indica que los primeros 16 bits de una dirección IP son la
+     dirección de red).
+    </P
+><A
+NAME="AEN854"
+></A
+><P
+>Indica que parte de una dirección IP corresponde a la dirección de red.
+    </P
+><P
+>Al diseñar una red debe escogerse una dirección de red junto
+     con la máscara de acuerdo al número de computadores, algunas
+     posibilidades son:</P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>/8 o 255.0.0.0</DT
+><DD
+><P
+>16777216 computadores</P
+></DD
+><DT
+>/12 o 255.242.0.0</DT
+><DD
+><P
+>1048576 computadores</P
+></DD
+><DT
+>/16 o 255.255.0.0</DT
+><DD
+><P
+>65536 computadores</P
+></DD
+><DT
+>/24 o 255.255.255.0</DT
+><DD
+><P
+>255 computadores</P
+></DD
+></DL
+></DIV
+><P
+>Cuantos 
+       computadores pueden
+      instalarse en una  red con mascara de red /24 o 255.255.255.0.
+    </P
+><P
+>Además la dirección de red que escoja debe ser única para no
+     producir conflictos con otras redes en caso de conectarse a
+     Internet y puede facilitar la interconexión de diversas redes y
+     el enrutamiento al interior de una organización.  La labor de
+     asignación de direcciones IP en una red local la puede hacer un 
+     administrador de red o puede hacerse dinámicamente con el protocolo 
+     DHCP. </P
+><P
+>Para facilitar la adopción de redes TCP/IPv4 en
+     organizaciones, el <ACRONYM
+CLASS="acronym"
+>RFC</ACRONYM
+> 1918 destinó algunas
+     direcciones de red para usar al interior de organizaciones (no
+     puede haber computadores en Internet con esas direcciones):
+     </P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>10.0.0.0 - 10.255.255.255</DT
+><DD
+><P
+>máscara /8</P
+></DD
+><DT
+>172.16.0.0 - 172.31.255.255</DT
+><DD
+><P
+>máscara /12</P
+></DD
+><DT
+>192.168.0.0 - 192.168.255.255</DT
+><DD
+><P
+>máscara /16</P
+></DD
+></DL
+></DIV
+><P
+>Por ejemplo en su red local puede emplear
+     direcciones entre 192.168.1.1 y 192.168.1.255 con máscara de red
+     /24 o 255.255.255.0.  O en caso de contar con más redes en la
+     misma organización, la segunda con direcciones entre 192.168.2.1 y
+     192.168.2.255 y así sucesivamente.  Además de usar direcciones
+     privadas, se facilita el crecimiento de la infraestructura de
+     redes y la configuración del enrutamiento entre unas y
+     otras.</P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="tabla-enrutamiento"
+>Tabla de Enrutamiento</A
+></H2
+><P
+>Como se presentó en la descripción de las capas en redes
+     TCP/IP (ver <A
+HREF="c23.htm"
+>Redes,
+     protocolos e Internet</A
+>), el protocolo <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+>
+     mantiene una tabla de enrutamiento que asocia direcciones de red
+     con compuertas, es decir con computadores conectados a la misma
+     red que pueden retransmitir información a la red destino.  En
+     una red de área local no es necesario configurarla, pero si se
+     requiere por ejemplo para interconectar varias redes de área local en 
+     una misma organización.</P
+><P
+>Puede ver la tabla de enrutamiento estático en con
+     <B
+CLASS="command"
+>route -n show</B
+> o con <B
+CLASS="command"
+>netstat -r</B
+>.
+     Entre los campos de cada entrada de esta tabla están: red
+     destino, puerta de enlace, banderas, uso, MTU, interfaz por la cual
+     enviar/recibir paquetes con ese destino, 
+     </P
+><P
+>Hay un destino por defecto (<TT
+CLASS="literal"
+>default</TT
+>) al
+     que se envia todo paquete que no tiene un destino en la tabla de
+     enrutamiento. Este destino por defecto o puerta de enlace se
+     configura en el archivo <TT
+CLASS="filename"
+>/etc/mygate</TT
+>. En una
+     red local conectada a Internet, el servidor debe emplear como
+     puerta de enlace la que le haya dado el proveedor de Internet, y
+     cada computador de la red local debe emplear la IP del servidor.
+    </P
+><P
+>De requerirse pueden agregarse compuertas con
+     <B
+CLASS="command"
+>route add</B
+> por ejemplo,
+     para agregar una ruta a la red 192.168.2.0/24 
+     usando como compuerta 192.168.1.60 que está en la misma
+     red:</P
+><PRE
+CLASS="screen"
+>&#13;sudo route add 192.168.2/24 192.168.1.60
+	 </PRE
+><P
+>&#13;     Y pueden eliminarse de forma análoga con <B
+CLASS="command"
+>route
+      delete</B
+>.
+    </P
+><P
+>&#13;     Para determinar problemas de enrutamiento o en general de la red, 
+     puede emplear algunas herramientas de diagnóstico por ejemplo:
+
+     <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><B
+CLASS="command"
+>traceroute</B
+></DT
+><DD
+><P
+>Presenta las direcciones de
+	 los computadores y enrutadores que transmiten un paquete
+	 hasta llegar a su destino. Por ejemplo
+		 <PRE
+CLASS="screen"
+>&#13;traceroute 192.168.2.2</PRE
+></P
+><A
+NAME="AEN917"
+></A
+><P
+>Este programa permite rastrear la ruta que sigue un paquete para llegar a su destino.
+    </P
+></DD
+><DT
+><B
+CLASS="command"
+>netstat -s</B
+></DT
+><DD
+><P
+>Éste presenta estadísticas sobre <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+>,
+	 <ACRONYM
+CLASS="acronym"
+>ICMP</ACRONYM
+> y <ACRONYM
+CLASS="acronym"
+>TCP</ACRONYM
+></P
+></DD
+><DT
+><B
+CLASS="command"
+>arp -an</B
+></DT
+><DD
+><P
+>Que presenta direcciones MAC junto con IPs asociadas
+	 </P
+></DD
+><DT
+><B
+CLASS="command"
+>tcpdump</B
+></DT
+><DD
+><P
+>Permite analizar el tráfico de una red TCP/IP.  Desde la
+	 cuenta root puede usarse este programa para examinar todo el
+	 tráfico que circule por una red.  Por ejemplo para verificar
+	 lo que se transmite por la interfaz re0:
+	 <PRE
+CLASS="screen"
+>&#13;sudo tcpdump -i re0 -n -ttt
+	 </PRE
+>
+       </P
+><A
+NAME="AEN940"
+></A
+><P
+>Permite analizar el tráfico
+      de una red TCP/IP.
+    </P
+></DD
+></DL
+></DIV
+>
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="configuracion-OpenBSD"
+>Otros aspectos de configuración de redes en OpenBSD</A
+></H2
+><P
+>Fuera de las tablas de enrutamiento y ARP, la funcionalidad de 
+	    redes a nivel de kernel se puede controlar con:
+
+     <P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="filename"
+>/etc/hosts</TT
+></DT
+><DD
+><P
+>En este archivo se listan nombres asociados a
+       la dirección <ACRONYM
+CLASS="acronym"
+>IP</ACRONYM
+> de algunos computadores, por
+       ejemplo:
+	 
+		 <PRE
+CLASS="screen"
+>&#13;127.0.0.1       localhost
+192.168.1.1    Jesus.miescuela.edu.co Jesus
+		 </PRE
+>
+	     </P
+></DD
+><DT
+><B
+CLASS="command"
+>sysctl</B
+></DT
+><DD
+><P
+>Para configurar algunas variables del
+		       kernel relacionadas con redes.
+		       Los cambios pueden hacerse permanentes modificando
+		       el archivo <TT
+CLASS="literal"
+>/etc/sysctl.conf</TT
+>.
+		       Resaltamos la variable <TT
+CLASS="literal"
+>net.inet.ip.forwarding</TT
+> que debe activarse para que un sistema opere como enrutador.
+	</P
+></DD
+><DT
+>pf</DT
+><DD
+><P
+>Que permite controlar el 
+tráfico de paquetes en el kernel y por tanto controlar
+la funcionalidad de
+cortafuegos<A
+NAME="AEN966"
+HREF="#FTN.AEN966"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>.
+Se configura de manera permanente en el archivo <TT
+CLASS="filename"
+>/etc/pf.conf</TT
+> (o el archivo especificado
+en la variable <TT
+CLASS="literal"
+>pf_rules</TT
+> de 
+<TT
+CLASS="filename"
+>rc.conf.local</TT
+> o <TT
+CLASS="filename"
+>rc.conf</TT
+>).  Para
+que <B
+CLASS="command"
+>pf</B
+> entre en operación en cada arranque del 
+sistema, agregue a <TT
+CLASS="filename"
+>rc.conf.local</TT
+> la línea:
+<PRE
+CLASS="screen"
+>&#13;pf=""
+</PRE
+>
+</P
+><P
+>&#13;	    Una vez esté operando si hace cambios al archivo de configuración
+	    puede lograr que reinicie y vuelva a leerlo con:
+	    <PRE
+CLASS="screen"
+>&#13;# sudo pfctl -f /etc/pf.conf
+	    </PRE
+>
+    </P
+><P
+>El archivo de configuración <TT
+CLASS="filename"
+>/etc/pf.conf</TT
+> 
+	    tiene una sintaxis bastante entendible que permite definir 
+	    variables y tablas. </P
+></DD
+></DL
+></DIV
+>
+     
+    </P
+><P
+>Las secciones de este capítulo explican algunas configuraciones
+	    típicas que pueden hacerse con <SPAN
+CLASS="application"
+>pf</SPAN
+>
+	    y los correspondientes cambios a su archivo de configuración.
+    </P
+></DIV
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notas</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN966"
+HREF="c846.htm#AEN966"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>Cortafuego del inglés
+<I
+CLASS="foreignphrase"
+>firewall</I
+></P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x767.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x982.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Red Local Inalámbrica: uso y configuración</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>NAT (Network Address Translation)</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

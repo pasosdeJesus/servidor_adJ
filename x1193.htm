@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Servidor ssh</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Protocolos de soporte y de usuario"
+HREF="c1091.htm"><LINK
+REL="PREVIOUS"
+TITLE="Protocolos de soporte y de usuario"
+HREF="c1091.htm"><LINK
+REL="NEXT"
+TITLE="Protocolo DHCP"
+HREF="x1218.htm"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c1091.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Capítulo 5. Protocolos de soporte y de usuario</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1218.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="servidor-ssh"
+>Servidor <B
+CLASS="command"
+>ssh</B
+></A
+></H1
+><P
+>Al instalar OpenBSD  con soporte de red, tendrá la oportunidad de
+	  activar o no el servidor de OpenSSH <B
+CLASS="command"
+>sshd</B
+>.
+	  Si posteriormente requiere cambiar la configuración edite el archivo
+	  <TT
+CLASS="filename"
+>/etc/rc.conf.local</TT
+> y para activarlo agregue:
+	  <PRE
+CLASS="screen"
+>&#13;sshd_flags=""
+  </PRE
+>
+  o para desactivarlo agregue:
+  <PRE
+CLASS="screen"
+>&#13;sshd_flags="NO"
+  </PRE
+>
+</P
+><P
+>El servidor OpenSSH es desarrollado por el proyecto OpenBSD y
+	para dar seguridad continuamente innova en métodos de cifrado, 
+	de intercambio de llaves y de integración con el sistema operativo (por
+	ejemplo modo separación de privilegios que ha mostrado ser
+	más seguro).
+  </P
+><P
+>La configuración por defecto de este servicio típicamente
+	  esta bien para la mayoría de casos, pero puede refinarla para
+	  su caso en el archivo de configuración 
+	  (<TT
+CLASS="filename"
+>/etc/ssh/sshd_config</TT
+>).   
+    </P
+><P
+>&#13;	Por defecto este servicio dejará una bitácora en
+	<TT
+CLASS="filename"
+>/var/log/authlog</TT
+> (y sus copias
+	anteriores comprimidas como <TT
+CLASS="filename"
+>/var/log/authlog.0.gz</TT
+>,
+	<TT
+CLASS="filename"
+>/var/log/authlog.1.gz</TT
+>, ...).
+    </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="referencias-sshd"
+>Referencias y lecturas recomendadas</A
+></H2
+><P
+>&#13;      Las siguientes páginas man:
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>sshd</SPAN
+>(8)</SPAN
+>.
+    </P
+><P
+> Separación de privilegios:
+	    <A
+HREF="http://www.counterpane.com/alert-openssh.html"
+TARGET="_top"
+>http://www.counterpane.com/alert-openssh.html</A
+>
+    </P
+><P
+>Página web:
+	    <A
+HREF="http://www.openssh.com"
+TARGET="_top"
+>http://www.openssh.com</A
+>
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c1091.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1218.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Protocolos de soporte y de usuario</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1091.htm"
+ACCESSKEY="U"
+>Subir</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Protocolo <B
+CLASS="command"
+>DHCP</B
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
