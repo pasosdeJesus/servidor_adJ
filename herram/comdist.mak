@@ -79,5 +79,5 @@ act-gh:
 	cp $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(PROYECTO)_gh-pages/
 	(cd $(PROYECTO)_gh-pages/;\
 	git add *; \
-	git commit -m "Actualiza HTML" -a;\
+	git commit -a;\
 	git push origin gh-pages)

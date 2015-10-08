@@ -25,7 +25,7 @@ URLSITE="http://pasosdejesus.github.io/servidor_adJ/"
 # Sitio de desarrollo de este proyecto
 #
 
-ACT_PROC="act-scp"
+ACT_PROC="act-gh"
 # Regla para actualizar sitio de publicación
 # Las que hay por defecto son act-scp y act-ncftpput
 
