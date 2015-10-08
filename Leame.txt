@@ -21,21 +21,21 @@ que producirá
 
 	* Páginas HTML apropiadas para consultar con un navegador en el 
 	  directorio html/
-	* PostScript apropiados para imprimir en imp/servidor_OpenBSD.ps
-	* PDF apropiado para imprimir en imp/servidor_OpenBSD.pdf
+	* PostScript apropiados para imprimir en imp/servidor_adJ.ps
+	* PDF apropiado para imprimir en imp/servidor_adJ.pdf
 
 también puede generar sólo un tipo de documentación con:
 
-	make html/servidor_OpenBSD.html
-	make imp/servidor_OpenBSD.ps
-	make imp/servidor_OpenBSD.pdf
+	make html/servidor_adJ.html
+	make imp/servidor_adJ.ps
+	make imp/servidor_adJ.pdf
 
 
 3. Opcional.  Consulte los documentos generados. Por ejemplo:
 
-	browsex html/servidor_OpenBSD.html
-	gv imp/servidor_OpenBSD.ps
-	xpdf imp/servidor_OpenBSD.pdf
+	browsex html/servidor_adJ.html
+	gv imp/servidor_adJ.ps
+	xpdf imp/servidor_adJ.pdf
 
 
 4. Instalación:
@@ -45,11 +45,14 @@ vaya a ser empleada por varios usuarios en su sistema:
 
 	make instala
 
-Esto instalará los 3 tipos de documentos en $prefijo/share/doc/servidor_OpenBSD
+Esto instalará los 3 tipos de documentos en $prefijo/share/doc/servidor_adJ
 (donde $prefijo es /usr/local o el que haya especificado durante la 
 configuración).
 
 
 
 5. Retroalimentación y ayuda
+
+Consulte Desarrollo.txt, contribuya en
+https://github.com/pasosdeJesus/servidor_adJ/
 

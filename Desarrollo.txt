@@ -63,15 +63,15 @@ $(PRY_VERSION).
 GENERACIÓN DE OTROS ARCHIVOS Y PUBLICACION
 
 Es posible generar un comprimido con las páginas HTML con nombre
-servidor_OpenBSD-1.0_html.tgz usando:
+servidor_adJ-1.0_html.tgz usando:
 
-	make servidor_OpenBSD-1.0_html.tgz
+	make servidor_adJ-1.0_html.tgz
 
-O un comprimido del PostScript  con nombre servidor_OpenBSD-1.0.ps.gz usando:
-	make imp/servidor_OpenBSD-1.0.ps.gz
+O un comprimido del PostScript  con nombre servidor_adJ-1.0.ps.gz usando:
+	make imp/servidor_adJ-1.0.ps.gz
 
 También puede generarse una distribución de fuentes (nombre 
-servidor_OpenBSD-1.0.tgz) con:
+servidor_adJ-1.0.tgz) con:
 
 	make dist
 
@@ -98,7 +98,6 @@ GENDIST del Makefile, y la copia se realizará sólo despues de haber
 chequeado todas las reglas y archivos de la variable GENACT del Makefile.
 
 
-
 VERSIÓN Y OTRAS VARIABLES DE CONFIGURACIÓN 
 
 Las variables de configuración y sus valores por defecto antes de una
@@ -116,7 +115,7 @@ de los archivos confv.emtpy y confv.sh (note que puede actualizar sólo
 confv.empty y borrar confv.sh pues este último es generado por conf.sh).
 Por ejemplo:
 
-	PRJ_VERSION=1.1
+	PRY_VERSION=1.1
 
 Puede revisar todas las variables disponibles y su descripción en
 el archivo confv.empty (el primer comentario debajo de cada variable
@@ -193,11 +192,6 @@ particular:
 		Porciones del Makefile para distribución 
 		y publicación
 
-Si modifica estos scripts o mejora las convenciones, eventualmente su
-cambio puede ser útil para la infraestructura de repasa.  Si lo desea
-puede desarrollar al tiempo tal infraestructura con su proyecto 
-instalando repasa y empleando enlaces en lugar de archivos separados.  
-Si lo desea, también puede compartir sus mejoras de dominio público 
-para que pueda ser integradas a repasa y beneficiar las instituciones 
-que emplean ese proyecto, puede enviar sus mejoras a 
-	structio-devel@lists.sourceforge.net
+Lo invitamos a aportar sus cambios en el repositorio de fuentes
+de este proyecto:
+https://github.com/pasosdeJesus/servidor_adJ/
