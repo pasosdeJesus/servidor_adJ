@@ -90,8 +90,10 @@ limpiadist: limpiamas
 limpiamas: limpia
 	rm -f img/*.eps img/*.ps
 	rm -f $(PROYECTO)-$(PRY_VERSION).tar.gz
+	rm -rf $(PROYECTO)-$(PRY_VERSION)
+	rm -rf $(PROYECTO)_gh-pages
 	rm -f $(INDEX).xdbk $(INDEX).xdbk.m $(INDEX).xml.m HTML.index.m
-
+	rm -f confaux.sed indice.xdbk.m
 
 # Elimina backups y archivos temporales
 limpia:
