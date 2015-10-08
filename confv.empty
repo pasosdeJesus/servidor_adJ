@@ -128,7 +128,7 @@ SGML_XML=""
 
 # Métodos
 
-ACT_PROC="act-scp"
+ACT_PROC="act-gh"
 # Regla para actualizar sitio de publicación
 # Las que hay por defecto son act-scp y act-ncftpput
 
