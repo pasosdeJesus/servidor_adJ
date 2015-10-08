@@ -14,22 +14,24 @@
 sudo /usr/local/bin/mysql_install_db
       </pre><p>
 </p><p>
-    Después agregue a <code class="filename">/etc/login.conf</code>:
+	  Para aumentar el límite de archivos que el usuario 
+	  <code class="literal">_mysql</code> de clase <code class="literal">mysql</code> puede abrir
+	  agregue a <code class="filename">/etc/login.conf</code>:
     </p><pre class="screen">
 mysql:\
 	:openfiles-cur=2048:\
 	:openfiles-max=4096:\
 	:tc=daemon:
 </pre><p>
-que creará una clase de login ---tenga en cuenta no dejar espacios al 
-final de cada línea y que desde la segundan comiencen con el caracter
+tenga en cuenta no dejar espacios al 
+final de cada línea y que desde la segunda línea cada una comiencen con el caracter
 tabulador. A continuación regenere el archivo binario  
 <code class="filename">/etc/login.conf.db</code> con
 </p><pre class="screen">
 cd /etc
 sudo cap_mkdb /etc/login.conf 
 </pre><p>
-A continuación agregue <code class="literal">mysqld</code> a 
+Después agregue <code class="literal">mysqld</code> a 
 <code class="literal">pkg_scripts</code> en <code class="filename">/etc/rc.conf.local</code>.
 A continuación lance el servidor con:
 </p><pre class="screen">
