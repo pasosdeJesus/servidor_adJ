@@ -142,7 +142,7 @@
 	</p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="nginx-php"></a>7.2.1. Uso de PHP con nginx</h4></div></div></div><p>
 			No hay un módulo para PHP pero puede ejecutarse como Fast-CGI.  
 			Esto puede lograrse por ejemplo con el paquete
-			<code class="literal">php-fpm-5.5.28</code>.   Este paquete incluye un
+			<code class="literal">php-fpm-5.5.30</code>.   Este paquete incluye un
 			servicio que se configura en <code class="filename">/etc/php-fpm.conf</code>
 			y que por defecto servirá en el puerto 9000.   Inicielo con
 			</p><pre class="screen">
@@ -312,7 +312,7 @@ sudo /etc/rc.d/apache restart
 Finalmente puede probar abriendo desde un navegador
 <code class="literal">https://Jesus.miescuela.edu.co</code>
 </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="php"></a>7.3.4. PHP</h4></div></div></div><p>Instale el paquete
-		<code class="literal">php-5.5.28</code>.
+		<code class="literal">php-5.5.30</code>.
 	  Después cree un enlace para activarlo en servidor web:
 	  </p><pre class="screen">
 ln -s /var/www/conf/modules.sample/php-5.4.conf \
@@ -336,7 +336,7 @@ DirectoryIndex index.html index.php
 ?&gt;
 	  </pre><p>
 	</p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="php-postgresql"></a>7.3.4.1. Soporte para PostgreSQL en PHP</h5></div></div></div><p>Para activar el soporte para PostgreSQL (ver <a href="postgresql.html" title="2. Motor de bases de datos PostgreSQL">Sección 2, “Motor de bases de datos PostgreSQL”</a>en PHP
-      instale el paquete <code class="literal">php-pgsql-5.5.28</code> y
+      instale el paquete <code class="literal">php-pgsql-5.5.30</code> y
       ejecute:
       </p><pre class="screen">
 ln -fs /etc/php-5.4.sample/pgsql.ini \
