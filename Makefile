@@ -72,7 +72,7 @@ ghtodo: distgh
 
 
 repasa:
-	DEF=$(PROYECTO).def CLA=$(PROYECTO).cla SEC=$(PROYECTO).sec DESC="Información extraida de $(PROYECTO) $(PRY_VERSION)" FECHA="$(FECHA_ACT)" BIBLIO="$(URLSITE)" TIPO_DERECHOS="descripcion corta derechos (cambiar Makefile)" TIEMPO_DERECHOS="$(MES_ACT)" DERECHOS="descripción larga derechos (cambiar en Makefile)" AUTORES="aqui poner autores (cambiar en Makefile)" IDSIGNIFICADO="sig" $(AWK) -f herram/db2rep $(SOURCES)
+	DEF=$(PROYECTO).def CLA=$(PROYECTO).cla SEC=$(PROYECTO).sec DESC="Información extraida de $(PROYECTO) $(PRY_VERSION)" FECHA="$(FECHA_ACT)" BIBLIO="$(URLSITE)" TIPO_DERECHOS="Dominio Público" TIEMPO_DERECHOS="$(MES_ACT)" DERECHOS="Información cedida al dominio público de acuerdo a la legislación colombiana. Sin garantías" AUTORES="Vladimir Támara Patiño" IDSIGNIFICADO="adJ_servidor" $(AWK) -f herram/db2rep $(SOURCES)
 
 # Para usar DocBook
 include herram/comdocbook.mak
