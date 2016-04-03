@@ -88,6 +88,11 @@ ping 127.0.0.1
 	protocolo<footnote><para>El programa que sigue este protocolo hace 
 	    parte de la implementación de IPv4 en el kernel.</para></footnote>.
     </para>
+    <para>Dado que estamos en paso de IPv4 a IPv6 también mencionamos que el mismo ejemplo con IPv6 es:
+<screen>
+ping6 ::1
+</screen>
+    </para>
 
     <indexterm role="pal">
      <primary>protocolo</primary>
@@ -184,7 +189,15 @@ ping 127.0.0.1
 	  Corporation for Assigned Names and Numbers</foreignphrase>).
 	 </para>
 	</listitem>
+	</varlistentry>
+        <varlistentry>
+	<term>LACNIC Registro de Direcciones de Internet para América Latina y CaribeRegistro de Direcciones de Internet para América Latina y Caribe</term>
+	<listitem>
+		<para>Es responsable de la asignación y administración de los recursos de numeración de Internet (IPv4, IPv6), Números Autónomos y Resolución Inversa, entre otros recursos para la región de América Latina y el Caribe. Es uno de los 5 Registros Regionales de Internet en el mundo.
+	 </para>
+	</listitem>
        </varlistentry>
+
       </variablelist>
      </para>
 
@@ -204,12 +217,11 @@ ping 127.0.0.1
 	</para>
 	</footnote>
       es manejada por <acronym>IANA</acronym>, que a su vez la ha
-      delegado a registros en diversas regiones.  Las regiones de
-      América y Africa debajo del Sahara son manejadas por el registro
-      <acronym>ARIN</acronym> (<foreignphrase>American Registry for
-      Internet Numbers</foreignphrase>), que recibe solicitudes para
+      delegado a registros en diversas regiones.  La región de
+      América Latina es manejada por el registro
+      <acronym>LACNIC</acronym>, que recibe solicitudes para
       asignar bloques a proveedores de servicio a Internet
-      (<acronym>ISP</acronym>), estos proveedores deben contar con la
+      (<acronym>ISP</acronym>) o usuarios, estos proveedores deben contar con la
       infraestructura para conectar sus computadores a Internet (e.g
       con cables submarinos, vía satélite) y a su vez ofrecen bloques
       de direcciones y conexión a otros proveedores o a
