@@ -15,20 +15,20 @@
 	<para>El siguiente ejemplo ejemplifica parte del archivo 
 		<filename>/etc/pf.conf</filename> para esto:
 <screen>
-# En la sección nat/rdr
-pass on $int_if proto tcp from $lan to any port 21 
-match in on $int_if proto tcp from $lan to any port 21 rdr-to 127.0.0.1 port 8021
-
-# En la sección de reglas de filtrado
-pass out proto tcp from $ext_ip to any port 21
+	# En la sección nat/rdr
+	pass on $int_if proto tcp from $lan to any port 21 
+	match in on $int_if proto tcp from $lan to any port 21 rdr-to 127.0.0.1 port 8021
+	
+	# En la sección de reglas de filtrado
+	pass out proto tcp from $ext_ip to any port 21
 </screen>
 
 </para>
 <warning><para>Para emplear <application>ftp-proxy</application> asegurese
 	que entre las reglas de su cortafuegos no esté:
-	<screen>
-set skip $int_if
-	</screen>
+<screen>
+	set skip $int_if
+</screen>
 	porque esto impediría la redirección al puerto 8021 (por defecto
 	usado por ftp-proxy) del cortafuegos cuando se hacen peticiones de 
 	ftp.
@@ -45,7 +45,7 @@ debe iniciar el proxy con:
 y para que se efectúe en cada arranque del servidor agregar
 a <filename>/etc/rc.conf.local</filename>:
 <screen>
-ftpproxy_flags=""
+	ftpproxy_flags=""
 </screen>
 </para>
 

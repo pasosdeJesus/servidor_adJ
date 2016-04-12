@@ -18,21 +18,21 @@ que ya se han configurado las variables <literal>int_if</literal> y
 <literal>ext_if</literal> con las
 interfaces de red interna y externa respectivamente:
 <screen>
-servicios_tcp="{ssh,domain}
-servicios_udp="{domain}"
-servicios_icmp="echoreq"
+	servicios_tcp="{ssh,domain}
+	servicios_udp="{domain}"
+	servicios_icmp="echoreq"
 
-block in log all
-pass out keep state
+	block in log all
+	pass out keep state
 
-pass quick on { lo $int_if }
-antispoof quick for { lo $int_if }
+	pass quick on { lo $int_if }
+	antispoof quick for { lo $int_if }
 
-pass in on $ext_if inet proto tcp from any to ($ext_if) \
-        port $servicios_tcp keep state
-pass in on $ext_if inet proto udp from any to ($ext_if) \
-	        port $servicios_udp keep state
-pass in inet proto icmp all icmp-type $servicios_icmp keep state
+	pass in on $ext_if inet proto tcp from any to ($ext_if) \
+	port $servicios_tcp keep state
+	pass in on $ext_if inet proto udp from any to ($ext_if) \
+	port $servicios_udp keep state
+	pass in inet proto icmp all icmp-type $servicios_icmp keep state
 </screen>
 </para>
 
@@ -44,20 +44,20 @@ pass in inet proto icmp all icmp-type $servicios_icmp keep state
 	estos puertos, de forma que las conexiones que lleguen al
 	cortafuegos sean redirigidas al servidor interno.
 	El siguiente ejemplo presenta como puede hacerse:
-	<screen>
-serv_ip="192.168.2.2"
-servicios_serv="{ldap,smtp,www,https,imaps, 389}"
+<screen>
+	serv_ip="192.168.2.2"
+	servicios_serv="{ldap,smtp,www,https,imaps, 389}"
 
-match in on $ext_if proto tcp from any to any port www rdr-to $serv_ip port www
-match in on $ext_if proto tcp from any to any port https rdr-to $serv_ip port https
-match in on $ext_if proto tcp from any to any port 993 rdr-to $serv_ip port 993
-match in on $ext_if proto tcp from any to any port smtp rdr-to $serv_ip port smtp
-match in on $ext_if proto tcp from any to any port 389 rdr-to $serv_ip port 389
+	match in on $ext_if proto tcp from any to any port www rdr-to $serv_ip port www
+	match in on $ext_if proto tcp from any to any port https rdr-to $serv_ip port https
+	match in on $ext_if proto tcp from any to any port 993 rdr-to $serv_ip port 993
+	match in on $ext_if proto tcp from any to any port smtp rdr-to $serv_ip port smtp
+	match in on $ext_if proto tcp from any to any port 389 rdr-to $serv_ip port 389
 
 
-pass in on $ext_if proto tcp from any to $serv_ip port $servicios_serv \
-        flags S/SA synproxy state
-	</screen>
+	pass in on $ext_if proto tcp from any to $serv_ip port $servicios_serv \
+	flags S/SA synproxy state
+</screen>
 </para>
 
 	<sect2 id="referencias-cortafuegos">

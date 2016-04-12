@@ -16,14 +16,14 @@
 	  usuarios del sistema puedan emplearlo
 	  basta agregar la siguiente línea al archivo
           <filename>/etc/rc.conf.local</filename>:
-	  <screen>
-ftpd_flags="-D -A"
-	  </screen>
+<screen>
+	ftpd_flags="-D -A"
+</screen>
 	  Que especifica operar en el fondo y sólo para recibir
 	  conexiones anónimas. Para ejecutarlo sin reiniciar use:
-	  <screen>
-/usr/libexec/ftpd -D -A
-	  </screen>
+<screen>
+	/usr/libexec/ftpd -D -A
+</screen>
   </para>
 
   <para> 
@@ -32,19 +32,19 @@ ftpd_flags="-D -A"
 	  de creación al usar <literal>adduser</literal> se presentan  
 	  a continuación (emplee una clave difícil, preferiblemente
 	  generada con <command>apg</command>):
-	  <screen>
-Enter username []: ftp
-Enter full name []: FTP anonimo
-Enter shell csh ksh nologin sh [ksh]: nologin
-Uid [1008]: 
-Login group ftp [ftp]: 
-Login group is ``ftp''. Invite ftp into other groups: guest no 
-[no]: 
-Login class auth-defaults auth-ftp-defaults daemon default staff 
-[default]: auth-ftp-defaults
-Enter password []: 
-Enter password again []: 
-	  </screen>
+<screen>
+	Enter username []: ftp
+	Enter full name []: FTP anonimo
+	Enter shell csh ksh nologin sh [ksh]: nologin
+	Uid [1008]: 
+	Login group ftp [ftp]: 
+	Login group is ``ftp''. Invite ftp into other groups: guest no 
+	[no]: 
+	Login class auth-defaults auth-ftp-defaults daemon default staff 
+	[default]: auth-ftp-defaults
+	Enter password []: 
+	Enter password again []: 
+</screen>
 	  Después puede ubicar lo que desee que aparezca en el servidor
 	  ftp en el directorio de tal cuenta
 	  (e.g <filename>/home/ftp</filename>) y quitar los permisos
@@ -85,9 +85,9 @@ Enter password again []:
 	  asegurese de agregar entre los flags en 
 	  <filename>/etc/rc.conf.local</filename>, las opciones
 	  <option>-S -l</option> y ejecutar:
-	  <screen>
-touch /var/log/ftpd
-	  </screen>
+<screen>
+	touch /var/log/ftpd
+</screen>
   </para>
   <sect2 id="ftpdmz">
 	  <title>Servicio FTP en una DMZ</title>
@@ -100,15 +100,15 @@ touch /var/log/ftpd
 		  para servir a la red interna, debe ejecutar una segunda
 		  instancia que opere en modo reverso.  Para esto
 		  agregue en <filename>/etc/rc.local</filename>:
-		  <screen>
-pgrep ftp-proxy > /dev/null
-if (test "$?" != 0  -a X"${ftpproxy_flags}" != X"NO" -a \
-	-x /usr/sbin/ftp-proxy) then {
-	echo -n ' ftp-proxy'
-	/usr/sbin/ftp-proxy ${ftpproxy_flags}
-	/usr/sbin/ftp-proxy -b 200.1.10.44 -p 21 -a 200.1.10.44 -R 192.168.1.30
-} fi;
-		  </screen>
+<screen>
+	pgrep ftp-proxy > /dev/null
+	if (test "$?" != 0  -a X"${ftpproxy_flags}" != X"NO" -a \
+		-x /usr/sbin/ftp-proxy) then {
+		echo -n ' ftp-proxy'
+		/usr/sbin/ftp-proxy ${ftpproxy_flags}
+		/usr/sbin/ftp-proxy -b 200.1.10.44 -p 21 -a 200.1.10.44 -R 192.168.1.30
+	} fi;
+</screen>
 		  cambiando 200.1.10.44 por su IP pública y 192.168.1.30 
 		  por la IP del servidor en el que corre ftp.
 	  </para>

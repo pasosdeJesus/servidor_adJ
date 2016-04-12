@@ -2,47 +2,50 @@
 
 <sect1 id="nat">
   <title>NAT (Network Address Translation)</title>
-  <para>Puede emplear NAT para que un computador conectado a una red
-	privada y que se conecte a Internet, sea
-	pasarela de los computadores de la red interna y así estos
-	puedan emplear Internet.  </para>
-	<para>Para activarlo debe estar corriendo <command>pf</command>
-		(como se explica al comienzo de este capítulo) y debe activar
-		reenvío de IP con:
-		<screen>
-sysctl -w net.inet.ip.forwarding=1
-		</screen>
-		o mejor aún de manera más permanente verificando que el
-		archivo <filename>/etc/sysctl.conf</filename> tenga la línea:
-		<screen>
-net.inet.ip.forwarding=1	
-		</screen>
+  <para>
+Puede emplear NAT para que un computador conectado a una red
+privada y que se conecte a Internet, sea
+pasarela de los computadores de la red interna y así estos
+puedan emplear Internet.  </para>
+<para>
+Para activarlo debe estar corriendo <command>pf</command>
+(como se explica al comienzo de este capítulo) y debe activar
+reenvío de IP con:
+<screen>
+	doas sysctl -w net.inet.ip.forwarding=1
+</screen>
+o mejor aún de manera más permanente verificando que el
+archivo <filename>/etc/sysctl.conf</filename> tenga la línea:
+<screen>
+	net.inet.ip.forwarding=1	
+</screen>
 	</para>	
-	<para>Como el computador
-	que hará NAT debe tener dos interfaces de red una para conectarlo a la
-	red interna (con IP de la red interna) y otra para conectarlo a 
-	Internet (con IP pública).  En el archivo
-	<filename>/etc/pf.conf</filename> configure las variables 
-	<literal>ext_if</literal> e <literal>int_if</literal>
-	con los nombres de las interfaces externa (conectada a Internet)
-	e interna respectivamente (verifiquelas antes con 
-	<command>ifconfig</command>).
-	Por ejemplo un archivo de configuración mínimo que hace
-	NAT, suponiendo que la interfaz interna es <literal>fxp0</literal> y la
-	externa es <literal>nfe0</literal> es:
-	<screen>
-int_if="fxp0"
-ext_if="nfe0"
-
-set skip on lo
-
-match out on $ext_if from !($ext_if) to any nat-to ($ext_if:0)
-
-pass in quick on $int_if
+	<para>
+Como el computador
+que hará NAT debe tener dos interfaces de red una para conectarlo a la
+red interna (con IP de la red interna) y otra para conectarlo a 
+Internet (con IP pública).  En el archivo
+<filename>/etc/pf.conf</filename> configure las variables 
+<literal>ext_if</literal> e <literal>int_if</literal>
+con los nombres de las interfaces externa (conectada a Internet)
+e interna respectivamente (verifiquelas antes con 
+<command>ifconfig</command>).
+Por ejemplo un archivo de configuración mínimo que hace
+NAT, suponiendo que la interfaz interna es <literal>fxp0</literal> y la
+externa es <literal>nfe0</literal> es:
+<screen>
+	int_if="fxp0"
+	ext_if="nfe0"
+	
+	set skip on lo
+	
+	match out on $ext_if from !($ext_if) to any nat-to ($ext_if:0)
+	
+	pass in quick on $int_if
 </screen>
 Esta configuración podría cargarse con:
 <screen>
-	sudo pfctl -f /etc/pf.conf.
+	doas pfctl -f /etc/pf.conf.
 </screen>
 </para>
 

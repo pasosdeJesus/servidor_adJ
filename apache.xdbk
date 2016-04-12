@@ -11,7 +11,7 @@
 <para>
 Instale el paquete:
 <screen>
-sudo pkg_add apache-httpd-openbsd
+	doas pkg_add apache-httpd-openbsd
 </screen>
 
 En el archivo <literal>etc/rc.conf.local</literal>  haga los siguientes cambios (parcialmente explicados en {2}):
@@ -28,7 +28,7 @@ lugar de <literal>/usr/lib/apache</literal>
 <para>
 Puede probar reiniciar el servidor completo para asegurar que el Apache 1.3.29 arranca también, o bien iniciar sólo el servicio con:
 <screen>
-sudo sh /etc/rc.d/apache start
+	doas sh /etc/rc.d/apache start
 </screen>
 </para>
 
@@ -41,16 +41,16 @@ Este porte corre por defecto y
 	pueden requerir que Apache tenga acceso a otras partes del sistema,
 	aunque no lo recomendamos puede lograrlo iniciando con el flag:
 	<screen>
-apache_flags="-u" </screen>
+	apache_flags="-u" </screen>
       </para>
       <para>Para detener el servidor una vez esté corriendo puede emplear:
 <screen>
-# /etc/rc.d/apache stop
+	doas /etc/rc.d/apache stop
 </screen>
 Para iniciarlo o reiniciarlo con las opciones que haya configurado
 en <filename>/etc/rc.conf.local</filename>:
 	<screen>
-# /etc/rc.d/apache restart
+	doas /etc/rc.d/apache restart
 	</screen>
 </para>
 
@@ -61,17 +61,17 @@ en <filename>/etc/rc.conf.local</filename>:
 	directorios para usuarios. A partir de OpenBSD 3.4 se recomienda 
 	que estos directorios se creen en <filename>/var/www/users</filename>, 
 	los activa estableciendo en el archivo de configuración:<screen>
-UserDir /users </screen>
+	UserDir /users </screen>
 	o bien<screen>
-UserDir /var/www/users </screen>
+	UserDir /var/www/users </screen>
 	el primer en caso de que corra Apache chroot y el segundo si no.
 	En ambos casos se sugiere la siguiente secuencia para crear
 	un directorio de publicación para el usuario &EUSUARIO;:
 	<screen>
-# cd /home/&EUSUARIO;
-# mkdir /var/www/users/&EUSUARIO;
-# ln -s /var/www/users/&EUSUARIO; public_html
-# chown &EUSUARIO;:&EUSUARIO; /var/www/users/&EUSUARIO;
+	cd /home/&EUSUARIO;
+	doas mkdir /var/www/users/&EUSUARIO;
+	doas ln -s /var/www/users/&EUSUARIO; public_html
+	doas chown &EUSUARIO;:&EUSUARIO; /var/www/users/&EUSUARIO;
 	</screen>
 
 	Así el usuario podrá publicar sus archivos en su subdirectorio
@@ -103,23 +103,23 @@ UserDir /var/www/users </screen>
 	      <para>Agregue en <filename>/var/www/conf/httpd.conf</filename>
 		una línea del estilo:
 		<screen>
-NameVirtualHost 65.167.3.4
+	NameVirtualHost 65.167.3.4
 		</screen>
 		remplazando la IP por la de su servidor
 	      </para>
 	      <para>Agregue un dominio virtual por cada dominio que maneje,
 		por ejemplo:
 		<screen>
-&lt;VirtualHost 65.167.63.234&gt;
-    ServerAdmin &EUSUARIO;@&EDOMINIO;
-    DocumentRoot /var/www/htdocs
-    ServerName www.&EDOMINIO;
-    ServerAlias &EDOMINIO;
-    ErrorLog logs/&EDOMINIO;-error_log
-    Options ExecCgi Includes MultiViews Indexes FollowSymlinks 
-    SymLinksIfOwnerMatch
-    CustomLog logs/&EDOMINIO;-access_log common
-&lt;/VirtualHost&gt;
+	&lt;VirtualHost 65.167.63.234&gt;
+	    ServerAdmin &EUSUARIO;@&EDOMINIO;
+	    DocumentRoot /var/www/htdocs
+	    ServerName www.&EDOMINIO;
+	    ServerAlias &EDOMINIO;
+	    ErrorLog logs/&EDOMINIO;-error_log
+	    Options ExecCgi Includes MultiViews Indexes FollowSymlinks 
+	    SymLinksIfOwnerMatch
+	    CustomLog logs/&EDOMINIO;-access_log common
+	&lt;/VirtualHost&gt;
 		</screen>
 	      </para>
 	    </listitem>
@@ -137,9 +137,9 @@ un certificado que pueda ser firmado por una Autoridad Certificadora
 o por usted mismo.
 
 <screen>
-# openssl genrsa -out /etc/ssl/private/server.key 1024
-# openssl req -new -key /etc/ssl/private/server.key \
-       -out /etc/ssl/private/server.csr
+	doas openssl genrsa -out /etc/ssl/private/server.key 1024
+	doas openssl req -new -key /etc/ssl/private/server.key \
+	       -out /etc/ssl/private/server.csr
 </screen>
 
 Tras el segundo paso debe ingresar el código del país (co para Colombia),
@@ -153,8 +153,8 @@ devolverá su certificado firmado (digamos <filename>sudominio.pem</filename>)
 el cual debe ubicar en <filename>/etc/ssl/server.crt</filename>.
 Si prefiere firmar usted mismo su certificado emplee:
 <screen>
-openssl x509 -req -days 3650 -in /etc/ssl/private/server.csr \
-      -signkey /etc/ssl/private/server.key -out /etc/ssl/server.crt
+	doas openssl x509 -req -days 3650 -in /etc/ssl/private/server.csr \
+		-signkey /etc/ssl/private/server.key -out /etc/ssl/server.crt
 </screen>
 </para>
 
@@ -185,7 +185,7 @@ líneas de la sección <literal>&lt;VirtualHost _default_:443&gt;</literal>:
 		<para> Reiniciar el servidor con 
 las opciones apropiadas, por ejemplo:
 <screen>
-sudo /etc/rc.d/apache restart
+	doas /etc/rc.d/apache restart
 </screen>
 		</para>
 	</listitem>
@@ -203,25 +203,25 @@ Finalmente puede probar abriendo desde un navegador
 		<literal>&p-php;</literal>.
 	  Después cree un enlace para activarlo en servidor web:
 	  <screen>
-ln -s /var/www/conf/modules.sample/php-5.4.conf \
-	/var/www/conf/modules/php.conf
+	doas ln -s /var/www/conf/modules.sample/php-5.4.conf \
+		/var/www/conf/modules/php.conf
 	  </screen>
 	  y asegúrese de que las siguientes líneas estén en
 	  <filename>/var/www/conf/httpd.conf</filename>:
 	  <screen>
-		  LoadModule php5_module /usr/local/lib/apache/modules/libphp5.so
+	LoadModule php5_module /usr/local/lib/apache/modules/libphp5.so
 
-AddType application/x-httpd-php .php
+	AddType application/x-httpd-php .php
 
-DirectoryIndex index.html index.php
+	DirectoryIndex index.html index.php
 	  </screen>
 	  Reinicie Apache  y pruebe la instalación de PHP por ejemplo
 	  cargando desde un navegador un archivo <filename>prueba.php</filename>
 	  el cual debe tener el siguiente contenido:
 	  <screen>
-&lt;?php
-  phpinfo();
-?&gt;
+	&lt;?php
+	  phpinfo();
+	?&gt;
 	  </screen>
 	</para>
 	<sect4 id="php-postgresql">
@@ -230,10 +230,10 @@ DirectoryIndex index.html index.php
 	      linkend="postgresql"></xref>en PHP
       instale el paquete <literal>&p-php-pgsql;</literal> y
       ejecute:
-      <screen>
-ln -fs /etc/php-5.4.sample/pgsql.ini \
-	/etc/php-5.4/pgsql.ini
-	    </screen>
+	<screen>
+	doas ln -fs /etc/php-5.4.sample/pgsql.ini \
+		/etc/php-5.4/pgsql.ini
+	</screen>
 	    Puede comprobar que esta extensión funciona revisando
 	    la salida de la función <literal>phpinfo()</literal>.
 	</para>
@@ -267,31 +267,31 @@ ln -fs /etc/php-5.4.sample/pgsql.ini \
 	  <literal>_tomcat</literal> y que sea dueño de los archivos 
 	  en <filename>/var/tomcat</filename>:
 	  <screen>
-# chown -R _tomcat:_tomcat /var/tomcat
+	doas chown -R _tomcat:_tomcat /var/tomcat
 	  </screen>
 
 	  Después ejecute:
 	  <screen>
-JAVA_HOME=/usr/local/jdk1.3.1-linux/ \
-  /usr/local/jakarta-tomcat-4.0.6/bin/startup.sh
+	JAVA_HOME=/usr/local/jdk1.3.1-linux/ \
+	  /usr/local/jakarta-tomcat-4.0.6/bin/startup.sh
 	  </screen>
 	  Si desea que Tomcat inicie cada vez que arranque el sistema
 	  agregue las siguientes líneas a
 	  <filename>/etc/rc.local</filename>:
 	  <screen>
-if [ -x /usr/local/jakarta-tomcat-4.0.6/bin/startup.sh ]; then
-  JAVA_HOME=/usr/local/jdk1.3.1-linux/ \
-  jakarta-tomcat-4.0.6/bin/startup.sh
-  echo -n 'tomcat'
-fi
+	if [ -x /usr/local/jakarta-tomcat-4.0.6/bin/startup.sh ]; then
+	  JAVA_HOME=/usr/local/jdk1.3.1-linux/ \
+	  jakarta-tomcat-4.0.6/bin/startup.sh
+	  echo -n 'tomcat'
+	fi
 	  </screen>
 	  y para que sea apagado cada vez que se apaga el computador, agregue
 	  en <filename>/etc/rc.shutdown</filename>:
 	  <screen>
-if [ -x /usr/local/jakarta-tomcat-4.0.6/bin/shutdown.sh ]; then
-  JAVA_HOME=/usr/local/jdk1.3.1-linux/ \
-    jakarta-tomcat-4.0.6/bin/shutdown.sh
-fi
+	if [ -x /usr/local/jakarta-tomcat-4.0.6/bin/shutdown.sh ]; then
+	  JAVA_HOME=/usr/local/jdk1.3.1-linux/ \
+	    jakarta-tomcat-4.0.6/bin/shutdown.sh
+	fi
 	  </screen>
 	</para>
 	<para>La configuración por defecto (modificable en
@@ -309,16 +309,16 @@ fi
 	  <filename>/usr/local/jakarta-tomcat-4.0.6/bin/catalina.sh</filename>.
 	  Agregue al comienzo:
 	  <screen>
-export DISPLAY=:1	    
+	export DISPLAY=:1	    
 	  </screen>
 	  Al comienzo de la sección de la opción <literal>start</literal> 
 	  agregue:
 	  <screen>
-/usr/X11R6/bin/Xvfb :1 &amp;
+	/usr/X11R6/bin/Xvfb :1 &amp;
 	  </screen>
 	  y en la sección <literal>stop</literal> ejecute:
 	  <screen>
-pkill -9 Xvfb
+	pkill -9 Xvfb
 	  </screen>
 	</para>
 	<para>Las bitácoras quedan en
@@ -346,15 +346,15 @@ pkill -9 Xvfb
 		activar SSI basta quitar los comentarios de las siguientes
 		líneas en <filename>/var/www/conf/httpd.conf</filename>:
 		<screen>
-AddType text/html .shtml
-AddHandler server-parsed .shtml
+	AddType text/html .shtml
+	AddHandler server-parsed .shtml
 		</screen>
 
 		y en el directorio o directorios desde los que se quieren
 		usar páginas con SSI (extensión <filename>.shtml</filename>), 
 		agregar entre las opciones:
 		<screen>
-Option Includes
+	Option Includes
 		</screen>
 		Si se desea que las páginas con extensión
 		<filename>.html</filename> sean reconocidas por el servidor,
@@ -362,19 +362,19 @@ Option Includes
 		de ejecución y agregué después del <literal>AddHandler</literal>
 		antes mencionado:
 		<screen>
-XBitHack on
+	XBitHack on
 		</screen>
 	</para>
 
 	<para>Tras reiniciar apache puede probar creando una página
 		<filename>prueba.shtml</filename> por ejemplo con:
 		<screen>
-<![CDATA[<html>
-	<head><title></title></head>
-	<body>
-		<!--#echo var="DATE_LOCAL" -->
-	</body>
-</html> ]]>
+	<![CDATA[<html>
+		<head><title></title></head>
+		<body>
+			<!--#echo var="DATE_LOCAL" -->
+		</body>
+	</html> ]]>
 		</screen>
 	Al abrirla debe presentar la fecha y hora del sistema.
 

@@ -12,11 +12,12 @@
 
   <para>Tras modificar <filename>/etc/syslog.conf</filename> puede
     obligarse a <command>syslogd</command> a leerlo de nuevo enviado
-    la señal HUP, por ejemplo: <screen>
-# ps ax | grep syslogd
-7723 ??  Is      0:00.06 syslogd 
-# kill -HUP 7723
-    </screen>
+    la señal HUP, por ejemplo: 
+<screen>
+	# ps ax | grep syslogd
+	7723 ??  Is      0:00.06 syslogd 
+	# kill -HUP 7723
+</screen>
   </para>
 
   <sect2 id="referencias-syslog">

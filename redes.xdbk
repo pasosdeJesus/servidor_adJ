@@ -78,9 +78,9 @@
 	Usted puede iniciar un protocolo con otro computador empleando el 
 	programa cliente adecuado, por ejemplo el cliente 
 	<command>ping</command> con:
-	<screen>
-ping 127.0.0.1
-	</screen>
+<screen>
+	ping 127.0.0.1
+</screen>
 	iniciará el protocolo de ping (<literal>ICMP</literal>, 
 	<literal>ECHO_REQUEST</literal>) con el computador con dirección 
 	IP 127.0.0.1 (su propio computador),  un programa de su computador
@@ -88,9 +88,10 @@ ping 127.0.0.1
 	protocolo<footnote><para>El programa que sigue este protocolo hace 
 	    parte de la implementación de IPv4 en el kernel.</para></footnote>.
     </para>
-    <para>Dado que estamos en paso de IPv4 a IPv6 también mencionamos que el mismo ejemplo con IPv6 es:
+    <para>Dado que estamos en paso de IPv4 a IPv6 también mencionamos que el 
+	    mismo ejemplo con IPv6 (y protocolo ICMP6) es:
 <screen>
-ping6 ::1
+	ping6 ::1
 </screen>
     </para>
 
@@ -327,44 +328,50 @@ Capa física:	       Ethernet     Modem
      <primary>ARP</primary>
     </indexterm>
     <para role="sig" id="linred.capas.ARP" userlevel="2">En el caso de redes 
-      Ethernet la capa de enlace corresponde al protocolo ...  Este
-      protocolo permite traducir direcciones IP a direcciones MAC.
+      Ethernet  e IPv4 la capa de enlace corresponde al protocolo ...  Este
+      protocolo permite traducir direcciones IPv4 a direcciones MAC.
     </para>
 
 
       <para>Los protocolos de esta capa permiten interconectar la capa
        de internet (<acronym role="protocol">IP</acronym>) con la red
-       que se use.  En el caso de una red Ethernet se trata del
-       protocolo ARP<footnote><para><acronym>ARP</acronym> se define
+       que se use.</para>  
+
+      <para>En el caso de una red Ethernet e IPv4 se trata del
+	      protocolo ARP<footnote><para><acronym>ARP</acronym> que 
+			      se define
        en el <acronym>RFC</acronym> 826</para></footnote>,
        y que se encarga de traducir
-       direcciones <acronym role="protocol">IP</acronym> a direcciones
+       direcciones <acronym role="protocol">IPv4</acronym> a 
+       direcciones
        <acronym>MAC</acronym>
        <footnote><para> Un computador envía un
 	 mensaje a todos los demás de la red
 	 (<foreignphrase>broadcast</foreignphrase> que es posible en
 	 Ethernet), solicitando la dirección <acronym>MAC</acronym> de
-       una dirección <acronym role="protocol">IP</acronym>, el
+       una dirección <acronym role="protocol">IPv4</acronym>, el
 	 dispositivo con esa MAC responde enviando su dirección
        <acronym>MAC</acronym> al dispositivo que hizo la solicitud.
 	</para></footnote>.
       </para>
 
       <para>Cada vez que un computador de una <acronym>LAN</acronym>
-       identifica una dirección <acronym role="protocol">IP</acronym>
+       identifica una dirección <acronym role="protocol">IPv4</acronym>
        de otro computador conectado a la <acronym>LAN</acronym> y su
        correspondiente dirección <acronym>ARP</acronym>, almacena la
        información en una tabla (se borra automáticamente después de
        algunos minutos o manualmente por ejemplo con 
-       <literal>sudo arp -d 192.168.2.2</literal>).
+       <literal>doas arp -d 192.168.2.2</literal>).
        La tabla puede consultarse con <literal>arp -a</literal>.</para>
 
-      <para>Para monitorear una red Ethernet y detectar nuevos
+      <para>Para monitorear una red Ethernet e IPv4 y detectar nuevos
        computadores que se conecten, puede emplearse el programa
        <application>arpwatch</application> (paquete
        <literal>arpwatch</literal>) que cada vez que detecta cambios
        envía un correo a la cuenta root.</para>
 
+<para>En el caso de IPv6 y Ethernet se empa el portocolo NDP (Neighbor Discovery Protocol).  Puede examinarse la tabla de vecinos con <literal>ndp -a</literal>
+</para>
       <para>En el caso de una conexión por modem el protocolo es
        <acronym>PPP</acronym><footnote><para>PPP se describe en el
 	 <acronym>RFC</acronym> 1661.</para></footnote>, que se encarga
@@ -534,7 +541,7 @@ Capa física:	       Ethernet     Modem
     </para>
 
        <indexterm role="pal">
-	       <primary><command>sudo pfctl -sa</command></primary>
+	       <primary><command>doas pfctl -sa</command></primary>
     </indexterm>
     <para role="sig" id="linred.capas.proc-net-udp" userlevel="1">Permite examinar entre otras, conexiones a puertos TCP y UDP.
     </para>
@@ -545,7 +552,7 @@ Capa física:	       Ethernet     Modem
        <acronym role="protocol">TCP</acronym> y 
 	 <acronym
 		 role="protocol">UDP</acronym> con 
-	 <command>sudo pfctl -sa</command>
+	 <command>doas pfctl -sa</command>
       </para>
      </sect2>
       

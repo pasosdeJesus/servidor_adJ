@@ -42,22 +42,22 @@
 			<ulink url="http://dhobsd.pasosdejesus.org/?id=CompatibilidadHardware"></ulink>.
 			Una vez conecte su tarjeta de red inalámbrica,
 			búsque la interfaz de red asociada con
-			<screen>
-ifconfig
-			</screen>
+<screen>
+	ifconfig
+</screen>
 			o algunos detalles de lo que se ve del hardware con
-				<screen>
-dmess | less
-			</screen>
+<screen>
+	dmess | less
+</screen>
 			Por ejemplo una Intel PRO/Wireless se ve así:
-			<screen>
-wpi0 at pci3 dev 0 function 0 "Intel PRO/Wireless 3945ABG" rev 0x02: irq 10, MoW1, address 00:1b:77:d6:52:ee
-			</screen>
+<screen>
+	wpi0 at pci3 dev 0 function 0 "Intel PRO/Wireless 3945ABG" rev 0x02: irq 10, MoW1, address 00:1b:77:d6:52:ee
+</screen>
 			y una D-Link USB típica se ve:
-			<screen>
-rum0 at uhub0 port 5 "Ralink 802.11 bg WLAN" rev 2.00/0.01 addr 2
-rum0: MAC/BBP RT2573 (rev 0x2573a), RF RT2528, address 00:1e:58:b0:db:68
-			</screen>
+<screen>
+	rum0 at uhub0 port 5 "Ralink 802.11 bg WLAN" rev 2.00/0.01 addr 2
+	rum0: MAC/BBP RT2573 (rev 0x2573a), RF RT2528, address 00:1e:58:b0:db:68
+</screen>
 			En algunos casos OpenBSD incluye el controlador
 			completo de fuentes abiertas para a la tarjeta (por
 			ejemplo <literal>rum0</literal>) pero 
@@ -68,15 +68,15 @@ rum0: MAC/BBP RT2573 (rev 0x2573a), RF RT2528, address 00:1e:58:b0:db:68
 			de <literal>wpi0</literal> al examinar
 			<command>man wpi</command> se ve que esta tarjeta 
 			requiere firmware adicional que debe instalar con:
-			<screen>
-sudo pkg_add http://damien.bergamini.free.fr/packages/openbsd/wpi-firmware-3.2.tgz
-			</screen>
+<screen>
+	doas pkg_add http://damien.bergamini.free.fr/packages/openbsd/wpi-firmware-3.2.tgz
+</screen>
 
 			Después de tener controlador completo puede buscar
 			redes inalámbricas cercanas con
-			<screen>
-sudo ifconfig rum0 scan	
-			</screen>
+<screen>
+	doas ifconfig rum0 scan	
+</screen>
 			remplazando <literal>rum0</literal> por la
 			interfaz de su tarjeta.  Verá un listado de
 			redes próximas con identificación, calidad
@@ -90,49 +90,49 @@ sudo ifconfig rum0 scan
 			o bien por DHCP si el Access Point lo soporta (como
 			ocurre típicamente).  Para configurar a una
 			red de nombre MIRED que no emplea encripción:
-			<screen>
-sudo ifconfig rum0 nwid MIRED 
-			</screen>
+<screen>
+	doas ifconfig rum0 nwid MIRED 
+</screen>
 			Si la red emplea encripción WEP (un mecanismo de
 			encripción débil), puede especificar la llave
 			de encripción en hexadecimal:
-			<screen>
-sudo ifconfig rum0 nwid MIRED nwkey 0x123498a2d2
-			</screen>
+<screen>
+	doas ifconfig rum0 nwid MIRED nwkey 0x123498a2d2
+</screen>
 			o en ASCII:
-			<screen>
-sudo ifconfig rum0 nwid MIRED nwkey "clave"
-			</screen>
+<screen>
+	doas ifconfig rum0 nwid MIRED nwkey "clave"
+</screen>
 			Si la red emplea encripción WAP (un mecanismo de
 			encripción más fuerte):
-			<screen>
-sudo ifconfig rum0 nwid MIRED wpakey MICLAVE
-			</screen>
+<screen>
+	doas ifconfig rum0 nwid MIRED wpakey MICLAVE
+</screen>
 			Después puede examinar nuevamente con <command>ifconfig</command> si ya se ve estado Activo en la interfaz de red lo cual le confirma
 			que logró conexión y posteriormente puede
 			establecer la IP bien manualmente si conoce
 			el segmente de red:
-			<screen>
-ifconfig rum0 192.168.1.15
-			</screen>
+<screen>
+	ifconfig rum0 192.168.1.15
+</screen>
 			o bien automáticamente si el Acess Point soporta
 			DHCP con:
-			<screen>
-sudo dhclient rum0
-			</screen>
+<screen>
+	doas dhclient rum0
+</screen>
 
 			Tras esto al examinar con <command>ifconfig</command> 
 			se ve algo como:
-			<screen>
-rum0: flags=8c43&lt;UP,BROADCAST,RUNNING,OACTIVE,SIMPLEX,MULTICAST&gt; mtu 1500
-        lladdr 00:1e:58:b0:db:68
-        priority: 4
-        groups: wlan egress
-        media: IEEE802.11 autoselect (OFDM36 mode 11g)
-        status: active
-        ieee80211: nwid MIRED chan 1 bssid 00:02:6f:5f:f8:6a 117dB nwkey &lt;not displayed&gt; 100dBm
-        inet 192.168.44.50 netmask 0xffffff00 broadcast 192.168.44.255
-        inet6 fe80::21e:58ff:feb0:db68%rum0 prefixlen 64 scopeid 0x6
+<screen>
+	rum0: flags=8c43&lt;UP,BROADCAST,RUNNING,OACTIVE,SIMPLEX,MULTICAST&gt; mtu 1500
+	        lladdr 00:1e:58:b0:db:68
+	        priority: 4
+	        groups: wlan egress
+	        media: IEEE802.11 autoselect (OFDM36 mode 11g)
+	        status: active
+	        ieee80211: nwid MIRED chan 1 bssid 00:02:6f:5f:f8:6a 117dB nwkey &lt;not displayed&gt; 100dBm
+	        inet 192.168.44.50 netmask 0xffffff00 broadcast 192.168.44.255
+	        inet6 fe80::21e:58ff:feb0:db68%rum0 prefixlen 64 scopeid 0x6
 </screen>
 		</para>
 
@@ -140,17 +140,17 @@ rum0: flags=8c43&lt;UP,BROADCAST,RUNNING,OACTIVE,SIMPLEX,MULTICAST&gt; mtu 1500
 			computador configure en <filename>hostname.rum0</filename>
 			(cambiando rum0 por su interfaz). Por ejemplo si
 			tiene una IP fija con:
-			<screen>
-inet 192.168.44.50 255.255.255.0 NONE nwid "MIRED" nwkey "clave"
-			</screen>
+<screen>
+	inet 192.168.44.50 255.255.255.0 NONE nwid "MIRED" nwkey "clave"
+</screen>
 			o si requiere DHCP:
-			<screen>
-dhcp NONE NONE NONE nwid "MIRED" nwkey "0x1112131415"
-			</screen>
+<screen>
+	dhcp NONE NONE NONE nwid "MIRED" nwkey "0x1112131415"
+</screen>
 			o si es WPA con DHCP:
-			<screen>
-dhcp nwid "MIRED" wpakey "clave"
-			</screen>
+<screen>
+	dhcp nwid "MIRED" wpakey "clave"
+</screen>
 		</para>
 		<para>
 			El tráfico de red inalámbrico puede examinarse
@@ -194,13 +194,13 @@ dhcp nwid "MIRED" wpakey "clave"
 	      IP 192.168.1.1 y lo conectó a la interfaz 
 	      <literal>rl0</literal>, configure
 	      esa interfaz de red por ejemplo con:
-	      <screen>
-ifconfig rl0 192.168.1.2 
-	      </screen>
+<screen>
+	ifconfig rl0 192.168.1.2 
+</screen>
 	      tras lo cual ya debe poder ejecutar:
-	      <screen>
-ping 192.168.1.1
-	      </screen>
+<screen>
+	ping 192.168.1.1
+</screen>
 	      obtener respuesta del Punto de Acceso Inalámbrico y 
 	      configurarlo abriendo en un navegador el URL 
 	      <literal>http://192.168.1.1</literal>.
@@ -253,9 +253,9 @@ ping 192.168.1.1
 			a la red CASA con encripción WEP y clave
 			"uvwxy". Basta que en 
 			<filename>/etc/hostname.ath0</filename> configure:
-			<screen>
-inet 192.168.3.1 255.255.255.0 NONE media autoselect \
-        mediaopt hostap nwid CASA chan 11 nwkey "uvwxy"
+<screen>
+	inet 192.168.3.1 255.255.255.0 NONE media autoselect \
+	mediaopt hostap nwid CASA chan 11 nwkey "uvwxy"
 </screen>
 Tras esto desde los portatiles y computadores cercanos debe poder ver
 la red CASA y conectarse con WEP y la clave uvwxy.

@@ -161,7 +161,7 @@ dropuser usejemplo;;
         como un usuario (digamos <literal>u1998</literal>)
 	con:
 <screen>
-psql -U u1998 -d b1998
+	psql -U u1998 -d b1998
 </screen>
 	En esta interfaz puede dar comandos SQL y algunos comandos internos
  	que puede listar con <command>\h</command>.

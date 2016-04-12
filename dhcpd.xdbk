@@ -35,9 +35,9 @@
 		  interfaz de red (digamos <literal>rl0</literal>) 
 		  se configura como cliente de DHCP desde la línea
 		  de comandos con:
-		  <screen>
-sudo dhclient rl0 
-		  </screen>
+<screen>
+	doas dhclient rl0 
+</screen>
 		  que lee parámetros de configuración de
 		  <filename>/etc/dhclient.conf</filename> (el cual por defecto
 		  está configurado para solicitar mascara de red, servidores 
@@ -49,9 +49,9 @@ sudo dhclient rl0
 		  (remplazar <literal>rl0</literal> por la de su caso)
 		  dejando en el archivo
 		  <filename>/etc/hostname.rl0</filename> la línea:
-		  <screen>
-dhcp
-		  </screen>
+<screen>
+	dhcp
+</screen>
 	  	</para>
   </sect2>
 
@@ -63,21 +63,21 @@ dhcp
 	  entre los parámetros el dominio, la puerta de enlace y la
 	  IP del servidor de nombres,
 	  se hace en el archivo <filename>/etc/dhcpd.conf</filename> con:
-  <screen>
-shared-network LOCAL-NET {
-        option  domain-name "&EDOMINIO;";
-        option  domain-name-servers 192.168.17.1;
-        subnet 192.168.17.0 netmask 255.255.255.0 {
-                option routers 192.168.17.1;
-                range 192.168.17.142 192.168.17.164;
-        }
-}
-  </screen>
+<screen>
+	shared-network LOCAL-NET {
+	        option  domain-name "&EDOMINIO;";
+	        option  domain-name-servers 192.168.17.1;
+	        subnet 192.168.17.0 netmask 255.255.255.0 {
+	                option routers 192.168.17.1;
+	                range 192.168.17.142 192.168.17.164;
+	        }
+	}
+</screen>
 	También asegurese de iniciar el servicio DHCP editando
 	<filename>/etc/rc.conf.local</filename> para agregar:
-	<screen>
-dhcpd_flags=""
-	</screen>
+<screen>
+	dhcpd_flags=""
+</screen>
 	o en lugar de "" puede especificar las interfaces de red 
 	que el servidor debe atender separadas por espacio.
 </para>

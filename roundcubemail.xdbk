@@ -30,30 +30,30 @@ el correo de la organización se consultará en
 <literal>correo.&EDOMINIO;</literal> (IP interna 192.168.60.1 y externa 200.200.200.200) con protocolo HTTPS, el archivo 
 <filename>/var/www/conf/httpd.conf</filename> debe incluir:
 <screen>
-&lt;VirtualHost 127.0.0.1:443 192.168.60.1:443 200.200.200.200:443&gt;
-DocumentRoot "/var/www/roundcubemail/"
-ServerName correo.&EDOMINIO;
-
-&lt;Directory /var/www/roundcubemail/&gt;
-	AllowOverride All
-&lt;/Directory&gt;
-
-ServerAdmin admin@&EDOMINIO;
-ErrorLog logs/round-error_log
-TransferLog logs/round-access_log
-
-SSLEngine on
-SSLCertificateFile    /etc/ssl/server.crt
-SSLCertificateKeyFile /etc/ssl/private/server.key
-&lt;/VirtualHost&gt;                                  
+	&lt;VirtualHost 127.0.0.1:443 192.168.60.1:443 200.200.200.200:443&gt;
+	DocumentRoot "/var/www/roundcubemail/"
+	ServerName correo.&EDOMINIO;
+	
+	&lt;Directory /var/www/roundcubemail/&gt;
+		AllowOverride All
+	&lt;/Directory&gt;
+	
+	ServerAdmin admin@&EDOMINIO;
+	ErrorLog logs/round-error_log
+	TransferLog logs/round-access_log
+	
+	SSLEngine on
+	SSLCertificateFile    /etc/ssl/server.crt
+	SSLCertificateKeyFile /etc/ssl/private/server.key
+	&lt;/VirtualHost&gt;                                  
 </screen>
 
 <warning><para>Es importante que en la configuración de Apache, como
 	       se presenta en el ejemplo incluya
-		<screen>
-&lt;Directory /var/www/roundcubemail/&gt;
-	AllowOverride All
-&lt;/Directory&gt;
+<screen>
+	&lt;Directory /var/www/roundcubemail/&gt;
+		AllowOverride All
+	&lt;/Directory&gt;
 </screen>
 para que se tomen las opciones de configuración del archivo 
 <filename>.htaccess</filename> especialmente del directorio
@@ -66,25 +66,25 @@ particular si se activa puede mantenerse la bitacora
 Para configurar una base de datos en PostgreSQL con socket en 
 <filename>/var/www/tmp</filename>
 (ver <xref linkend="postgresql"></xref>) ejecutar:
-			<screen>
-sudo su - _postgresql
-createuser -h /var/www/tmp -Upostgres roundcube
-createdb -h /var/www/tmp -Upostgres -E UNICODE roundcubemail -T template0
-psql -h /var/www/tmp -Upostgres template1
+<screen>
+	doas su - _postgresql
+	createuser -h /var/www/tmp -Upostgres roundcube
+	createdb -h /var/www/tmp -Upostgres -E UNICODE roundcubemail -T template0
+	psql -h /var/www/tmp -Upostgres template1
 </screen>		
 y desde la interfaz administrativa de PostgreSQL establezcla una clave para el usuario <literal>roundcube</literal> con:
 <screen>
-ALTER USER roundcube WITH PASSWORD 'nueva_clave';
+	ALTER USER roundcube WITH PASSWORD 'nueva_clave';
 </screen>
 	Salir con '\q' y desde la línea de comandos ingresar a la nueva base con:
-	<screen>
-psql -h /var/www/tmp -Uroundcube roundcubemail
-	</screen>
+<screen>
+	psql -h /var/www/tmp -Uroundcube roundcubemail
+</screen>
 	le solicitará la clave que estableció para el usuario
 	<literal>roundcube</literal>, a continuación  desde la interfaz de 
 	PostgreSQL ejecute el script de inicialización con:
 <screen>
-\i /var/www/roundcubemail/SQL/postgres.initial.sql
+	\i /var/www/roundcubemail/SQL/postgres.initial.sql
 			</screen>		
 		</para> </listitem>
 		<listitem> <para>
@@ -95,44 +95,44 @@ Después debe configurar roundcubemail, editando los
 archivos del directorio <filename>/var/www/roundcubemail/config</filename>.
 Si al examinar con
 <screen>
-ls /var/www/roundcubemail/config
+	ls /var/www/roundcubemail/config
 </screen>
 le faltan los archivos <filename>main.inc.php</filename> y
 <filename>db.inc.php</filename> inicie con plantillas así:
 <screen>
-cp /var/www/roundcubemail/config/main.inc.php.dist \
-	/var/www/roundcubemail/config/main.inc.php
-cp /var/www/roundcubemail/config/db.inc.php.dist \
-	/var/www/roundcubemail/config/db.inc.php
+	cp /var/www/roundcubemail/config/main.inc.php.dist \
+		/var/www/roundcubemail/config/main.inc.php
+	cp /var/www/roundcubemail/config/db.inc.php.dist \
+		/var/www/roundcubemail/config/db.inc.php
 </screen>
 Editelos para que se adapten a su caso. Por ejemplo en 
 <filename>config/main.inc.php</filename> basta modificar
 las líneas:
 <screen>
-$rcmail_config['force_https'] = TRUE;
+	$rcmail_config['force_https'] = TRUE;
 
-$rcmail_config['auto_create_user'] = TRUE;
+	$rcmail_config['auto_create_user'] = TRUE;
 
-$rcmail_config['default_host'] = 'ssl://correo.&EDOMINIO;:993';
-
-$rcmail_config['default_port'] = 993;
-
-$rcmail_config['smtp_server'] = '127.0.0.1';
-
-$rcmail_config['mail_domain'] = '&EDOMINIO;';
+	$rcmail_config['default_host'] = 'ssl://correo.&EDOMINIO;:993';
+	
+	$rcmail_config['default_port'] = 993;
+	
+	$rcmail_config['smtp_server'] = '127.0.0.1';
+	
+	$rcmail_config['mail_domain'] = '&EDOMINIO;';
 </screen>
 
 y en el archivo <filename>config/db.inc.php</filename> la línea:
 <screen>
-$rcmail_config['db_dsn'] = 'pgsql://roundcube:nueva_clave@127.0.0.1/roundcubemail';
+	$rcmail_config['db_dsn'] = 'pgsql://roundcube:nueva_clave@127.0.0.1/roundcubemail';
 </screen>
 			  </para>
 		  </listitem>
 		  <listitem>
 			  <para>Edite el archivo de configuración de Apache <filename>/var/www/conf/php.ini</filename> para deshabilitar encripción de sesiones y establecer zona horaria en la líneas:
-				  <screen>
-suhosin.session.encrypt = Off
-date.timezone = America/Bogota
+<screen>
+	suhosin.session.encrypt = Off
+	date.timezone = America/Bogota
 		  </screen>
 		y reinicie Apache.	  
 			  </para>
@@ -143,11 +143,11 @@ De permiso para completar instalación y pruebas desde el
 web, editando el archivo <filename>config/main.inc.php</filename> y
 cambiando la línea:
 <screen>
-$rcmail_config['enable_installer'] = true;
+	$rcmail_config['enable_installer'] = true;
 </screen>
 y ejecutando:
 <screen>
-sudo chmod -R a+rx /var/www/roundcubemail/installer
+	doas chmod -R a+rx /var/www/roundcubemail/installer
 </screen>
 			  </para>
 		  </listitem>
@@ -159,11 +159,11 @@ compruebe las dependencias solicitadas y realice las pruebas
 disponibles.  
 Una vez concluya evite el uso de ese directorio ejecutando:
 <screen>
-sudo chmod -R a-rx /var/www/roundcubemail/installer
+	doas chmod -R a-rx /var/www/roundcubemail/installer
 </screen>
 y cambiando en <filename>config/main.inc.php</filename> la línea:
 <screen>
-$rcmail_config['enable_installer'] = false;
+	$rcmail_config['enable_installer'] = false;
 </screen>
 			  </para>
 		  </listitem>
@@ -178,7 +178,7 @@ $rcmail_config['enable_installer'] = false;
 			  <para>En el archivo <filename>config/main.inc.php</filename> agregue password en el arreglo <literal>plugins</literal>, si
 				  sólo tiene este plugin quedará:
 				  <screen>
-$rcmail_config['plugins'] = array('password');
+	$rcmail_config['plugins'] = array('password');
 				  </screen>
 			  </para>
 		  </listitem>
@@ -196,30 +196,30 @@ $rcmail_config['plugins'] = array('password');
 				  <literal>rcmail_config['plugins']</literal>, por 
 				  ejemplo si no hay otros plugins cambiando
 <screen>
-$rcmail_config['plugins'] = array();
+	$rcmail_config['plugins'] = array();
 </screen>
 por
 <screen>
-$rcmail_config['plugins'] = array('password');
+	$rcmail_config['plugins'] = array('password');
 </screen>
 			  </para>
 		  </listitem>
 		  <listitem>
 			  <para>Si no existe el archivo <filename>plugins/password/config.inc.php</filename> inicie uno con:
-				  <screen>
-cp plugins/password/config.inc.php.dist plugins/password/config.inc.php
-				  </screen>
+<screen>
+	cp plugins/password/config.inc.php.dist plugins/password/config.inc.php
+</screen>
 			  </para>
 		  </listitem>
 		  <listitem>
 			  <para>Modifique el archivo
 				  <filename>plugins/password/config.inc.php</filename> de acuerdo a su configuración, 
 por lo menos los siguientes 3 valores deben cambiarse:
-				  <screen>
-$rcmail_config['password_driver'] = 'poppassd';
-$rcmail_config['password_pop_host'] = '127.0.0.1';
-$rcmail_config['password_pop_port'] = 106;
-				  </screen>
+<screen>
+	$rcmail_config['password_driver'] = 'poppassd';
+	$rcmail_config['password_pop_host'] = '127.0.0.1';
+	$rcmail_config['password_pop_port'] = 106;
+</screen>
 			  </para>
 		  </listitem>
 		  <listitem>
@@ -231,25 +231,25 @@ $rcmail_config['password_pop_port'] = 106;
 				  emplear ese) y configúrelo
 				  para que inicie durante el arranque por
 				  ejemplo agregando a <filename>/etc/rc.local</filename>:
-				  <screen>
-pgrep poppassd > /dev/null 2>&amp;1
-if (test "$?" != "0") then {
-        echo -n ' poppassd'
-        /usr/local/libexec/openpoppassd
-} fi;
-				  </screen>
+<screen>
+	pgrep poppassd > /dev/null 2>&amp;1
+	if (test "$?" != "0") then {
+	        echo -n ' poppassd'
+	        /usr/local/libexec/openpoppassd
+	} fi;
+</screen>
 			  </para>
 			  <para>Una vez lo haya iniciado puede probarlo con:
-				  <screen>
-telnet localhost 106
-				  </screen>
+<screen>
+	telnet localhost 106
+</screen>
 				  que debe responder con:
-				  <screen>
-Trying 127.0.0.1...
-Connected to localhost.
-Escape character is '^]'.
-200 openpoppassd v1.1 hello, who are you?
-				  </screen>
+<screen>
+	Trying 127.0.0.1...
+	Connected to localhost.
+	Escape character is '^]'.
+	200 openpoppassd v1.1 hello, who are you?
+</screen>
 			  </para>
 		  </listitem>
 	  </orderedlist>

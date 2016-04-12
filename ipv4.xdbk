@@ -120,7 +120,7 @@
      usando como compuerta 192.168.1.60 que está en la misma
      red:</para>
      <screen>
-sudo route add 192.168.2/24 192.168.1.60
+doas route add 192.168.2/24 192.168.1.60
 	 </screen>
 
     <para>
@@ -166,7 +166,7 @@ traceroute 192.168.2.2</screen></para>
 	 tráfico que circule por una red.  Por ejemplo para verificar
 	 lo que se transmite por la interfaz re0:
 	 <screen>
-sudo tcpdump -i re0 -n -ttt
+doas tcpdump -i re0 -n -ttt
 	 </screen>
        </para>
 	<indexterm role="pal">
@@ -229,7 +229,7 @@ pf=""
 	    Una vez esté operando si hace cambios al archivo de configuración
 	    puede lograr que reinicie y vuelva a leerlo con:
 	    <screen>
-# sudo pfctl -f /etc/pf.conf
+doas pfctl -f /etc/pf.conf
 	    </screen>
     </para>
     <para>El archivo de configuración <filename>/etc/pf.conf</filename> 

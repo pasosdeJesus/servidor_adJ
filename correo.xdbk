@@ -22,8 +22,8 @@ cifrada y copia de respaldo del correo en otra partición
 también cifrada.   
 Antes de emplearlos ejecute:
 <screen>
-sudo cp /usr/local/share/examples/adJ/varcorreo.sh /etc/
-	  </screen> 
+	doas cp /usr/local/share/examples/adJ/varcorreo.sh /etc/
+</screen> 
 y a continuación edite el archivo recién copiado para
 adaptarlo a su entorno.
   </para>
@@ -151,13 +151,14 @@ adaptarlo a su entorno.
 	  <acronym>RFC</acronym> 822, con un cuerpo de mensaje que
 	  emplee 7 bits y terminando con una línea que sólo tenga un
 	   punto. Por ejemplo</para>
-	 <screen>
-From: &EUSUARIO;@&ECLIENTE;
-To: &EUSUARIO2;@&ECLIENTE2;
-Subject: Saludo
+<screen>
+	From: &EUSUARIO;@&ECLIENTE;
+	To: &EUSUARIO2;@&ECLIENTE2;
+	Subject: Saludo
 
-Un cortisimo saludo para bendición de nuestro Creador.
-.  </screen>
+	Un cortisimo saludo para bendición de nuestro Creador.
+	.  
+</screen>
 	  <para>
 	  Si lo desea puede experimentar con este protocolo,
 	  empleando telnet y el <acronym>MTA</acronym> de su
@@ -165,9 +166,11 @@ Un cortisimo saludo para bendición de nuestro Creador.
 	  resulta más transparente empleando directamente
 	  <application>sendmail</application> :
 
-	  <screen> sendmail -bm
-&EUSUARIO2;@&ECLIENTE2; -f
-&EUSUARIO;@&ECLIENTE; </screen>
+<screen> 
+	sendmail -bm
+	&EUSUARIO2;@&ECLIENTE2; -f
+	&EUSUARIO;@&ECLIENTE; 
+</screen>
 	   (para emplear <option>-f</option> con
 	   <application>sendmail</application> debe ser usuario
 	   autorizado).
@@ -307,7 +310,7 @@ Una vez en operación puede probar la autenticación con
 		      <para>
       En <filename>/home/&EUSUARIO;/.forward</filename>
       <screen>
-"| exec /usr/local/bin/procmail"
+	"| exec /usr/local/bin/procmail"
       </screen>
       las comillas son indispensables así como el símbolo '|'.
 		      </para>
@@ -316,19 +319,19 @@ Una vez en operación puede probar la autenticación con
 		      <para>
 
       En <filename>/home/&EUSUARIO;/.procmailrc</filename>
-      <screen>
-LINEBUF=4096
-#VERBOSE=on
-PMDIR=/home/&EUSUARIO;/
-MAILDIR=$PMDIR/Maildir/
-FORMAIL=/usr/local/bin/formail
-SENDMAIL=/usr/sbin/sendmail
-#LOGFILE=$PMDIR/log
+<screen>
+	LINEBUF=4096
+	#VERBOSE=on
+	PMDIR=/home/&EUSUARIO;/
+	MAILDIR=$PMDIR/Maildir/
+	FORMAIL=/usr/local/bin/formail
+	SENDMAIL=/usr/sbin/sendmail
+	#LOGFILE=$PMDIR/log
 
-:0
-* .*
-/home/&EUSUARIO;/Maildir/
-      </screen>
+	:0
+	* .*
+	/home/&EUSUARIO;/Maildir/
+</screen>
       Note que el directorio de la variable <literal>MAILDIR</literal>
       termina con '/'.  Esto es indispensable para indicar a 
       <literal>procmail</literal> 
@@ -341,8 +344,8 @@ SENDMAIL=/usr/sbin/sendmail
       <filename>/home/&EUSUARIO;/Maildir</filename>
       con:
       <screen>
-	      maildirmake /home/&EUSUARIO;/Maildir
-	      chown -R &EUSUARIO;:estudiante /home/&EUSUARIO;/Maildir
+	maildirmake /home/&EUSUARIO;/Maildir
+	chown -R &EUSUARIO;:estudiante /home/&EUSUARIO;/Maildir
       </screen>
 		      </para>
 	      </listitem>
@@ -368,21 +371,21 @@ SENDMAIL=/usr/sbin/sendmail
       <literal>procmail</literal> modificando 
       <literal>~/.procmail</literal> para quitar el comentario de la línea
       <screen>
-VERBOSE=on
+	VERBOSE=on
       </screen>
       y ejecutando:
-      <screen>
-$ cd /home/&EUSUARIO;
-$ procmail 
-Mensaje de prueba
-Termínelo con Control-D
-.
-procmail: [21024] Fri Jul  1 18:32:30 2005
-procmail: Assigning "PMDIR=/home/&EUSUARIO;/"
-procmail: Assigning "MAILDIR=/home/&EUSUARIO;/Maildir/"
-procmail: Assigning "FORMAIL=/usr/local/bin/formail"
-procmail: Assigning "SENDMAIL=/usr/sbin/sendmail"
-procmail: Assigning "LOGFILE=/home/&EUSUARIO;/log"
+<screen>
+	cd /home/&EUSUARIO;
+	procmail 
+	Mensaje de prueba
+	Termínelo con Control-D
+	.
+	procmail: [21024] Fri Jul  1 18:32:30 2005
+	procmail: Assigning "PMDIR=/home/&EUSUARIO;/"
+	procmail: Assigning "MAILDIR=/home/&EUSUARIO;/Maildir/"
+	procmail: Assigning "FORMAIL=/usr/local/bin/formail"
+	procmail: Assigning "SENDMAIL=/usr/sbin/sendmail"
+	procmail: Assigning "LOGFILE=/home/&EUSUARIO;/log"
 </screen>
 	Tras lo cual debe encontrar un nuevo archivo en 
 	<filename>Maildir/new</filename> con el mensaje de prueba.
@@ -427,12 +430,12 @@ Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bi
 <para>
 	En <filename>/etc/courier/pop3d</filename> cambie
       <screen>
-POP3DSTART=YES
-MAILDIRPATH=Maildir
+	POP3DSTART=YES
+	MAILDIRPATH=Maildir
       </screen>
       y en <filename>/etc/courier/pop3d-ssl</filename> cambie
       <screen>
-MAILDIRPATH=Maildir
+	MAILDIRPATH=Maildir
       </screen>
       Para emplear SSL requiere un certificado (por defecto en 
       <filename>/etc/ssl/private/pop3d.pem</filename>) firmado por una
@@ -441,7 +444,7 @@ MAILDIRPATH=Maildir
       archivo
       <filename>/etc/courier/pop3d.cnf</filename> y ejecute:
       <screen>
-# mkpop3dcert
+	doas mkpop3dcert
       </screen>
       Script que creará un certificado válido por un año 
       (si lo requiere por más tiempo puede editar el script y cambiar
@@ -452,16 +455,16 @@ MAILDIRPATH=Maildir
 	      En caso de que si tenga un certificado firmado digamos
 	      para su servidor web, puede emplearlo 
 	      (ver <citation>courier-cert</citation>) así:
-	      <screen>
-cd /etc/ssl/private
-cat server.key ../server.crt > pop3d.pem
+<screen>
+	cd /etc/ssl/private
+	cat server.key ../server.crt > pop3d.pem
 	      </screen>
       </para>
 	<para>
       Para iniciar POP3S ejecute:
-      <screen>
-sudo mkdir -p /var/run/courier
-sudo /usr/local/libexec/pop3d-ssl.rc start
+<screen>
+	doas mkdir -p /var/run/courier
+	doas /usr/local/libexec/pop3d-ssl.rc start
       </screen>
       líneas que se recomienda agregar a <filename>/etc/rc.local</filename> 
       si planea prestar
@@ -470,8 +473,8 @@ sudo /usr/local/libexec/pop3d-ssl.rc start
       </para>
       <para>
       Para detener POP3S: 
-      <screen>
-sudo /usr/local/libexec/pop3d-ssl.rc stop
+<screen>
+	doas /usr/local/libexec/pop3d-ssl.rc stop
       </screen>
       </para>
       <para>
@@ -479,30 +482,30 @@ sudo /usr/local/libexec/pop3d-ssl.rc stop
       emplea el puerto 995. Para abrir ese puerto en un cortafuegos en
       <filename>/etc/pf.conf</filename> podría emplear una línea de la 
       forma:
-      <screen>
-pass in on $ext_if proto tcp to ($ext_if) port pop3s keep state
+<screen>
+	pass in on $ext_if proto tcp to ($ext_if) port pop3s keep state
       </screen>
 
       Puede probar el funcionamiento del servidor con:
-      <screen>
-$ openssl s_client -connect localhost:995 
-      </screen>
+<screen>
+	openssl s_client -connect localhost:995 
+</screen>
 	teniendo en cuenta que el correo debe estar en formato Maildir
 	en el directorio <filename>Maildir</filename> del usuario
 	que revisará.  Una sesión típica sería:
-      <screen>
-+OK Hello there.
-user &EUSUARIO;
-+OK Password required.
-pass ejem
-+OK logged in.
-list
-+OK POP3 clients that break here, they violate STD53.
-1 17559
-2 1128
-3 2430
-. 
-      </screen>
+<screen>
+	+OK Hello there.
+	user &EUSUARIO;
+	+OK Password required.
+	pass ejem
+	+OK logged in.
+	list
+	+OK POP3 clients that break here, they violate STD53.
+	1 17559
+	2 1128
+	3 2430
+	. 
+</screen>
       Notará que la implementación Courier de POP3S intenta extraer
       correos del directorio <filename>Maildir/cur</filename>
       </para>
@@ -520,37 +523,37 @@ la posibilidad de manejar directorios/carpetas.
 	Instale el paquete <literal>courier-imap</literal>
 	y edite <filename>/etc/courier/imapd</filename> para cambiar por 
 	lo menos:
-      <screen>
-IMAPDSTART=YES
-MAILDIRPATH=Maildir
-      </screen>
+<screen>
+	IMAPDSTART=YES
+	MAILDIRPATH=Maildir
+</screen>
       y <filename>/etc/courier/imapd-ssl</filename> para dejar
-      <screen>
-MAILDIRPATH=Maildir
-      </screen>
+<screen>
+	MAILDIRPATH=Maildir
+</screen>
 	y eventualmente dependiendo de los clientes para el IMAPS
 	(por ejemplo roundcube-0.5) también puede requerir:
-	<screen>
-TLS_PROTOCOL=SSL23
-	</screen>
+<screen>
+	TLS_PROTOCOL=SSL23
+</screen>
       Para generar un certificado autofirmado edite 
       <filename>imapd.cnf</filename> para personalizar sus datos y ejecute
-      <screen>
-# mkimapdcert
-      </screen>
+<screen>
+	mkimapdcert
+</screen>
       o si desea emplear el mismo certificado de su servidor web:
-      <screen>
-cd /etc/ssl/private
-cat server.key ../server.crt > imapd.pem
-      </screen>
+<screen>
+	cd /etc/ssl/private
+	cat server.key ../server.crt > imapd.pem
+</screen>
       Para iniciar IMAPS ejecute:
-      <screen>
-sudo /etc/rc.d/courier_imap_ssl start
-      </screen>
+<screen>
+	doas /etc/rc.d/courier_imap_ssl start
+</screen>
       y para detenerlo:
-      <screen>
-sudo /etc/rc.d/courier_imap_ssl stop
-      </screen>
+<screen>
+	doas /etc/rc.d/courier_imap_ssl stop
+</screen>
 Para iniciar el servicio cada vez que arranque el sistema 
 agregue <literal>courier_imap_ssl</literal> a la
 variable <literal>pkg_scripts</literal> en
@@ -566,31 +569,31 @@ de autenticación que haya configurado),
 <literal>courierlogger</literal>.  Si desea ver mensajes 
 de depuración en <filename>/var/log/maillog</filename>, cambie en 
 <filename>/etc/courier/imapd</filename>:
-		<screen>
-DEBUG_LOGIN=1
-		</screen>
+<screen>
+	DEBUG_LOGIN=1
+</screen>
 		podrá detener los servicios con:
-		<screen>
-sudo /usr/local/libexec/imapd-ssl.rc stop
-rm /var/run/courier/imapd-ssl.pid
-		</screen>
+<screen>
+	doas /usr/local/libexec/imapd-ssl.rc stop
+	rm /var/run/courier/imapd-ssl.pid
+</screen>
 		Si tiene cortafuegos activo asegurese también de abrir el 
 		puerto 993 agregando a <filename>/etc/pf.conf</filename> 
 		algo como:
 		<screen>
-pass in on $ext_if proto tcp to ($ext_if) port 993 keep state
+	pass in on $ext_if proto tcp to ($ext_if) port 993 keep state
 		</screen>
 		Una vez en ejecución puede hacer una prueba como:
 <screen>
-$ openssl s_client -connect localhost:993
-...
-AB LOGIN &EUSUARIO; MiClave
-AB OK LOGIN Ok.
-BC SELECT "Inbox"
-BC NO Unable to open this mailbox.
-ZZZZ LOGOUT
-* BYE Courier-IMAP server shutting down
-ZZZZ OK LOGOUT completed
+	$ openssl s_client -connect localhost:993
+	...
+	AB LOGIN &EUSUARIO; MiClave
+	AB OK LOGIN Ok.
+	BC SELECT "Inbox"
+	BC NO Unable to open this mailbox.
+	ZZZZ LOGOUT
+	* BYE Courier-IMAP server shutting down
+	ZZZZ OK LOGOUT completed
 </screen>
 
 </para>
@@ -787,44 +790,44 @@ para que incluya líneas como las siguientes (en caso de que el usuario
 maneje su correo en formato <literal>mbox</literal> como ocurre por
 defecto en OpenBSD):
 <screen>
-:0fw                                                                            
-* &lt; 256000
-| spamc                                                                         
-
-:0e                                                                             
-{
-	EXITCODE=$?
-}
-
-:0:                                                                             
-* ^X-Spam-Status: Yes
-spamagarrado # buzón donde va todo el spam
+	:0fw                                                                            
+	* &lt; 256000
+	| spamc                                                                         
+	
+	:0e                                                                             
+	{
+		EXITCODE=$?
+	}
+	
+	:0:                                                                             
+	* ^X-Spam-Status: Yes
+	spamagarrado # buzón donde va todo el spam
 </screen>
 
 O como las siguientes que suponen que el usuario <literal>pablo</literal>
 maneja su correo en formato <literal>maildir</literal> (para permitir 
 consulta con IMAPS --ver <xref linkend="pop3s-imaps-courier"></xref>):
 <screen>
-:0fw: spamassassin.lock
-* &lt; 512000
-| spamc
-
-# Los correos con puntaje de 15 o superior casi que con seguridad son spam (con
-# 0.05% de falsos positivos de acuerdo a rules/STATISTICS.txt). Pongamolos
-# en un mbox diferente llamado .Spam.
-:0:
-* ^X-Spam-Level: \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
-/home/pablo/Maildir/.Spam/
-
-# Todo correo marcado como spam (eg. con puntaje mayor que el umbral puesto)
-# se mueve a "PosibleSpam".
-:0:
-* ^X-Spam-Status: Yes
-/home/pablo/Maildir/.PosibleSpam/
-
-:0
-* .*
-/home/pablo/Maildir/
+	:0fw: spamassassin.lock
+	* &lt; 512000
+	| spamc
+	
+	# Los correos con puntaje de 15 o superior casi que con seguridad son spam (con
+	# 0.05% de falsos positivos de acuerdo a rules/STATISTICS.txt). Pongamolos
+	# en un mbox diferente llamado .Spam.
+	:0:
+	* ^X-Spam-Level: \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
+	/home/pablo/Maildir/.Spam/
+	
+	# Todo correo marcado como spam (eg. con puntaje mayor que el umbral puesto)
+	# se mueve a "PosibleSpam".
+	:0:
+	* ^X-Spam-Status: Yes
+	/home/pablo/Maildir/.PosibleSpam/
+	
+	:0
+	* .*
+	/home/pablo/Maildir/
 </screen>
 </para>
 </sect3>
@@ -873,28 +876,28 @@ Leer <filename>/usr/local/share/doc/mailman/README.OpenBSD</filename>
 	Editar <filename>/var/www/conf/httpd.conf</filename> agregando la 
 	linea:
 <screen>
-ScriptAlias /mailman/ "$mailmandir/cgi-bin/"
+	ScriptAlias /mailman/ "$mailmandir/cgi-bin/"
 </screen>
 donde $mailmandir es <command>/usr/local/lib/mailman/</command>
 agregar también:
 
 <screen>
-&lt;Directory "/usr/local/lib/mailman/cgi-bin"&gt;
-    AllowOverride None
-    Options None
-    Order allow,deny
-    Allow from all
-&lt;/Directory&gt;
+	&lt;Directory "/usr/local/lib/mailman/cgi-bin"&gt;
+	    AllowOverride None
+	    Options None
+	    Order allow,deny
+	    Allow from all
+	&lt;/Directory&gt;
 </screen>
 
 además agregar las lineas: 
 <screen>
-Alias /pipermail/ "/var/spool/mailman/archives/public/"
-
-&lt;Directory "/var/spool/mailman/archives/public/">
-        Options FollowSymLinks
-        AddDefaultCharset Off
-&lt;/Directory>
+	Alias /pipermail/ "/var/spool/mailman/archives/public/"
+	
+	&lt;Directory "/var/spool/mailman/archives/public/">
+	        Options FollowSymLinks
+	        AddDefaultCharset Off
+	&lt;/Directory>
 </screen>
 
 al mismo archivo.
@@ -902,46 +905,46 @@ al mismo archivo.
 </para>
 <para>
 Copiar los iconos:
-<filename>cp /usr/local/lib/mailman/icons/*  /var/www/icons/</filename>
+<command>cp /usr/local/lib/mailman/icons/*  /var/www/icons/</command>
 
 Reiniciar el apache para que cargue los cambios.
 <screen>
-apachectl stop
-. /etc/rc.conf.local
-httpd $httpd_flags
+	apachectl stop
+	. /etc/rc.conf.local
+	httpd $httpd_flags
 </screen>
 
 editar el archivo <filename>/usr/local/lib/mailman/Mailman/mm_cfg.py</filename>
 agregando las lineas
 
 <screen>
-DEFAULT_EMAIL_HOST = '<replaceable>dominio.net</replaceable>'
-DEFAULT_URL_HOST = '<replaceable>www.dominio.net</replaceable>'
-DEFAULT_URL_PATTERN = 'http://%s/mailman/'
-add_virtualhost(DEFAULT_URL_HOST, DEFAULT_EMAIL_HOST)
+	DEFAULT_EMAIL_HOST = '<replaceable>dominio.net</replaceable>'
+	DEFAULT_URL_HOST = '<replaceable>www.dominio.net</replaceable>'
+	DEFAULT_URL_PATTERN = 'http://%s/mailman/'
+	add_virtualhost(DEFAULT_URL_HOST, DEFAULT_EMAIL_HOST)
 </screen>
 </para>
 <para>
 Crear primera lista llamada mailman
 <screen>
-/usr/local/lib/mailman/bin/newlist mailman
+	/usr/local/lib/mailman/bin/newlist mailman
 </screen>
 </para>
 <para>
 agregar a <filename>/etc/mail/aliases</filename> las lineas:
 
 <screen>
-## mailman mailing list
-mailman:              "|/usr/local/lib/mailman/mail/mailman post mailman"
-mailman-admin:        "|/usr/local/lib/mailman/mail/mailman admin mailman"
-mailman-bounces:      "|/usr/local/lib/mailman/mail/mailman bounces mailman"
-mailman-confirm:      "|/usr/local/lib/mailman/mail/mailman confirm mailman"
-mailman-join:         "|/usr/local/lib/mailman/mail/mailman join mailman"
-mailman-leave:        "|/usr/local/lib/mailman/mail/mailman leave mailman"
-mailman-owner:        "|/usr/local/lib/mailman/mail/mailman owner mailman"
-mailman-request:      "|/usr/local/lib/mailman/mail/mailman request mailman"
-mailman-subscribe:    "|/usr/local/lib/mailman/mail/mailman subscribe mailman"
-mailman-unsubscribe:  "|/usr/local/lib/mailman/mail/mailman unsubscribe mailman"
+	## mailman mailing list
+	mailman:              "|/usr/local/lib/mailman/mail/mailman post mailman"
+	mailman-admin:        "|/usr/local/lib/mailman/mail/mailman admin mailman"
+	mailman-bounces:      "|/usr/local/lib/mailman/mail/mailman bounces mailman"
+	mailman-confirm:      "|/usr/local/lib/mailman/mail/mailman confirm mailman"
+	mailman-join:         "|/usr/local/lib/mailman/mail/mailman join mailman"
+	mailman-leave:        "|/usr/local/lib/mailman/mail/mailman leave mailman"
+	mailman-owner:        "|/usr/local/lib/mailman/mail/mailman owner mailman"
+	mailman-request:      "|/usr/local/lib/mailman/mail/mailman request mailman"
+	mailman-subscribe:    "|/usr/local/lib/mailman/mail/mailman subscribe mailman"
+	mailman-unsubscribe:  "|/usr/local/lib/mailman/mail/mailman unsubscribe mailman"
 </screen>
 </para>
 <para>
@@ -951,26 +954,27 @@ Regenerar alias con
 <para>
 Poner en el crontab algunas lineas:
 <screen>
-crontab -u _mailman  /usr/local/lib/mailman/cron/crontab.in
+	crontab -u _mailman  /usr/local/lib/mailman/cron/crontab.in
 </screen>
 </para>
 <para>
 Reiniciar mailman:
 <screen>
-/usr/local/lib/mailman/bin/mailmanctl start
+	/usr/local/lib/mailman/bin/mailmanctl start
 </screen>
 </para>
 <para>
 Hacer que cada vez que se inicie el equipo corra mailman, agregando
-al archivo <filename>/etc/rc.local</filename> las lineas: <screen>
-if [ X"$mailmanctl_flags" != X"NO" -a  \
-	-x /usr/local/lib/mailman/bin/mailmanctl ]; then
-          echo -n ' mailman'
-          /usr/local/lib/mailman/bin/mailmanctl $mailmanctl_flags
-fi
+al archivo <filename>/etc/rc.local</filename> las lineas: 
+<screen>
+	if [ X"$mailmanctl_flags" != X"NO" -a  \
+		-x /usr/local/lib/mailman/bin/mailmanctl ]; then
+	          echo -n ' mailman'
+	          /usr/local/lib/mailman/bin/mailmanctl $mailmanctl_flags
+	fi
 </screen>
 y en <filename>/etc/rc.conf.local</filename>:<screen>
-mailmanctl_flags="-s -q start"
+	mailmanctl_flags="-s -q start"
 </screen>
 </para>
 <para>

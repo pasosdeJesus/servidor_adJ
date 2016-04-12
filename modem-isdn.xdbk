@@ -24,66 +24,66 @@
     Por ejemplo el archivo <filename>/etc/ppp/ppp.conf</filename> podría
     incluir porciones como las siguientes (remplazando el número de
     teléfono, el nombre de la cuenta y  la clave por los correctos):
-    <screen>
-default:
-  set log Phase Chat LCP IPCP CCP tun command
-  set device /dev/cua01
-  set speed 115200
-  set dial "ABORT BUSY ABORT NO\\sCARRIER TIMEOUT 5 \"\" AT \
-    OK-AT-OK ATE1Q0 OK \\dATDT\\T TIMEOUT 40 CONNECT"
-
-
-PAP:
- set phone 019478909891 
- set authname micuenta@miproveedor.com
- set authkey laclaveusada
- set timeout 120
- add default HISADDR
- enable dns
-    </screen>
+<screen>
+	default:
+	  set log Phase Chat LCP IPCP CCP tun command
+	  set device /dev/cua01
+	  set speed 115200
+	  set dial "ABORT BUSY ABORT NO\\sCARRIER TIMEOUT 5 \"\" AT \
+	    OK-AT-OK ATE1Q0 OK \\dATDT\\T TIMEOUT 40 CONNECT"
+	
+	
+	PAP:
+	 set phone 019478909891 
+	 set authname micuenta@miproveedor.com
+	 set authkey laclaveusada
+	 set timeout 120
+	 add default HISADDR
+	 enable dns
+</screen>
     Para conectarse ejecute <command>/usr/sbin/ppp -ddial PAP</command>
     desde una cuenta que pertenezca al grupo <literal>network</literal>.
     Cuando se establezca la conexión quedará asociada una dirección IP a una
     interfaz <literal>tun</literal> (e.g a <literal>tun0</literal>).  Puede
     también emplear el siguiente script para realizar la conexión:
-    <screen>
-#!/bin/sh
-# Dominio público. 2004.
-
-# Usa configuracion de /etc/ppp/ppp.conf regla PAP
-
-netw=`groups | sed -e "s/.*network.*/1/g"`;
-if (test "$netw" != "1") then {
-	echo "Para usar PPP debe ser del grupo network";
-	exit 1;
-} fi;
-
-IP=`/sbin/ifconfig tun0 | tail -n 1 | sed -e "s/.*inet \([.0-9]*\) .*/\1/g"`;
-esta=`echo $IP | sed -e "s/^[0-9][.0-9]*$/SI/g"`
-if (test "$esta" = "SI") then {
-	echo "Ya está conectado, IP es $IP";
-	exit 0;
-} fi;
-/usr/sbin/ppp -ddial PAP
-while (test "$esta" != "SI") ; do
-	sleep 1;
+<screen>
+	#!/bin/sh
+	# Dominio público. 2004.
+	
+	# Usa configuracion de /etc/ppp/ppp.conf regla PAP
+	
+	netw=`groups | sed -e "s/.*network.*/1/g"`;
+	if (test "$netw" != "1") then {
+		echo "Para usar PPP debe ser del grupo network";
+		exit 1;
+	} fi;
+	
 	IP=`/sbin/ifconfig tun0 | tail -n 1 | sed -e "s/.*inet \([.0-9]*\) .*/\1/g"`;
 	esta=`echo $IP | sed -e "s/^[0-9][.0-9]*$/SI/g"`
-done
-
-echo "Conectado. La IP es $IP";
-    </screen>
+	if (test "$esta" = "SI") then {
+		echo "Ya está conectado, IP es $IP";
+		exit 0;
+	} fi;
+	/usr/sbin/ppp -ddial PAP
+	while (test "$esta" != "SI") ; do
+		sleep 1;
+		IP=`/sbin/ifconfig tun0 | tail -n 1 | sed -e "s/.*inet \([.0-9]*\) .*/\1/g"`;
+		esta=`echo $IP | sed -e "s/^[0-9][.0-9]*$/SI/g"`
+	done
+	
+	echo "Conectado. La IP es $IP";
+</screen>
     Y el siguiente que facilita la desconexión:
-    <screen>
-pid=`ps ax | grep "[p]pp" | sed -e "s/^[ ]*\([0-9]*\) .*$/\1/g"`;
-espid=`echo $pid | sed -e "s/^[0-9][0-9]*$/SI/g"`;
-if (test "$espid" != "SI") then {
-  echo "No está conectado";
-  exit 1;
-} fi;
-kill -HUP $pid
-echo "Desconectado";
-    </screen>
+<screen>
+	pid=`ps ax | grep "[p]pp" | sed -e "s/^[ ]*\([0-9]*\) .*$/\1/g"`;
+	espid=`echo $pid | sed -e "s/^[0-9][0-9]*$/SI/g"`;
+	if (test "$espid" != "SI") then {
+	  echo "No está conectado";
+	  exit 1;
+	} fi;
+	kill -HUP $pid
+	echo "Desconectado";
+</screen>
   </para>
   <!--  <sect2 id="conexion-supercable">
     <title>Resolviendo problemas de conexión con Supercable en OpenBSD</title>

@@ -13,9 +13,9 @@
       red cuando es detectado en el momento del arranque (o por demanda
       como en el caso de <literal>tun0</literal>).  Estas interfaces se 
       administran con <command>ifconfig</command>, para listarlas todas:
-      <screen>
+<screen>
 	ifconfig -a
-      </screen>
+</screen>
       o para 
 
       En la pagina de cada tipo de interfaz soportado se encuentran

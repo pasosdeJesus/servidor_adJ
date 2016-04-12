@@ -13,9 +13,9 @@
 		<title>Configuración mínima</title>	
 		<para>
 			En el archivo <literal>/etc/rc.conf.local</literal> agregue:
-			<screen>
+<screen>
 	httpd_flags=""
-			</screen>
+</screen>
 			y en adJ agregue <literal>httpd</literal> a la variable <literal>pkg_scripts</literal>.
 		</para>
 
@@ -25,19 +25,19 @@
 
 		<para>
 			La sintaxis de la sección de tipos es idéntica a la de <literal>nginx</literal> y como puede usarse <literal>include</literal> para incluir otro archivo de configuración, el siguiente es un ejemplo mínimo (incluyendo el macro <literal>ext_ip</literal>):
-			<screen>
+<screen>
 	ext_ip="200.201.202.203"
 	server "default" {
 		listen on $ext_ip port 80
 	}
 	include "/etc/nginx/mime.types"
-			</screen>
+</screen>
 		</para>
 		<para>
 			Podría probarlo iniciando en modo de depuración con:
-			<screen>
-	sudo httpd -vn
-			</screen>
+<screen>
+	doas httpd -vn
+</screen>
 
 			Y examinando con un navegador la URL 
 			<literal>http://200.201.202.203</literal>, con lo que 
@@ -74,7 +74,7 @@
 
 		<para>
 			Al ejemplo de configuración mínima anterior bastaría agregarle ssl a la opción listen e indicar el puerto 443, que es el asignado por defecto para HTTPS:
-			<screen>
+<screen>
 	ext_ip="200.201.202.203"
 	server "default" {
 		listen on $ext_ip ssl port 443
@@ -97,7 +97,7 @@
 		<para>
 			Si se configuraran los dominios www.miescuela.edu.co y www.otrodominio.co apuntando a la misma IP de los ejemplos anteriores y tiene las páginas de cada dominio en <literal>/var/www/htdocs/miescuela</literal> y <literal>/var/www/htdocs/otrodominio</literal>:
 
-			<screen>
+<screen>
 	ext_ip="200.201.202.203"
 	server "www.miescuela.edu.co" {
 		listen on $ext_ip port 80
@@ -123,7 +123,7 @@
 		<para>
 			Una configuración mínima para SIVeL 1.2 que opere en 192.168.1.1, con archivos en <literal>/var/www/htdcos/sivel</literal> y con SSL es:
 
-			<screen>
+<screen>
 	server "192.168.1.1" {
 		listen on egress ssl port 443
 
@@ -138,14 +138,14 @@
 		<para>
 
 			Operará bien con la configuración por defecto de php-fpm, que puede instalar con:
-			<screen>
-	sudo pkg_add php-fpm
-	sudo cp /usr/local/share/examples/php-5.4/php-fpm.conf /etc/
-			</screen>
+<screen>
+	doas pkg_add php-fpm
+	doas cp /usr/local/share/examples/php-5.4/php-fpm.conf /etc/
+</screen>
 			e iniciar con:
-			<screen>
-	sudo sh /etc/rc.d/php-fpm start
-			</screen>
+<screen>
+	doas sh /etc/rc.d/php-fpm start
+</screen>
 			o mejor en cada arranque de su sistema editando <literal>/etc/rc.conf.local</literal>
 			y agregando
 			<itemizedlist>
@@ -168,9 +168,9 @@
 				<title>Otros detalles de uso</title>
 				<para>
 					Si requiere volve a leer archivo de configuración, en lugar de reiniciar httpd puede ejecutar:
-					<screen>
+<screen>
 						pkill -HUP httpd
-					</screen>
+</screen>
 				</para>
 
 				<para>

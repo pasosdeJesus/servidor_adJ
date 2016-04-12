@@ -6,13 +6,13 @@
 	  activar o no el servidor de OpenSSH <command>sshd</command>.
 	  Si posteriormente requiere cambiar la configuración edite el archivo
 	  <filename>/etc/rc.conf.local</filename> y para activarlo agregue:
-	  <screen>
-sshd_flags=""
-  </screen>
+<screen>
+	sshd_flags=""
+</screen>
   o para desactivarlo agregue:
-  <screen>
-sshd_flags="NO"
-  </screen>
+<screen>
+	sshd_flags="NO"
+</screen>
 </para>
 
 <para>El servidor OpenSSH es desarrollado por el proyecto OpenBSD y

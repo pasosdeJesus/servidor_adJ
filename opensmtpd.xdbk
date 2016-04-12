@@ -11,20 +11,20 @@ menos de 1000 correos diarios.
         <para>
 Antes de iniciar el servicio es importante detener sendmail con:
 <screen>
-/etc/rc.d/sendmail stop
+	/etc/rc.d/sendmail stop
 </screen>
 y deshabilitarlo dejando en /etc/rc.conf.local la línea:
 <screen>
-    sendmail_flags=NO
+	sendmail_flags=NO
 </screen>
 </para>
 <para>El servicio se inicia con:
 <screen>
-/etc/rc.d/smtpd start
+	doas /etc/rc.d/smtpd start
 </screen>
 y se detiene con:
 <screen>
-/etc/rc.d/smtpd stop
+	doas /etc/rc.d/smtpd stop
 </screen>
 
 Para que inicie en cada arranque y se reinicie fácil ejecutando 
@@ -32,16 +32,16 @@ Para que inicie en cada arranque y se reinicie fácil ejecutando
 a la variable <literal>pkg_scripts</literal> de
 <filename>/etc/rc.conf.local</filename> y en ese mismo archivo agregue:
 <screen>
-smtdp_flags=""
+	smtdp_flags=""
 </screen>
 También modifique <filename>/etc/mailer.conf</filename> y cambie algunas
 líneas para que sean:
 <screen>
-sendmail        /usr/sbin/smtpctl
-send-mail       /usr/sbin/smtpctl
-mailq           /usr/sbin/smtpctl
-makemap         /usr/libexec/smtpd/makemap
-newaliases      /usr/libexec/smtpd/makemap
+	sendmail        /usr/sbin/smtpctl
+	send-mail       /usr/sbin/smtpctl
+	mailq           /usr/sbin/smtpctl
+	makemap         /usr/libexec/smtpd/makemap
+	newaliases      /usr/libexec/smtpd/makemap
 </screen>
 
 Una vez en operación pueden examinarse diversos aspectos (como bitacoras, examinar cola
@@ -54,22 +54,22 @@ La configuración se define en el archivo
 La configuración más simple que sólo aceptará correo local y lo dejará en 
 formato mbox en <filename>/var/mail</filename> o hará relevo es:
 <screen>
-listen on lo0
+	listen on lo0
 
-table aliases db:/etc/mail/aliases.db
+	table aliases db:/etc/mail/aliases.db
 
-accept for local alias &lt;aliases&gt; deliver to mbox
-accept for all relay
+	accept for local alias &lt;aliases&gt; deliver to mbox
+	accept for all relay
 </screen>
 
 Para que permita enviar y recibir de otros computadores debe cambiarse 
 la interfaz donde escucha y a nombre de quien acepta correos, por ejemplo:
 <screen>
-listen on all
+	listen on all
 
-table aliases db:/etc/mail/aliases.db
-accept from any for domain "&EDOMINIO;" alias &lt;aliases&gt; deliver to mbox
-accept for all relay
+	table aliases db:/etc/mail/aliases.db
+	accept from any for domain "&EDOMINIO;" alias &lt;aliases&gt; deliver to mbox
+	accept for all relay
 </screen>
 
 Si prefiere que los correos sean recibidos por procmail puede cambiar 
@@ -78,22 +78,22 @@ Si prefiere que los correos sean recibidos por procmail puede cambiar
 Sin embargo para recibir en formato maildir (por defecto en <filename>~/Maildir</filename> de cada usuario) y tener opción de procesar usuario a usuario
 con procmail via el archivo <filename>~/.forward</filename> es mejor:
 <screen>
-accept from any for domain "&EDOMINIO;" alias &lt;aliases&gt; deliver to maildir
+	accept from any for domain "&EDOMINIO;" alias &lt;aliases&gt; deliver to maildir
 </screen>
 
 Al igual que con sendmail la tabla de alias que usa esta configuración
 es <filename>/etc/mail/aliases.db</filename>, la cual se generá después
 de hacer cambios a <filename>/etc/mail/aliases</filename> con:
 <screen>
-cd /etc/mail
-make
+	cd /etc/mail
+	doas make
 </screen>
 
 Para asegurar el relevo de correos provenientes de &EDOMINIO; o 
 de la IP 192.168.1.2, basta agregar al mismo archivo de configuración:
 <screen>
-accept from &EDOMINIO; for any relay
-accept from 192.168.1.2 for any relay
+	accept from &EDOMINIO; for any relay
+	accept from 192.168.1.2 for any relay
 </screen>
 
 Para agregar autenticación y TLS ,
@@ -106,9 +106,9 @@ y dejar <filename>&EDOMINIO;.crt</filename> en
 cambiar en el archivo de configuración la línea con 
 <literal>listen</literal> por:
 <screen>
-pki &EDOMINIO; certificate "/etc/ssl/&EDOMINIO;.crt" \
-  key /etc/ssl/private/&EDOMINIO;.key"
-listen on all port 25 tls pki &EDOMINIO; auth-optional
+	pki &EDOMINIO; certificate "/etc/ssl/&EDOMINIO;.crt" \
+		key /etc/ssl/private/&EDOMINIO;.key"
+	listen on all port 25 tls pki &EDOMINIO; auth-optional
 </screen>
 Puede ser más estricto con <literal>tls-require</literal> en lugar
 de <literal>tls</literal> y con <literal>auth</literal> en lugar
@@ -118,11 +118,11 @@ de <literal>auth-optional</literal>.
 Para escuchar también en el puerto 465 (u otro puerto) cifrado por 
 defecto puede agregar:
 <screen>
-listen on all port 465 smtps pki &EDOMINIO; auth-optional
+	listen on all port 465 smtps pki &EDOMINIO; auth-optional
 </screen>
 y TLS estricto en el puerto 587:
 <screen>
-listen on all port 587 tls pki &EDOMINIO; auth
+	listen on all port 587 tls pki &EDOMINIO; auth
 </screen>
 </para>
 
@@ -132,9 +132,9 @@ MX de cada dominio (ver <xref linkend="dominios-virtuales-correo"></xref>),
 agregar una tabla de alias y una línea <literal>accept</literal> por cada 
 dominio, por ejemplo:
 <screen>
-table aliasesejemplo db:/etc/mail/aliasesejemplo.db
-...
-accept from any for domain "ejemplo.org" alias &lt;aliasesejemplo&gt; deliver to maildir
+	table aliasesejemplo db:/etc/mail/aliasesejemplo.db
+	...
+	accept from any for domain "ejemplo.org" alias &lt;aliasesejemplo&gt; deliver to maildir
 </screen>
 
 La tabla de alias debe generarse a partir de un archivo plano
@@ -151,9 +151,9 @@ La tabla de alias debe generarse a partir de un archivo plano
 	<para>OpenSMTP envia mensajes de error a la bitácora 
 		<filename>/var/log/maillog</filename>. Puede ejecutarse en modo
 		de depuración para determinar problemas con:
-		<screen>
-smtpd -d
-		</screen>
+<screen>
+	smtpd -d
+</screen>
 		Esto no lo activará como servicio y presentará errores en pantalla.
 	</para>
 </sect3>

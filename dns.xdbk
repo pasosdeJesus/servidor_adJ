@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <sect1 id="servidor-dns">
-  <title>Servidor DNS</title>
+  <title>Servicio DNS</title>
   <sect2 id="resolucion-de-nombres">
     <title>Resolución de nombres</title>
     <para>Para resolver nombres OpenBSD emplea rutinas propias
@@ -14,11 +14,11 @@
       retornar direcciones IP en orden (<literal>sortlist</literal>),
       opciones (<literal>options</literal>).   Un ejemplo del
       archivo <filename>/etc/resolv.conf</filename> es:
-      <screen>
-search &EDOMINIO;
-nameserver 192.168.16.1
-lookup file bind
-      </screen>
+<screen>
+	search &EDOMINIO;
+	nameserver 192.168.16.1
+	lookup file bind
+</screen>
       <literal>lookup</literal> permite especificar un orden para
       hacer resolución de acuerdo a uno o más de los siguientes 
       argumentos separados por espacio:
@@ -38,13 +38,199 @@ lookup file bind
       </itemizedlist>
     </para>
   </sect2>
+  
+  <sect2 id="unbound">
+	  <title>Servidor recursivo <literal>unbound</literal></title>
+	  <para>
+Un servidor recursivo recibe consultas de dominios y las reenvia a otros 
+servidores –comenzando por los servidores raiz– o si tiene respuesta a 
+las consultas en su repositorio temporal fresco (cache) lo usa para responder. 
+Es útil para responder consultas de una red local rapidamente, y en tal caso 
+debe responder consultas que se hagan desde la red interna pero no desde 
+Internet --como posiblemente ocurre con la vista recursiva del archivo 
+<filename>/var/named/etc/named.conf</filename> si tiene uno.
+</para>
+<para>
+A continuación explicamos como configurar unbound (que hace 
+parte del sistema base desde OpenBSD y adJ 5.7) como servidor recursivo.
+	  </para>
+
+	  <para>
+En <literal>/etc/rc.conf.local</literal> agregue
+<screen>
+	unbound_flags="-c /var/unbound/etc/unbound.conf"
+</screen>
+
+Y a la varialbe <literal>pkg_scripts</literal> agreguele <literal>unbound</literal>
+
+Configurelo en <literal>/var/unbound/etc/unbound.conf</literal>, cambiando al menos:
+
+<orderedlist>
+	<listitem>
+		<para>
+Si su cortafuegos tiene en la red interna la IP 192.168.100.100 
+responda sólo a esa interfaz:
+<screen>
+interface: 192.168.100.100
+</screen>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+Permita consultas desde la red interna, añadiendo:
+<screen>
+access-control: 192.168.100.0/24 allow
+</screen>
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+Las zonas autoritarias que <literal>nsd</literal> esté sirviendo también 
+debe responderlas de manera autoritaria con unbound pero dirigiendo a la 
+red interna, por ejemplo respecto al ejemplo de la sección anterior, 
+suponiendo que en la red Interna el servidor que responde correo es 
+192.168.100.101:
+<screen>
+	local-zone: "miescuela.edu.co." static
+	local-data: "correo.miescuela.edu.co. IN A 192.168.100.101"
+	local-data: "ns1.miescuela.edu.co. IN A 192.168.100.100"
+	local-zone: "100.168.192.in-addr.arpa." static
+	local-data-ptr: "192.168.100.101 correo.miescuela.edu.co."
+	local-data-ptr: "192.168.100.100 ns1.miescuela.edu.co."
+</screen>
+		</para>
+	</listitem>
+</orderedlist>
+
+Inicie el servicio con
+<screen>
+	sudo sh  /etc/rc.d/unbound start
+</screen>
+
+Revise posibles errores en las bitacoras <literal>/var/log/messages</literal> 
+y <literal>/var/log/servicio</literal>
+</para>
+<para>
+Pruebe que responde con:
+<screen>
+dig @192.168.100.100 correo.miescuela.edu.co
+</screen>
+que debería dar la IP privada.
+</para>
+<para>
+Si prefiere examinar con más detalle puede iniciarlo para depurar con:
+<screen>
+	unbound -c /var/unbound/etc/unbound.conf -vvvv -d
+</screen>
+</para>
+
+</sect2>
+
+  <sect2 id="nsd">
+    <title>Servidor autoritario con NSD</title>
+
+    <para>
+Desde adJ y OpenBSD 5.7 hace parte del sistema base junto con unbound 
+(que vinieron a replazar named). Usa una configuración basada en la de 
+named por lo que es sencilla la migración.
+    </para>
+    <para>
+Agregue a  <literal>/etc/rc.conf.local</literal> la línea:
+<screen>
+	nsd_flags="-c /var/nsd/etc/nsd.conf"
+</screen>
+e incluya <literal>nsd</literal> en la variable <literal>pkg_scripts</literal>
+	</para>
+	<para>
+
+El archivo de configuración principal ubíquelo en 
+<literal>/var/nsd/etc/nsd.conf</literal>,
+por cada zona maestra que maneje de manera autoritaria (es decir cada zona 
+master en la vista <literal>view "authoritative</literal> de 
+<filename>/var/named/etc/named.conf</filename>) 
+incluya líneas de la forma:
+<screen>
+	zone:
+		name: "miescuela.edu.co"
+		zonefile: "miescuela.edu.co"
+</screen>
+Para que responda hacía Internet en un cortafuegos con IP pública 
+(digamos 200.201.202.203) en el mismo archivo asegurese de dejar:
+<screen>
+	ip-address: 200.201.202.203
+</screen>
+	</para>
+	<para>
+En el directorio <literal>/var/nsd/zones</literal> debe dejar un archivo de zona por cada 
+zona que configure.  Afortunadamente NSD reconoce la misma sintaxis de 
+archivos de zona que <literal>bind</literal>, así que basta que copie los de las zonas 
+autoritarías (que tipicamente se ubican en <literal>/var/named/master/</literal>).  
+	</para>
+	<para>
+Un ejemplo de un archivo de zona <literal>/var/nsd/zones/miescuela.edu.co</literal> es:
+
+
+<screen>
+	$ORIGIN miescuela.edu.co.
+	$TTL 6h
+	
+	@ IN SOA ns1.miescuela.edu.co. root.localhost. (
+		2 ; Serial
+		1d ; Refresco secundario
+		6h ; Reintento secundario
+		2d ; Expiracion secndaria
+		1d ) ; Cache 
+	
+		     NS	ns1
+		     A	200.201.202.203
+	       MX 5  correo.miescuela.edu.co.
+	correo A  200.201.202.203
+	ns1	   A  200.201.202.203
+	*	     A  200.201.202.203
+</screen>
+
+	</para>
+	<para>
+Si tiene zonas secundarias (esclavas) puede crear el directorio 
+<literal>/var/nsd/zones/secundaria/</literal>, copiar allí las zonas de
+<literal>/var/named/slave/</literal> y en el archivo de configuración de NSD
+agregar secciones del siguiente estilo:
+<screen>
+	zone:
+	        name: "miotrozona.org"
+	        zonefile: "secundaria/miotrazona.org"
+	        allow-notify: 193.98.157.148 NOKEY
+	        request-xfr: 193.98.157.148 NOKEY             
+</screen>
+	</para>
+	<para>
+Inicie el servicio con
+<screen>
+	doas sh  /etc/rc.d/nsd start
+</screen>
+(o reinicielo con <literal>restart</literal> en lugar de <literal>start</literal>).
+	</para>
+	<para>
+Revise posibles errores en las bitacoras <literal>/var/log/messages</literal> 
+y <literal>/var/log/servicio</literal>
+	</para>
+	<para>
+Pruebe que responde desde Internet con:
+<screen>
+	dig @200.201.202.203 correo.miescuela.edu.co
+</screen>
+que debería dar la IP pública.
+	</para>
+</sect2>
+
 
   <sect2 id="named">
     <title>named</title>
-    <para>OpenBSD incluye entre sus componentes básicos parte del servidor
+    <para>OpenBSD aún incluye como paquete el servidor
       BIND 9, bajo el nombre <literal>named</literal>, que por defecto corre
       con <command>chroot</command> en el directorio
-      <filename>/var/named</filename>.  
+      <filename>/var/named</filename> y que puede hacer las labores de unbound 
+      y nsd.  
     </para>
     <para>Puede configurarse y probarse antes de iniciarlo en cada
       arranque.  Para configurarlo por primera vez pueden seguirse primero 
@@ -58,24 +244,24 @@ lookup file bind
       por ejemplo los datos un servidor DNS primario del dominio &EDOMINIO; 
       pueden quedar en el archivo 
       <filename>/var/named/master/&EDOMINIO;</filename>:
-      <screen>
-$TTL 1D
-@ IN  SOA  @  root.localhost. (
-	03091025 ; Serial
-	1D   ; Refresco secundario
-	6H   ; Reintento secundario
-	2D   ; Expiración secundaria
-	1D ) ; Cache de registro de recursos
-
-	NS  @
-
-	A       65.8.9.234
-
-	MX      5      correo.&EDOMINIO;.
-
-correo	IN      A       201.2.3.74
-ns1     IN      A       201.2.3.74
-www     IN      A       201.2.3.74
+<screen>
+	$TTL 1D
+	@ IN  SOA  @  root.localhost. (
+		03091025 ; Serial
+		1D   ; Refresco secundario
+		6H   ; Reintento secundario
+		2D   ; Expiración secundaria
+		1D ) ; Cache de registro de recursos
+	
+		NS  @
+	
+		A       65.8.9.234
+	
+		MX      5      correo.&EDOMINIO;.
+	
+	correo	IN      A       201.2.3.74
+	ns1     IN      A       201.2.3.74
+	www     IN      A       201.2.3.74
 </screen>
 
 Note que se declara el mismo dominio como servidor de nombre autoritario,
@@ -94,16 +280,16 @@ Recuerde aumentar el número serial cada vez que haga algún cambio, para que
 la información pueda ser actualizada en los servidores secundarios.
 Puede probar cada archivo de zonas que haga con:
 <screen>
-  named-checkzone &EDOMINIO; /var/named/master/&EDOMINIO;
+	named-checkzone &EDOMINIO; /var/named/master/&EDOMINIO;
 </screen>
 Agregue una referencia al archivo de zonas maestro en
 <filename>/var/named/etc/named.conf</filename>, en la sección para
 zonas maestras algo de la forma:
 <screen>
-zone "&EDOMINIO;" {
-  type master;
-  file "master/&EDOMINIO;";
-}
+	zone "&EDOMINIO;" {
+	  type master;
+	  file "master/&EDOMINIO;";
+	}
 </screen>
 </para>
 <para>
@@ -111,11 +297,11 @@ Si desea que un servidor sea secundario de algún servidor primario,
 agregue en <filename>/var/named/etc/named.conf</filename> en la sección
 para zonas esclavas algo como:
 <screen>
-zone "&EDOMINIO;" {
-  type slave;
-  file "slave/&EDOMINIO;";
-  masters { 65.8.9.234; };
-}
+	zone "&EDOMINIO;" {
+	  type slave;
+	  file "slave/&EDOMINIO;";
+	  masters { 65.8.9.234; };
+	}
 </screen>
 
 Cuando <command>named</command> lea de nuevo sus archivos de configuración 
@@ -125,34 +311,36 @@ traerá la información del servidor primario y la dejará en el archivo
 
 <para>
       El servidor se inicia con
-      <screen>
-    sudo sh /etc/rc.d/named start</screen>
+<screen>
+	doas sh /etc/rc.d/named start
+</screen>
       Los errores que se produzcan antes de hacer <command>chroot</command>
       son enviados a <filename>/var/log/servicio</filename>.
       Para probar el funcionamiento antes de modificar
       <filename>/etc/resolv.conf</filename> puede usar:
-      <screen>
+<screen>
 	dig @localhost &EDOMINIO;
-      </screen>
+</screen>
       Si requiere volver a leer los archivos de configuración 
       (por ejemplo después de cambiar los archivos de zonas) puede
       enviar la señal <literal>SIGHUP</literal> al proceso con:
-      <screen>
+<screen>
 	pkill -HUP named
-      </screen>
+</screen>
       o con
-      <screen>
+<screen>
 	rndc reload
-      </screen>
+</screen>
     </para>
 
     <para>
       Una vez compruebe que su servidor DNS está operando correctamente puede
       indicar que se inicie en cada arranque agregando a
       <filename>/etc/rc.conf.local</filename>:
-      <screen>
-named_flags="" </screen>
-      y en el mismo archivo en la definición de <literal>pkg_scripts</literal>
+<screen>
+	named_flags="" 
+</screen>
+y en el mismo archivo en la definición de <literal>pkg_scripts</literal>
       agregando <literal>named</literal>.
     </para>
 
@@ -180,70 +368,70 @@ named_flags="" </screen>
 		    para computadores dentro de la LAN.  Un posible
 		    archivo de configuración (basado en los distribuidos
 		    con OpenBSD) es:
-		    <screen>
-acl clients {
-	localnets;
-	::1;
-};
-options {
-	version "";     
-	listen-on    { any; };
-	listen-on-v6 { any; };
-	allow-recursion { clients; };
-};
-logging {
-	category lame-servers { null; };
-};
-
-view "internal" {  // Para la red interna
-    match-clients { clients; };
-    match-recursive-only yes;
-    recursion yes;
-
-    zone "." {
-    	type hint;
-    	file "standard/root.hint";
-    };
-    zone "localhost" {
-    	type master;
-	file "standard/localhost";
-	allow-transfer { localhost; };
-    }
-    zone "127.in-addr.arpa" {
-    	type master;
-    	file "standard/loopback";
-    	allow-transfer { localhost; };
-    };
-    zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
-    	type master;
-    	file "standard/loopback6.arpa";
-    	allow-transfer { localhost; };
-    };
-    zone "com" {
-    	type delegation-only;
-    };
-    zone "net" {
-    	type delegation-only;
-    };
-
-    zone "&EDOMINIO;" {
-        type master;
-        file "refleja/&EDOMINIO;.org";
-    };
-};
-view "external" { // Para Internet
-    recursion no;
-    additional-from-auth no;
-    additional-from-cache no;
-    zone "&EDOMINIO;" {
-        type master;
-	file "master/&EDOMINIO;";
-    };
-    zone "168.74.245.200.IN-ADDR.ARPA" { // Para resolución inversa
-        type master;
-	file "master/db.168.74.245.200";
-    };
-};
+<screen>
+	acl clients {
+		localnets;
+		::1;
+	};
+	options {
+		version "";     
+		listen-on    { any; };
+		listen-on-v6 { any; };
+		allow-recursion { clients; };
+	};
+	logging {
+		category lame-servers { null; };
+	};
+	
+	view "internal" {  // Para la red interna
+	    match-clients { clients; };
+	    match-recursive-only yes;
+	    recursion yes;
+	
+	    zone "." {
+	    	type hint;
+	    	file "standard/root.hint";
+	    };
+	    zone "localhost" {
+	    	type master;
+		file "standard/localhost";
+		allow-transfer { localhost; };
+	    }
+	    zone "127.in-addr.arpa" {
+	    	type master;
+	    	file "standard/loopback";
+	    	allow-transfer { localhost; };
+	    };
+	    zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
+	    	type master;
+	    	file "standard/loopback6.arpa";
+	    	allow-transfer { localhost; };
+	    };
+	    zone "com" {
+	    	type delegation-only;
+	    };
+	    zone "net" {
+	    	type delegation-only;
+	    };
+	
+	    zone "&EDOMINIO;" {
+	        type master;
+	        file "refleja/&EDOMINIO;.org";
+	    };
+	};
+	view "external" { // Para Internet
+	    recursion no;
+	    additional-from-auth no;
+	    additional-from-cache no;
+	    zone "&EDOMINIO;" {
+	        type master;
+		file "master/&EDOMINIO;";
+	    };
+	    zone "168.74.245.200.IN-ADDR.ARPA" { // Para resolución inversa
+	        type master;
+		file "master/db.168.74.245.200";
+	    };
+	};
 </screen>
 El archivo <filename>master/&EDOMINIO;</filename> sería el típico
 para resolver externamente, mientras que en 
@@ -252,18 +440,18 @@ anterior pero con las direcciones de la red local.
 <filename>master/db.167.74.245.200</filename> tendría datos para resolución
 de nombres inversa desde fuera de la organización, por ejemplo:
 <screen>
-$TTL 1D
-@ IN  SOA  @  root.localhost. (
-  49   ; Serial de Zona
-  1D   ; Refesco secundario
-  6H   ; Retintento secundario
-  2D   ; Expiración secundaria
-  1D ) ; Cache de registros de recurso
-
-@       IN      NS      cortafuegos.&EDOMINIO;.
-	IN      PTR     www.&EDOMINIO;.
-	IN      PTR     correo.&EDOMINIO;
-	IN      PTR     ns1.&EDOMINIO;
+	$TTL 1D
+	@ IN  SOA  @  root.localhost. (
+	  49   ; Serial de Zona
+	  1D   ; Refesco secundario
+	  6H   ; Retintento secundario
+	  2D   ; Expiración secundaria
+	  1D ) ; Cache de registros de recurso
+	
+	@       IN      NS      cortafuegos.&EDOMINIO;.
+		IN      PTR     www.&EDOMINIO;.
+		IN      PTR     correo.&EDOMINIO;
+		IN      PTR     ns1.&EDOMINIO;
 </screen>
 	</para>
     </sect3>
@@ -272,19 +460,51 @@ $TTL 1D
     <title>Referencias y lecturas recomendadas</title>
 
     <para>
-      Sección sobre DNS de las guías Aprendiendo a aprender Linux.
-      <citation><link linkend="AA_Linux">AA_Linux</link></citation>
-      Referencia para administradores de BIND 9
-      <citation><link linkend="bind9arm">bind9arm</link></citation>.
-      Ayudas para configurar Bind incluido en OpenBSD.
+	    <itemizedlist>
+		    <listitem><para>
+Sección sobre DNS de las guías Aprendiendo a aprender Linux.
+<citation><link linkend="AA_Linux">AA_Linux</link></citation>
+		    </para></listitem>
+		    <listitem><para>
+Referencia para administradores de BIND 9
+<citation><link linkend="bind9arm">bind9arm</link></citation>.
+		    </para></listitem>
+		    <listitem><para>
+Ayudas para configurar Bind incluido en OpenBSD.
+		    </para></listitem>
+		    <listitem><para>
       Puede consultar más sobre vistas y reflexión de consultas DNS
       en <ulink url="http://www.bind9.net/manual/bind/9.3.1/Bv9ARM.ch06.html#view_statement_grammar"/>.
+		    </para></listitem>
+		    <listitem><para>
       <citation><link linkend="openbsdDnsDhcp">openbsdDnsDhcp</link></citation>.
-      Las siguientes páginas man:
+		    </para></listitem>
+		    <listitem><para>
+Las siguientes páginas man:
       <citerefentry><refentrytitle>named</refentrytitle>
 	<manvolnum>8</manvolnum></citerefentry>.
       <citerefentry><refentrytitle>dig</refentrytitle>
-	<manvolnum>8</manvolnum></citerefentry>.
+	      <manvolnum>8</manvolnum></citerefentry>.
+      <citerefentry><refentrytitle>unbound</refentrytitle>
+	      <manvolnum>8</manvolnum></citerefentry>.
+      <citerefentry><refentrytitle>nsd</refentrytitle>
+	      <manvolnum>8</manvolnum></citerefentry>.
+      <citerefentry><refentrytitle>unbound.conf</refentrytitle>
+	      <manvolnum>5</manvolnum></citerefentry>.
+      <citerefentry><refentrytitle>named.conf</refentrytitle>
+	      <manvolnum>5</manvolnum></citerefentry>.
+		    </para></listitem>
+		    <listitem><para>
+https://calomel.org/nsd_dns.html
+		    </para></listitem>
+		    <listitem><para>
+http://eradman.com/posts/run-your-own-server.html
+		    </para></listitem>
+		    <listitem><para>
+https://calomel.org/unbound_dns.html
+		    </para></listitem>
+	    </itemizedlist>
+
     </para>
   </sect2>
 </sect1>

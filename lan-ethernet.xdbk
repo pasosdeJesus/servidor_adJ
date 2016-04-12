@@ -44,49 +44,49 @@
       como en el caso de <literal>tun0</literal>).  Estas interfaces se 
       administran con <command>ifconfig</command>, por ejemplo
       para listarlas todas utilice:
-      <screen>
-ifconfig -a
+<screen>
+	ifconfig -a
 </screen>
 A continuación se presenta un ejemplo de la salida de este comando:
 <screen>
-lo0: flags=8049&lt;UP,LOOPBACK,RUNNING,MULTICAST&gt; mtu 33160
-	priority: 0
-	groups: lo
-	inet 127.0.0.1 netmask 0xff000000
-	inet6 ::1 prefixlen 128
-	inet6 fe80::1%lo0 prefixlen 64 scopeid 0x6
-re0: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
-	lladdr 00:14:d1:1a:cf:b2
-	priority: 0
-	groups: egress
-	media: Ethernet autoselect (100baseTX full-duplex,rxpause,txpause)
-	status: active
-	inet 189.148.51.41 netmask 0xffffff00 broadcast 189.148.51.255
-	inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
-re1: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
-	lladdr 00:14:d1:1a:ce:93
-	priority: 0
-	media: Ethernet autoselect (1000baseT full-duplex)
-	status: active
-	inet 192.168.2.1 netmask 0xffffff00 broadcast 192.168.2.255
-	inet6 fe80::214:d1ff:fe1a:ce93%re1 prefixlen 64 scopeid 0x2
-re2: flags=8802&lt;BROADCAST,SIMPLEX,MULTICAST> mtu 1500
-	lladdr 00:14:d1:1a:cf:af
-	priority: 0
-	media: Ethernet autoselect (10baseT half-duplex)
-	status: no carrier
-vr0: flags=8843&lg;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
-	lladdr 00:19:db:82:8f:93
-	priority: 0
-	media: Ethernet autoselect (100baseTX full-duplex)
-	status: active
-	inet 192.168.1.1 netmask 0xffffff00 broadcast 192.168.1.255
-	inet6 fe80::219:dbff:fe82:8f93%vr0 prefixlen 64 scopeid 0x4
-enc0: flags=0&lg;> mtu 1536
-	priority: 0
-pflog0: flags=141&lg;UP,RUNNING,PROMISC> mtu 33160
-	priority: 0
-	groups: pflog
+	lo0: flags=8049&lt;UP,LOOPBACK,RUNNING,MULTICAST&gt; mtu 33160
+		priority: 0
+		groups: lo
+		inet 127.0.0.1 netmask 0xff000000
+		inet6 ::1 prefixlen 128
+		inet6 fe80::1%lo0 prefixlen 64 scopeid 0x6
+	re0: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+		lladdr 00:14:d1:1a:cf:b2
+		priority: 0
+		groups: egress
+		media: Ethernet autoselect (100baseTX full-duplex,rxpause,txpause)
+		status: active
+		inet 189.148.51.41 netmask 0xffffff00 broadcast 189.148.51.255
+		inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
+	re1: flags=8843&lt;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+		lladdr 00:14:d1:1a:ce:93
+		priority: 0
+		media: Ethernet autoselect (1000baseT full-duplex)
+		status: active
+		inet 192.168.2.1 netmask 0xffffff00 broadcast 192.168.2.255
+		inet6 fe80::214:d1ff:fe1a:ce93%re1 prefixlen 64 scopeid 0x2
+	re2: flags=8802&lt;BROADCAST,SIMPLEX,MULTICAST> mtu 1500
+		lladdr 00:14:d1:1a:cf:af
+		priority: 0
+		media: Ethernet autoselect (10baseT half-duplex)
+		status: no carrier
+	vr0: flags=8843&lg;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+		lladdr 00:19:db:82:8f:93
+		priority: 0
+		media: Ethernet autoselect (100baseTX full-duplex)
+		status: active
+		inet 192.168.1.1 netmask 0xffffff00 broadcast 192.168.1.255
+		inet6 fe80::219:dbff:fe82:8f93%vr0 prefixlen 64 scopeid 0x4
+	enc0: flags=0&lg;> mtu 1536
+		priority: 0
+	pflog0: flags=141&lg;UP,RUNNING,PROMISC> mtu 33160
+		priority: 0
+		groups: pflog
 </screen>
 Es como una tabla con 2 columnas, en la de la izquierda se lista el nombre
 de la interfaz de red (en este ejemplo <literal>lo0</literal>, 
@@ -134,8 +134,8 @@ del cortafuegos <literal>pf</literal>.
 		</varlistentry>
 		<varlistentry><term><literal>inet</literal></term>
 			<listitem><para>Propiedades IPv4, por ejemplo:
-	<screen>
-inet 189.148.51.41 netmask 0xffffff00 broadcast 189.148.51.255
+<screen>
+	inet 189.148.51.41 netmask 0xffffff00 broadcast 189.148.51.255
 </screen>
 Indica que la IP es 189.148.51.41, con mascara de red 255.255.255.0
 (en hexadecimal 255 es <literal>ff</literal>), y dirección para envíos 
@@ -144,8 +144,8 @@ masivos (broadcast) 189.148.51.255.
 		</varlistentry>
 		<varlistentry><term><literal>inet6</literal></term>
 			<listitem><para>Propiedades IPv6, por ejemplo:
-					<screen>
-inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
+<screen>
+	inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
 </screen>
 Indica que la dirección IPv6 es <literal>fe80::214:d1ff:fe1a:cfb2</literal>
 			</para></listitem>
@@ -171,13 +171,13 @@ computador.</para></listitem>
 	Los dispositivos reconocidos en el momento del arranque 
 	que se asocian a interfaces de red, así como los que no logran
 	configurarse, pueden verse con:
-	<screen>
-dmesg | less
-	</screen>
+<screen>
+	dmesg | less
+</screen>
 	Un ejemplo típico de una tarjeta Ethernet reconocida es:
-	<screen>
-re0 at pci0 dev 8 function 0 "Realtek 8169" rev 0x10: RTL8169/8110SB (0x1000), apic 2 int 16 (irq 10), address 00:14:d1:1a:cf:b2
-	</screen>
+<screen>
+	re0 at pci0 dev 8 function 0 "Realtek 8169" rev 0x10: RTL8169/8110SB (0x1000), apic 2 int 16 (irq 10), address 00:14:d1:1a:cf:b2
+</screen>
 	Note que se lista el nombre de la interfaz (i.e 
 	<literal>re0</literal>),
 	los recursos de hardware que emplea y la dirección MAC (i.e
@@ -188,9 +188,9 @@ re0 at pci0 dev 8 function 0 "Realtek 8169" rev 0x10: RTL8169/8110SB (0x1000), a
 	OpenBSD incluye documentación completa para cada tipo de dispositivo 
 	detectable (por ejemplo opciones); para el caso del controlador 
 	del ejemplo anterior puede verse con:
-	<screen>
-man re
-	</screen>
+<screen>
+	man re
+</screen>
 </para>
 	</sect2>
 	<sect2 id="configuracion-interfaz">
@@ -208,9 +208,9 @@ man re
 			<command>man hostname.if</command> en el caso
 			de una red IPv4 con DHCP basta que ese archivo tenga
 			la línea:
-			<screen>
-dhcp
-			</screen>
+<screen>
+	dhcp
+</screen>
 		</para>
 		<para>
 			Si el direccionamiento en la red local es estático,
@@ -239,17 +239,17 @@ dhcp
 				</listitem>
 			</itemizedlist>
 			La línea completa sería:
-			<screen>
-inet 189.148.51.41 255.255.255.0 NONE
-			</screen>
+<screen>
+	inet 189.148.51.41 255.255.255.0 NONE
+</screen>
 		</para>
 		<para>Un archivo como estos lo puede crear y/o editar con
 			cualquier editor de texto (por ejemplo <literal>mg</literal> 
 			o <literal>vim</literal>).   Si tiene sesión de 
 			X-Window puede emplear desde una terminal 
-			<screen>
-sudo touch /etc/hostname.re0; sudo xfw /etc/hostname.re0
-			</screen>
+<screen>
+	doas touch /etc/hostname.re0; doas xfw /etc/hostname.re0
+</screen>
 			Estas ediciones también las puede hacer 
 			en adJ con botón derecho sobre el
 			escritorio Dispositivos->Red->Configurar Interfaces,
@@ -271,7 +271,7 @@ editor con el que la edite termine la línea con la tecla RETORNO.
 debe editar con su editor preferido y que también debe terminar con
 fin de línea. Un ejemplo típico del contenido sería una línea con:
 <screen>
-189.148.51.1
+	189.148.51.1
 </screen>
 Con adJ puede hacer botón derecho sobre el escritorio 
 Dispositivos->Red->Configurar Puerta de Enlace.
@@ -279,9 +279,9 @@ Dispositivos->Red->Configurar Puerta de Enlace.
 		<para>Después de hacer cambios a la configuración de
 			red es posible que pueda reiniciar el sistema de 
 			redes con:
-			<screen>
-$ sudo sh /etc/netstart
-			</screen>
+<screen>
+	doas sh /etc/netstart
+</screen>
 			aunque en algunos casos es necesario reiniciar
 			el computador.
 		</para>
@@ -294,9 +294,9 @@ $ sudo sh /etc/netstart
       <para>La tabla del protocolo ARP asocia direcciones físicas de
 	    tarjetas de red conectadas a su red con direcciones IP. Para
 	    examinar tal tabla use:
-	    <screen>
-arp -a 
-	    </screen> 
+<screen>
+	arp -a 
+</screen> 
 	    es posible agregar entradas de manera permanente o eliminarlas
 	    con las opciones <literal>-s</literal> y <literal>-d</literal>
 	    respectivamente.
@@ -538,9 +538,9 @@ Lado 2:  1 - blanco/verde, 2 - verde , 3 - blanco/naranja, 4 - blanco/cafe,
        con <acronym>IP</acronym> 192.168.1.1) intente conectarse a un
        cliente (tal vez <acronym>IP</acronym> 192.168.1.2) con 
        <command>ping</command> :
-	  <screen>
-ping 192.168.1.2	
-	  </screen>
+<screen>
+	ping 192.168.1.2	
+</screen>
 	  y viceversa.
 	</para>
     </sect3>

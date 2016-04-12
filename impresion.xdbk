@@ -11,10 +11,10 @@
 	con nombre <literal>lp</literal>, en los demás computadores
 	en el archivo <filename>/etc/printcap</filename> debe haber líneas 
 	como:
-	<screen>
-	  rp|remote line printer:\
-	  :lp=:rm=&ENOMCLIENTE;:rp=lp:sd=/var/spool/output:lf=/var/log/lpd-errs:
-	</screen>
+<screen>
+	rp|remote line printer:\
+		:lp=:rm=&ENOMCLIENTE;:rp=lp:sd=/var/spool/output:lf=/var/log/lpd-errs:
+</screen>
 	La impresora remota
 	está conectada a <literal>&ENOMCLIENTE;</literal> como
 	se especifica en el campo <literal>rm</literal>	(ha funcionado
@@ -54,15 +54,15 @@
    Para compartir una impresora manejada por cups (digamos
    DeskJet_3535),
 	edite el archivo /usr/local/etc/cups/cupsd.conf y asegurese de tener:
-	<screen>
-		Browsing On
-		BrowseProtocols cups
-		BrowseAllow 192.168.*.*
-		&lt;Location /printers/DeskJet_3535&gt;
-			AuthType None
-			Allow From All
-		&lt;/Location&gt;
-	</screen>
+<screen>
+	Browsing On
+	BrowseProtocols cups
+	BrowseAllow 192.168.*.*
+	&lt;Location /printers/DeskJet_3535&gt;
+		AuthType None
+		Allow From All
+	&lt;/Location&gt;
+</screen>
 		
 
 	Para imprimir desde Windows 2000 

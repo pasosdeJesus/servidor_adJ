@@ -33,43 +33,43 @@
 			red local, empleando un certificados cuyas llaves pública y privada 
 			debe copiarse a <filename>/etc/ldap/certs</filename> y ejecutar:
 <screen>
-    cd /etc/ldap/certs
-    chown _ldapd:_ldapd *
-    chmod 0640 /etc/ldap/certs/*key
-    chmod 0644 /etc/ldap/certs/*crt 
+	cd /etc/ldap/certs
+	chown _ldapd:_ldapd *
+	chmod 0640 /etc/ldap/certs/*key
+	chmod 0644 /etc/ldap/certs/*crt 
 </screen>
       Para configurar el servidor, verifique que exista el usuario 
 			<literal>_ldapd</literal> y el grupo <literal>_ldapd</literal> 
 			y edite <literal>/etc/ldapd.conf</literal>:
 <screen>
-schema "/etc/ldap/core.schema"                                                  
-schema "/etc/ldap/inetorgperson.schema"                                         
-schema "/etc/ldap/nis.schema"                                                   
- 
-lan_if = "re1"
-
-listen on $lan_if ldaps certificate www.pasosdeJesus.org
-listen on lo0 secure
-listen on "/var/run/ldapi"
-
-namespace "dc=www,dc=pasosdeJesus,dc=org" {
-        rootdn          "cn=root,dc=www,dc=pasosdeJesus,dc=org"
-        rootpw          "secret"
-        index           sn
-        index           givenName
-        index           cn
-        index           mail
-        index           objectClass
-        index           sn
-        fsync           on
-}                                                                               
+	schema "/etc/ldap/core.schema"                                                  
+	schema "/etc/ldap/inetorgperson.schema"                                         
+	schema "/etc/ldap/nis.schema"                                                   
+	 
+	lan_if = "re1"
+	
+	listen on $lan_if ldaps certificate www.pasosdeJesus.org
+	listen on lo0 secure
+	listen on "/var/run/ldapi"
+	
+	namespace "dc=www,dc=pasosdeJesus,dc=org" {
+	        rootdn          "cn=root,dc=www,dc=pasosdeJesus,dc=org"
+	        rootpw          "secret"
+	        index           sn
+	        index           givenName
+	        index           cn
+	        index           mail
+	        index           objectClass
+	        index           sn
+	        fsync           on
+	}                                                                               
 </screen>
 
      Recuerde que la clave del directorio debe ser mejor que la presentada 
 		 (i.e remplace <literal>secret</literal> por una buena clave). En lugar 
 		 de poner la clave plana también es posible poner la cadena generada con:
 <screen>
-    # slappasswd -v -u -h {CRYPT} -s secret
+	doas slappasswd -v -u -h {CRYPT} -s secret
 </screen>
       que en el caso de la clave '<literal>secret</literal>' es 
       '<literal>{CRYPT}uPUCy906TIu/k</literal>'
@@ -85,19 +85,19 @@ namespace "dc=www,dc=pasosdeJesus,dc=org" {
     <para>
 			Cada vez que modifique el archivo de configuración del servidor, puede 
 			verificarlo con:
-			<screen>
-    $ sudo ldapd -n
+<screen>
+	doas ldapd -n
 </screen>
       Para iniciar el servidor LDAP en modo de depuración para ver posibles 
 			errores:
 <screen>
-    $ sudo ldadpd -dv
+	doas ldadpd -dv
 </screen>
       Tras verificar el funcionamiento, para que en cada arranque se 
 			inicie el servidor puede agregar a <literal>/etc/rc.conf.local</literal>:
 <screen>
-    ldapd_flags=""
-    pkg_scripts = "ldapd"
+	ldapd_flags=""
+	pkg_scripts = "ldapd"
 </screen>
 
 E iniciar el servicio con <literal>/etc/rc.d/ldapd start</literal> 
@@ -111,8 +111,8 @@ y detenerlo con <literal>/etc/rc.d/ldadp stop</literal>
 					<para>
 Descarguelo y renombrelo:
 <screen>
-sudo ftp -o /etc/ldap/courier.schema \
-http://courier.cvs.sourceforge.net/viewvc/courier/libs/authlib/authldap.schema
+	doas ftp -o /etc/ldap/courier.schema \
+	http://courier.cvs.sourceforge.net/viewvc/courier/libs/authlib/authldap.schema
 </screen>
 					</para>
 				</listitem>
@@ -120,10 +120,10 @@ http://courier.cvs.sourceforge.net/viewvc/courier/libs/authlib/authldap.schema
 					<para>
 Edite /etc/ldap/courier.schema y quite comentario a las líneas:
 <screen>
-attributetype ( 1.3.6.1.4.1.10018.1.1.14 NAME 'mailhost'                        
-        DESC 'Host to which incoming POP/IMAP connections should be proxied'
-        EQUALITY caseIgnoreIA5Match                                        
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )  
+	attributetype ( 1.3.6.1.4.1.10018.1.1.14 NAME 'mailhost'                        
+	        DESC 'Host to which incoming POP/IMAP connections should be proxied'
+	        EQUALITY caseIgnoreIA5Match                                        
+	        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )  
 </screen>
 					</para>
 				</listitem>
@@ -139,15 +139,15 @@ attributetype ( 1.3.6.1.4.1.10018.1.1.14 NAME 'mailhost'
     <para>
 Instale el paquete con:
 <screen>
-    # pkg_add openldap-client
+	doas pkg_add openldap-client
 </screen>
 Verifique localmente que el servidor no cifrado corre con:
 <screen>
-     ldapsearch -x -b 'dc=www,dc=pasosdeJesus,dc=org' '(objectclass=*)'
+	ldapsearch -x -b 'dc=www,dc=pasosdeJesus,dc=org' '(objectclass=*)'
 </screen>
 Respecto al servidor cifrado puede analizar la conexión SSL con:
 <screen>
-     openssl s_client -connect 192.168.2.1:465
+	openssl s_client -connect 192.168.2.1:465
 </screen>
 Puede verificar sus certificados contra la entidad que los expide siguiendo 
 instrucciones de {4}.    
@@ -156,7 +156,7 @@ instrucciones de {4}.
 	Puede deshabilitar la verificación de certificados de ldapsearch 
 	poniendo en <literal>/etc/openldap/ldap.conf</literal>:
 <screen>
-    TLS_REQCERT never
+	TLS_REQCERT never
 </screen>
 
 Para hacer pruebas desde otro computador, tenga en cuenta que en OpenBSD 
@@ -164,12 +164,12 @@ ldapsearch utiliza openssl mientras que por ejemplo en Ubuntu emplea
 GNUTLS, por esto eventualmente puede requerir descargar certificado de 
 autoridad certificadora (digamos gd.pem) y ejecutar:
 <screen>
-    sudo cat /etc/ssl/certs/gd.pem >> /etc/ssl/certs/ca-certificates.crt
+	doas cat /etc/ssl/certs/gd.pem >> /etc/ssl/certs/ca-certificates.crt 
 </screen>
 
 Además de modificar <filename>/etc/ldap/ldap.conf</filename> para agregar
 <screen>
-    TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
+	TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
 </screen>
 
   	</para>
@@ -186,44 +186,44 @@ Además de modificar <filename>/etc/ldap/ldap.conf</filename> para agregar
 			formato ldif, por ejemplo leidos de un archivo. Un primer archivo con 
 			datos de la organización puede ser <literal>org.ldif</literal> y contener:
 <screen>
-dn:     dc=www,dc=pasosdeJesus,dc=org
-objectClass:    dcObject
-objectClass:    organization
-o:      Pasos de Jesús
-dc:     correo
+	dn:     dc=www,dc=pasosdeJesus,dc=org
+	objectClass:    dcObject
+	objectClass:    organization
+	o:      Pasos de Jesús
+	dc:     correo
 
-dn: cn=admin,dc=correo,dc=pasosdeJesus,dc=org
-objectClass: organizationalRole
-cn: admin
+	dn: cn=admin,dc=correo,dc=pasosdeJesus,dc=org
+	objectClass: organizationalRole
+	cn: admin
 
-dn:ou=gente, dc=correo,dc=pasosdeJesus,dc=org
-objectClass:    top
-objectClass:    organizationalUnit
-ou:     gente
+	dn:ou=gente, dc=correo,dc=pasosdeJesus,dc=org
+	objectClass:    top
+	objectClass:    organizationalUnit
+	ou:     gente
 
-dn:ou=grupos,dc=correo,dc=pasosdeJesus,dc=org
-objectClass:    top
-objectClass:    organizationalUnit
-ou:     grupos
+	dn:ou=grupos,dc=correo,dc=pasosdeJesus,dc=org
+	objectClass:    top
+	objectClass:    organizationalUnit
+	ou:     grupos
 
-dn:ou=sendmail,dc=www,dc=pasosdeJesus,dc=org
-ou: sendmail
-objectClass: top
-objectClass: organizationalUnit
-userPassword: sendmail
+	dn:ou=sendmail,dc=www,dc=pasosdeJesus,dc=org
+	ou: sendmail
+	objectClass: top
+	objectClass: organizationalUnit
+	userPassword: sendmail
 </screen>
 
 Nota: Al agregar información verifique no dejar espacios en blanco al final de cada línea.
 
 Se pueden agregar <literal>org.ldif</literal> con:
 <screen>
-ldapadd -x -D "cn=admin,dc=www,dc=pasosdeJesus,dc=org" -W \
-  -h www.pasosdeJesus.org -f org.ldif
+	ldapadd -x -D "cn=admin,dc=www,dc=pasosdeJesus,dc=org" -W \
+	-h www.pasosdeJesus.org -f org.ldif
 </screen>
 
 Además de poder revisar los mensajes que <literal>slapd</literal> genere al ejecutarse en modo de depuración, podrá consultar los datos ingresados al directorio con:
 <screen>
-ldapsearch -x -b 'dc=www,dc=pasosdeJesus,dc=org' '(objectclass=*)'
+	ldapsearch -x -b 'dc=www,dc=pasosdeJesus,dc=org' '(objectclass=*)'
 </screen>
 
   	</para>
@@ -236,7 +236,7 @@ ldapsearch -x -b 'dc=www,dc=pasosdeJesus,dc=org' '(objectclass=*)'
 			Instale el paquete y siga las instrucciones que de (por ejemplo 
 			activar <literal>php-ldap</literal>):
 <screen>
-# pkg_add phpldapadmin
+	doas pkg_add phpldapadmin
 </screen>
 
 También debe asegurar que pueden emplearse los dispositivos de generación 
@@ -246,10 +246,10 @@ que en <literal>/etc/fstab</literal> al montar la partición
 <literal>/var</literal> este permitiendo dispositivos (que no este la 
 opción <literal>nodev</literal>) y ejecute:
 <screen>
-cd /var/www
-sudo mkdir -p dev
-cd dev
-/dev/MAKEDEV arandom
+	cd /var/www
+	doas mkdir -p dev
+	cd dev
+	/dev/MAKEDEV arandom
 </screen>
     </para>
 	</sect2>

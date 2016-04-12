@@ -60,11 +60,13 @@
       Por ejemplo si conecta dos sistemas OpenBSD empleando en ambos
       el primer puerto serial, en uno de los dos puede ejecutar 
       (como usuario <literal>root</literal>)
-      <screen>
-	cat &lt; /dev/cua00</screen>
+<screen>
+	cat &lt; /dev/cua00
+</screen>
       mientras que en el otro ejecute
-      <screen>
-	cat &gt; /dev/cua00</screen>
+<screen>
+	cat &gt; /dev/cua00
+</screen>
       cuando escriba en el segundo y presione ENTER, en el primero recibirá
       el mensaje y líneas en blanco (<literal>cat</literal> no es el
       programa apropiado para establecer la comunicación, sólo para probar).
@@ -82,9 +84,9 @@
     <para>
       Basta editar el archivo <filename>/etc/ttys</filename>, quitar el 
       comentario a la línea apropiada para que quede:
-      <screen>
-tty00   "/usr/libexec/getty std.9600"   vt220 on secure
-      </screen>
+<screen>
+	tty00   "/usr/libexec/getty std.9600"   vt220 on secure
+</screen>
       Después puede reiniciar el sistema o reiniciar <command>init</command>
       con: <command>kill -HUP 1</command>.
     </para>
@@ -125,8 +127,9 @@ tty00   "/usr/libexec/getty std.9600"   vt220 on secure
     </para>
     <para>Si el computador que va a conectar es un sistema OpenBSD puede
       emplear el programa <command>tip</command> como usuario root:
-      <screen>
-tip tty0 </screen>
+<screen>
+	tip tty0 
+</screen>
       Es posible que tenga que intentar varias veces, si configura el
       servidor con una velocidad diferente puede especificarla por ejemplo
       con <command>tip -38400 tty0</command>
@@ -149,12 +152,13 @@ tip tty0 </screen>
       con <command>uudecode</command>.  Para codificar un archivo
       <filename>prog.tgz</filename> y dejarlo codificado en
       <filename>prog.tgz.uue</filename>:
-      <screen>
-uuencode prog.tgz &lt; prog.tgz &gt; prog.tgz.uue</screen>
+<screen>
+	uuencode prog.tgz &lt; prog.tgz &gt; prog.tgz.uue
+</screen>
       posteriormente para decodificarlo:
-      <screen>
-uudecode prog.tgz.uue
-      </screen>
+<screen>
+	uudecode prog.tgz.uue
+</screen>
     </para>
     <para>El inconveniente del método descrito es que <command>tip</command>
       no verifica la información transmitida. Una alternativa es
@@ -162,9 +166,10 @@ uudecode prog.tgz.uue
       como en servidor el paquete <literal>zmtx-zmrx</literal>
       (o <literal>lrzsz</literal>).  Cuando desee transmitir
       un archivo del servidor al cliente, inicie la transmisión
-      en el servidor: <screen>
-zmtx Mattich2.pdf
-      </screen>
+      en el servidor: 
+<screen>
+	zmtx Mattich2.pdf
+</screen>
       y en el cliente desde <command>tip</command> use
       <literal>~C zmrx</literal>.  Para enviar un archivo del cliente
       al servidor ejecute en el servidor:  <command>zmrx</command> y
@@ -188,52 +193,52 @@ zmtx Mattich2.pdf
     <para>En el servidor asegúrese de tener en el archivo
 	<filename>/etc/ppp/ppp.conf</filename>:
 
-      <screen>
-default:
-  set log Phase Chat LCP IPCP CCP tun command
-  set device /dev/cua00
-  set speed 115200
-  set ctsrts on
-  set dial ""
-
-modemnulo:
-  set timeout 0
-  set lqrperiod 10
-  enable proxy
-  enable lqr
-  accept lqr
-  allow users SuLogin
-       </screen>
+<screen>
+	default:
+	  set log Phase Chat LCP IPCP CCP tun command
+	  set device /dev/cua00
+	  set speed 115200
+	  set ctsrts on
+	  set dial ""
+	
+	modemnulo:
+	  set timeout 0
+	  set lqrperiod 10
+	  enable proxy
+	  enable lqr
+	  accept lqr
+	  allow users SuLogin
+</screen>
 
        Remplazando <literal>SuLogin</literal>, <literal>SuClave</literal>
        y las direcciones de red por las apropiadas.
        Por su parte el archivo <filename>/etc/ppp/ppp.conf</filename>
        del cliente debe contener:
-       <screen>
-default:
- set log Phase Chat LCP IPCP CCP tun command
- set device /dev/cua00
- set speed 115200
- set ctsrts on
- set dial ""
-
-modemnulo:
-  set dial ""
-  set authkey SuClave
-  set login "TIMEOUT 3 ogin:-\\r-login: SuLogin word: \\P $ ppp\\s\\-direct\\smodemnulo\\r"
-  set lqrperiod 10
-  set timeout 0
-  set ifaddr 192.168.16.20 192.168.16.131
-  add default HISADDR
-  enable lqr
-  accept lqr
-  enable dns
-       </screen>
+<screen>
+	default:
+	 set log Phase Chat LCP IPCP CCP tun command
+	 set device /dev/cua00
+	 set speed 115200
+	 set ctsrts on
+	 set dial ""
+	
+	modemnulo:
+	  set dial ""
+	  set authkey SuClave
+	  set login "TIMEOUT 3 ogin:-\\r-login: SuLogin word: \\P $ ppp\\s\\-direct\\smodemnulo\\r"
+	  set lqrperiod 10
+	  set timeout 0
+	  set ifaddr 192.168.16.20 192.168.16.131
+	  add default HISADDR
+	  enable lqr
+	  accept lqr
+	  enable dns
+</screen>
 
        Después pude iniciar la comunicación desde el cliente con:
-       <screen>
-ppp -ddial modemnulo
-       </screen>
+<screen>
+	ppp -ddial modemnulo
+</screen>
 
      </para>
   </sect2>
