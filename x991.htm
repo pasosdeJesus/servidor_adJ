@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>NAT (Network Address Translation)</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Direcciones, enrutamiento, transporte y cortafuegos"
+HREF="c855.htm"><LINK
+REL="PREVIOUS"
+TITLE="Direcciones, enrutamiento, transporte y cortafuegos"
+HREF="c855.htm"><LINK
+REL="NEXT"
+TITLE="Cortafuegos: filtrado y túneles"
+HREF="x1020.htm"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c855.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1020.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="nat"
+>NAT (Network Address Translation)</A
+></H1
+><P
+>&#13;Puede emplear NAT para que un computador conectado a una red
+privada y que se conecte a Internet, sea
+pasarela de los computadores de la red interna y así estos
+puedan emplear Internet.  </P
+><P
+>&#13;Para activarlo debe estar corriendo <B
+CLASS="command"
+>pf</B
+>
+(como se explica al comienzo de este capítulo) y debe activar
+reenvío de IP con:
+<PRE
+CLASS="screen"
+>&#13;	doas sysctl -w net.inet.ip.forwarding=1
+</PRE
+>
+o mejor aún de manera más permanente verificando que el
+archivo <TT
+CLASS="filename"
+>/etc/sysctl.conf</TT
+> tenga la línea:
+<PRE
+CLASS="screen"
+>&#13;	net.inet.ip.forwarding=1	
+</PRE
+>
+	</P
+><P
+>&#13;Como el computador
+que hará NAT debe tener dos interfaces de red una para conectarlo a la
+red interna (con IP de la red interna) y otra para conectarlo a 
+Internet (con IP pública).  En el archivo
+<TT
+CLASS="filename"
+>/etc/pf.conf</TT
+> configure las variables 
+<TT
+CLASS="literal"
+>ext_if</TT
+> e <TT
+CLASS="literal"
+>int_if</TT
+>
+con los nombres de las interfaces externa (conectada a Internet)
+e interna respectivamente (verifiquelas antes con 
+<B
+CLASS="command"
+>ifconfig</B
+>).
+Por ejemplo un archivo de configuración mínimo que hace
+NAT, suponiendo que la interfaz interna es <TT
+CLASS="literal"
+>fxp0</TT
+> y la
+externa es <TT
+CLASS="literal"
+>nfe0</TT
+> es:
+<PRE
+CLASS="screen"
+>&#13;	int_if="fxp0"
+	ext_if="nfe0"
+	
+	set skip on lo
+	
+	match out on $ext_if from !($ext_if) to any nat-to ($ext_if:0)
+	
+	pass in quick on $int_if
+</PRE
+>
+Esta configuración podría cargarse con:
+<PRE
+CLASS="screen"
+>&#13;	doas pfctl -f /etc/pf.conf.
+</PRE
+>
+</P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="referencias-nat"
+>Referencias y lecturas recomendadas</A
+></H2
+><P
+>&#13;      Las siguientes páginas man:
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>pf</SPAN
+>(4)</SPAN
+>,
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>pfctl</SPAN
+>(4)</SPAN
+>.
+    </P
+><P
+>&#13;Guía del usuario de PF [<SPAN
+CLASS="citation"
+><A
+HREF="b3057.htm#PF"
+>PF</A
+></SPAN
+>].
+	</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c855.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1020.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Direcciones, enrutamiento, transporte y cortafuegos</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c855.htm"
+ACCESSKEY="U"
+>Subir</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Cortafuegos: filtrado y túneles</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

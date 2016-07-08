@@ -5,12 +5,12 @@
 	  Para configurar un cliente basta editar 
 	  <code class="filename">/etc/rc.conf.local</code> para agregar:
 </p><pre class="screen">
-ntpd_flags=""
+	ntpd_flags=""
 </pre><p>
 lo cual empleará el archivo de configuración <code class="filename">/etc/ntpd.conf</code>
 que por defecto especifica:
 </p><pre class="screen">
-servers pool.ntp.org
+	servers pool.ntp.org
 </pre><p>
 con lo cual actua como cliente empleando aleatoriamente alguno de los
 servidores de NTP disponibles mundialmente en <code class="literal">pool.ntp.org</code>.

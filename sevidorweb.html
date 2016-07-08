@@ -12,26 +12,26 @@
 		Sus fuentes se basan en las de <code class="literal">relayd</code>  que fue introducido y madurado en OpenBSD desde la versión 4.1 (inicialmente llamado <code class="literal">hoststated</code>).
 	</p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="httpd-min"></a>7.1.1. Configuración mínima</h4></div></div></div><p>
 			En el archivo <code class="literal">/etc/rc.conf.local</code> agregue:
-			</p><pre class="screen">
+</p><pre class="screen">
 	httpd_flags=""
-			</pre><p>
+</pre><p>
 			y en adJ agregue <code class="literal">httpd</code> a la variable <code class="literal">pkg_scripts</code>.
 		</p><p>
 			Se configura en el archivo <code class="literal">/etc/httpd.conf</code> cuya sintaxis tiene algunas similitudes con la de <code class="literal">nginx</code> y con la de <code class="literal">relayd</code>.  Puede constar de 4 secciones: macros, configuraciones globales, uno o más servidores y tipos.
 		</p><p>
 			La sintaxis de la sección de tipos es idéntica a la de <code class="literal">nginx</code> y como puede usarse <code class="literal">include</code> para incluir otro archivo de configuración, el siguiente es un ejemplo mínimo (incluyendo el macro <code class="literal">ext_ip</code>):
-			</p><pre class="screen">
+</p><pre class="screen">
 	ext_ip="200.201.202.203"
 	server "default" {
 		listen on $ext_ip port 80
 	}
 	include "/etc/nginx/mime.types"
-			</pre><p>
+</pre><p>
 		</p><p>
 			Podría probarlo iniciando en modo de depuración con:
-			</p><pre class="screen">
-	sudo httpd -vn
-			</pre><p>
+</p><pre class="screen">
+	doas httpd -vn
+</pre><p>
 
 			Y examinando con un navegador la URL 
 			<code class="literal">http://200.201.202.203</code>, con lo que 
@@ -48,7 +48,7 @@
 					</p></li></ul></div><p>
 		</p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="httpd-ssl"></a>7.1.2. Servidor con cifrado</h4></div></div></div><p>
 			Al ejemplo de configuración mínima anterior bastaría agregarle ssl a la opción listen e indicar el puerto 443, que es el asignado por defecto para HTTPS:
-			</p><pre class="screen">
+</p><pre class="screen">
 	ext_ip="200.201.202.203"
 	server "default" {
 		listen on $ext_ip ssl port 443
@@ -62,7 +62,7 @@
 		</p><p>
 			Si se configuraran los dominios www.miescuela.edu.co y www.otrodominio.co apuntando a la misma IP de los ejemplos anteriores y tiene las páginas de cada dominio en <code class="literal">/var/www/htdocs/miescuela</code> y <code class="literal">/var/www/htdocs/otrodominio</code>:
 
-			</p><pre class="screen">
+</p><pre class="screen">
 	ext_ip="200.201.202.203"
 	server "www.miescuela.edu.co" {
 		listen on $ext_ip port 80
@@ -81,7 +81,7 @@
 		</p><p>
 			Una configuración mínima para SIVeL 1.2 que opere en 192.168.1.1, con archivos en <code class="literal">/var/www/htdcos/sivel</code> y con SSL es:
 
-			</p><pre class="screen">
+</p><pre class="screen">
 	server "192.168.1.1" {
 		listen on egress ssl port 443
 
@@ -95,14 +95,14 @@
 		</p><p>
 
 			Operará bien con la configuración por defecto de php-fpm, que puede instalar con:
-			</p><pre class="screen">
-	sudo pkg_add php-fpm
-	sudo cp /usr/local/share/examples/php-5.4/php-fpm.conf /etc/
-			</pre><p>
+</p><pre class="screen">
+	doas pkg_add php-fpm
+	doas cp /usr/local/share/examples/php-5.4/php-fpm.conf /etc/
+</pre><p>
 			e iniciar con:
-			</p><pre class="screen">
-	sudo sh /etc/rc.d/php-fpm start
-			</pre><p>
+</p><pre class="screen">
+	doas sh /etc/rc.d/php-fpm start
+</pre><p>
 			o mejor en cada arranque de su sistema editando <code class="literal">/etc/rc.conf.local</code>
 			y agregando
 			</p><div class="itemizedlist"><ul type="disc"><li><p>
@@ -112,57 +112,62 @@
 					</p></li></ul></div><p>
 		</p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="httpd-otros"></a>7.1.5. Otros detalles de uso</h4></div></div></div><p>
 					Si requiere volve a leer archivo de configuración, en lugar de reiniciar httpd puede ejecutar:
-					</p><pre class="screen">
+</p><pre class="screen">
 						pkill -HUP httpd
-					</pre><p>
+</pre><p>
 				</p><p>
 					El formato de las bitácoras por defecto es similar al de <code class="literal">nginx</code>
 				</p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="nginx"></a>7.2. Nginx</h3></div></div></div><p>
-		OpenBSD y adJ incluyen nginx también entre 
-		los componentes básicos.  Su archivo de configuración
-		es <code class="filename">/etc/nginx/nginx.conf</code>.
-		Por defecto correra en una jaula en 
-		<code class="filename">/var/www</code>, puede iniciarlo 
-		manualmente con:
-		</p><pre class="screen">
-			/etc/rc.d/nginx start
-		</pre><p>
-		y detenerlo con
-		</p><pre class="screen">
-			/etc/rc.d/nginx stop
-		</pre><p>
-		Para que inicie automáticamente en cada arranque 
-		basta agregar en
-		<code class="filename">/etc/rc.conf.local</code>:
-		</p><pre class="screen">
-			nginx_flags=""
-		</pre><p>
-		y que añada <code class="literal">nginx</code> en
-		<code class="literal">pkg_scripts</code>.
+OpenBSD y adJ incluyen nginx también entre 
+	los componentes básicos.  Su archivo de configuración
+	es <code class="filename">/etc/nginx/nginx.conf</code>.
+	Por defecto correra en una jaula en 
+	<code class="filename">/var/www</code>, puede iniciarlo 
+	manualmente con:
+</p><pre class="screen">
+	doas /etc/rc.d/nginx start
+</pre><p>
+	y detenerlo con
+</p><pre class="screen">
+	doas /etc/rc.d/nginx stop
+</pre><p>
+	Para que inicie automáticamente en cada arranque 
+	basta agregar en
+	<code class="filename">/etc/rc.conf.local</code>:
+</p><pre class="screen">
+	nginx_flags=""
+</pre><p>
+	y que añada <code class="literal">nginx</code> en
+	<code class="literal">pkg_scripts</code>.
 	</p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="nginx-php"></a>7.2.1. Uso de PHP con nginx</h4></div></div></div><p>
-			No hay un módulo para PHP pero puede ejecutarse como Fast-CGI.  
-			Esto puede lograrse por ejemplo con el paquete
-			<code class="literal">php-fpm-5.5.30</code>.   Este paquete incluye un
-			servicio que se configura en <code class="filename">/etc/php-fpm.conf</code>
-			y que por defecto servirá en el puerto 9000.   Inicielo con
-			</p><pre class="screen">
-				sudo sh /etc/rc.d/php-fpm start
-			</pre><p>
-			o de manera permanente en cada arranque agregue <code class="literal">php-fpm</code>
-			en <code class="literal">pkg_scripts</code> en <code class="filename">/etc/rc.conf.local</code>.
+No hay un módulo para PHP pero puede ejecutarse como Fast-CGI.  
+Esto puede lograrse por ejemplo con el paquete
+<code class="literal">php-fpm-5.6.19</code>.   Este paquete incluye un
+servicio que se configura en <code class="filename">/etc/php-fpm.conf</code>
+por ejemplo para escuchar en el socket 
+<code class="filename">/var/www/run/php-fpm.sock</code> con
+</p><pre class="screen">
+	listen = /var/www/run/php-fpm.sock
+</pre><p>
+Inicielo con
+</p><pre class="screen">
+	doas sh /etc/rc.d/php-fpm start
+</pre><p>
+o de manera permanente en cada arranque agregue <code class="literal">php-fpm</code>
+en <code class="literal">pkg_scripts</code> en <code class="filename">/etc/rc.conf.local</code>.
 
-			En el archivo de configuración de nginx agregue en la sección
-			<code class="literal">server</code> donde servirá Apache:
-			</p><div class="orderedlist"><ol type="1"><li><p>En <code class="literal">index</code> agregue 
-						<code class="literal">index.php</code></p></li><li><p>Adicione:
-						</p><pre class="screen">
-							location ~ \.php$ {
-							fastcgi_pass   127.0.0.1:9000;
-							fastcgi_index  index.php;
-							fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-							include        fastcgi_params;
-							}
-					</pre></li></ol></div><p>
+En el archivo de configuración de nginx agregue en la sección
+<code class="literal">server</code> donde servirá Apache:
+</p><div class="orderedlist"><ol type="1"><li><p>En <code class="literal">index</code> agregue 
+			<code class="literal">index.php</code></p></li><li><p>Adicione:
+</p><pre class="screen">
+	location ~ \.php$ {
+		fastcgi_pass   unix:run/php-fpm.sock;
+		fastcgi_index  index.php;
+		fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+		include        fastcgi_params;
+	}
+</pre></li></ol></div><p>
 		</p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="apache"></a>7.3. Apache</h3></div></div></div><p>adJ y OpenBSD cuentan con el porte de
 		      transición <code class="literal">apache-httpd-openbsd</code>
 		      con el Apache 1.3.29 modificado que había en 
@@ -173,7 +178,7 @@
 </p><p>
 Instale el paquete:
 </p><pre class="screen">
-sudo pkg_add apache-httpd-openbsd
+	doas pkg_add apache-httpd-openbsd
 </pre><p>
 
 En el archivo <code class="literal">etc/rc.conf.local</code>  haga los siguientes cambios (parcialmente explicados en {2}):
@@ -188,7 +193,7 @@ lugar de <code class="literal">/usr/lib/apache</code>
 </p><p>
 Puede probar reiniciar el servidor completo para asegurar que el Apache 1.3.29 arranca también, o bien iniciar sólo el servicio con:
 </p><pre class="screen">
-sudo sh /etc/rc.d/apache start
+	doas sh /etc/rc.d/apache start
 </pre><p>
 </p><p>
 Este porte corre por defecto y
@@ -199,32 +204,32 @@ Este porte corre por defecto y
 	pueden requerir que Apache tenga acceso a otras partes del sistema,
 	aunque no lo recomendamos puede lograrlo iniciando con el flag:
 	</p><pre class="screen">
-apache_flags="-u" </pre><p>
+	apache_flags="-u" </pre><p>
       </p><p>Para detener el servidor una vez esté corriendo puede emplear:
 </p><pre class="screen">
-# /etc/rc.d/apache stop
+	doas /etc/rc.d/apache stop
 </pre><p>
 Para iniciarlo o reiniciarlo con las opciones que haya configurado
 en <code class="filename">/etc/rc.conf.local</code>:
 	</p><pre class="screen">
-# /etc/rc.d/apache restart
+	doas /etc/rc.d/apache restart
 	</pre><p>
 </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="directorios-usuarios"></a>7.3.1. Directorios para usuarios</h4></div></div></div><p>El archivo de configuración por defecto
 	(<code class="filename">/var/www/conf/httpd.conf</code>) no incluye 
 	directorios para usuarios. A partir de OpenBSD 3.4 se recomienda 
 	que estos directorios se creen en <code class="filename">/var/www/users</code>, 
 	los activa estableciendo en el archivo de configuración:</p><pre class="screen">
-UserDir /users </pre><p>
+	UserDir /users </pre><p>
 	o bien</p><pre class="screen">
-UserDir /var/www/users </pre><p>
+	UserDir /var/www/users </pre><p>
 	el primer en caso de que corra Apache chroot y el segundo si no.
 	En ambos casos se sugiere la siguiente secuencia para crear
 	un directorio de publicación para el usuario pablo:
 	</p><pre class="screen">
-# cd /home/pablo
-# mkdir /var/www/users/pablo
-# ln -s /var/www/users/pablo public_html
-# chown pablo:pablo /var/www/users/pablo
+	cd /home/pablo
+	doas mkdir /var/www/users/pablo
+	doas ln -s /var/www/users/pablo public_html
+	doas chown pablo:pablo /var/www/users/pablo
 	</pre><p>
 
 	Así el usuario podrá publicar sus archivos en su subdirectorio
@@ -243,22 +248,22 @@ UserDir /var/www/users </pre><p>
 		      en <code class="filename">/var/www/usr/local/lib/apache/modules/</code></p></li><li><p>Agregue en <code class="filename">/var/www/conf/httpd.conf</code>
 		una línea del estilo:
 		</p><pre class="screen">
-NameVirtualHost 65.167.3.4
+	NameVirtualHost 65.167.3.4
 		</pre><p>
 		remplazando la IP por la de su servidor
 	      </p><p>Agregue un dominio virtual por cada dominio que maneje,
 		por ejemplo:
 		</p><pre class="screen">
-&lt;VirtualHost 65.167.63.234&gt;
-    ServerAdmin pablo@miescuela.edu.co
-    DocumentRoot /var/www/htdocs
-    ServerName www.miescuela.edu.co
-    ServerAlias miescuela.edu.co
-    ErrorLog logs/miescuela.edu.co-error_log
-    Options ExecCgi Includes MultiViews Indexes FollowSymlinks 
-    SymLinksIfOwnerMatch
-    CustomLog logs/miescuela.edu.co-access_log common
-&lt;/VirtualHost&gt;
+	&lt;VirtualHost 65.167.63.234&gt;
+	    ServerAdmin pablo@miescuela.edu.co
+	    DocumentRoot /var/www/htdocs
+	    ServerName www.miescuela.edu.co
+	    ServerAlias miescuela.edu.co
+	    ErrorLog logs/miescuela.edu.co-error_log
+	    Options ExecCgi Includes MultiViews Indexes FollowSymlinks 
+	    SymLinksIfOwnerMatch
+	    CustomLog logs/miescuela.edu.co-access_log common
+	&lt;/VirtualHost&gt;
 		</pre><p>
 	      </p></li></ol></div><p>
       </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="ssl"></a>7.3.3. SSL</h4></div></div></div><p>
@@ -269,9 +274,9 @@ un certificado que pueda ser firmado por una Autoridad Certificadora
 o por usted mismo.
 
 </p><pre class="screen">
-# openssl genrsa -out /etc/ssl/private/server.key 1024
-# openssl req -new -key /etc/ssl/private/server.key \
-       -out /etc/ssl/private/server.csr
+	doas openssl genrsa -out /etc/ssl/private/server.key 1024
+	doas openssl req -new -key /etc/ssl/private/server.key \
+	       -out /etc/ssl/private/server.csr
 </pre><p>
 
 Tras el segundo paso debe ingresar el código del país (co para Colombia),
@@ -284,8 +289,8 @@ devolverá su certificado firmado (digamos <code class="filename">sudominio.pem<
 el cual debe ubicar en <code class="filename">/etc/ssl/server.crt</code>.
 Si prefiere firmar usted mismo su certificado emplee:
 </p><pre class="screen">
-openssl x509 -req -days 3650 -in /etc/ssl/private/server.csr \
-      -signkey /etc/ssl/private/server.key -out /etc/ssl/server.crt
+	doas openssl x509 -req -days 3650 -in /etc/ssl/private/server.csr \
+		-signkey /etc/ssl/private/server.key -out /etc/ssl/server.crt
 </pre><p>
 </p><p>
 A continuación puede
@@ -306,42 +311,42 @@ líneas de la sección <code class="literal">&lt;VirtualHost _default_:443&gt;</
 		</p></li><li><p> Reiniciar el servidor con 
 las opciones apropiadas, por ejemplo:
 </p><pre class="screen">
-sudo /etc/rc.d/apache restart
+	doas /etc/rc.d/apache restart
 </pre><p>
 		</p></li></ul></div><p>
 Finalmente puede probar abriendo desde un navegador
 <code class="literal">https://Jesus.miescuela.edu.co</code>
 </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="php"></a>7.3.4. PHP</h4></div></div></div><p>Instale el paquete
-		<code class="literal">php-5.5.30</code>.
+		<code class="literal">php-5.6.19</code>.
 	  Después cree un enlace para activarlo en servidor web:
 	  </p><pre class="screen">
-ln -s /var/www/conf/modules.sample/php-5.4.conf \
-	/var/www/conf/modules/php.conf
+	doas ln -s /var/www/conf/modules.sample/php-5.4.conf \
+		/var/www/conf/modules/php.conf
 	  </pre><p>
 	  y asegúrese de que las siguientes líneas estén en
 	  <code class="filename">/var/www/conf/httpd.conf</code>:
 	  </p><pre class="screen">
-		  LoadModule php5_module /usr/local/lib/apache/modules/libphp5.so
+	LoadModule php5_module /usr/local/lib/apache/modules/libphp5.so
 
-AddType application/x-httpd-php .php
+	AddType application/x-httpd-php .php
 
-DirectoryIndex index.html index.php
+	DirectoryIndex index.html index.php
 	  </pre><p>
 	  Reinicie Apache  y pruebe la instalación de PHP por ejemplo
 	  cargando desde un navegador un archivo <code class="filename">prueba.php</code>
 	  el cual debe tener el siguiente contenido:
 	  </p><pre class="screen">
-&lt;?php
-  phpinfo();
-?&gt;
+	&lt;?php
+	  phpinfo();
+	?&gt;
 	  </pre><p>
 	</p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="php-postgresql"></a>7.3.4.1. Soporte para PostgreSQL en PHP</h5></div></div></div><p>Para activar el soporte para PostgreSQL (ver <a href="postgresql.html" title="2. Motor de bases de datos PostgreSQL">Sección 2, “Motor de bases de datos PostgreSQL”</a>en PHP
-      instale el paquete <code class="literal">php-pgsql-5.5.30</code> y
+      instale el paquete <code class="literal">php-pgsql-5.6.19</code> y
       ejecute:
-      </p><pre class="screen">
-ln -fs /etc/php-5.4.sample/pgsql.ini \
-	/etc/php-5.4/pgsql.ini
-	    </pre><p>
+	</p><pre class="screen">
+	doas ln -fs /etc/php-5.4.sample/pgsql.ini \
+		/etc/php-5.4/pgsql.ini
+	</pre><p>
 	    Puede comprobar que esta extensión funciona revisando
 	    la salida de la función <code class="literal">phpinfo()</code>.
 	</p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="lecturas-php"></a>7.3.4.2. Lecturas recomendadas</h5></div></div></div><p>Puede aprender sobre PHP en 
@@ -356,15 +361,15 @@ ln -fs /etc/php-5.4.sample/pgsql.ini \
 		activar SSI basta quitar los comentarios de las siguientes
 		líneas en <code class="filename">/var/www/conf/httpd.conf</code>:
 		</p><pre class="screen">
-AddType text/html .shtml
-AddHandler server-parsed .shtml
+	AddType text/html .shtml
+	AddHandler server-parsed .shtml
 		</pre><p>
 
 		y en el directorio o directorios desde los que se quieren
 		usar páginas con SSI (extensión <code class="filename">.shtml</code>), 
 		agregar entre las opciones:
 		</p><pre class="screen">
-Option Includes
+	Option Includes
 		</pre><p>
 		Si se desea que las páginas con extensión
 		<code class="filename">.html</code> sean reconocidas por el servidor,
@@ -372,17 +377,17 @@ Option Includes
 		de ejecución y agregué después del <code class="literal">AddHandler</code>
 		antes mencionado:
 		</p><pre class="screen">
-XBitHack on
+	XBitHack on
 		</pre><p>
 	</p><p>Tras reiniciar apache puede probar creando una página
 		<code class="filename">prueba.shtml</code> por ejemplo con:
 		</p><pre class="screen">
-&lt;html&gt;
-	&lt;head&gt;&lt;title&gt;&lt;/title&gt;&lt;/head&gt;
-	&lt;body&gt;
-		&lt;!--#echo var="DATE_LOCAL" --&gt;
-	&lt;/body&gt;
-&lt;/html&gt; 
+	&lt;html&gt;
+		&lt;head&gt;&lt;title&gt;&lt;/title&gt;&lt;/head&gt;
+		&lt;body&gt;
+			&lt;!--#echo var="DATE_LOCAL" --&gt;
+		&lt;/body&gt;
+	&lt;/html&gt; 
 		</pre><p>
 	Al abrirla debe presentar la fecha y hora del sistema.
 

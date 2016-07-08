@@ -1,0 +1,363 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Servidor ftp</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Protocolos de soporte y de usuario"
+HREF="c1100.htm"><LINK
+REL="PREVIOUS"
+TITLE="Servidor de correo electrónico"
+HREF="x1381.htm"><LINK
+REL="NEXT"
+TITLE="Servidor Web"
+HREF="x2153.htm"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1381.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Capítulo 5. Protocolos de soporte y de usuario</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2153.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="servidor-ftp"
+>Servidor <TT
+CLASS="literal"
+>ftp</TT
+></A
+></H1
+><P
+>Sólo recomendamos el servicio ftp para poner un
+		servidor anónimo (con el usuario
+		<TT
+CLASS="literal"
+>anonymous</TT
+> y una clave arbitraria).  
+		No para que transfiera datos
+		de un usuario porque este servicio transmite claves
+		planas por la red, y así mismo transmite archivos
+		sin encripción alguna.   Para transferir información
+		de usuarios emplee un protocolo seguro como
+		<B
+CLASS="command"
+>scp</B
+>.
+	</P
+><P
+>OpenBSD incluye un servidor de ftp auditado, para que los
+	  usuarios del sistema puedan emplearlo
+	  basta agregar la siguiente línea al archivo
+          <TT
+CLASS="filename"
+>/etc/rc.conf.local</TT
+>:
+<PRE
+CLASS="screen"
+>&#13;	ftpd_flags="-D -A"
+</PRE
+>
+	  Que especifica operar en el fondo y sólo para recibir
+	  conexiones anónimas. Para ejecutarlo sin reiniciar use:
+<PRE
+CLASS="screen"
+>&#13;	/usr/libexec/ftpd -D -A
+</PRE
+>
+  </P
+><P
+> 
+	  Para permitir conexiones anónimas debe crear una cuenta 
+	  <TT
+CLASS="literal"
+>ftp</TT
+>. Los detalles
+	  de creación al usar <TT
+CLASS="literal"
+>adduser</TT
+> se presentan  
+	  a continuación (emplee una clave difícil, preferiblemente
+	  generada con <B
+CLASS="command"
+>apg</B
+>):
+<PRE
+CLASS="screen"
+>&#13;	Enter username []: ftp
+	Enter full name []: FTP anonimo
+	Enter shell csh ksh nologin sh [ksh]: nologin
+	Uid [1008]: 
+	Login group ftp [ftp]: 
+	Login group is ``ftp''. Invite ftp into other groups: guest no 
+	[no]: 
+	Login class auth-defaults auth-ftp-defaults daemon default staff 
+	[default]: auth-ftp-defaults
+	Enter password []: 
+	Enter password again []: 
+</PRE
+>
+	  Después puede ubicar lo que desee que aparezca en el servidor
+	  ftp en el directorio de tal cuenta
+	  (e.g <TT
+CLASS="filename"
+>/home/ftp</TT
+>) y quitar los permisos
+	  de escritura para todos los usuarios.
+  </P
+><P
+>Cuando un usuario anonymous inicie una sesión, el
+	  servidor pondrá el directorio <TT
+CLASS="filename"
+>/home/ftp</TT
+>
+	  como jaula (chroot) de la conexión.   Se espera que el
+	  dueño de ese directorio sea root y no permita escritura
+	  (modo 555), como subdirectorios se espera:
+	  <P
+></P
+><UL
+><LI
+><P
+>bin: puede ubicar programas que permitirá
+				  que sean ejecutados (no se recomienda).  De tenerlo
+				  el dueño debe ser root y no permitir escritura
+				  ni lectura por nadie (modo 511).</P
+></LI
+><LI
+><P
+>etc: El dueño debe ser root y no permitir
+			  escritura ni lectura de nadie (modo 511). Para que
+			  <B
+CLASS="command"
+>ls</B
+> presente nombres en lugar
+			  de números deben estar presentes 
+			  <TT
+CLASS="filename"
+>pwd.db</TT
+> y 
+			  <TT
+CLASS="filename"
+>group</TT
+> (sin claves reales).
+			  Si existe el archivo <TT
+CLASS="filename"
+>motd</TT
+>
+			  será presentado tras ingresos exitosos. Estos
+		  archivos deben tener modo 444.</P
+></LI
+><LI
+><P
+>pub: el dueño debe ser root, sin permitir escritura de
+		  nadie (modo 555).  En este directorio se ponen los 
+		  archivos por compartir.</P
+></LI
+></UL
+>
+  </P
+><P
+>Si desea mantener una bitácora de las descargas que se realicen
+	  (en <TT
+CLASS="filename"
+>/var/log/ftpd</TT
+>),
+	  asegurese de agregar entre los flags en 
+	  <TT
+CLASS="filename"
+>/etc/rc.conf.local</TT
+>, las opciones
+	  <CODE
+CLASS="option"
+>-S -l</CODE
+> y ejecutar:
+<PRE
+CLASS="screen"
+>&#13;	touch /var/log/ftpd
+</PRE
+>
+  </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ftpdmz"
+>Servicio FTP en una DMZ</A
+></H2
+><P
+>Si su servicio ftp opera en un servidor de la
+		  red interna, puede emplear 
+		  <SPAN
+CLASS="application"
+>ftp-proxy</SPAN
+> para
+		  hacerlo visible al exterior.</P
+><P
+>Además del <SPAN
+CLASS="application"
+>ftp-proxy</SPAN
+>
+		  que podría estar corriendo en el cortafuegos
+		  para servir a la red interna, debe ejecutar una segunda
+		  instancia que opere en modo reverso.  Para esto
+		  agregue en <TT
+CLASS="filename"
+>/etc/rc.local</TT
+>:
+<PRE
+CLASS="screen"
+>&#13;	pgrep ftp-proxy &#62; /dev/null
+	if (test "$?" != 0  -a X"${ftpproxy_flags}" != X"NO" -a \
+		-x /usr/sbin/ftp-proxy) then {
+		echo -n ' ftp-proxy'
+		/usr/sbin/ftp-proxy ${ftpproxy_flags}
+		/usr/sbin/ftp-proxy -b 200.1.10.44 -p 21 -a 200.1.10.44 -R 192.168.1.30
+	} fi;
+</PRE
+>
+		  cambiando 200.1.10.44 por su IP pública y 192.168.1.30 
+		  por la IP del servidor en el que corre ftp.
+	  </P
+><P
+>Para monitorear su operación antes de activarlo
+		  puede emplear las opciones <CODE
+CLASS="option"
+>-D 7 -dvv</CODE
+>
+		  que lo hará correr en primer plano enviando bitácora
+	  a salida estándar con máximo nivel de verbosidad.</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="referencias-ftp"
+>Referencias y lecturas recomendadas</A
+></H2
+><P
+>&#13;	    La página del manual de <B
+CLASS="command"
+>ftpd</B
+>.
+    </P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1381.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2153.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Servidor de correo electrónico</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c1100.htm"
+ACCESSKEY="U"
+>Subir</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Servidor Web</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

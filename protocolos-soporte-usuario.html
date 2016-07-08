@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Capítulo 5. Protocolos de soporte y de usuario</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="control-de-ancho-de-banda.html" title="6. Control de ancho de banda"><link rel="next" href="servidor-ssh.html" title="2. Servidor ssh"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 5. Protocolos de soporte y de usuario</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="control-de-ancho-de-banda.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="servidor-ssh.html">Siguiente</a></td></tr></table><hr></div><div class="chapter" lang="es"><div class="titlepage"><div><div><h2 class="title"><a name="protocolos-soporte-usuario"></a>Capítulo 5. Protocolos de soporte y de usuario</h2></div></div></div><div class="toc"><p><b>Tabla de contenidos</b></p><dl><dt><span class="sect1"><a href="protocolos-soporte-usuario.html#servidor-dns">1. Servidor DNS</a></span></dt><dd><dl><dt><span class="sect2"><a href="protocolos-soporte-usuario.html#resolucion-de-nombres">1.1. Resolución de nombres</a></span></dt><dt><span class="sect2"><a href="protocolos-soporte-usuario.html#named">1.2. named</a></span></dt><dd><dl><dt><span class="sect3"><a href="protocolos-soporte-usuario.html#vistas">1.2.1. Vistas para resolver nombres interna y externamente</a></span></dt></dl></dd><dt><span class="sect2"><a href="protocolos-soporte-usuario.html#referencias-dns">1.3. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="servidor-ssh.html">2. Servidor <span><strong class="command">ssh</strong></span></a></span></dt><dd><dl><dt><span class="sect2"><a href="servidor-ssh.html#referencias-sshd">2.1. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="dhcp.html">3. Protocolo <span><strong class="command">DHCP</strong></span></a></span></dt><dd><dl><dt><span class="sect2"><a href="dhcp.html#cliente-DHCP">3.1. Configuración de un cliente DHCP</a></span></dt><dt><span class="sect2"><a href="dhcp.html#servidor-DHCP">3.2. Configuración de un servidor DHCP</a></span></dt><dt><span class="sect2"><a href="dhcp.html#referencias-dhcpd">3.3. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="servidor-ntp.html">4. Servidor <span><strong class="command">ntp</strong></span></a></span></dt><dd><dl><dt><span class="sect2"><a href="servidor-ntp.html#referencias-ntp">4.1. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="servicios-correo.html">5. Servidor de correo electrónico</a></span></dt><dd><dl><dt><span class="sect2"><a href="servicios-correo.html#smtp">5.1. Protocolo SMTP</a></span></dt><dt><span class="sect2"><a href="servicios-correo.html#sendmail">5.2. MTA <code class="literal">sendmail</code></a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#relevo-de-correo">5.2.1. Relevo de Correo</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#smtp-auth-tls">5.2.2. SMTP-AUTH y TLS</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#cambiar-puerto-smtp">5.2.3. Cambiar puerto SMTP</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#dominios-virtuales-correo">5.2.4. Dominios virtuales</a></span></dt></dl></dd><dt><span class="sect2"><a href="servicios-correo.html#opensmtpd">5.3. MTA <code class="literal">OpenSMTPD</code></a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#smtpd-depura">5.3.1. Depuración de OpenSMTP</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#referencias-opensmtpd">5.3.2. Referencias</a></span></dt></dl></dd><dt><span class="sect2"><a href="servicios-correo.html#protocolos-revisar-correo">5.4. Protocolos para revisar correo</a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#pop3s-imaps-courier">5.4.1. Implementación Courier de POP3S e IMAPS</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#dovecot">5.4.2. Implementación Dovecot de IMAPS y POP3S</a></span></dt></dl></dd><dt><span class="sect2"><a href="servicios-correo.html#spam">5.5. Combatiendo correo no solicitado con SpamAssassin</a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#configuracion-spamd">5.5.1. Configuración de spamd</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#configuracion-usuario-procmail">5.5.2. Configuración de procmail por usuario</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#pruebas-spam">5.5.3. Pruebas</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#referencias-spamd">5.5.4. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect2"><a href="servicios-correo.html#correo-web">5.6. Correo desde el web (webmail)</a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#roundcubemail">5.6.1. Roundcubemail</a></span></dt></dl></dd><dt><span class="sect2"><a href="servicios-correo.html#listas-correo">5.7. Listas de correo</a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#mailman">5.7.1. Instalación de Mailman (sin <code class="literal">chroot</code>)</a></span></dt></dl></dd></dl></dd><dt><span class="sect1"><a href="servidor-ftp.html">6. Servidor <code class="literal">ftp</code></a></span></dt><dd><dl><dt><span class="sect2"><a href="servidor-ftp.html#ftpdmz">6.1. Servicio FTP en una DMZ</a></span></dt><dt><span class="sect2"><a href="servidor-ftp.html#referencias-ftp">6.2. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="sevidorweb.html">7. Servidor Web</a></span></dt><dd><dl><dt><span class="sect2"><a href="sevidorweb.html#openbsd-httpd">7.1. OpenBSD httpd</a></span></dt><dd><dl><dt><span class="sect3"><a href="sevidorweb.html#httpd-min">7.1.1. Configuración mínima</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#httpd-ssl">7.1.2. Servidor con cifrado</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#httpd-dom">7.1.3. Dominios virtuales</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#httpd-php">7.1.4. Sitio con PHP</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#httpd-otros">7.1.5. Otros detalles de uso</a></span></dt></dl></dd><dt><span class="sect2"><a href="sevidorweb.html#nginx">7.2. Nginx</a></span></dt><dd><dl><dt><span class="sect3"><a href="sevidorweb.html#nginx-php">7.2.1. Uso de PHP con nginx</a></span></dt></dl></dd><dt><span class="sect2"><a href="sevidorweb.html#apache">7.3. Apache</a></span></dt><dd><dl><dt><span class="sect3"><a href="sevidorweb.html#directorios-usuarios">7.3.1. Directorios para usuarios</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#dominios-virtuales">7.3.2. Dominios virtuales</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#ssl">7.3.3. SSL</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#php">7.3.4. PHP</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#ssi">7.3.5. Server Side Include</a></span></dt></dl></dd></dl></dd></dl></div><p></p><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="servidor-dns"></a>1. Servidor DNS</h2></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="resolucion-de-nombres"></a>1.1. Resolución de nombres</h3></div></div></div><p>Para resolver nombres OpenBSD emplea rutinas propias
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Capítulo 5. Protocolos de soporte y de usuario</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="control-de-ancho-de-banda.html" title="6. Control de ancho de banda"><link rel="next" href="servidor-ssh.html" title="2. Servidor ssh"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 5. Protocolos de soporte y de usuario</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="control-de-ancho-de-banda.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="servidor-ssh.html">Siguiente</a></td></tr></table><hr></div><div class="chapter" lang="es"><div class="titlepage"><div><div><h2 class="title"><a name="protocolos-soporte-usuario"></a>Capítulo 5. Protocolos de soporte y de usuario</h2></div></div></div><div class="toc"><p><b>Tabla de contenidos</b></p><dl><dt><span class="sect1"><a href="protocolos-soporte-usuario.html#servidor-dns">1. Servicio DNS</a></span></dt><dd><dl><dt><span class="sect2"><a href="protocolos-soporte-usuario.html#resolucion-de-nombres">1.1. Resolución de nombres</a></span></dt><dt><span class="sect2"><a href="protocolos-soporte-usuario.html#unbound">1.2. Servidor recursivo <code class="literal">unbound</code></a></span></dt><dt><span class="sect2"><a href="protocolos-soporte-usuario.html#nsd">1.3. Servidor autoritario con NSD</a></span></dt><dt><span class="sect2"><a href="protocolos-soporte-usuario.html#named">1.4. named</a></span></dt><dd><dl><dt><span class="sect3"><a href="protocolos-soporte-usuario.html#vistas">1.4.1. Vistas para resolver nombres interna y externamente</a></span></dt></dl></dd><dt><span class="sect2"><a href="protocolos-soporte-usuario.html#referencias-dns">1.5. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="servidor-ssh.html">2. Servidor <span><strong class="command">ssh</strong></span></a></span></dt><dd><dl><dt><span class="sect2"><a href="servidor-ssh.html#referencias-sshd">2.1. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="dhcp.html">3. Protocolo <span><strong class="command">DHCP</strong></span></a></span></dt><dd><dl><dt><span class="sect2"><a href="dhcp.html#cliente-DHCP">3.1. Configuración de un cliente DHCP</a></span></dt><dt><span class="sect2"><a href="dhcp.html#servidor-DHCP">3.2. Configuración de un servidor DHCP</a></span></dt><dt><span class="sect2"><a href="dhcp.html#referencias-dhcpd">3.3. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="servidor-ntp.html">4. Servidor <span><strong class="command">ntp</strong></span></a></span></dt><dd><dl><dt><span class="sect2"><a href="servidor-ntp.html#referencias-ntp">4.1. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="servicios-correo.html">5. Servidor de correo electrónico</a></span></dt><dd><dl><dt><span class="sect2"><a href="servicios-correo.html#smtp">5.1. Protocolo SMTP</a></span></dt><dt><span class="sect2"><a href="servicios-correo.html#sendmail">5.2. MTA <code class="literal">sendmail</code></a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#relevo-de-correo">5.2.1. Relevo de Correo</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#smtp-auth-tls">5.2.2. SMTP-AUTH y TLS</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#cambiar-puerto-smtp">5.2.3. Cambiar puerto SMTP</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#dominios-virtuales-correo">5.2.4. Dominios virtuales</a></span></dt></dl></dd><dt><span class="sect2"><a href="servicios-correo.html#opensmtpd">5.3. MTA <code class="literal">OpenSMTPD</code></a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#smtpd-depura">5.3.1. Depuración de OpenSMTP</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#referencias-opensmtpd">5.3.2. Referencias</a></span></dt></dl></dd><dt><span class="sect2"><a href="servicios-correo.html#protocolos-revisar-correo">5.4. Protocolos para revisar correo</a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#pop3s-imaps-courier">5.4.1. Implementación Courier de POP3S e IMAPS</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#dovecot">5.4.2. Implementación Dovecot de IMAPS y POP3S</a></span></dt></dl></dd><dt><span class="sect2"><a href="servicios-correo.html#spam">5.5. Combatiendo correo no solicitado con SpamAssassin</a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#configuracion-spamd">5.5.1. Configuración de spamd</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#configuracion-usuario-procmail">5.5.2. Configuración de procmail por usuario</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#pruebas-spam">5.5.3. Pruebas</a></span></dt><dt><span class="sect3"><a href="servicios-correo.html#referencias-spamd">5.5.4. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect2"><a href="servicios-correo.html#correo-web">5.6. Correo desde el web (webmail)</a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#roundcubemail">5.6.1. Roundcubemail</a></span></dt></dl></dd><dt><span class="sect2"><a href="servicios-correo.html#listas-correo">5.7. Listas de correo</a></span></dt><dd><dl><dt><span class="sect3"><a href="servicios-correo.html#mailman">5.7.1. Instalación de Mailman (sin <code class="literal">chroot</code>)</a></span></dt></dl></dd></dl></dd><dt><span class="sect1"><a href="servidor-ftp.html">6. Servidor <code class="literal">ftp</code></a></span></dt><dd><dl><dt><span class="sect2"><a href="servidor-ftp.html#ftpdmz">6.1. Servicio FTP en una DMZ</a></span></dt><dt><span class="sect2"><a href="servidor-ftp.html#referencias-ftp">6.2. Referencias y lecturas recomendadas</a></span></dt></dl></dd><dt><span class="sect1"><a href="sevidorweb.html">7. Servidor Web</a></span></dt><dd><dl><dt><span class="sect2"><a href="sevidorweb.html#openbsd-httpd">7.1. OpenBSD httpd</a></span></dt><dd><dl><dt><span class="sect3"><a href="sevidorweb.html#httpd-min">7.1.1. Configuración mínima</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#httpd-ssl">7.1.2. Servidor con cifrado</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#httpd-dom">7.1.3. Dominios virtuales</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#httpd-php">7.1.4. Sitio con PHP</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#httpd-otros">7.1.5. Otros detalles de uso</a></span></dt></dl></dd><dt><span class="sect2"><a href="sevidorweb.html#nginx">7.2. Nginx</a></span></dt><dd><dl><dt><span class="sect3"><a href="sevidorweb.html#nginx-php">7.2.1. Uso de PHP con nginx</a></span></dt></dl></dd><dt><span class="sect2"><a href="sevidorweb.html#apache">7.3. Apache</a></span></dt><dd><dl><dt><span class="sect3"><a href="sevidorweb.html#directorios-usuarios">7.3.1. Directorios para usuarios</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#dominios-virtuales">7.3.2. Dominios virtuales</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#ssl">7.3.3. SSL</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#php">7.3.4. PHP</a></span></dt><dt><span class="sect3"><a href="sevidorweb.html#ssi">7.3.5. Server Side Include</a></span></dt></dl></dd></dl></dd></dl></div><p></p><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="servidor-dns"></a>1. Servicio DNS</h2></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="resolucion-de-nombres"></a>1.1. Resolución de nombres</h3></div></div></div><p>Para resolver nombres OpenBSD emplea rutinas propias
       de resolución incluidas en la librería de C, se configuran
       en <code class="filename">/etc/resolv.conf</code>.  Este archivo
       puede incluir, dominio (<code class="literal">domain</code>),
@@ -8,11 +8,11 @@
       retornar direcciones IP en orden (<code class="literal">sortlist</code>),
       opciones (<code class="literal">options</code>).   Un ejemplo del
       archivo <code class="filename">/etc/resolv.conf</code> es:
-      </p><pre class="screen">
-search miescuela.edu.co
-nameserver 192.168.16.1
-lookup file bind
-      </pre><p>
+</p><pre class="screen">
+	search miescuela.edu.co
+	nameserver 192.168.16.1
+	lookup file bind
+</pre><p>
       <code class="literal">lookup</code> permite especificar un orden para
       hacer resolución de acuerdo a uno o más de los siguientes 
       argumentos separados por espacio:
@@ -20,10 +20,160 @@ lookup file bind
 	    (<code class="literal">named</code>)</p></li><li><p><code class="literal">file</code> que indica buscar en
 	    <code class="filename">/etc/hosts</code></p></li><li><p><code class="literal">yp</code> que indica emplear el sistema YP si
 	    <span><strong class="command">ypbind</strong></span> está corriendo.</p></li></ul></div><p>
-    </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="named"></a>1.2. named</h3></div></div></div><p>OpenBSD incluye entre sus componentes básicos parte del servidor
+    </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="unbound"></a>1.2. Servidor recursivo <code class="literal">unbound</code></h3></div></div></div><p>
+Un servidor recursivo recibe consultas de dominios y las reenvia a otros 
+servidores –comenzando por los servidores raiz– o si tiene respuesta a 
+las consultas en su repositorio temporal fresco (cache) lo usa para responder. 
+Es útil para responder consultas de una red local rapidamente, y en tal caso 
+debe responder consultas que se hagan desde la red interna pero no desde 
+Internet --como posiblemente ocurre con la vista recursiva del archivo 
+<code class="filename">/var/named/etc/named.conf</code> si tiene uno.
+</p><p>
+A continuación explicamos como configurar unbound (que hace 
+parte del sistema base desde OpenBSD y adJ 5.7) como servidor recursivo.
+	  </p><p>
+En <code class="literal">/etc/rc.conf.local</code> agregue
+</p><pre class="screen">
+	unbound_flags="-c /var/unbound/etc/unbound.conf"
+</pre><p>
+
+Y a la varialbe <code class="literal">pkg_scripts</code> agreguele <code class="literal">unbound</code>
+
+Configurelo en <code class="literal">/var/unbound/etc/unbound.conf</code>, cambiando al menos:
+
+</p><div class="orderedlist"><ol type="1"><li><p>
+Si su cortafuegos tiene en la red interna la IP 192.168.100.100 
+responda sólo a esa interfaz:
+</p><pre class="screen">
+interface: 192.168.100.100
+</pre><p>
+		</p></li><li><p>
+Permita consultas desde la red interna, añadiendo:
+</p><pre class="screen">
+access-control: 192.168.100.0/24 allow
+</pre><p>
+		</p></li><li><p>
+Las zonas autoritarias que <code class="literal">nsd</code> esté sirviendo también 
+debe responderlas de manera autoritaria con unbound pero dirigiendo a la 
+red interna, por ejemplo respecto al ejemplo de la sección anterior, 
+suponiendo que en la red Interna el servidor que responde correo es 
+192.168.100.101:
+</p><pre class="screen">
+	local-zone: "miescuela.edu.co." static
+	local-data: "correo.miescuela.edu.co. IN A 192.168.100.101"
+	local-data: "ns1.miescuela.edu.co. IN A 192.168.100.100"
+	local-zone: "100.168.192.in-addr.arpa." static
+	local-data-ptr: "192.168.100.101 correo.miescuela.edu.co."
+	local-data-ptr: "192.168.100.100 ns1.miescuela.edu.co."
+</pre><p>
+		</p></li></ol></div><p>
+
+Inicie el servicio con
+</p><pre class="screen">
+	sudo sh  /etc/rc.d/unbound start
+</pre><p>
+
+Revise posibles errores en las bitacoras <code class="literal">/var/log/messages</code> 
+y <code class="literal">/var/log/servicio</code>
+</p><p>
+Pruebe que responde con:
+</p><pre class="screen">
+dig @192.168.100.100 correo.miescuela.edu.co
+</pre><p>
+que debería dar la IP privada.
+</p><p>
+Si prefiere examinar con más detalle puede iniciarlo para depurar con:
+</p><pre class="screen">
+	unbound -c /var/unbound/etc/unbound.conf -vvvv -d
+</pre><p>
+</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="nsd"></a>1.3. Servidor autoritario con NSD</h3></div></div></div><p>
+Desde adJ y OpenBSD 5.7 hace parte del sistema base junto con unbound 
+(que vinieron a replazar named). Usa una configuración basada en la de 
+named por lo que es sencilla la migración.
+    </p><p>
+Agregue a  <code class="literal">/etc/rc.conf.local</code> la línea:
+</p><pre class="screen">
+	nsd_flags="-c /var/nsd/etc/nsd.conf"
+</pre><p>
+e incluya <code class="literal">nsd</code> en la variable <code class="literal">pkg_scripts</code>
+	</p><p>
+
+El archivo de configuración principal ubíquelo en 
+<code class="literal">/var/nsd/etc/nsd.conf</code>,
+por cada zona maestra que maneje de manera autoritaria (es decir cada zona 
+master en la vista <code class="literal">view "authoritative</code> de 
+<code class="filename">/var/named/etc/named.conf</code>) 
+incluya líneas de la forma:
+</p><pre class="screen">
+	zone:
+		name: "miescuela.edu.co"
+		zonefile: "miescuela.edu.co"
+</pre><p>
+Para que responda hacía Internet en un cortafuegos con IP pública 
+(digamos 200.201.202.203) en el mismo archivo asegurese de dejar:
+</p><pre class="screen">
+	ip-address: 200.201.202.203
+</pre><p>
+	</p><p>
+En el directorio <code class="literal">/var/nsd/zones</code> debe dejar un archivo de zona por cada 
+zona que configure.  Afortunadamente NSD reconoce la misma sintaxis de 
+archivos de zona que <code class="literal">bind</code>, así que basta que copie los de las zonas 
+autoritarías (que tipicamente se ubican en <code class="literal">/var/named/master/</code>).  
+	</p><p>
+Un ejemplo de un archivo de zona <code class="literal">/var/nsd/zones/miescuela.edu.co</code> es:
+
+
+</p><pre class="screen">
+	$ORIGIN miescuela.edu.co.
+	$TTL 6h
+	
+	@ IN SOA ns1.miescuela.edu.co. root.localhost. (
+		2 ; Serial
+		1d ; Refresco secundario
+		6h ; Reintento secundario
+		2d ; Expiracion secndaria
+		1d ) ; Cache 
+	
+		     NS	ns1
+		     A	200.201.202.203
+	       MX 5  correo.miescuela.edu.co.
+	correo A  200.201.202.203
+	ns1	   A  200.201.202.203
+	*	     A  200.201.202.203
+</pre><p>
+
+	</p><p>
+Si tiene zonas secundarias (esclavas) puede crear el directorio 
+<code class="literal">/var/nsd/zones/secundaria/</code>, copiar allí las zonas de
+<code class="literal">/var/named/slave/</code> y en el archivo de configuración de NSD
+agregar secciones del siguiente estilo:
+</p><pre class="screen">
+	zone:
+	        name: "miotrozona.org"
+	        zonefile: "secundaria/miotrazona.org"
+	        allow-notify: 193.98.157.148 NOKEY
+	        request-xfr: 193.98.157.148 NOKEY             
+</pre><p>
+	</p><p>
+Inicie el servicio con
+</p><pre class="screen">
+	doas sh  /etc/rc.d/nsd start
+</pre><p>
+(o reinicielo con <code class="literal">restart</code> en lugar de <code class="literal">start</code>).
+	</p><p>
+Revise posibles errores en las bitacoras <code class="literal">/var/log/messages</code> 
+y <code class="literal">/var/log/servicio</code>
+	</p><p>
+Pruebe que responde desde Internet con:
+</p><pre class="screen">
+	dig @200.201.202.203 correo.miescuela.edu.co
+</pre><p>
+que debería dar la IP pública.
+	</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="named"></a>1.4. named</h3></div></div></div><p>OpenBSD aún incluye como paquete el servidor
       BIND 9, bajo el nombre <code class="literal">named</code>, que por defecto corre
       con <span><strong class="command">chroot</strong></span> en el directorio
-      <code class="filename">/var/named</code>.  
+      <code class="filename">/var/named</code> y que puede hacer las labores de unbound 
+      y nsd.  
     </p><p>Puede configurarse y probarse antes de iniciarlo en cada
       arranque.  Para configurarlo por primera vez pueden seguirse primero 
       los pasos de <code class="filename">/etc/rc</code>.
@@ -36,24 +186,24 @@ lookup file bind
       por ejemplo los datos un servidor DNS primario del dominio miescuela.edu.co 
       pueden quedar en el archivo 
       <code class="filename">/var/named/master/miescuela.edu.co</code>:
-      </p><pre class="screen">
-$TTL 1D
-@ IN  SOA  @  root.localhost. (
-	03091025 ; Serial
-	1D   ; Refresco secundario
-	6H   ; Reintento secundario
-	2D   ; Expiración secundaria
-	1D ) ; Cache de registro de recursos
-
-	NS  @
-
-	A       65.8.9.234
-
-	MX      5      correo.miescuela.edu.co.
-
-correo	IN      A       201.2.3.74
-ns1     IN      A       201.2.3.74
-www     IN      A       201.2.3.74
+</p><pre class="screen">
+	$TTL 1D
+	@ IN  SOA  @  root.localhost. (
+		03091025 ; Serial
+		1D   ; Refresco secundario
+		6H   ; Reintento secundario
+		2D   ; Expiración secundaria
+		1D ) ; Cache de registro de recursos
+	
+		NS  @
+	
+		A       65.8.9.234
+	
+		MX      5      correo.miescuela.edu.co.
+	
+	correo	IN      A       201.2.3.74
+	ns1     IN      A       201.2.3.74
+	www     IN      A       201.2.3.74
 </pre><p>
 
 Note que se declara el mismo dominio como servidor de nombre autoritario,
@@ -72,27 +222,27 @@ Recuerde aumentar el número serial cada vez que haga algún cambio, para que
 la información pueda ser actualizada en los servidores secundarios.
 Puede probar cada archivo de zonas que haga con:
 </p><pre class="screen">
-  named-checkzone miescuela.edu.co /var/named/master/miescuela.edu.co
+	named-checkzone miescuela.edu.co /var/named/master/miescuela.edu.co
 </pre><p>
 Agregue una referencia al archivo de zonas maestro en
 <code class="filename">/var/named/etc/named.conf</code>, en la sección para
 zonas maestras algo de la forma:
 </p><pre class="screen">
-zone "miescuela.edu.co" {
-  type master;
-  file "master/miescuela.edu.co";
-}
+	zone "miescuela.edu.co" {
+	  type master;
+	  file "master/miescuela.edu.co";
+	}
 </pre><p>
 </p><p>
 Si desea que un servidor sea secundario de algún servidor primario,
 agregue en <code class="filename">/var/named/etc/named.conf</code> en la sección
 para zonas esclavas algo como:
 </p><pre class="screen">
-zone "miescuela.edu.co" {
-  type slave;
-  file "slave/miescuela.edu.co";
-  masters { 65.8.9.234; };
-}
+	zone "miescuela.edu.co" {
+	  type slave;
+	  file "slave/miescuela.edu.co";
+	  masters { 65.8.9.234; };
+	}
 </pre><p>
 
 Cuando <span><strong class="command">named</strong></span> lea de nuevo sus archivos de configuración 
@@ -100,34 +250,36 @@ traerá la información del servidor primario y la dejará en el archivo
 <code class="filename">/var/named/slave/miescuela.edu.co</code>.
 </p><p>
       El servidor se inicia con
-      </p><pre class="screen">
-    sudo sh /etc/rc.d/named start</pre><p>
+</p><pre class="screen">
+	doas sh /etc/rc.d/named start
+</pre><p>
       Los errores que se produzcan antes de hacer <span><strong class="command">chroot</strong></span>
       son enviados a <code class="filename">/var/log/servicio</code>.
       Para probar el funcionamiento antes de modificar
       <code class="filename">/etc/resolv.conf</code> puede usar:
-      </p><pre class="screen">
+</p><pre class="screen">
 	dig @localhost miescuela.edu.co
-      </pre><p>
+</pre><p>
       Si requiere volver a leer los archivos de configuración 
       (por ejemplo después de cambiar los archivos de zonas) puede
       enviar la señal <code class="literal">SIGHUP</code> al proceso con:
-      </p><pre class="screen">
+</p><pre class="screen">
 	pkill -HUP named
-      </pre><p>
+</pre><p>
       o con
-      </p><pre class="screen">
+</p><pre class="screen">
 	rndc reload
-      </pre><p>
+</pre><p>
     </p><p>
       Una vez compruebe que su servidor DNS está operando correctamente puede
       indicar que se inicie en cada arranque agregando a
       <code class="filename">/etc/rc.conf.local</code>:
-      </p><pre class="screen">
-named_flags="" </pre><p>
-      y en el mismo archivo en la definición de <code class="literal">pkg_scripts</code>
+</p><pre class="screen">
+	named_flags="" 
+</pre><p>
+y en el mismo archivo en la definición de <code class="literal">pkg_scripts</code>
       agregando <code class="literal">named</code>.
-    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="vistas"></a>1.2.1. Vistas para resolver nombres interna y externamente</h4></div></div></div><p>Si cuenta con una LAN conectada a Internet por medio
+    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="vistas"></a>1.4.1. Vistas para resolver nombres interna y externamente</h4></div></div></div><p>Si cuenta con una LAN conectada a Internet por medio
 		    de un cortafuegos con OpenBSD que maneja el DNS
 		   	de su organización  y si además cuenta
 		    con una DMZ tal que las peticiones a algunos puertos
@@ -148,70 +300,70 @@ named_flags="" </pre><p>
 		    para computadores dentro de la LAN.  Un posible
 		    archivo de configuración (basado en los distribuidos
 		    con OpenBSD) es:
-		    </p><pre class="screen">
-acl clients {
-	localnets;
-	::1;
-};
-options {
-	version "";     
-	listen-on    { any; };
-	listen-on-v6 { any; };
-	allow-recursion { clients; };
-};
-logging {
-	category lame-servers { null; };
-};
-
-view "internal" {  // Para la red interna
-    match-clients { clients; };
-    match-recursive-only yes;
-    recursion yes;
-
-    zone "." {
-    	type hint;
-    	file "standard/root.hint";
-    };
-    zone "localhost" {
-    	type master;
-	file "standard/localhost";
-	allow-transfer { localhost; };
-    }
-    zone "127.in-addr.arpa" {
-    	type master;
-    	file "standard/loopback";
-    	allow-transfer { localhost; };
-    };
-    zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
-    	type master;
-    	file "standard/loopback6.arpa";
-    	allow-transfer { localhost; };
-    };
-    zone "com" {
-    	type delegation-only;
-    };
-    zone "net" {
-    	type delegation-only;
-    };
-
-    zone "miescuela.edu.co" {
-        type master;
-        file "refleja/miescuela.edu.co.org";
-    };
-};
-view "external" { // Para Internet
-    recursion no;
-    additional-from-auth no;
-    additional-from-cache no;
-    zone "miescuela.edu.co" {
-        type master;
-	file "master/miescuela.edu.co";
-    };
-    zone "168.74.245.200.IN-ADDR.ARPA" { // Para resolución inversa
-        type master;
-	file "master/db.168.74.245.200";
-    };
-};
+</p><pre class="screen">
+	acl clients {
+		localnets;
+		::1;
+	};
+	options {
+		version "";     
+		listen-on    { any; };
+		listen-on-v6 { any; };
+		allow-recursion { clients; };
+	};
+	logging {
+		category lame-servers { null; };
+	};
+	
+	view "internal" {  // Para la red interna
+	    match-clients { clients; };
+	    match-recursive-only yes;
+	    recursion yes;
+	
+	    zone "." {
+	    	type hint;
+	    	file "standard/root.hint";
+	    };
+	    zone "localhost" {
+	    	type master;
+		file "standard/localhost";
+		allow-transfer { localhost; };
+	    }
+	    zone "127.in-addr.arpa" {
+	    	type master;
+	    	file "standard/loopback";
+	    	allow-transfer { localhost; };
+	    };
+	    zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
+	    	type master;
+	    	file "standard/loopback6.arpa";
+	    	allow-transfer { localhost; };
+	    };
+	    zone "com" {
+	    	type delegation-only;
+	    };
+	    zone "net" {
+	    	type delegation-only;
+	    };
+	
+	    zone "miescuela.edu.co" {
+	        type master;
+	        file "refleja/miescuela.edu.co.org";
+	    };
+	};
+	view "external" { // Para Internet
+	    recursion no;
+	    additional-from-auth no;
+	    additional-from-cache no;
+	    zone "miescuela.edu.co" {
+	        type master;
+		file "master/miescuela.edu.co";
+	    };
+	    zone "168.74.245.200.IN-ADDR.ARPA" { // Para resolución inversa
+	        type master;
+		file "master/db.168.74.245.200";
+	    };
+	};
 </pre><p>
 El archivo <code class="filename">master/miescuela.edu.co</code> sería el típico
 para resolver externamente, mientras que en 
@@ -220,29 +372,47 @@ anterior pero con las direcciones de la red local.
 <code class="filename">master/db.167.74.245.200</code> tendría datos para resolución
 de nombres inversa desde fuera de la organización, por ejemplo:
 </p><pre class="screen">
-$TTL 1D
-@ IN  SOA  @  root.localhost. (
-  49   ; Serial de Zona
-  1D   ; Refesco secundario
-  6H   ; Retintento secundario
-  2D   ; Expiración secundaria
-  1D ) ; Cache de registros de recurso
-
-@       IN      NS      cortafuegos.miescuela.edu.co.
-	IN      PTR     www.miescuela.edu.co.
-	IN      PTR     correo.miescuela.edu.co
-	IN      PTR     ns1.miescuela.edu.co
+	$TTL 1D
+	@ IN  SOA  @  root.localhost. (
+	  49   ; Serial de Zona
+	  1D   ; Refesco secundario
+	  6H   ; Retintento secundario
+	  2D   ; Expiración secundaria
+	  1D ) ; Cache de registros de recurso
+	
+	@       IN      NS      cortafuegos.miescuela.edu.co.
+		IN      PTR     www.miescuela.edu.co.
+		IN      PTR     correo.miescuela.edu.co
+		IN      PTR     ns1.miescuela.edu.co
 </pre><p>
-	</p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-dns"></a>1.3. Referencias y lecturas recomendadas</h3></div></div></div><p>
-      Sección sobre DNS de las guías Aprendiendo a aprender Linux.
-      [<span class="citation"><a href="bi01.html#AA_Linux">AA_Linux</a></span>]
-      Referencia para administradores de BIND 9
-      [<span class="citation"><a href="bi01.html#bind9arm">bind9arm</a></span>].
-      Ayudas para configurar Bind incluido en OpenBSD.
+	</p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-dns"></a>1.5. Referencias y lecturas recomendadas</h3></div></div></div><p>
+	    </p><div class="itemizedlist"><ul type="disc"><li><p>
+Sección sobre DNS de las guías Aprendiendo a aprender Linux.
+[<span class="citation"><a href="bi01.html#AA_Linux">AA_Linux</a></span>]
+		    </p></li><li><p>
+Referencia para administradores de BIND 9
+[<span class="citation"><a href="bi01.html#bind9arm">bind9arm</a></span>].
+		    </p></li><li><p>
+Ayudas para configurar Bind incluido en OpenBSD.
+		    </p></li><li><p>
       Puede consultar más sobre vistas y reflexión de consultas DNS
       en <a href="http://www.bind9.net/manual/bind/9.3.1/Bv9ARM.ch06.html#view_statement_grammar" target="_top">http://www.bind9.net/manual/bind/9.3.1/Bv9ARM.ch06.html#view_statement_grammar</a>.
+		    </p></li><li><p>
       [<span class="citation"><a href="bi01.html#openbsdDnsDhcp">openbsdDnsDhcp</a></span>].
-      Las siguientes páginas man:
+		    </p></li><li><p>
+Las siguientes páginas man:
       <a href=""><span class="citerefentry"><span class="refentrytitle">named</span>(8)</span></a>.
       <a href=""><span class="citerefentry"><span class="refentrytitle">dig</span>(8)</span></a>.
+      <a href=""><span class="citerefentry"><span class="refentrytitle">unbound</span>(8)</span></a>.
+      <a href=""><span class="citerefentry"><span class="refentrytitle">nsd</span>(8)</span></a>.
+      <a href=""><span class="citerefentry"><span class="refentrytitle">unbound.conf</span>(5)</span></a>.
+      <a href=""><span class="citerefentry"><span class="refentrytitle">named.conf</span>(5)</span></a>.
+		    </p></li><li><p>
+https://calomel.org/nsd_dns.html
+		    </p></li><li><p>
+http://eradman.com/posts/run-your-own-server.html
+		    </p></li><li><p>
+https://calomel.org/unbound_dns.html
+		    </p></li></ul></div><p>
+
     </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="control-de-ancho-de-banda.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="servidor-ssh.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">6. Control de ancho de banda </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 2. Servidor <span><strong class="command">ssh</strong></span></td></tr></table></div></body></html>

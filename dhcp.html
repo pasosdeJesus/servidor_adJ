@@ -9,7 +9,7 @@
   </p><p>
 	  En su modo de operación dinámico el servidor
 	  le asigna una IP a un sólo cliente por cierto periodo de tiempo, al
-	  cabo del cual podría asignarle otra IP<sup>[<a name="idm1328815888" href="#ftn.idm1328815888">25</a>]</sup>.
+	  cabo del cual podría asignarle otra IP<sup>[<a name="idm2952993776" href="#ftn.idm2952993776">25</a>]</sup>.
   </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="cliente-DHCP"></a>3.1. Configuración de un cliente DHCP</h3></div></div></div><p>La configuración de un computador para operar como
 		  cliente de DHCP depende del sistema operativo, en el caso
 		  de Windows en las propiedades TCP/IPv4 de la tarjeta puede
@@ -20,9 +20,9 @@
 		  interfaz de red (digamos <code class="literal">rl0</code>) 
 		  se configura como cliente de DHCP desde la línea
 		  de comandos con:
-		  </p><pre class="screen">
-sudo dhclient rl0 
-		  </pre><p>
+</p><pre class="screen">
+	doas dhclient rl0 
+</pre><p>
 		  que lee parámetros de configuración de
 		  <code class="filename">/etc/dhclient.conf</code> (el cual por defecto
 		  está configurado para solicitar mascara de red, servidores 
@@ -34,30 +34,30 @@ sudo dhclient rl0
 		  (remplazar <code class="literal">rl0</code> por la de su caso)
 		  dejando en el archivo
 		  <code class="filename">/etc/hostname.rl0</code> la línea:
-		  </p><pre class="screen">
-dhcp
-		  </pre><p>
+</p><pre class="screen">
+	dhcp
+</pre><p>
 	  	</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-DHCP"></a>3.2. Configuración de un servidor DHCP</h3></div></div></div><p>Una configuración típica para un servidor DHCP que servirá
 	  direcciones para la red local 192.168.17.x en el rango
 	  192.168.17.142 a 192.168.17.164 y que enviará además
 	  entre los parámetros el dominio, la puerta de enlace y la
 	  IP del servidor de nombres,
 	  se hace en el archivo <code class="filename">/etc/dhcpd.conf</code> con:
-  </p><pre class="screen">
-shared-network LOCAL-NET {
-        option  domain-name "miescuela.edu.co";
-        option  domain-name-servers 192.168.17.1;
-        subnet 192.168.17.0 netmask 255.255.255.0 {
-                option routers 192.168.17.1;
-                range 192.168.17.142 192.168.17.164;
-        }
-}
-  </pre><p>
+</p><pre class="screen">
+	shared-network LOCAL-NET {
+	        option  domain-name "miescuela.edu.co";
+	        option  domain-name-servers 192.168.17.1;
+	        subnet 192.168.17.0 netmask 255.255.255.0 {
+	                option routers 192.168.17.1;
+	                range 192.168.17.142 192.168.17.164;
+	        }
+	}
+</pre><p>
 	También asegurese de iniciar el servicio DHCP editando
 	<code class="filename">/etc/rc.conf.local</code> para agregar:
-	</p><pre class="screen">
-dhcpd_flags=""
-	</pre><p>
+</p><pre class="screen">
+	dhcpd_flags=""
+</pre><p>
 	o en lugar de "" puede especificar las interfaces de red 
 	que el servidor debe atender separadas por espacio.
 </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-dhcpd"></a>3.3. Referencias y lecturas recomendadas</h3></div></div></div><p>
@@ -67,7 +67,7 @@ dhcpd_flags=""
       <a href=""><span class="citerefentry"><span class="refentrytitle">dhclient.conf</span>(5)</span></a>, 
       <a href=""><span class="citerefentry"><span class="refentrytitle">dhcpd</span>(8)</span></a> y 
       <a href=""><span class="citerefentry"><span class="refentrytitle">dhcpd.conf</span>(5)</span></a>.
-    </p><p>El RFC 2131 (ver [<a href="bi01.html#rfc2131" title="[rfc2131]">rfc2131</a>]).</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1328815888" href="#idm1328815888">25</a>] </sup>Típicamente 
+    </p><p>El RFC 2131 (ver [<a href="bi01.html#rfc2131" title="[rfc2131]">rfc2131</a>]).</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2952993776" href="#idm2952993776">25</a>] </sup>Típicamente 
 			  un cliente
 			  enviará un paquete DHCPDISCOVER a toda la red (opcionalmente
 			  con sugerencia de la IP que quiere), un servidor que

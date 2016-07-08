@@ -1,42 +1,45 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>2. NAT (Network Address Translation)</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="direcciones-enrutamiento-transporte.html" title="Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos"><link rel="prev" href="direcciones-enrutamiento-transporte.html" title="Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos"><link rel="next" href="cortafuegos.html" title="3. Cortafuegos: filtrado y túneles"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2. NAT (Network Address Translation)</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="direcciones-enrutamiento-transporte.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos</th><td width="20%" align="right"> <a accesskey="n" href="cortafuegos.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nat"></a>2. NAT (Network Address Translation)</h2></div></div></div><p>Puede emplear NAT para que un computador conectado a una red
-	privada y que se conecte a Internet, sea
-	pasarela de los computadores de la red interna y así estos
-	puedan emplear Internet.  </p><p>Para activarlo debe estar corriendo <span><strong class="command">pf</strong></span>
-		(como se explica al comienzo de este capítulo) y debe activar
-		reenvío de IP con:
-		</p><pre class="screen">
-sysctl -w net.inet.ip.forwarding=1
-		</pre><p>
-		o mejor aún de manera más permanente verificando que el
-		archivo <code class="filename">/etc/sysctl.conf</code> tenga la línea:
-		</p><pre class="screen">
-net.inet.ip.forwarding=1	
-		</pre><p>
-	</p><p>Como el computador
-	que hará NAT debe tener dos interfaces de red una para conectarlo a la
-	red interna (con IP de la red interna) y otra para conectarlo a 
-	Internet (con IP pública).  En el archivo
-	<code class="filename">/etc/pf.conf</code> configure las variables 
-	<code class="literal">ext_if</code> e <code class="literal">int_if</code>
-	con los nombres de las interfaces externa (conectada a Internet)
-	e interna respectivamente (verifiquelas antes con 
-	<span><strong class="command">ifconfig</strong></span>).
-	Por ejemplo un archivo de configuración mínimo que hace
-	NAT, suponiendo que la interfaz interna es <code class="literal">fxp0</code> y la
-	externa es <code class="literal">nfe0</code> es:
-	</p><pre class="screen">
-int_if="fxp0"
-ext_if="nfe0"
-
-set skip on lo
-
-match out on $ext_if from !($ext_if) to any nat-to ($ext_if:0)
-
-pass in quick on $int_if
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>2. NAT (Network Address Translation)</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="direcciones-enrutamiento-transporte.html" title="Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos"><link rel="prev" href="direcciones-enrutamiento-transporte.html" title="Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos"><link rel="next" href="cortafuegos.html" title="3. Cortafuegos: filtrado y túneles"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2. NAT (Network Address Translation)</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="direcciones-enrutamiento-transporte.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos</th><td width="20%" align="right"> <a accesskey="n" href="cortafuegos.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nat"></a>2. NAT (Network Address Translation)</h2></div></div></div><p>
+Puede emplear NAT para que un computador conectado a una red
+privada y que se conecte a Internet, sea
+pasarela de los computadores de la red interna y así estos
+puedan emplear Internet.  </p><p>
+Para activarlo debe estar corriendo <span><strong class="command">pf</strong></span>
+(como se explica al comienzo de este capítulo) y debe activar
+reenvío de IP con:
+</p><pre class="screen">
+	doas sysctl -w net.inet.ip.forwarding=1
+</pre><p>
+o mejor aún de manera más permanente verificando que el
+archivo <code class="filename">/etc/sysctl.conf</code> tenga la línea:
+</p><pre class="screen">
+	net.inet.ip.forwarding=1	
+</pre><p>
+	</p><p>
+Como el computador
+que hará NAT debe tener dos interfaces de red una para conectarlo a la
+red interna (con IP de la red interna) y otra para conectarlo a 
+Internet (con IP pública).  En el archivo
+<code class="filename">/etc/pf.conf</code> configure las variables 
+<code class="literal">ext_if</code> e <code class="literal">int_if</code>
+con los nombres de las interfaces externa (conectada a Internet)
+e interna respectivamente (verifiquelas antes con 
+<span><strong class="command">ifconfig</strong></span>).
+Por ejemplo un archivo de configuración mínimo que hace
+NAT, suponiendo que la interfaz interna es <code class="literal">fxp0</code> y la
+externa es <code class="literal">nfe0</code> es:
+</p><pre class="screen">
+	int_if="fxp0"
+	ext_if="nfe0"
+	
+	set skip on lo
+	
+	match out on $ext_if from !($ext_if) to any nat-to ($ext_if:0)
+	
+	pass in quick on $int_if
 </pre><p>
 Esta configuración podría cargarse con:
 </p><pre class="screen">
-	sudo pfctl -f /etc/pf.conf.
+	doas pfctl -f /etc/pf.conf.
 </pre><p>
 </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-nat"></a>2.1. Referencias y lecturas recomendadas</h3></div></div></div><p>
       Las siguientes páginas man:

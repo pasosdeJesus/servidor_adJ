@@ -8,19 +8,19 @@
 </p><p>El siguiente ejemplo ejemplifica parte del archivo 
 		<code class="filename">/etc/pf.conf</code> para esto:
 </p><pre class="screen">
-# En la sección nat/rdr
-pass on $int_if proto tcp from $lan to any port 21 
-match in on $int_if proto tcp from $lan to any port 21 rdr-to 127.0.0.1 port 8021
-
-# En la sección de reglas de filtrado
-pass out proto tcp from $ext_ip to any port 21
+	# En la sección nat/rdr
+	pass on $int_if proto tcp from $lan to any port 21 
+	match in on $int_if proto tcp from $lan to any port 21 rdr-to 127.0.0.1 port 8021
+	
+	# En la sección de reglas de filtrado
+	pass out proto tcp from $ext_ip to any port 21
 </pre><p>
 
 </p><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><table border="0" summary="Warning"><tr><td rowspan="2" align="center" valign="top" width="25"><img alt="[Aviso]" src="./warning.png"></td><th align="left">Aviso</th></tr><tr><td align="left" valign="top"><p>Para emplear <span class="application">ftp-proxy</span> asegurese
 	que entre las reglas de su cortafuegos no esté:
-	</p><pre class="screen">
-set skip $int_if
-	</pre><p>
+</p><pre class="screen">
+	set skip $int_if
+</pre><p>
 	porque esto impediría la redirección al puerto 8021 (por defecto
 	usado por ftp-proxy) del cortafuegos cuando se hacen peticiones de 
 	ftp.
@@ -35,7 +35,7 @@ debe iniciar el proxy con:
 y para que se efectúe en cada arranque del servidor agregar
 a <code class="filename">/etc/rc.conf.local</code>:
 </p><pre class="screen">
-ftpproxy_flags=""
+	ftpproxy_flags=""
 </pre><p>
 </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-ftpproxy"></a>4.1. Referencias y lecturas recomendadas</h3></div></div></div><p>
 	Las siguientes páginas man:

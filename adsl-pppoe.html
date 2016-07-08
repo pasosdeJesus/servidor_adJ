@@ -28,60 +28,59 @@
 	<code class="literal">rl0</code> con interfaz en su caso, examinar
 	posibles interfaces con <span><strong class="command">ifconfig</strong></span>) deje:
 	</p><pre class="screen">
-up
+	up
 	</pre><p>
 
 	Edite <code class="filename">/etc/ppp/ppp.conf</code> (si no existe
 	cópielo de <code class="filename">/etc/ppp/ppp.conf.smaple</code>), para que quede
 	una sección como la siguiente:
 	</p><pre class="screen">
-pppoe:
- set log Phase Chat LCP IPCP CCP tun command
- set redial 15 0
- set reconnect 15 10000
- set device "!/usr/sbin/pppoe -i rl0"
- set mtu max 1492
- set mru max 1492
- set speed sync
- disable acfcomp protocomp
- deny acfcomp
- enable lqr
- set lqrperiod 5
- set cd 5
- set dial
- set login
- set timeout 0
- set authname "usuario"
- set authkey "miclave"
- add! default HISADDR
- enable mssfixup
+	pppoe:
+	 set log Phase Chat LCP IPCP CCP tun command
+	 set redial 15 0
+	 set reconnect 15 10000
+	 set device "!/usr/sbin/pppoe -i rl0"
+	 set mtu max 1492
+	 set mru max 1492
+	 set speed sync
+	 disable acfcomp protocomp
+	 deny acfcomp
+	 enable lqr
+	 set lqrperiod 5
+	 set cd 5
+	 set dial
+	 set login
+	 set timeout 0
+	 set authname "usuario"
+	 set authkey "miclave"
+	 add! default HISADDR
+	 enable mssfixup
 	</pre><p>
 
 	Cambiando la interfaz de red, el usuario y la clave.
 	Podrá probar la conexión con:
 	</p><pre class="screen">
-		ppp -ddial -nat pppoe
+	ppp -ddial -nat pppoe
 	</pre><p>
 
 	Si desea que en cada arranque se conecte automáticamente,
 	tal como se explica en 	
 	<a href="http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html%20" target="_top">http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html</a>
 	agregue a <code class="filename">/etc/rc.local</code>:
-	</p><pre class="screen">
-IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
-if [ -z "$IPADSL" ]; then
-	echo -n "Estableciendo conexion PPPoE DSL"; ppp -ddial pppoe
-	for i in 10 9 8 7 6 5 4 3 2 1 0; do 
-	    sleep 5             
-	    echo -n "$i"        
-	    IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
-	    if [ -z "$IPADSL" ]; then
-	        	break
-	    fi                  
-	done     
-fi
-
-	</pre><p>
+</p><pre class="screen">
+	IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
+	if [ -z "$IPADSL" ]; then
+		echo -n "Estableciendo conexion PPPoE DSL"; ppp -ddial pppoe
+		for i in 10 9 8 7 6 5 4 3 2 1 0; do 
+		    sleep 5             
+		    echo -n "$i"        
+		    IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
+		    if [ -z "$IPADSL" ]; then
+		        	break
+		    fi                  
+		done     
+	fi
+</pre><p>
 </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-pppoe"></a>3.1. Referencias y lecturas recomendadas</h3></div></div></div><p>
       Página del manual <code class="literal">pppoe</code>.
     </p><p>

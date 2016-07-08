@@ -7,44 +7,50 @@
     Indique los sistemas de archivos en los que usará cuota,
     en <code class="filename">/etc/fstab</code> agregando como opción del sistema
     de archivos: <code class="literal">userquota</code> y/o <code class="literal">groupquota</code>.
-    Por ejemplo:</p><pre class="screen">
-/dev/wd0d /home ffs rw,nodev,nosuid,userquota 1 2
-    </pre><p>
-    Después active el sistema de cuotas con:</p><pre class="screen">
-# quotaon -a
-    </pre><p>
+    Por ejemplo:
+</p><pre class="screen">
+	/dev/wd0d /home ffs rw,nodev,nosuid,userquota 1 2
+</pre><p>
+    Después active el sistema de cuotas con:
+</p><pre class="screen">
+	doas quotaon -a
+</pre><p>
   </p><p>
     Para especificar la cuota por usuario o por grupo emplee
-    <code class="literal">edquota</code>, por ejemplo:</p><pre class="screen">
-# edquota pabram
-    </pre><p>
+    <code class="literal">edquota</code>, por ejemplo:
+</p><pre class="screen">
+	doas edquota pabram
+</pre><p>
     que lo dejará en un editor en el que podrá cambiar las especificaciones
     de la cuota en cada sistema de archivos con cuotas:
-    </p><pre class="screen">
-Quotas for user pabram:
-/home: blocks in use: 1292980, limits (soft = 1000000, hard = 2000000)
-       inodes in use: 142318, limits (soft = 0, hard = 0)
-     </pre><p>
+</p><pre class="screen">
+	Quotas for user pabram:
+	/home: blocks in use: 1292980, limits (soft = 1000000, hard = 2000000)
+		inodes in use: 142318, limits (soft = 0, hard = 0)
+</pre><p>
      el límite blando podrá extenderse para cada usuario por un periodo de 
      tiempo (en este ejemplo), tras el cual se convertirá en un límite duro. 
      Límites en 0 indican que no hay restricción.
    </p><p>
     Puede replicar la configuración de cuotas en otros usuarios con:
-    </p><pre class="screen">
-# edquota -p pabram pedgar juamar margo
-    </pre><p>
+</p><pre class="screen">
+	doas edquota -p pabram pedgar juamar margo
+</pre><p>
     Después de especificar las cuotas de los usuarios puede verificar
-    la política de cuotas con:</p><pre class="screen">
-# repquota -a
-    </pre><p>
-    o chequear que se cumplan todas las cuotas con:</p><pre class="screen">
-quotacheck -a
-    </pre><p>
+    la política de cuotas con:
+</p><pre class="screen">
+	repquota -a
+</pre><p>
+o chequear que se cumplan todas las cuotas con:
+</p><pre class="screen">
+	quotacheck -a
+</pre><p>
   </p><p>Para activar sistema de cuotas y que las cuotas sean verificadas 
     cada vez que el sistema inicia agregue la siguiente línea al 
-    archivo <code class="filename">/etc/rc.conf.local</code>:</p><pre class="screen">
-check_quotas=YES
-    </pre><p>
+    archivo <code class="filename">/etc/rc.conf.local</code>:
+</p><pre class="screen">
+	check_quotas=YES
+</pre><p>
   </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-quota"></a>1.1. Referencias y lecturas recomendadas</h3></div></div></div><p>
       Las siguientes páginas del manual de OpenBSD:
       <a href=""><span class="citerefentry"><span class="refentrytitle">quota</span>(1)</span></a>,
