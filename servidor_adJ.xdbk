@@ -36,6 +36,7 @@
 <!ENTITY http.xdbk SYSTEM "http.xdbk">
 <!ENTITY apache.xdbk SYSTEM "apache.xdbk">
 <!ENTITY nginx.xdbk SYSTEM "nginx.xdbk">
+<!ENTITY letsencrypt.xdbk SYSTEM "letsencrypt.xdbk">
 <!ENTITY httpd.xdbk SYSTEM "httpd.xdbk">
 <!ENTITY ldapd.xdbk SYSTEM "ldapd.xdbk">
 

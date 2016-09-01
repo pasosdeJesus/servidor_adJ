@@ -230,8 +230,8 @@ adaptarlo a su entorno.
 
 	</sect2>
 
-&sendmail.xdbk;
 &opensmtpd.xdbk;
+&sendmail.xdbk;
 
  <sect2 id="protocolos-revisar-correo">
 		<title>Protocolos para revisar correo</title>
@@ -249,6 +249,7 @@ adaptarlo a su entorno.
 		  de POP3S e IMAPS con las implementaciones de Courier.
 		</para>
 
+   &dovecot.xdbk;
    <sect3 id="pop3s-imaps-courier">
     <title>Implementación Courier de POP3S e IMAPS</title>
 
@@ -718,7 +719,6 @@ ZZZZ OK LOGOUT completed
 
 </sect3>
 
-&dovecot.xdbk;
 
 </sect2>
 

@@ -12,6 +12,7 @@
 	</para>
 
 	&httpd.xdbk;
+	&letsencrypt.xdbk;
 	&nginx.xdbk;
 	&apache.xdbk;
 

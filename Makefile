@@ -8,7 +8,7 @@ include Make.inc
 
 EXT_DOCBOOK=xdbk
 
-SOURCES=$(PROYECTO).xdbk biblio.xdbk correo.xdbk dictd.xdbk dns.xdbk ftp.xdbk http.xdbk redes.xdbk lan-ethernet.xdbk inalambrica.xdbk modem-isdn.xdbk modem-nulo.xdbk mariadb.xdbk pol-correo.xdbk postgresql.xdbk quota.xdbk dhcpd.xdbk sshd.xdbk syslog.xdbk nat.xdbk cortafuegos.xdbk controlab.xdbk ntp.xdbk novedades.xdbk ftpproxy.xdbk ejemplopf.xdbk roundcubemail.xdbk opensmtpd.xdbk dovecot.xdbk
+SOURCES=$(PROYECTO).xdbk biblio.xdbk correo.xdbk dictd.xdbk dns.xdbk ftp.xdbk http.xdbk httpd.xdbk letsencrypt.xdbk nginx.xdbk apache.xdbk redes.xdbk lan-ethernet.xdbk inalambrica.xdbk modem-isdn.xdbk modem-nulo.xdbk mariadb.xdbk pol-correo.xdbk postgresql.xdbk quota.xdbk dhcpd.xdbk sshd.xdbk syslog.xdbk nat.xdbk cortafuegos.xdbk controlab.xdbk ntp.xdbk novedades.xdbk ftpproxy.xdbk ejemplopf.xdbk roundcubemail.xdbk opensmtpd.xdbk dovecot.xdbk
 # Listado de fuentes XML. Preferiblmente en el orden de inclusión.
 
 IMAGES= img/home.png img/prev.png img/toc-minus.png img/blank.png img/important.png img/toc-plus.png img/caution.png img/next.png img/tip.png img/up.png img/draft.png img/note.png img/toc-blank.png img/warning.png

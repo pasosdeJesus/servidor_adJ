@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <variablelist>
+	<varlistentry><term>Versión 5.9</term>
+		<listitem><para><itemizedlist>
+			<listitem><para>
+					Uso de <command>letsencrypt</command> 
+					(<xref linkend="letsencrypt"></xref>)
+			</para></listitem>
+		</itemizedlist></para></listitem>
+	</varlistentry>
+
+
 	<varlistentry><term>Versión 5.8</term>
 		<listitem><para><itemizedlist>
 			<listitem><para>
@@ -48,7 +58,7 @@ y fuentes a
 			Actualizada <xref linkend="opensmtpd"></xref>.
 		</para></listitem>
 		<listitem><para>
-			Actualizada <xref linkend="mysql"></xref>.
+			Actualizada <xref linkend="mariadb"></xref>.
 		</para></listitem>
 		<listitem><para>Nueva <xref linkend="servidor-ldapd"></xref> en capítulo 6.
 		</para></listitem>
