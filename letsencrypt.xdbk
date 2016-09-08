@@ -15,8 +15,9 @@
 	renovarse con el mismo letsencrypt).
 </para>
 <para>
-	Por ejemplo para un dominio &EDOMINIO; sólo certificado para el 
-	web:
+	Por ejemplo para generar certificada para un dominio 
+	www.&EDOMINIO; cuya raíz en el sistema de archivos está en 
+	<code>/var/www/htdocs</code>:
 <screen>
 	doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO; 
 </screen>
@@ -24,7 +25,8 @@
 <para>
 	Si además de los dominios web necesita cubrir con 
 	el mismo certificado el servidor de correo: correo.&EDOMINIO; que
-	tiene una raiz diferente:
+	tiene una raiz diferente (digamos 
+	<code>/var/www/roundcubemail</code>):
 <screen>
 	doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO;  -w /var/www/roundcubemail -d correo.&EDOMINIO;
 </screen>
