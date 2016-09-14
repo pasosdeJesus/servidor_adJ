@@ -191,11 +191,11 @@ CLASS="acronym"
 >.
       En una situación típica en la que un usuario <SPAN
 CLASS="systemitem"
->pablo@amor.miescuela.edu.co</SPAN
+>pablo@amor.miong.org</SPAN
 > envía un
       mensaje al usuario <SPAN
 CLASS="systemitem"
->rodrigo@respeto.miescuela.edu.co</SPAN
+>rodrigo@respeto.miong.org</SPAN
 > sin
       computadores intermediarios, se requiere:
 
@@ -483,6 +483,338 @@ CLASS="sect2"
 ><H2
 CLASS="sect2"
 ><A
+NAME="opensmtpd"
+>MTA <TT
+CLASS="literal"
+>OpenSMTPD</TT
+></A
+></H2
+><P
+>&#13;Se trata de un MTA desarrollado principalmente para OpenBSD
+por desarrolladores de OpenBSD.  Aunque aún se considera experimental 
+hemos comprobado su estabilidad para dominios virtuales que manejan 
+menos de 1000 correos diarios.
+</P
+><P
+>&#13;Antes de iniciar el servicio es importante detener sendmail con:
+<PRE
+CLASS="screen"
+>&#13;	/etc/rc.d/sendmail stop
+</PRE
+>
+y deshabilitarlo dejando en /etc/rc.conf.local la línea:
+<PRE
+CLASS="screen"
+>&#13;	sendmail_flags=NO
+</PRE
+>
+</P
+><P
+>El servicio se inicia con:
+<PRE
+CLASS="screen"
+>&#13;	doas /etc/rc.d/smtpd start
+</PRE
+>
+y se detiene con:
+<PRE
+CLASS="screen"
+>&#13;	doas /etc/rc.d/smtpd stop
+</PRE
+>
+
+Para que inicie en cada arranque y se reinicie fácil ejecutando 
+<TT
+CLASS="literal"
+>/etc/rc.local</TT
+> agrege <TT
+CLASS="literal"
+>smtpd</TT
+>
+a la variable <TT
+CLASS="literal"
+>pkg_scripts</TT
+> de
+<TT
+CLASS="filename"
+>/etc/rc.conf.local</TT
+> y en ese mismo archivo agregue:
+<PRE
+CLASS="screen"
+>&#13;	smtdp_flags=""
+</PRE
+>
+También modifique <TT
+CLASS="filename"
+>/etc/mailer.conf</TT
+> y cambie algunas
+líneas para que sean:
+<PRE
+CLASS="screen"
+>&#13;	sendmail        /usr/sbin/smtpctl
+	send-mail       /usr/sbin/smtpctl
+	mailq           /usr/sbin/smtpctl
+	makemap         /usr/libexec/smtpd/makemap
+	newaliases      /usr/libexec/smtpd/makemap
+</PRE
+>
+
+Una vez en operación pueden examinarse diversos aspectos (como bitacoras, examinar cola
+de correos, estadísticas) con <B
+CLASS="command"
+>smtpctl</B
+>.
+</P
+><P
+>&#13;La configuración se define en el archivo 
+<TT
+CLASS="filename"
+>/etc/mail/smtpd.conf</TT
+>.
+La configuración más simple que sólo aceptará correo local y lo dejará en 
+formato mbox en <TT
+CLASS="filename"
+>/var/mail</TT
+> o hará relevo es:
+<PRE
+CLASS="screen"
+>&#13;	listen on lo0
+
+	table aliases db:/etc/mail/aliases.db
+
+	accept for local alias &#60;aliases&#62; deliver to mbox
+	accept for all relay
+</PRE
+>
+
+Para que permita enviar y recibir de otros computadores debe cambiarse 
+la interfaz donde escucha y a nombre de quien acepta correos, por ejemplo:
+<PRE
+CLASS="screen"
+>&#13;	listen on all
+
+	table aliases db:/etc/mail/aliases.db
+	accept from any for domain "miong.org" alias &#60;aliases&#62; deliver to mbox
+	accept for all relay
+</PRE
+>
+
+Si prefiere que los correos sean recibidos por procmail puede cambiar 
+<TT
+CLASS="literal"
+>deliver to mbox</TT
+> por <TT
+CLASS="literal"
+>deliver to mda "procmail -f -"</TT
+>.
+
+Sin embargo para recibir en formato maildir (por defecto en <TT
+CLASS="filename"
+>~/Maildir</TT
+> de cada usuario) y tener opción de procesar usuario a usuario
+con procmail via el archivo <TT
+CLASS="filename"
+>~/.forward</TT
+> es mejor:
+<PRE
+CLASS="screen"
+>&#13;	accept from any for domain "miong.org" alias &#60;aliases&#62; deliver to maildir
+</PRE
+>
+
+Al igual que con sendmail la tabla de alias que usa esta configuración
+es <TT
+CLASS="filename"
+>/etc/mail/aliases.db</TT
+>, la cual se generá después
+de hacer cambios a <TT
+CLASS="filename"
+>/etc/mail/aliases</TT
+> con:
+<PRE
+CLASS="screen"
+>&#13;	cd /etc/mail
+	doas make
+</PRE
+>
+
+Para asegurar el relevo de correos provenientes de miong.org o 
+de la IP 192.168.1.2, basta agregar al mismo archivo de configuración:
+<PRE
+CLASS="screen"
+>&#13;	accept from miong.org for any relay
+	accept from 192.168.1.2 for any relay
+</PRE
+>
+
+Para agregar autenticación y TLS ,
+no es necesario cyrus-sasl basta
+generar certificado SSL (ver <A
+HREF="x1381.htm#smtp-auth-tls"
+>la sección de nombre <I
+>SMTP-AUTH y TLS</I
+></A
+>)
+y dejar <TT
+CLASS="filename"
+>miong.org.crt</TT
+> en 
+<TT
+CLASS="filename"
+>/etc/ssl/</TT
+> y 
+<TT
+CLASS="filename"
+>miong.org.key</TT
+> en
+<TT
+CLASS="filename"
+>/etc/ssl/private</TT
+> y después 
+cambiar en el archivo de configuración la línea con 
+<TT
+CLASS="literal"
+>listen</TT
+> por:
+<PRE
+CLASS="screen"
+>&#13;	pki miong.org certificate "/etc/ssl/miong.org.crt" \
+		key /etc/ssl/private/miong.org.key"
+	listen on all port 25 tls pki miong.org auth-optional
+</PRE
+>
+Puede ser más estricto con <TT
+CLASS="literal"
+>tls-require</TT
+> en lugar
+de <TT
+CLASS="literal"
+>tls</TT
+> y con <TT
+CLASS="literal"
+>auth</TT
+> en lugar
+de <TT
+CLASS="literal"
+>auth-optional</TT
+>.
+</P
+><P
+>&#13;Para escuchar también en el puerto 465 (u otro puerto) cifrado por 
+defecto puede agregar:
+<PRE
+CLASS="screen"
+>&#13;	listen on all port 465 smtps pki miong.org auth-optional
+</PRE
+>
+y TLS estricto en el puerto 587:
+<PRE
+CLASS="screen"
+>&#13;	listen on all port 587 tls pki miong.org auth
+</PRE
+>
+</P
+><P
+>&#13;Para atender diversos dominios DNS, además de configurar el registro
+MX de cada dominio (ver <A
+HREF="x1381.htm#dominios-virtuales-correo"
+>la sección de nombre <I
+>Dominios virtuales</I
+></A
+>),
+agregar una tabla de alias y una línea <TT
+CLASS="literal"
+>accept</TT
+> por cada 
+dominio, por ejemplo:
+<PRE
+CLASS="screen"
+>&#13;	table aliasesejemplo db:/etc/mail/aliasesejemplo.db
+	...
+	accept from any for domain "ejemplo.org" alias &#60;aliasesejemplo&#62; deliver to maildir
+</PRE
+>
+
+La tabla de alias debe generarse a partir de un archivo plano
+<TT
+CLASS="filename"
+>/etc/mail/aliasesjemplo</TT
+> con:
+<PRE
+CLASS="screen"
+>&#13;	cd /etc/mail
+	makemap hash aliasesejemplo &#60; aliasesejemplo
+	chmod a+r aliasesejemplo
+</PRE
+>
+</P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="smtpd-depura"
+>Depuración de OpenSMTP</A
+></H3
+><P
+>OpenSMTP envia mensajes de error a la bitácora 
+		<TT
+CLASS="filename"
+>/var/log/maillog</TT
+>. Puede ejecutarse en modo
+		de depuración para determinar problemas con:
+<PRE
+CLASS="screen"
+>&#13;	smtpd -d
+</PRE
+>
+		Esto no lo activará como servicio y presentará errores en pantalla.
+	</P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-opensmtpd"
+>Referencias</A
+></H3
+><P
+>&#13;				<P
+></P
+><UL
+><LI
+><P
+><B
+CLASS="command"
+>man smtpd</B
+>, <B
+CLASS="command"
+>man smtpd.conf</B
+>, <B
+CLASS="command"
+>man smtpctl</B
+></P
+></LI
+><LI
+><P
+>&#13;							<A
+HREF="http://www.opensmtpd.org/"
+TARGET="_top"
+>http://www.opensmtpd.org/</A
+>
+						</P
+></LI
+></UL
+>
+			</P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
 NAME="sendmail"
 >MTA <TT
 CLASS="literal"
@@ -534,9 +866,9 @@ CLASS="screen"
 	Trying ::1...
 	Connected to localhost.
 	Escape character is '^]'.
-	220 amor.miescuela.edu.co ESMTP Sendmail 8.13.8/8.13.3; Mon, 16 Oct 2006 12:42:41 -0500 (COT)
+	220 amor.miong.org ESMTP Sendmail 8.13.8/8.13.3; Mon, 16 Oct 2006 12:42:41 -0500 (COT)
 	HELO localhost
-	250 amor.miescuela.edu.co Hello pablo@localhost [IPv6:::1], pleased to meet you
+	250 amor.miong.org Hello pablo@localhost [IPv6:::1], pleased to meet you
 	MAIL FROM: &#60;pablo@localhost&#62;
 	250 2.1.0 &#60;pablo@localhost&#62;... Sender ok
 	RCPT TO: &#60;pablo@localhost&#62;
@@ -548,7 +880,7 @@ CLASS="screen"
 	.
 	250 2.0.0 k9GHgf1q019958 Message accepted for delivery
 	quit
-	221 2.0.0 amor.miescuela.edu.co closing connection
+	221 2.0.0 amor.miong.org closing connection
 Connection closed by foreign host.
 </PRE
 >
@@ -600,7 +932,7 @@ CLASS="command"
 Un ejemplo de tal archivo es:
 <PRE
 CLASS="screen"
->&#13;	miescuela.edu.co  # Acepta de todos los computadores del dominio
+>&#13;	miong.org  # Acepta de todos los computadores del dominio
 	192.168.1  # Acepta de todos las IPs de la forma 192.168.1.x
 </PRE
 >
@@ -635,7 +967,7 @@ es otra extensión a SMTP.
 CLASS="command"
 >sendmail</B
 > soporta tanto TLS como SMTP-AUTH, 
-la configuración por defecto de OpenBSD 5.8 no los incluye.
+la configuración por defecto de OpenBSD 5.9 no los incluye.
 En el caso de TLS lo incluido en el sistema base es suficiente y
 el procedimiento de configuración se documenta en
 <B
@@ -800,7 +1132,7 @@ CLASS="screen"
 	for i in `find . -name CVS`; do echo $i; 
 		echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" &#62; $i/Root;
 	done
-	cvs -z3 update -Pd -rOPENBSD_5_8
+	cvs -z3 update -Pd -rOPENBSD_5_9
 </PRE
 >
 
@@ -936,9 +1268,9 @@ CLASS="command"
 <PRE
 CLASS="screen"
 >&#13;	doas sendmail -O LogLevel=20 -bs -Am
-	220 correo.miescuela.edu.co ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
+	220 correo.miong.org ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
 	EHLO LOCALHOST
-	250-correo.miescuela.edu.co Hello root@localhost, pleased to meet you
+	250-correo.miong.org Hello root@localhost, pleased to meet you
 	250-ENHANCEDSTATUSCODES
 	250-PIPELINING
 	250-8BITMIME
@@ -1003,14 +1335,14 @@ CLASS="screen"
 puede intentar el envío de un correo por ejemplo con:
 <PRE
 CLASS="screen"
->&#13;	MAIL FROM:&#60;pablo@miescuela.edu.co&#62;
+>&#13;	MAIL FROM:&#60;pablo@miong.org&#62;
 	250 OK                                                                          
-	RCPT TO:&#60;rodrigo@miescuela.edu.co&#62;
+	RCPT TO:&#60;rodrigo@miong.org&#62;
 	250 Accepted                                                                    
 	DATA                                                                            
 	354 Enter message, ending with "." on a line by itself                          
-	From: "pablo@miescuela.edu.co" &#60;pablo@miescuela.edu.co&#62;
-	To:  rodrigo@miescuela.edu.co
+	From: "pablo@miong.org" &#60;pablo@miong.org&#62;
+	To:  rodrigo@miong.org
 	Subject: probando
 	1234                                                                            
 	.                                                                               
@@ -1027,8 +1359,8 @@ CLASS="filename"
 de forma remota (o también local) con:
 <PRE
 CLASS="screen"
->&#13;	telnet correo.miescuela.edu.co 25
-	220 correo.miescuela.edu.co ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
+>&#13;	telnet correo.miong.org 25
+	220 correo.miong.org ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
 	EHLO [200.21.23.4]
 </PRE
 >
@@ -1077,7 +1409,7 @@ lo soporta, basta que en la configuración del servidor SMTP
 indique que debe emplearse un usuario y que emplee TLS (puede usar
 tanto el puerto 25 como el 465).  Tenga en cuenta que el nombre
 del usuario con el cual autenticarse debe incluir el dominio
-(e.g pablo@miescuela.edu.co).
+(e.g pablo@miong.org).
 			</P
 ></DIV
 ><DIV
@@ -1230,12 +1562,12 @@ el servidor de correo del dominio.  i.e
 en el archivo maestro del dominio 
 (digamos <TT
 CLASS="filename"
->/var/named/master/miescuela.edu.co</TT
+>/var/named/master/miong.org</TT
 >) 
 algo como:
 <PRE
 CLASS="screen"
->&#13;	MX      5       correo.miescuela.edu.co.
+>&#13;	MX      5       correo.miong.org.
 	correo          IN      A       65.167.89.169
 </PRE
 >
@@ -1244,7 +1576,7 @@ CLASS="screen"
 ></LI
 ><LI
 ><P
->&#13;Agregue el dominio (e.g miescuela.edu.co) a los
+>&#13;Agregue el dominio (e.g miong.org) a los
 archivos <TT
 CLASS="filename"
 >/etc/local-host-names</TT
@@ -1270,7 +1602,7 @@ CLASS="screen"
 Con esta configuración todo correo a una dirección
 de la forma <TT
 CLASS="literal"
->pablo@miescuela.edu.co</TT
+>pablo@miong.org</TT
 >
 será enviado a la cola de correos del usuario local
 pablo.   Si lo requiere es posible agregar direcciones
@@ -1282,351 +1614,19 @@ CLASS="filename"
 por ejemplo:
 <PRE
 CLASS="screen"
->&#13;	pablofelipe@miescuela.edu.co	pablo
+>&#13;	pablofelipe@miong.org	pablo
 </PRE
 >
 reenviará todo correo dirigido a 
 <TT
 CLASS="literal"
->pablofelipe@miescuela.edu.co</TT
+>pablofelipe@miong.org</TT
 > al usuario
 local <TT
 CLASS="literal"
 >pablo</TT
 >.
 		</P
-></DIV
-></DIV
-><DIV
-CLASS="sect2"
-><H2
-CLASS="sect2"
-><A
-NAME="opensmtpd"
->MTA <TT
-CLASS="literal"
->OpenSMTPD</TT
-></A
-></H2
-><P
->&#13;Se trata de un MTA desarrollado principalmente para OpenBSD
-por desarrolladores de OpenBSD.  Aunque aún se considera experimental 
-hemos comprobado su estabilidad para dominios virtuales que manejan 
-menos de 1000 correos diarios.
-</P
-><P
->&#13;Antes de iniciar el servicio es importante detener sendmail con:
-<PRE
-CLASS="screen"
->&#13;	/etc/rc.d/sendmail stop
-</PRE
->
-y deshabilitarlo dejando en /etc/rc.conf.local la línea:
-<PRE
-CLASS="screen"
->&#13;	sendmail_flags=NO
-</PRE
->
-</P
-><P
->El servicio se inicia con:
-<PRE
-CLASS="screen"
->&#13;	doas /etc/rc.d/smtpd start
-</PRE
->
-y se detiene con:
-<PRE
-CLASS="screen"
->&#13;	doas /etc/rc.d/smtpd stop
-</PRE
->
-
-Para que inicie en cada arranque y se reinicie fácil ejecutando 
-<TT
-CLASS="literal"
->/etc/rc.local</TT
-> agrege <TT
-CLASS="literal"
->smtpd</TT
->
-a la variable <TT
-CLASS="literal"
->pkg_scripts</TT
-> de
-<TT
-CLASS="filename"
->/etc/rc.conf.local</TT
-> y en ese mismo archivo agregue:
-<PRE
-CLASS="screen"
->&#13;	smtdp_flags=""
-</PRE
->
-También modifique <TT
-CLASS="filename"
->/etc/mailer.conf</TT
-> y cambie algunas
-líneas para que sean:
-<PRE
-CLASS="screen"
->&#13;	sendmail        /usr/sbin/smtpctl
-	send-mail       /usr/sbin/smtpctl
-	mailq           /usr/sbin/smtpctl
-	makemap         /usr/libexec/smtpd/makemap
-	newaliases      /usr/libexec/smtpd/makemap
-</PRE
->
-
-Una vez en operación pueden examinarse diversos aspectos (como bitacoras, examinar cola
-de correos, estadísticas) con <B
-CLASS="command"
->smtpctl</B
->.
-</P
-><P
->&#13;La configuración se define en el archivo 
-<TT
-CLASS="filename"
->/etc/mail/smtpd.conf</TT
->.
-La configuración más simple que sólo aceptará correo local y lo dejará en 
-formato mbox en <TT
-CLASS="filename"
->/var/mail</TT
-> o hará relevo es:
-<PRE
-CLASS="screen"
->&#13;	listen on lo0
-
-	table aliases db:/etc/mail/aliases.db
-
-	accept for local alias &#60;aliases&#62; deliver to mbox
-	accept for all relay
-</PRE
->
-
-Para que permita enviar y recibir de otros computadores debe cambiarse 
-la interfaz donde escucha y a nombre de quien acepta correos, por ejemplo:
-<PRE
-CLASS="screen"
->&#13;	listen on all
-
-	table aliases db:/etc/mail/aliases.db
-	accept from any for domain "miescuela.edu.co" alias &#60;aliases&#62; deliver to mbox
-	accept for all relay
-</PRE
->
-
-Si prefiere que los correos sean recibidos por procmail puede cambiar 
-<TT
-CLASS="literal"
->deliver to mbox</TT
-> por <TT
-CLASS="literal"
->deliver to mda "procmail -f -"</TT
->.
-
-Sin embargo para recibir en formato maildir (por defecto en <TT
-CLASS="filename"
->~/Maildir</TT
-> de cada usuario) y tener opción de procesar usuario a usuario
-con procmail via el archivo <TT
-CLASS="filename"
->~/.forward</TT
-> es mejor:
-<PRE
-CLASS="screen"
->&#13;	accept from any for domain "miescuela.edu.co" alias &#60;aliases&#62; deliver to maildir
-</PRE
->
-
-Al igual que con sendmail la tabla de alias que usa esta configuración
-es <TT
-CLASS="filename"
->/etc/mail/aliases.db</TT
->, la cual se generá después
-de hacer cambios a <TT
-CLASS="filename"
->/etc/mail/aliases</TT
-> con:
-<PRE
-CLASS="screen"
->&#13;	cd /etc/mail
-	doas make
-</PRE
->
-
-Para asegurar el relevo de correos provenientes de miescuela.edu.co o 
-de la IP 192.168.1.2, basta agregar al mismo archivo de configuración:
-<PRE
-CLASS="screen"
->&#13;	accept from miescuela.edu.co for any relay
-	accept from 192.168.1.2 for any relay
-</PRE
->
-
-Para agregar autenticación y TLS ,
-no es necesario cyrus-sasl basta
-generar certificado SSL (ver <A
-HREF="x1381.htm#smtp-auth-tls"
->la sección de nombre <I
->SMTP-AUTH y TLS</I
-></A
->)
-y dejar <TT
-CLASS="filename"
->miescuela.edu.co.crt</TT
-> en 
-<TT
-CLASS="filename"
->/etc/ssl/</TT
-> y 
-<TT
-CLASS="filename"
->miescuela.edu.co.key</TT
-> en
-<TT
-CLASS="filename"
->/etc/ssl/private</TT
-> y después 
-cambiar en el archivo de configuración la línea con 
-<TT
-CLASS="literal"
->listen</TT
-> por:
-<PRE
-CLASS="screen"
->&#13;	pki miescuela.edu.co certificate "/etc/ssl/miescuela.edu.co.crt" \
-		key /etc/ssl/private/miescuela.edu.co.key"
-	listen on all port 25 tls pki miescuela.edu.co auth-optional
-</PRE
->
-Puede ser más estricto con <TT
-CLASS="literal"
->tls-require</TT
-> en lugar
-de <TT
-CLASS="literal"
->tls</TT
-> y con <TT
-CLASS="literal"
->auth</TT
-> en lugar
-de <TT
-CLASS="literal"
->auth-optional</TT
->.
-</P
-><P
->&#13;Para escuchar también en el puerto 465 (u otro puerto) cifrado por 
-defecto puede agregar:
-<PRE
-CLASS="screen"
->&#13;	listen on all port 465 smtps pki miescuela.edu.co auth-optional
-</PRE
->
-y TLS estricto en el puerto 587:
-<PRE
-CLASS="screen"
->&#13;	listen on all port 587 tls pki miescuela.edu.co auth
-</PRE
->
-</P
-><P
->&#13;Para atender diversos dominios DNS, además de configurar el registro
-MX de cada dominio (ver <A
-HREF="x1381.htm#dominios-virtuales-correo"
->la sección de nombre <I
->Dominios virtuales</I
-></A
->),
-agregar una tabla de alias y una línea <TT
-CLASS="literal"
->accept</TT
-> por cada 
-dominio, por ejemplo:
-<PRE
-CLASS="screen"
->&#13;	table aliasesejemplo db:/etc/mail/aliasesejemplo.db
-	...
-	accept from any for domain "ejemplo.org" alias &#60;aliasesejemplo&#62; deliver to maildir
-</PRE
->
-
-La tabla de alias debe generarse a partir de un archivo plano
-<TT
-CLASS="filename"
->/etc/mail/aliasesjemplo</TT
-> con:
-<PRE
-CLASS="screen"
->&#13;	cd /etc/mail
-	makemap hash aliasesejemplo &#60; aliasesejemplo
-	chmod a+r aliasesejemplo
-</PRE
->
-</P
-><DIV
-CLASS="sect3"
-><H3
-CLASS="sect3"
-><A
-NAME="smtpd-depura"
->Depuración de OpenSMTP</A
-></H3
-><P
->OpenSMTP envia mensajes de error a la bitácora 
-		<TT
-CLASS="filename"
->/var/log/maillog</TT
->. Puede ejecutarse en modo
-		de depuración para determinar problemas con:
-<PRE
-CLASS="screen"
->&#13;	smtpd -d
-</PRE
->
-		Esto no lo activará como servicio y presentará errores en pantalla.
-	</P
-></DIV
-><DIV
-CLASS="sect3"
-><H3
-CLASS="sect3"
-><A
-NAME="referencias-opensmtpd"
->Referencias</A
-></H3
-><P
->&#13;				<P
-></P
-><UL
-><LI
-><P
-><B
-CLASS="command"
->man smtpd</B
->, <B
-CLASS="command"
->man smtpd.conf</B
->, <B
-CLASS="command"
->man smtpctl</B
-></P
-></LI
-><LI
-><P
->&#13;							<A
-HREF="http://www.opensmtpd.org/"
-TARGET="_top"
->http://www.opensmtpd.org/</A
->
-						</P
-></LI
-></UL
->
-			</P
 ></DIV
 ></DIV
 ><DIV
@@ -1655,6 +1655,90 @@ CLASS="footnote"
 		  segura pero que requiere configuración más delicada
 		  de POP3S e IMAPS con las implementaciones de Courier.
 		</P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="dovecot"
+>Implementación Dovecot de IMAPS y POP3S</A
+></H3
+><P
+>&#13;	    Instale el paquete dovecot-2.2.21p0 y asegurese de dejar
+	    <TT
+CLASS="literal"
+>dovecot</TT
+> en la variable 
+	    <TT
+CLASS="literal"
+>pkg_scripts</TT
+> de 
+	    <TT
+CLASS="filename"
+>/etc/rc.conf.local</TT
+> 
+	    para que se inicie en cada arranque.
+    </P
+><P
+>&#13;	    Puede generar un certificado autofirmado editando los
+	    datos para el certificado en el archivo 
+	    <TT
+CLASS="filename"
+>/etc/ssl/dovecot-openssl.cnf</TT
+> y 
+	    generandolo con
+<PRE
+CLASS="screen"
+>&#13;	/usr/local/sbin/dovecot-mkcert.sh
+</PRE
+>
+	    que lo dejará en <TT
+CLASS="filename"
+>/etc/ssl/dovecotcert.pem</TT
+>
+	    y <TT
+CLASS="filename"
+>/etc/ssl/private/dovecot.pem</TT
+>.
+    </P
+><P
+>&#13;	    Edite el archivo <TT
+CLASS="filename"
+>/etc/dovecot/conf.d/auth-system.conf.ext</TT
+>
+	    y asegurse de que queden sin comentario las siguientes partes:
+<PRE
+CLASS="screen"
+>&#13;	passdb {                                                                        
+		driver = bsdauth    
+	}
+	userdb {                                                                        
+		driver = passwd                                                               
+	}
+</PRE
+>
+	   	Inicie el servicio con 
+<PRE
+CLASS="screen"
+>&#13;	/etc/rc.d/dovecot start
+</PRE
+>	
+		y pruebelo en los puertos 143 (IAMP sin cifrar),
+		993 (IMAP sobre SSL), 110 (POP3 sin cifrar) y
+		995 (POP3 sobre SSL).
+	      	Por defecto dovecot intentará recuperar
+		correos en formato maildir de la carpeta 
+		<TT
+CLASS="filename"
+>Maildir</TT
+> de cada usuario.
+	</P
+><P
+>&#13;		Una vez confirme la operación recomendamos que sólo
+		abra el puerto 993  del cortafuegos
+		para permitir conexiones IMAP remotas sobre SSL.
+	</P
+></DIV
 ><DIV
 CLASS="sect3"
 ><H3
@@ -1949,7 +2033,7 @@ CLASS="filename"
 		<PRE
 CLASS="screen"
 >&#13;Dec 19 18:31:59 servidor sendmail[22209]: kBJNVwMt022209: to=test@localhost, ctladdr=pablo (1000/1000), delay=00:00:01, xdelay=00:00:01, mailer=relay, pri=30061, relay=[127.0.0.1] [127.0.0.1], dsn=2.0.0, stat=Sent (kBJNVw3t021322 Message accepted for delivery)
-Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bin/procmail", ctladdr=&#60;test@miescuela.edu.co&#62; (1008/10), delay=00:00:00, xdelay=00:00:00, mailer=prog, pri=30756, dsn=2.0.0, stat=Sent
+Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bin/procmail", ctladdr=&#60;test@miong.org&#62; (1008/10), delay=00:00:00, xdelay=00:00:00, mailer=prog, pri=30756, dsn=2.0.0, stat=Sent
 		</PRE
 >
 	</P
@@ -2472,90 +2556,6 @@ TARGET="_top"
       </P
 ></DIV
 ></DIV
-><DIV
-CLASS="sect3"
-><H3
-CLASS="sect3"
-><A
-NAME="dovecot"
->Implementación Dovecot de IMAPS y POP3S</A
-></H3
-><P
->&#13;	    Instale el paquete dovecot-2.2.18p0 y asegurese de dejar
-	    <TT
-CLASS="literal"
->dovecot</TT
-> en la variable 
-	    <TT
-CLASS="literal"
->pkg_scripts</TT
-> de 
-	    <TT
-CLASS="filename"
->/etc/rc.conf.local</TT
-> 
-	    para que se inicie en cada arranque.
-    </P
-><P
->&#13;	    Puede generar un certificado autofirmado editando los
-	    datos para el certificado en el archivo 
-	    <TT
-CLASS="filename"
->/etc/ssl/dovecot-openssl.cnf</TT
-> y 
-	    generandolo con
-<PRE
-CLASS="screen"
->&#13;	/usr/local/sbin/dovecot-mkcert.sh
-</PRE
->
-	    que lo dejará en <TT
-CLASS="filename"
->/etc/ssl/dovecotcert.pem</TT
->
-	    y <TT
-CLASS="filename"
->/etc/ssl/private/dovecot.pem</TT
->.
-    </P
-><P
->&#13;	    Edite el archivo <TT
-CLASS="filename"
->/etc/dovecot/conf.d/auth-system.conf.ext</TT
->
-	    y asegurse de que queden sin comentario las siguientes partes:
-<PRE
-CLASS="screen"
->&#13;	passdb {                                                                        
-		driver = bsdauth    
-	}
-	userdb {                                                                        
-		driver = passwd                                                               
-	}
-</PRE
->
-	   	Inicie el servicio con 
-<PRE
-CLASS="screen"
->&#13;	/etc/rc.d/dovecot start
-</PRE
->	
-		y pruebelo en los puertos 143 (IAMP sin cifrar),
-		993 (IMAP sobre SSL), 110 (POP3 sin cifrar) y
-		995 (POP3 sobre SSL).
-	      	Por defecto dovecot intentará recuperar
-		correos en formato maildir de la carpeta 
-		<TT
-CLASS="filename"
->Maildir</TT
-> de cada usuario.
-	</P
-><P
->&#13;		Una vez confirme la operación recomendamos que sólo
-		abra el puerto 993  del cortafuegos
-		para permitir conexiones IMAP remotas sobre SSL.
-	</P
-></DIV
 ></DIV
 ><DIV
 CLASS="sect2"
@@ -2580,7 +2580,7 @@ CLASS="literal"
 			  en algunas organizaciones.
 		  </P
 ><P
->&#13;			  SpamAssassin (paquete p5-Mail-SpamAssassin-3.4.1p1) 
+>&#13;			  SpamAssassin (paquete p5-Mail-SpamAssassin-3.4.1p4) 
 			  junto con procmail (paquete procmail-3.22p6) son 
 			  una solución intermedia que permiten recibir todo 
 			  correo pero 
@@ -2809,7 +2809,7 @@ CLASS="filename"
 	  instrucciones de módulos, suponiendo
 	  que en el mismo servidor (<TT
 CLASS="literal"
->correo.miescuela.edu.co</TT
+>correo.miong.org</TT
 >)
 	  están los servicios IMAPS y SMTP y que
 	  se empleará el motor de bases de datos PostgreSQL:
@@ -2827,7 +2827,7 @@ por lo que es necesario configurar el servidor web.  Por ejemplo si
 el correo de la organización se consultará en 
 <TT
 CLASS="literal"
->correo.miescuela.edu.co</TT
+>correo.miong.org</TT
 > (IP interna 192.168.60.1 y externa 200.200.200.200) con protocolo HTTPS, el archivo 
 <TT
 CLASS="filename"
@@ -2837,13 +2837,13 @@ CLASS="filename"
 CLASS="screen"
 >&#13;	&#60;VirtualHost 127.0.0.1:443 192.168.60.1:443 200.200.200.200:443&#62;
 	DocumentRoot "/var/www/roundcubemail/"
-	ServerName correo.miescuela.edu.co
+	ServerName correo.miong.org
 	
 	&#60;Directory /var/www/roundcubemail/&#62;
 		AllowOverride All
 	&#60;/Directory&#62;
 	
-	ServerAdmin admin@miescuela.edu.co
+	ServerAdmin admin@miong.org
 	ErrorLog logs/round-error_log
 	TransferLog logs/round-access_log
 	
@@ -2912,7 +2912,7 @@ CLASS="filename"
 >/var/www/tmp</TT
 >
 (ver <A
-HREF="x2451.htm"
+HREF="x2458.htm"
 >la sección de nombre <I
 >Motor de bases de datos PostgreSQL</I
 > en Capítulo 6</A
@@ -3003,13 +3003,13 @@ CLASS="screen"
 
 	$rcmail_config['auto_create_user'] = TRUE;
 
-	$rcmail_config['default_host'] = 'ssl://correo.miescuela.edu.co:993';
+	$rcmail_config['default_host'] = 'ssl://correo.miong.org:993';
 	
 	$rcmail_config['default_port'] = 993;
 	
 	$rcmail_config['smtp_server'] = '127.0.0.1';
 	
-	$rcmail_config['mail_domain'] = 'miescuela.edu.co';
+	$rcmail_config['mail_domain'] = 'miong.org';
 </PRE
 >
 
@@ -3065,7 +3065,7 @@ CLASS="screen"
 >&#13;Con un navegador examine el URL 
 <TT
 CLASS="literal"
->https://correo.miescuela.edu.co/installer/</TT
+>https://correo.miong.org/installer/</TT
 >
 compruebe las dependencias solicitadas y realice las pruebas
 disponibles.  
@@ -3269,7 +3269,7 @@ CLASS="command"
 
 que requiere <B
 CLASS="command"
->python-2.7.10</B
+>python-2.7.11</B
 >
 se crean automáticamente el grupo <B
 CLASS="command"
@@ -3557,11 +3557,11 @@ CLASS="literal"
 	  <TT
 CLASS="literal"
 >MAIL FROM:
-	   pablo@amor.miescuela.edu.co</TT
+	   pablo@amor.miong.org</TT
 >, después enviaría
 	  <TT
 CLASS="literal"
->RCPT TO: rodrigo@respeto.miescuela.edu.co</TT
+>RCPT TO: rodrigo@respeto.miong.org</TT
 >,
 	  después <TT
 CLASS="literal"
@@ -3576,8 +3576,8 @@ CLASS="acronym"
 	   punto. Por ejemplo</P
 ><PRE
 CLASS="screen"
->&#13;	From: pablo@amor.miescuela.edu.co
-	To: rodrigo@respeto.miescuela.edu.co
+>&#13;	From: pablo@amor.miong.org
+	To: rodrigo@respeto.miong.org
 	Subject: Saludo
 
 	Un cortisimo saludo para bendición de nuestro Creador.
@@ -3603,8 +3603,8 @@ CLASS="application"
 CLASS="screen"
 > 
 	sendmail -bm
-	rodrigo@respeto.miescuela.edu.co -f
-	pablo@amor.miescuela.edu.co 
+	rodrigo@respeto.miong.org -f
+	pablo@amor.miong.org 
 </PRE
 >
 	   (para emplear <CODE

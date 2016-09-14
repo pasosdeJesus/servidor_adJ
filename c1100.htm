@@ -183,7 +183,7 @@ CLASS="filename"
 > es:
 <PRE
 CLASS="screen"
->&#13;	search miescuela.edu.co
+>&#13;	search miong.org
 	nameserver 192.168.16.1
 	lookup file bind
 </PRE
@@ -577,15 +577,15 @@ CLASS="filename"
       Pueden configurarse archivos como dice en [<SPAN
 CLASS="citation"
 ><A
-HREF="b3057.htm#AA_Linux"
+HREF="b3073.htm#AA_Linux"
 >AA_Linux</A
 ></SPAN
 >]
-      por ejemplo los datos un servidor DNS primario del dominio miescuela.edu.co 
+      por ejemplo los datos un servidor DNS primario del dominio miong.org 
       pueden quedar en el archivo 
       <TT
 CLASS="filename"
->/var/named/master/miescuela.edu.co</TT
+>/var/named/master/miong.org</TT
 >:
 <PRE
 CLASS="screen"
@@ -601,7 +601,7 @@ CLASS="screen"
 	
 		A       65.8.9.234
 	
-		MX      5      correo.miescuela.edu.co.
+		MX      5      correo.miong.org.
 	
 	correo	IN      A       201.2.3.74
 	ns1     IN      A       201.2.3.74
@@ -613,12 +613,12 @@ Note que se declara el mismo dominio como servidor de nombre autoritario,
 se relaciona con la IP (65.8.9.234), el nombre
 <TT
 CLASS="literal"
->correo.miescuela.edu.co</TT
+>correo.miong.org</TT
 > identificara la misma máquina
 y es el nombre que se usará para intercambiar correos; el nombre
 <TT
 CLASS="literal"
->www.miescuela.edu.co</TT
+>www.miong.org</TT
 > será un alias para el mismo servidor.
 Note que todo nombre que no termine con punto (.), será completado por
 <B
@@ -631,11 +631,11 @@ CLASS="literal"
 completado a
 <TT
 CLASS="literal"
->www.miescuela.edu.co</TT
+>www.miong.org</TT
 >, si se olvida el punto después
 de <TT
 CLASS="literal"
->correo.miescuela.edu.co</TT
+>correo.miong.org</TT
 >, <B
 CLASS="command"
 >bind</B
@@ -643,14 +643,14 @@ CLASS="command"
 completará a
 <TT
 CLASS="literal"
->correo.miescuela.edu.co.miescuela.edu.co</TT
+>correo.miong.org.miong.org</TT
 >).
 Recuerde aumentar el número serial cada vez que haga algún cambio, para que
 la información pueda ser actualizada en los servidores secundarios.
 Puede probar cada archivo de zonas que haga con:
 <PRE
 CLASS="screen"
->&#13;	named-checkzone miescuela.edu.co /var/named/master/miescuela.edu.co
+>&#13;	named-checkzone miong.org /var/named/master/miong.org
 </PRE
 >
 Agregue una referencia al archivo de zonas maestro en
@@ -661,9 +661,9 @@ CLASS="filename"
 zonas maestras algo de la forma:
 <PRE
 CLASS="screen"
->&#13;	zone "miescuela.edu.co" {
+>&#13;	zone "miong.org" {
 	  type master;
-	  file "master/miescuela.edu.co";
+	  file "master/miong.org";
 	}
 </PRE
 >
@@ -677,9 +677,9 @@ CLASS="filename"
 para zonas esclavas algo como:
 <PRE
 CLASS="screen"
->&#13;	zone "miescuela.edu.co" {
+>&#13;	zone "miong.org" {
 	  type slave;
-	  file "slave/miescuela.edu.co";
+	  file "slave/miong.org";
 	  masters { 65.8.9.234; };
 	}
 </PRE
@@ -692,7 +692,7 @@ CLASS="command"
 traerá la información del servidor primario y la dejará en el archivo
 <TT
 CLASS="filename"
->/var/named/slave/miescuela.edu.co</TT
+>/var/named/slave/miong.org</TT
 >.
 </P
 ><P
@@ -717,7 +717,7 @@ CLASS="filename"
 > puede usar:
 <PRE
 CLASS="screen"
->&#13;	dig @localhost miescuela.edu.co
+>&#13;	dig @localhost miong.org
 </PRE
 >
       Si requiere volver a leer los archivos de configuración 
@@ -776,7 +776,7 @@ NAME="vistas"
 		    seguramente tendrá inconvenientes al resolver
 		    nombres de su dominio en la LAN, pues el nombre de 
 		    su organización
-		    (digamos miescuela.edu.co) será resulto a la dirección externa,
+		    (digamos miong.org) será resulto a la dirección externa,
 		    la cual conectará al cortafuegos por el puerto
 		    pedido y tratará de redirigir la conexión al
 		    servidor en la DMZ (i.e se reflejará).   Por este motivo
@@ -844,18 +844,18 @@ CLASS="screen"
 	    	type delegation-only;
 	    };
 	
-	    zone "miescuela.edu.co" {
+	    zone "miong.org" {
 	        type master;
-	        file "refleja/miescuela.edu.co.org";
+	        file "refleja/miong.org.org";
 	    };
 	};
 	view "external" { // Para Internet
 	    recursion no;
 	    additional-from-auth no;
 	    additional-from-cache no;
-	    zone "miescuela.edu.co" {
+	    zone "miong.org" {
 	        type master;
-		file "master/miescuela.edu.co";
+		file "master/miong.org";
 	    };
 	    zone "168.74.245.200.IN-ADDR.ARPA" { // Para resolución inversa
 	        type master;
@@ -866,12 +866,12 @@ CLASS="screen"
 >
 El archivo <TT
 CLASS="filename"
->master/miescuela.edu.co</TT
+>master/miong.org</TT
 > sería el típico
 para resolver externamente, mientras que en 
 <TT
 CLASS="filename"
->refleja/miescuela.edu.co</TT
+>refleja/miong.org</TT
 > tendría los mismo nombres del
 anterior pero con las direcciones de la red local. 
 <TT
@@ -889,10 +889,10 @@ CLASS="screen"
 	  2D   ; Expiración secundaria
 	  1D ) ; Cache de registros de recurso
 	
-	@       IN      NS      cortafuegos.miescuela.edu.co.
-		IN      PTR     www.miescuela.edu.co.
-		IN      PTR     correo.miescuela.edu.co
-		IN      PTR     ns1.miescuela.edu.co
+	@       IN      NS      cortafuegos.miong.org.
+		IN      PTR     www.miong.org.
+		IN      PTR     correo.miong.org
+		IN      PTR     ns1.miong.org
 </PRE
 >
 	</P
@@ -916,7 +916,7 @@ NAME="referencias-dns"
 [<SPAN
 CLASS="citation"
 ><A
-HREF="b3057.htm#AA_Linux"
+HREF="b3073.htm#AA_Linux"
 >AA_Linux</A
 ></SPAN
 >]
@@ -928,7 +928,7 @@ HREF="b3057.htm#AA_Linux"
 [<SPAN
 CLASS="citation"
 ><A
-HREF="b3057.htm#bind9arm"
+HREF="b3073.htm#bind9arm"
 >bind9arm</A
 ></SPAN
 >].
@@ -954,7 +954,7 @@ TARGET="_top"
 >&#13;      [<SPAN
 CLASS="citation"
 ><A
-HREF="b3057.htm#openbsdDnsDhcp"
+HREF="b3073.htm#openbsdDnsDhcp"
 >openbsdDnsDhcp</A
 ></SPAN
 >].

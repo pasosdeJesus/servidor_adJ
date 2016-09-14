@@ -15,7 +15,7 @@
      dirección de red (por ejemplo 255.255.0.0 es una máscara que
      indica que los primeros 16 bits de una dirección IP son la
      dirección de red).
-    </p><a class="indexterm" name="idm3041572208"></a><p>Al diseñar una red debe escogerse una dirección de red junto
+    </p><a class="indexterm" name="idp2641708816"></a><p>Al diseñar una red debe escogerse una dirección de red junto
      con la máscara de acuerdo al número de computadores, algunas
      posibilidades son:</p><div class="variablelist"><dl><dt><span class="term">/8 o 255.0.0.0</span></dt><dd><p>16777216 computadores</p></dd><dt><span class="term">/12 o 255.242.0.0</span></dt><dd><p>1048576 computadores</p></dd><dt><span class="term">/16 o 255.255.0.0</span></dt><dd><p>65536 computadores</p></dd><dt><span class="term">/24 o 255.255.255.0</span></dt><dd><p>255 computadores</p></dd></dl></div><p>Además la dirección de red que escoja debe ser única para no
      producir conflictos con otras redes en caso de conectarse a
@@ -71,7 +71,7 @@ doas route add 192.168.2/24 192.168.1.60
 	 los computadores y enrutadores que transmiten un paquete
 	 hasta llegar a su destino. Por ejemplo
 		 </p><pre class="screen">
-traceroute 192.168.2.2</pre><a class="indexterm" name="idp276076944"></a></dd><dt><span class="term"><span><strong class="command">netstat -s</strong></span></span></dt><dd><p>Éste presenta estadísticas sobre <span class="acronym">IP</span>,
+traceroute 192.168.2.2</pre><a class="indexterm" name="idm123571056"></a></dd><dt><span class="term"><span><strong class="command">netstat -s</strong></span></span></dt><dd><p>Éste presenta estadísticas sobre <span class="acronym">IP</span>,
 	 <span class="acronym">ICMP</span> y <span class="acronym">TCP</span></p></dd><dt><span class="term"><span><strong class="command">arp -an</strong></span></span></dt><dd><p>Que presenta direcciones MAC junto con IPs asociadas
 	 </p></dd><dt><span class="term"><span><strong class="command">tcpdump</strong></span></span></dt><dd><p>Permite analizar el tráfico de una red TCP/IP.  Desde la
 	 cuenta root puede usarse este programa para examinar todo el
@@ -80,7 +80,7 @@ traceroute 192.168.2.2</pre><a class="indexterm" name="idp276076944"></a></dd><d
 	 </p><pre class="screen">
 doas tcpdump -i re0 -n -ttt
 	 </pre><p>
-       </p><a class="indexterm" name="idp276077584"></a></dd></dl></div><p>
+       </p><a class="indexterm" name="idp2397589520"></a></dd></dl></div><p>
     </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="configuracion-OpenBSD"></a>1.2. Otros aspectos de configuración de redes en OpenBSD</h3></div></div></div><p>Fuera de las tablas de enrutamiento y ARP, la funcionalidad de 
 	    redes a nivel de kernel se puede controlar con:
 
@@ -90,7 +90,7 @@ doas tcpdump -i re0 -n -ttt
 	 
 		 </p><pre class="screen">
 127.0.0.1       localhost
-192.168.1.1    Jesus.miescuela.edu.co Jesus
+192.168.1.1    Jesus.miong.org Jesus
 		 </pre><p>
 	     </p></dd><dt><span class="term"><span><strong class="command">sysctl</strong></span></span></dt><dd><p>Para configurar algunas variables del
 		       kernel relacionadas con redes.
@@ -100,7 +100,7 @@ doas tcpdump -i re0 -n -ttt
 	</p></dd><dt><span class="term">pf</span></dt><dd><p>Que permite controlar el 
 tráfico de paquetes en el kernel y por tanto controlar
 la funcionalidad de
-cortafuegos<sup>[<a name="idp520007568" href="#ftn.idp520007568">24</a>]</sup>.
+cortafuegos<sup>[<a name="idp2138829072" href="#ftn.idp2138829072">24</a>]</sup>.
 Se configura de manera permanente en el archivo <code class="filename">/etc/pf.conf</code> (o el archivo especificado
 en la variable <code class="literal">pf_rules</code> de 
 <code class="filename">rc.conf.local</code> o <code class="filename">rc.conf</code>).  Para
@@ -122,5 +122,5 @@ doas pfctl -f /etc/pf.conf
     </p><p>Las secciones de este capítulo explican algunas configuraciones
 	    típicas que pueden hacerse con <span class="application">pf</span>
 	    y los correspondientes cambios a su archivo de configuración.
-    </p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp520007568" href="#idp520007568">24</a>] </sup>Cortafuego del inglés
+    </p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2138829072" href="#idp2138829072">24</a>] </sup>Cortafuego del inglés
 <span xmlns="" class="foreignphrase"><em class="foreignphrase">firewall</em></span></p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="red-inalambrica.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="nat.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">5. Red Local Inalámbrica: uso y configuración </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 2. NAT (Network Address Translation)</td></tr></table></div></body></html>

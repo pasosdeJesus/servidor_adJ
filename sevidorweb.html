@@ -117,7 +117,33 @@
 </pre><p>
 				</p><p>
 					El formato de las bitácoras por defecto es similar al de <code class="literal">nginx</code>
-				</p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="nginx"></a>7.2. Nginx</h3></div></div></div><p>
+				</p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="letsencrypt"></a>7.2. Certificados SSL gratuitos con Let's Encrypt</h3></div></div></div><p>
+	Hasta hace un tiempo era impensable contar con un 
+	certificado SSL válido para los diversos navegadores
+	(candadito verde) y que fuese gratuito.  
+	Sin embargo algunas empresas empezaron a ofrecerlos
+	(e.g Gandi da certificado gratuito por un año para un dominio
+	por la compra de un dominio),
+	y finalmente de diversos intentos por parte de organizaciones
+	sin ánimo de lucro, letsencrypt.org es reconocida por los
+	navegadores principales y ofrece todo tipo de certificados
+	validos por 3 meses de manera gratuita (cada 3 meses debe
+	renovarse con el mismo letsencrypt).
+</p><p>
+	Por ejemplo para un dominio miong.org sólo certificado para el 
+	web:
+</p><pre class="screen">
+	doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d miong.org -d www.miong.org 
+</pre><p>
+</p><p>
+	Si además de los dominios web necesita cubrir con 
+	el mismo certificado el servidor de correo: correo.miong.org que
+	tiene una raiz diferente:
+</p><pre class="screen">
+	doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d miong.org -d www.miong.org  -w /var/www/roundcubemail -d correo.miong.org
+</pre><p>
+
+</p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="nginx"></a>7.3. Nginx</h3></div></div></div><p>
 OpenBSD y adJ incluyen nginx también entre 
 	los componentes básicos.  Su archivo de configuración
 	es <code class="filename">/etc/nginx/nginx.conf</code>.
@@ -139,10 +165,10 @@ OpenBSD y adJ incluyen nginx también entre
 </pre><p>
 	y que añada <code class="literal">nginx</code> en
 	<code class="literal">pkg_scripts</code>.
-	</p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="nginx-php"></a>7.2.1. Uso de PHP con nginx</h4></div></div></div><p>
+	</p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="nginx-php"></a>7.3.1. Uso de PHP con nginx</h4></div></div></div><p>
 No hay un módulo para PHP pero puede ejecutarse como Fast-CGI.  
 Esto puede lograrse por ejemplo con el paquete
-<code class="literal">php-fpm-5.6.19</code>.   Este paquete incluye un
+<code class="literal">php-fpm-5.6.25</code>.   Este paquete incluye un
 servicio que se configura en <code class="filename">/etc/php-fpm.conf</code>
 por ejemplo para escuchar en el socket 
 <code class="filename">/var/www/run/php-fpm.sock</code> con
@@ -168,7 +194,7 @@ En el archivo de configuración de nginx agregue en la sección
 		include        fastcgi_params;
 	}
 </pre></li></ol></div><p>
-		</p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="apache"></a>7.3. Apache</h3></div></div></div><p>adJ y OpenBSD cuentan con el porte de
+		</p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="apache"></a>7.4. Apache</h3></div></div></div><p>adJ y OpenBSD cuentan con el porte de
 		      transición <code class="literal">apache-httpd-openbsd</code>
 		      con el Apache 1.3.29 modificado que había en 
 		      adJ/OpenBSD 5.5.   Este porte será descontinuado
@@ -214,7 +240,7 @@ en <code class="filename">/etc/rc.conf.local</code>:
 	</p><pre class="screen">
 	doas /etc/rc.d/apache restart
 	</pre><p>
-</p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="directorios-usuarios"></a>7.3.1. Directorios para usuarios</h4></div></div></div><p>El archivo de configuración por defecto
+</p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="directorios-usuarios"></a>7.4.1. Directorios para usuarios</h4></div></div></div><p>El archivo de configuración por defecto
 	(<code class="filename">/var/www/conf/httpd.conf</code>) no incluye 
 	directorios para usuarios. A partir de OpenBSD 3.4 se recomienda 
 	que estos directorios se creen en <code class="filename">/var/www/users</code>, 
@@ -236,8 +262,8 @@ en <code class="filename">/etc/rc.conf.local</code>:
 	<code class="filename">public_html</code> (como ocurre clásicamente) y
 	desde un navegador local podrán verse con el URL:
 	<code class="literal">http://localhost/~pablo/</code> o remotamente
-	con <code class="literal">http://www.miescuela.edu.co/~pablo/</code>
-      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="dominios-virtuales"></a>7.3.2. Dominios virtuales</h4></div></div></div><p>Empleado dominios virtuales (del inglés
+	con <code class="literal">http://www.miong.org/~pablo/</code>
+      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="dominios-virtuales"></a>7.4.2. Dominios virtuales</h4></div></div></div><p>Empleado dominios virtuales (del inglés
 	  <span class="foreignphrase"><em class="foreignphrase">Virtual Hosting</em></span>) es posible
 	  manejar con un mismo servidor diversas direcciones DNS.  Para
 	  activarlo:
@@ -255,18 +281,18 @@ en <code class="filename">/etc/rc.conf.local</code>:
 		por ejemplo:
 		</p><pre class="screen">
 	&lt;VirtualHost 65.167.63.234&gt;
-	    ServerAdmin pablo@miescuela.edu.co
+	    ServerAdmin pablo@miong.org
 	    DocumentRoot /var/www/htdocs
-	    ServerName www.miescuela.edu.co
-	    ServerAlias miescuela.edu.co
-	    ErrorLog logs/miescuela.edu.co-error_log
+	    ServerName www.miong.org
+	    ServerAlias miong.org
+	    ErrorLog logs/miong.org-error_log
 	    Options ExecCgi Includes MultiViews Indexes FollowSymlinks 
 	    SymLinksIfOwnerMatch
-	    CustomLog logs/miescuela.edu.co-access_log common
+	    CustomLog logs/miong.org-access_log common
 	&lt;/VirtualHost&gt;
 		</pre><p>
 	      </p></li></ol></div><p>
-      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="ssl"></a>7.3.3. SSL</h4></div></div></div><p>
+      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="ssl"></a>7.4.3. SSL</h4></div></div></div><p>
 
 Para emplear SSL con Apache pueden seguirse las instrucciones 
 del FAQ de OpenBSD que se retoman a continuación.  Debe generar
@@ -315,9 +341,9 @@ las opciones apropiadas, por ejemplo:
 </pre><p>
 		</p></li></ul></div><p>
 Finalmente puede probar abriendo desde un navegador
-<code class="literal">https://Jesus.miescuela.edu.co</code>
-</p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="php"></a>7.3.4. PHP</h4></div></div></div><p>Instale el paquete
-		<code class="literal">php-5.6.19</code>.
+<code class="literal">https://Jesus.miong.org</code>
+</p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="php"></a>7.4.4. PHP</h4></div></div></div><p>Instale el paquete
+		<code class="literal">php-5.6.25</code>.
 	  Después cree un enlace para activarlo en servidor web:
 	  </p><pre class="screen">
 	doas ln -s /var/www/conf/modules.sample/php-5.4.conf \
@@ -340,8 +366,8 @@ Finalmente puede probar abriendo desde un navegador
 	  phpinfo();
 	?&gt;
 	  </pre><p>
-	</p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="php-postgresql"></a>7.3.4.1. Soporte para PostgreSQL en PHP</h5></div></div></div><p>Para activar el soporte para PostgreSQL (ver <a href="postgresql.html" title="2. Motor de bases de datos PostgreSQL">Sección 2, “Motor de bases de datos PostgreSQL”</a>en PHP
-      instale el paquete <code class="literal">php-pgsql-5.6.19</code> y
+	</p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="php-postgresql"></a>7.4.4.1. Soporte para PostgreSQL en PHP</h5></div></div></div><p>Para activar el soporte para PostgreSQL (ver <a href="postgresql.html" title="2. Motor de bases de datos PostgreSQL">Sección 2, “Motor de bases de datos PostgreSQL”</a>en PHP
+      instale el paquete <code class="literal">php-pgsql-5.6.25</code> y
       ejecute:
 	</p><pre class="screen">
 	doas ln -fs /etc/php-5.4.sample/pgsql.ini \
@@ -349,12 +375,12 @@ Finalmente puede probar abriendo desde un navegador
 	</pre><p>
 	    Puede comprobar que esta extensión funciona revisando
 	    la salida de la función <code class="literal">phpinfo()</code>.
-	</p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="lecturas-php"></a>7.3.4.2. Lecturas recomendadas</h5></div></div></div><p>Puede aprender sobre PHP en 
+	</p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="lecturas-php"></a>7.4.4.2. Lecturas recomendadas</h5></div></div></div><p>Puede aprender sobre PHP en 
 	    <a href="http://www.php.net" target="_top">http://www.php.net</a></p><p>La configuración de PHP con PostgreSQL y Apache corriendo 
 	    con chroot puede verse en
 	    <a href="http://www.bsdforen.org/foren/showtopic.php?threadid=773" target="_top">http://www.bsdforen.org/foren/showtopic.php?threadid=773</a> o en la sección sobre PostgreSQL 
     de estas guías (ver <a href="postgresql.html" title="2. Motor de bases de datos PostgreSQL">Sección 2, “Motor de bases de datos PostgreSQL”</a>
-    </p></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="ssi"></a>7.3.5. Server Side Include</h4></div></div></div><p>El Apache incluido en OpenBSD tiene compilado como módulo
+    </p></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="ssi"></a>7.4.5. Server Side Include</h4></div></div></div><p>El Apache incluido en OpenBSD tiene compilado como módulo
 		estático <code class="literal">mod_include.c</code> (como
 		puede comprobarse ejecutando 
 		<span><strong class="command">/usr/sbin/httpd -l</strong></span>).  Por esto para
@@ -391,7 +417,7 @@ Finalmente puede probar abriendo desde un navegador
 		</pre><p>
 	Al abrirla debe presentar la fecha y hora del sistema.
 
-	</p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="lecturas-ssi"></a>7.3.5.1. Lecturas recomendadas</h5></div></div></div><p>Hay información completa sobre SSI en el manual de
+	</p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="lecturas-ssi"></a>7.4.5.1. Lecturas recomendadas</h5></div></div></div><p>Hay información completa sobre SSI en el manual de
 		  Apache
 		  <a href="http://httpd.apache.org/docs/howto/ssi.html" target="_top">http://httpd.apache.org/docs/howto/ssi.html</a>
 	  </p></div></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="servidor-ftp.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="protocolos-soporte-usuario.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="otros-servicios-de-un-servidor.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">6. Servidor <code class="literal">ftp</code> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> Capítulo 6. Otros servicios que puede prestar el servidor</td></tr></table></div></body></html>

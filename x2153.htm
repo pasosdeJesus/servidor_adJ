@@ -17,7 +17,7 @@ TITLE="Servidor ftp"
 HREF="x2105.htm"><LINK
 REL="NEXT"
 TITLE="Otros servicios que puede prestar el servidor"
-HREF="c2405.htm"></HEAD
+HREF="c2412.htm"></HEAD
 ><BODY
 CLASS="sect1"
 BGCOLOR="#FFFFFF"
@@ -59,7 +59,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="c2405.htm"
+HREF="c2412.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
@@ -457,6 +457,48 @@ CLASS="sect2"
 ><H2
 CLASS="sect2"
 ><A
+NAME="letsencrypt"
+>Certificados SSL gratuitos con Let's Encrypt</A
+></H2
+><P
+>&#13;	Hasta hace un tiempo era impensable contar con un 
+	certificado SSL válido para los diversos navegadores
+	(candadito verde) y que fuese gratuito.  
+	Sin embargo algunas empresas empezaron a ofrecerlos
+	(e.g Gandi da certificado gratuito por un año para un dominio
+	por la compra de un dominio),
+	y finalmente de diversos intentos por parte de organizaciones
+	sin ánimo de lucro, letsencrypt.org es reconocida por los
+	navegadores principales y ofrece todo tipo de certificados
+	validos por 3 meses de manera gratuita (cada 3 meses debe
+	renovarse con el mismo letsencrypt).
+</P
+><P
+>&#13;	Por ejemplo para un dominio miong.org sólo certificado para el 
+	web:
+<PRE
+CLASS="screen"
+>&#13;	doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d miong.org -d www.miong.org 
+</PRE
+>
+</P
+><P
+>&#13;	Si además de los dominios web necesita cubrir con 
+	el mismo certificado el servidor de correo: correo.miong.org que
+	tiene una raiz diferente:
+<PRE
+CLASS="screen"
+>&#13;	doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d miong.org -d www.miong.org  -w /var/www/roundcubemail -d correo.miong.org
+</PRE
+>
+
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
 NAME="nginx"
 >Nginx</A
 ></H2
@@ -517,7 +559,7 @@ NAME="nginx-php"
 Esto puede lograrse por ejemplo con el paquete
 <TT
 CLASS="literal"
->php-fpm-5.6.19</TT
+>php-fpm-5.6.25</TT
 >.   Este paquete incluye un
 servicio que se configura en <TT
 CLASS="filename"
@@ -758,7 +800,7 @@ CLASS="literal"
 > o remotamente
 	con <TT
 CLASS="literal"
->http://www.miescuela.edu.co/~pablo/</TT
+>http://www.miong.org/~pablo/</TT
 >
       </P
 ></DIV
@@ -829,14 +871,14 @@ CLASS="screen"
 		<PRE
 CLASS="screen"
 >&#13;	&#60;VirtualHost 65.167.63.234&#62;
-	    ServerAdmin pablo@miescuela.edu.co
+	    ServerAdmin pablo@miong.org
 	    DocumentRoot /var/www/htdocs
-	    ServerName www.miescuela.edu.co
-	    ServerAlias miescuela.edu.co
-	    ErrorLog logs/miescuela.edu.co-error_log
+	    ServerName www.miong.org
+	    ServerAlias miong.org
+	    ErrorLog logs/miong.org-error_log
 	    Options ExecCgi Includes MultiViews Indexes FollowSymlinks 
 	    SymLinksIfOwnerMatch
-	    CustomLog logs/miescuela.edu.co-access_log common
+	    CustomLog logs/miong.org-access_log common
 	&#60;/VirtualHost&#62;
 		</PRE
 >
@@ -956,7 +998,7 @@ CLASS="screen"
 Finalmente puede probar abriendo desde un navegador
 <TT
 CLASS="literal"
->https://Jesus.miescuela.edu.co</TT
+>https://Jesus.miong.org</TT
 >
 </P
 ></DIV
@@ -972,7 +1014,7 @@ NAME="php"
 >Instale el paquete
 		<TT
 CLASS="literal"
->php-5.6.19</TT
+>php-5.6.25</TT
 >.
 	  Después cree un enlace para activarlo en servidor web:
 	  <PRE
@@ -1019,14 +1061,14 @@ NAME="php-postgresql"
 ></H4
 ><P
 >Para activar el soporte para PostgreSQL (ver <A
-HREF="x2451.htm"
+HREF="x2458.htm"
 >la sección de nombre <I
 >Motor de bases de datos PostgreSQL</I
 > en Capítulo 6</A
 >en PHP
       instale el paquete <TT
 CLASS="literal"
->php-pgsql-5.6.19</TT
+>php-pgsql-5.6.25</TT
 > y
       ejecute:
 	<PRE
@@ -1066,7 +1108,7 @@ TARGET="_top"
 >http://www.bsdforen.org/foren/showtopic.php?threadid=773</A
 > o en la sección sobre PostgreSQL 
     de estas guías (ver <A
-HREF="x2451.htm"
+HREF="x2458.htm"
 >la sección de nombre <I
 >Motor de bases de datos PostgreSQL</I
 > en Capítulo 6</A
@@ -1207,7 +1249,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="c2405.htm"
+HREF="c2412.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
