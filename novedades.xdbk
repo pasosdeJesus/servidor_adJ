@@ -1,282 +1,406 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <variablelist>
-	<varlistentry><term>Versión 6.0</term>
-		<listitem><para><itemizedlist>
-			<listitem><para>
-			</para></listitem>
-		</itemizedlist></para></listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 5.9</term>
-		<listitem><para><itemizedlist>
-			<listitem><para>
-					Uso de <command>letsencrypt</command> 
-					(<xref linkend="letsencrypt"></xref>)
-			</para></listitem>
-		</itemizedlist></para></listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 5.8</term>
-		<listitem><para><itemizedlist>
-			<listitem><para>
-Uso de <command>unbound</command> (<xref linkend="unbound"></xref>) y 
-<command>nsd</command> (<xref linkend="nsd"></xref>) en lugar de 
-<command>named</command>, 
-			</para></listitem>
-
-			<listitem><para>
-Uso de <command>doas</command> en lugar de <command>sudo</command>
-			</para></listitem>
-			<listitem><para>
-Comienza a documentarse IPv6, <xref linkend="redes-protocolos-internet"></xref>
-			</para></listitem>
-		</itemizedlist></para></listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 5.7</term>
-		<listitem><para><itemizedlist>
-			<listitem><para>
-Renombrada y simplificada <xref linkend="mariadb"></xref>
-			</para></listitem>
-			<listitem><para>
-Guía migrada a 
-<ulink url="http://pasosdejesus.github.io/servidor_adJ/index.html">http://pasosdejesus.github.io/servidor_adJ/index.html</ulink>
-y fuentes a 
-<ulink url="https://github.com/pasosdeJesus/servidor_adJ/">https://github.com/pasosdeJesus/servidor_adJ/</ulink>
-			</para></listitem>
-		</itemizedlist></para></listitem>
-	</varlistentry>
-
-	<varlistentry><term>Versión 5.6</term>
-		<listitem><para><itemizedlist>
-		<listitem><para>Renovada  sección sobre servidor web
-		con nueva <xref linkend="openbsd-httpd"></xref>
-		</para></listitem>
-		</itemizedlist></para></listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 5.5</term>
-		<listitem><para><itemizedlist>
-			
-		<listitem><para>
-			Actualizada <xref linkend="opensmtpd"></xref>.
-		</para></listitem>
-		<listitem><para>
-			Actualizada <xref linkend="mariadb"></xref>.
-		</para></listitem>
-		<listitem><para>Nueva <xref linkend="servidor-ldapd"></xref> en capítulo 6.
-		</para></listitem>
-
-		</itemizedlist></para></listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 5.4</term>
-		<listitem><para><itemizedlist>
-
-		<listitem><para>Nueva <xref linkend="nginx"></xref>
-		</para></listitem>
-
-		</itemizedlist></para></listitem>
-	</varlistentry>
-
-	<varlistentry><term>Versión 5.3</term>
-		<listitem><para><itemizedlist>
-		<listitem><para>Nueva <xref linkend="dovecot"></xref>
-		</para></listitem>
-		<listitem><para>
-				Actualizada sección 
-				<xref linkend="servicios-correo"/>
-				para incluir OpenSMTPD.
-		</para></listitem>
-		<listitem><para>
-				Fuentes convertidas a UTF-8
-		</para></listitem>
-		</itemizedlist></para></listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 5.2</term>
-		<listitem><para><itemizedlist>
-		<listitem><para>
-Nueva <xref linkend="postgresql-cotejacion"></xref>
-		</para></listitem>
-		<listitem>
-			<para>Descripción de <command>prepsendmail</command> en <xref linkend="servicios-correo"></xref></para>
-		</listitem>
-		</itemizedlist></para></listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 5.0</term>
-		<listitem><para><itemizedlist>
-		<listitem><para>
-			 	Actualizada instalación de PHP
-				<xref linkend="php"></xref>.
-		</para></listitem>
-		<listitem><para>
-			 	Cubre Aprendiendo de Jesús 5.0.
-		</para></listitem>
-		</itemizedlist></para></listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 4.9</term>
-		<listitem><para><itemizedlist>
-		<listitem><para>
-			 	Protocolo DHCP 
-				<xref linkend="dhcp"></xref>.
-		</para></listitem>
-
-		<listitem><para>
-				Cambio de claves desde roundcubemail
-				<xref linkend="roundcubemail"></xref>.
-		</para></listitem>
-		<listitem><para>Cubre Aprendiendo de Jesús 4.9 </para></listitem>
-		</itemizedlist></para></listitem>
-	</varlistentry>
-	
-	<varlistentry><term>Versión 4.8</term>
-		<listitem><para><itemizedlist>
-		<listitem><para>
-				Nuevas secciones con generalidades de redes  
-				<xref linkend="redes-protocolos-internet"></xref> y <xref linkend="ipv4"></xref>, 
-				adaptadas de <xref linkend="AA_Linux"></xref>.
-		</para></listitem>
-		<listitem><para>Cubre Aprendiendo de Jesús 4.8 </para></listitem>
-		</itemizedlist></para></listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 4.7</term>
-		<listitem><para>
-				<itemizedlist>
-			<listitem>
-				<para>Cambios en <xref linkend="direcciones-enrutamiento-transporte"></xref> para incluir nueva sintaxis de <literal>/etc/pf.conf</literal> (el instalador de adJ 4.7 intenta realizar los cambios automáticamente). </para>
-			</listitem>
-
-			<listitem>
-				<para>Cubre Aprendiendo de Jesús 4.7 </para>
-			</listitem>
-		</itemizedlist>
-			</para></listitem>
-	</varlistentry>
-
-
-
-	<varlistentry><term>Versión 4.6</term>
-		<listitem>
-			<para>
-				<itemizedlist>
-			<listitem>
-				<para>Cubre Aprendiendo de Jesús 4.6 </para>
-			</listitem>
-			<listitem>
-				<para>Renovado el lector de correo en web (<xref linkend="roundcubemail"></xref>).</para>
-			</listitem>
-			<listitem>
-				<para>Nueva sección sobre redes locales inalámbricas (<xref linkend="red-inalambrica"></xref>).</para>
-			</listitem>
-			<listitem>
-				<para>Uso de <literal>SpamAssassin</literal> en lugar de spamd (<xref linkend="spam"></xref>)</para>
-			</listitem>
-
-
-		</itemizedlist>
-			</para>
-		</listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 4.4</term>
-		<listitem>
-			<para>
-				<itemizedlist>
-			<listitem>
-				<para>Cubre Aprendiendo de Jesús 4.4 </para>
-			</listitem>
-		</itemizedlist>
-			</para>
-		</listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 4.3</term>
-		<listitem>
-			<para>
-				<itemizedlist>
-					<listitem>
-						<para>Revisado capítulo sobre 
-correo	y agregada sección sobre <application>spamd</application>
-</para>
-					</listitem>
-			<listitem>
-				<para>Cubre OpenBSD 4.3 </para>
-			</listitem>
-		</itemizedlist>
-			</para>
-		</listitem>
-	</varlistentry>
-
-
-	<varlistentry><term>Versión 1.6</term>
-		<listitem>
-			<para>
-				<itemizedlist>
-					<listitem>
-						<para>Revisado capítulo sobre 
-							servicio 
-							<application>ftp</application>. </para>
-					</listitem>
-			<listitem>
-				<para>Revisado capítulo sobre 
-					<application>pf</application>,
-					nueva sección sobre 
-					<application>ftp-proxy</application>.</para>
-			</listitem>
-			<listitem>
-				<para>Cubre OpenBSD 4.2 </para>
-			</listitem>
-		</itemizedlist>
-			</para>
-		</listitem>
-	</varlistentry>
-
-	<varlistentry><term>Versión 1.5</term>
-		<listitem>
-			<para>
-		<itemizedlist>
-			<listitem>
-				<para>Cubre OpenBSD 4.1 </para>
-			</listitem>
-			<listitem>
-				<para>Reorganizada sección sobre 
-					correo electrónico.</para>
-			</listitem>
-		</itemizedlist>
-			</para>
-		</listitem>
-	</varlistentry>
-	<varlistentry><term>Versión 1.4</term>
-		<listitem>
-			<para>
-		<itemizedlist>
-			<listitem>
-				<para>Cubre OpenBSD 3.9 </para>
-			</listitem>
-			<listitem>
-				<para>Mejoras a configuración DNS </para>
-			</listitem>
-			<listitem>
-				<para>POP3S e IMAPS con 
-					<literal>courier</literal></para>
-			</listitem>
-		</itemizedlist>
-			</para>
-		</listitem>
-	</varlistentry>
+  <varlistentry>
+    <term>
+      Versión 6.0
+    </term>
+    <listitem>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Guía migrada a Markdown
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 5.9
+    </term>
+    <listitem>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Uso de <literal>letsencrypt</literal>
+            (<xref linkend="letsencrypt"/>)
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 5.8
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Uso de <literal>unbound</literal>
+            (<xref linkend="unbound"/>) y
+            <literal>nsd</literal> (<xref linkend="nsd"/>) en
+            lugar de <literal>named</literal>,
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Uso de <literal>doas</literal> en lugar de
+            <literal>sudo</literal>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Comienza a documentarse IPv6,
+            <xref linkend="redes_protocolos_e_internet"/>
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 5.7
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Renombrada y simplificada
+            <xref linkend="mariadb"/>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Guía migrada a
+            <ulink url="http://pasosdejesus.github.io/servidor_adJ/index.html">http://pasosdejesus.github.io/servidor_adJ/index.html</ulink>
+            y fuentes a
+            <ulink url="https://github.com/pasosdeJesus/servidor_adJ/">https://github.com/pasosdeJesus/servidor_adJ/</ulink>
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 5.6
+    </term>
+    <listitem>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Renovada sección sobre servidor web con nueva
+            <xref linkend="openbsd-httpd"/>
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 5.5
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Actualizada <xref linkend="opensmtpd"/>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Actualizada <xref linkend="mariadb"/>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Nueva <xref linkend="servidor-ldapd"/> en capítulo
+            6.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 5.4
+    </term>
+    <listitem>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Nueva <xref linkend="nginx"/>
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 5.3
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Nueva <xref linkend="dovecot"/>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Actualizada sección
+            <xref linkend="servicios-correo"/> para incluir
+            OpenSMTPD.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Fuentes convertidas a UTF-8
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 5.2
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Nueva <xref linkend="postgresql-cotejacion"/>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Descripción de <literal>prepsendmail</literal> en
+            <xref linkend="servicios-correo"/>
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 5.0
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Actualizada instalación de PHP
+            <xref linkend="php"/>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Cubre Aprendiendo de Jesús 5.0.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 4.9
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Protocolo DHCP <xref linkend="dhcp"/>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Cambio de claves desde roundcubemail
+            <xref linkend="roundcubemail"/>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Cubre Aprendiendo de Jesús 4.9
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 4.8
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Nuevas secciones con generalidades de redes
+            <xref linkend="redes_protocolos_e_internet"/> y
+            <xref linkend="ipv4"/>, adaptadas de
+            <link linkend="biblio">AA_Linux</link>.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Cubre Aprendiendo de Jesús 4.8
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 4.7
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Cambios en
+            <xref linkend="direcciones_enrutamiento_transporte_y_cortafuegos"/>
+            para incluir nueva sintaxis de
+            <literal>/etc/pf.conf</literal> (el instalador de adJ 4.7
+            intenta realizar los cambios automáticamente).
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Cubre Aprendiendo de Jesús 4.7
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 4.6
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Cubre Aprendiendo de Jesús 4.6
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Renovado el lector de correo en web
+            (<xref linkend="roundcubemail"/>).
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Nueva sección sobre redes locales inalámbricas
+            (<xref linkend="red-inalambrica"/>).
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Uso de <literal>SpamAssassin</literal> en lugar de spamd
+            (<xref linkend="spam"/>)
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 4.4
+    </term>
+    <listitem>
+      <itemizedlist spacing="compact">
+        <listitem>
+          <para>
+            Cubre Aprendiendo de Jesús 4.4
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 4.3
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Revisado capítulo sobre correo y agregada sección sobre
+            spamd
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Cubre OpenBSD 4.3
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 1.6
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Revisado capítulo sobre servicio ftp.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Revisado capítulo sobre pf, nueva sección sobre ftp-proxy.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Cubre OpenBSD 4.2
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 1.5
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Cubre OpenBSD 4.1
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Reorganizada sección sobre correo electrónico.
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      Versión 1.4
+    </term>
+    <listitem>
+      <itemizedlist>
+        <listitem>
+          <para>
+            Cubre OpenBSD 3.9
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Mejoras a configuración DNS
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            POP3S e IMAPS con <literal>courier</literal>
+          </para>
+        </listitem>
+      </itemizedlist>
+    </listitem>
+  </varlistentry>
 </variablelist>

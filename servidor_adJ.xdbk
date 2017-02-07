@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" [ 
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" [ 
 <!ENTITY % confv SYSTEM "confv.ent">
 <!ENTITY % infoversion SYSTEM "infoversion.ent">
 <!ENTITY % personaliza SYSTEM "personaliza.ent">
@@ -8,43 +8,11 @@
 %personaliza;
 
 
-<!ENTITY redes.xdbk SYSTEM "redes.xdbk">
-<!ENTITY ipv4.xdbk SYSTEM "ipv4.xdbk">
-<!ENTITY modem-nulo.xdbk SYSTEM "modem-nulo.xdbk">
-<!ENTITY modem-isdn.xdbk SYSTEM "modem-isdn.xdbk">
-<!ENTITY adsl-pppoe.xdbk SYSTEM "adsl-pppoe.xdbk">
-<!ENTITY lan-ethernet.xdbk SYSTEM "lan-ethernet.xdbk">
-<!ENTITY inalambrica.xdbk SYSTEM "inalambrica.xdbk">
-
-<!ENTITY ip.xdbk SYSTEM "lan-ethernet.xdbk">
-<!ENTITY nat.xdbk SYSTEM "nat.xdbk">
-<!ENTITY cortafuegos.xdbk SYSTEM "cortafuegos.xdbk">
-<!ENTITY ftpproxy.xdbk SYSTEM "ftpproxy.xdbk">
-<!ENTITY ejemplopf.xdbk SYSTEM "ejemplopf.xdbk">
-<!ENTITY controlab.xdbk SYSTEM "controlab.xdbk">
-
-<!ENTITY sshd.xdbk SYSTEM "sshd.xdbk">
-<!ENTITY dhcpd.xdbk SYSTEM "dhcpd.xdbk">
-<!ENTITY ntp.xdbk SYSTEM "ntp.xdbk">
-<!ENTITY dns.xdbk SYSTEM "dns.xdbk">
-<!ENTITY correo.xdbk SYSTEM "correo.xdbk">
-<!ENTITY sendmail.xdbk SYSTEM "sendmail.xdbk">
-<!ENTITY opensmtpd.xdbk SYSTEM "opensmtpd.xdbk">
-<!ENTITY dovecot.xdbk SYSTEM "dovecot.xdbk">
-<!ENTITY roundcubemail.xdbk SYSTEM "roundcubemail.xdbk">
-<!ENTITY ftp.xdbk SYSTEM "ftp.xdbk">
-<!ENTITY http.xdbk SYSTEM "http.xdbk">
-<!ENTITY apache.xdbk SYSTEM "apache.xdbk">
-<!ENTITY nginx.xdbk SYSTEM "nginx.xdbk">
-<!ENTITY letsencrypt.xdbk SYSTEM "letsencrypt.xdbk">
-<!ENTITY httpd.xdbk SYSTEM "httpd.xdbk">
-<!ENTITY ldapd.xdbk SYSTEM "ldapd.xdbk">
-
-<!ENTITY postgresql.xdbk SYSTEM "postgresql.xdbk">
-<!ENTITY mariadb.xdbk SYSTEM "mariadb.xdbk">
-
-<!ENTITY quota.xdbk SYSTEM "quota.xdbk">
-<!ENTITY dictd.xdbk SYSTEM "dictd.xdbk">
+<!ENTITY redes SYSTEM "redes.xdbk">
+<!ENTITY interconexion SYSTEM "interconexion.xdbk">
+<!ENTITY direcciones SYSTEM "direcciones.xdbk">
+<!ENTITY protocolossop SYSTEM "protocolossop.xdbk">
+<!ENTITY otrosservicios SYSTEM "otrosservicios.xdbk">
 
 <!ENTITY novedades.xdbk SYSTEM "novedades.xdbk">
 
@@ -52,9 +20,9 @@
 <!ENTITY indice SYSTEM "indice.xdbk">
 ]>
 
-<book lang="es">
+<article lang="es">
 	<title>&PRY-DESC;</title>
-  <bookinfo>
+  <articleinfo>
 	<title>&PRY-DESC;</title>
     <author><firstname>Vladimir</firstname>
 	    <surname>Támara Patiño
@@ -82,9 +50,9 @@ escrito se dedica a Dios por su infinita sabiduría.</para>
 	<ulink url="https://github.com/pasosdeJesus/servidor_adJ/">https://github.com/pasosdeJesus/servidor_adJ/</ulink>.
       </para>
     </legalnotice>
-  </bookinfo>
+  </articleinfo>
 
-  <chapter id="introduccion">
+  <sect1 id="introduccion">
     <title>Introducción</title>
 
     <para>En este escrito describimos el sistema operativo OpenBSD 
@@ -92,8 +60,8 @@ escrito se dedica a Dios por su infinita sabiduría.</para>
 	    distribución Aprendiendo de Jesús (adJ) que se emplea en 
 	    servidores seguros o cortafuegos conectados
       a Internet o en una Intranet.  Este escrito es complementario
-      a <xref linkend="basico_OpenBSD"></xref> y a 
-      <xref linkend="usuario_OpenBSD"></xref>.  El primero es para
+      a <link linkend="biblio">basico_adJ</link> y a 
+      <link linkend="biblio">usuario_adJ</link>.  El primero es para
       usuarios que emplean remotamente un sistema OpenBSD, en el segundo
       se describe la instalación de OpenBSD así como su uso y la configuración 
       de programas y características típicamente empleadas por usuarios 
@@ -103,72 +71,25 @@ escrito se dedica a Dios por su infinita sabiduría.</para>
       <citation>DocBook</citation>) y siguen algunas
       convenciones de la herramienta <literal>repasa</literal> (ver
       <citation>repasa</citation>).</para>
-  </chapter>
+  </sect1>
 
-  <chapter id="redes-protocolos-internet">
-	  <title>Redes, protocolos e Internet</title>
-	  &redes.xdbk;
-  </chapter>
-
-  <chapter id="dispositivos-interconexion">
-    <title>Dispositivos de interconexión</title>
-    <para>Durante el arranque, OpenBSD detecta la gran mayoría de 
-      dispositivos conectados a un computador.  Una vez en operación
-      puede examinar la detección con <literal>dmesg</literal>.  
-    </para>
-    <para>Si durante el arranque algún dispositivo no es detectado
-      o es detectado incorrectamente, puede intentar hacer modificaciones
-      durante el arranque iniciando con <literal>bsd -c</literal> cuando
-      esté en el prompt de arranque del programa <command>boot</command>
-      (ver <citation>usuario_OpenBSD</citation>).
-    </para>
-    &modem-nulo.xdbk;
-    &modem-isdn.xdbk;
-    &adsl-pppoe.xdbk;
-    &lan-ethernet.xdbk;
-    &inalambrica.xdbk;
-  </chapter>
-
-
-  <chapter id="direcciones-enrutamiento-transporte">
-    <title>Direcciones, enrutamiento, transporte y cortafuegos</title>
-    &ipv4.xdbk;
-    &nat.xdbk;
-    &cortafuegos.xdbk;
-    &ftpproxy.xdbk;
-    &ejemplopf.xdbk;
-    &controlab.xdbk;
-
-  </chapter>
-
-  <chapter id="protocolos-soporte-usuario">
-    <title>Protocolos de soporte y de usuario</title>
-    <para></para>
-    &dns.xdbk;
-    &sshd.xdbk;
-    &dhcpd.xdbk;
-    &ntp.xdbk; 
-    &correo.xdbk;
-    &ftp.xdbk;
-    &http.xdbk;
-  </chapter>
-
-  <chapter id="otros-servicios-de-un-servidor">
-    <title>Otros servicios que puede prestar el servidor</title>
-    <para></para>
-    &quota.xdbk;
-    <!--    &dictd.xdbk; -->
-    &postgresql.xdbk;
-    &mariadb.xdbk;
-    &ldapd.xdbk;
-  </chapter>
+  &redes;
+  &interconexion;
+  &direcciones;
+  &protocolossop;
+  &otrosservicios;
 
   <appendix id="novedades">
 	  <title>Novedades</title>
-	  <para>
-         &novedades.xdbk;
-     </para>
+	  &novedades.xdbk;
+  </appendix>  
+ 
+   <appendix id="biblio">
+	   <title>Bibliografia</title>
+	   &biblio;
    </appendix>  
+
+
 
 
   <!--<chapter id="seguridad">
@@ -184,6 +105,5 @@ http://www.onlamp.com/pub/a/bsd/2003/10/30/FreeBSD_Basics.html
 </para>
 </chapter> -->
 
-  &biblio;
   <!--  &indice; -->
-</book>
+</article>

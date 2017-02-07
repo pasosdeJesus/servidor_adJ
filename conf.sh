@@ -206,6 +206,7 @@ if (test "$prefix" != "") then {
 if (test "$VERBOSE_FLAG" -gt "0") then {
 	echo "Chequeando y detectando valor de variables de configuración";
 } fi;
+check "PANDOC" "" "test -x \$PANDOC" `which pandoc 2> /dev/null` `which $HOME/.cabal/bin/pandoc 2> /dev/null`
 check "JADE" "" "test -x \$JADE" `which jade 2> /dev/null` `which openjade 2> /dev/null`
 check "JADETEX" "" "test -x \$JADETEX" `which jadetex 2> /dev/null`
 check "PDFJADETEX" "" "test -x \$PDFJADETEX" `which pdfjadetex 2> /dev/null`

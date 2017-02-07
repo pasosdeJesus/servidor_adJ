@@ -138,7 +138,7 @@ ispell: $(HTML_TARGET)
 	$(ISPELL) -d spanish -p $(PROYECTO).ispell imp/$(PROYECTO).txt
 
 
-.SUFFIXES: .eps .png .dot .fig
+.SUFFIXES: .dot .eps .fig .md .png .xdbk
 
 .jpg.eps:
 	$(CONVERT) $< EPS:$@
@@ -153,3 +153,12 @@ ispell: $(HTML_TARGET)
 
 .fig.png:
 	$(FIG2DEV) -L png $< $@
+
+# Extensiones a Markdown:
+# Referencias a otra sección [xref](#id)
+# Sustitución de entidades igual que en SGML &nombreentidad;
+.md.xdbk:
+	mkdir -p tmp
+	$(PANDOC) -t docbook -o tmp/$@ $<
+	sed -e "s/<link linkend=\"\([^\"]*\)\">xref<\/link>/<xref linkend=\"\1\"\/>/g;s/&amp;\([-A-Z]*\);/\&\1;/g;" tmp/$@ > $@
+

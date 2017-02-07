@@ -1,167 +1,115 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<bibliography>
-
-  <biblioentry id="bdp">
-    <title>Traducción no oficial de dominio público de apartes de la Biblia</title>
-    <bibliomisc> <ulink
-	url="http://de.geocities.com/nuestroamigojesus/bdp">http://de.geocities.com/nuestroamigojesus/bdp</ulink> 2003 </bibliomisc>
-  </biblioentry>
-
-  <biblioentry id="WEB">
-    <title>World English Bible</title>
-    <bibliomisc> <ulink url="http://www.ebible.org">http://www.ebible.org</ulink> 2002 </bibliomisc>
-  </biblioentry>
-
-  <biblioentry id="AA_Linux">
-	  <title>Aprendiendo a aprender Linux: guías de estudio para colegios</title>
-    <bibliomisc> <ulink
-		    url="http://structio.sf.net/guias/AA_Linux_colegio"/> 
-	    2003 </bibliomisc>
-  </biblioentry>
-
-
-  <biblioentry id="PF">
-    <title>PF: The OpenBSD Packet Filter</title>
-    <bibliomisc> <ulink
-	url="http://www.openbsd.org/faq/pf/index.html">http://www.openbsd.org/faq/pf/index.html</ulink> 2004 </bibliomisc>
-  </biblioentry>
-
-
-  <biblioentry id="CablesModemNulo">
-    <title>Data communication cables</title>
-    <bibliomisc><ulink
-	url="http://www.sput.nl/hardware/data-cables.html"/> 2003 </bibliomisc>
-  </biblioentry>
-
-  <biblioentry id="SerialOpenBSD">
-    <title>Setting up a simple serial connection with OpenBSD</title>
-    <bibliomisc><ulink
-	url="http://www.ludd.luth.se/~mdr/misc/serialconsole.html"/> 2003 </bibliomisc>
-  </biblioentry>
-
-  <biblioentry id="FreeBSDHandbook">
-    <title>FreeBSD Handbook</title>
-    <bibliomisc><ulink
-	url="http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook"/> 2003 </bibliomisc>
-  </biblioentry>
-
-  <biblioentry id="bind9arm">
-    <title>Bind 9 Administrator Reference Manual</title>
-    <bibliomisc><ulink
-	url="http://www.nominum.com/content/documents/bind9arm.pdf"/>. 
-     Internet Software Consortium. 2003 </bibliomisc>
-  </biblioentry>
-
-  <biblioentry id="openbsdDnsDhcp">
-    <title>Using OpenBSD for DNS and DHCP for a Lab or Home Network</title>
-    <bibliomisc>F. William Lynch. <ulink
-	url="http://enontech.com/unix/publications/obsd-dns/obsd-dns.html"/>. 
-     2003 </bibliomisc>
-  </biblioentry>
-
-  <biblioentry id="postgresql-doc">
-    <title>PostgreSQL 7.3.2 Documentation</title>
-    <bibliomisc>The PostgreSQL Global Development Group. 2002.
-      Disponible en <filename>/usr/local/share/doc/postgresql/html</filename>
-      después de instalar paquete <literal>postgresql-doc</literal>.
-    </bibliomisc>
-  </biblioentry>
-
-  <biblioentry id="pf">
-	  <title>PF: The OpenBSD Packet Filter</title>
-    <bibliomisc>
-      <ulink
-	url="ftp://ftp.openbsd.org/pub/OpenBSD/doc/pf-faq.txt"/>
-    </bibliomisc>
-  </biblioentry>
-
-  <biblioentry id="SecMySQL">
-	  <title>Securing MySQL: step-by-step</title>
-    <bibliomisc>
-      <ulink
-	      url="http://www.securityfocus.com/infocus/1726"/>
-    </bibliomisc>
-  </biblioentry>
-
-  <bibliomixed id="AALinux">
-    <title>Aprendiendo a aprender Linux: Guías para colegios con plataforma
-      de referencia S-Helio 1.1</title>
-    <bibliomisc><ulink
-	url="http://structio.sourceforge.net">http://structio.sourceforge.net</ulink> Feb/2003 </bibliomisc>
-  </bibliomixed>
-
-  <bibliomixed id="ethernet-cables">
-	  <title>How-to - Ethernet Cables</title>
-    <bibliomisc><ulink
-		    url="http://www.ertyu.org/~steven_nikkel/ethernetcables.html">http://www.ertyu.org/~steven_nikkel/ethernetcables.html</ulink> Mar/2005 </bibliomisc>
-  </bibliomixed>
-
-  <bibliomixed id="courier-cert">
-	  <title>Courier imap SSL Certificates</title>
-    <bibliomisc><ulink
-		    url="http://milliwaysconsulting.net/support/systems/courier-ssl.html">http://milliwaysconsulting.net/support/systems/courier-ssl.html</ulink> Consultado Jun/2007 </bibliomisc>
-  </bibliomixed>
-
-  <bibliomixed id="basico_OpenBSD">
-	  <title>Uso Básico de la distribución Aprendiendo de Jesús de OpenBSD</title>
-	<bibliomisc><ulink
-			url="http://structio.sourceforge.net/guias/basico_OpenBSD">http://structio.sourceforge.net/guias/basico_OpenBSD</ulink> &ANIO-ACT; </bibliomisc>
-  </bibliomixed>
-
-
-  <bibliomixed id="usuario_OpenBSD">
-	  <title>La distribución Aprendiendo de Jesús de OpenBSD como Sistema de Escritorio</title>
-	  <bibliomisc><ulink
-			  url="http://structio.sourceforge.net/guias/usuario_OpenBSD">http://structio.sourceforge.net/guias/usuario_OpenBSD</ulink> &ANIO-ACT; </bibliomisc>
-  </bibliomixed>
-
-  <bibliomixed id="wndw">
-	  <title>Redes inalámbricas en los paises en desarrollo</title>
-	  <bibliomisc><ulink
-			  url="http://www.wndw.net"></ulink>. 2008. Hacker Friendly LCC.  </bibliomisc>
-  </bibliomixed>
-
-  <bibliomixed id="taoietf">
-	  <author><firstname>P.</firstname><surname>Hoffman</surname></author>
-	  <title>The Tao of IETF: A Novice"s Guide to the Internet 
-		  Engineering Task Force</title>
-	  <bibliomisc><ulink
-			  url="http://www.ietf.org/tao.html"></ulink>. 
-		  Consultado en Feb.2011. </bibliomisc>
-  </bibliomixed>
-
-  <bibliomixed id="osietf">
-	  <title>Open Sources: Voices from the Open Source Revolution</title>
-	  <bibliomisc><ulink
-			  url="http://www.oreilly.com/catalog/opensources/book/ietf.html"></ulink>. 1999.
-		  Consultado en Feb.2011. </bibliomisc>
-  </bibliomixed>
-
-  <bibliomixed id="rfceditor">
-	  <title>RFC Editor</title>
-	  <bibliomisc><ulink
-			  url="http://www.rfc-editor.org"></ulink>. 
-		  Consultado en Feb.2011. </bibliomisc>
-  </bibliomixed>
-
-  <bibliomixed id="rfces">
-	  <title>Proyecto LuCAS - Especificaciones de estándares abiertos</title>
-	  <bibliomisc><ulink
-			  url="http://lucas.hispalinux.es/htmls/estandares.html"></ulink>. 
-		  Consultado en Feb.2011. </bibliomisc>
-  </bibliomixed>
-
-  <bibliomixed id="rfc2131">
-	  <title>RFC 2131. Dynamic Host Configuration Protocol. </title>
-	  <author><firstname>R.</firstname> <surname>Droms</surname></author>
-	  <bibliomisc><ulink
-			  url="http://www.faqs.org/rfcs/rfc2131.html"></ulink>. 
-		  1997. Consultado en Ago.2011. </bibliomisc>
-  </bibliomixed>
-
-
-
-
-</bibliography>
-
+<para>
+  [bdp] Traducción no oficial de dominio público de apartes de la
+  Biblia.
+  <ulink url="http://de.geocities.com/nuestroamigojesus/bdp">http://de.geocities.com/nuestroamigojesus/bdp</ulink>
+  2003
+</para>
+<para>
+  [WEB] World English Bible.
+  <ulink url="http://www.ebible.org">http://www.ebible.org</ulink> 2002
+</para>
+<para>
+  [AA_Linux] Aprendiendo a aprender Linux: guías de estudio para
+  colegios.
+  <ulink url="http://structio.sf.net/guias/AA_Linux_colegio">http://structio.sf.net/guias/AA_Linux_colegio</ulink>
+  2003
+</para>
+<para>
+  [PF] PF: The OpenBSD Packet Filter.
+  <ulink url="http://www.openbsd.org/faq/pf/index.html">http://www.openbsd.org/faq/pf/index.html</ulink>
+  2004
+</para>
+<para>
+  [CablesModemNulo] Data communication cables.
+  <ulink url="http://www.sput.nl/hardware/data-cables.html">http://www.sput.nl/hardware/data-cables.html</ulink>
+  2003
+</para>
+<para>
+  [SerialOpenBSD] Setting up a simple serial connection with
+  OpenBSD.<ulink url="http://www.ludd.luth.se/~mdr/misc/serialconsole.html">http://www.ludd.luth.se/~mdr/misc/serialconsole.html</ulink>
+  2003
+</para>
+<para>
+  [FreeBSDHandbook] FreeBSD Handbook.
+  <ulink url="http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook">http://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook</ulink>
+  2003
+</para>
+<para>
+  [bind9arm] Bind 9 Administrator Reference Manual.
+  <ulink url="http://www.nominum.com/content/documents/bind9arm.pdf">http://www.nominum.com/content/documents/bind9arm.pdf</ulink>.
+  Internet Software Consortium. 2003
+</para>
+<para>
+  [openbsdDnsDhcp] Using OpenBSD for DNS and DHCP for a Lab or Home
+  Network. F. William Lynch.
+  <ulink url="http://enontech.com/unix/publications/obsd-dns/obsd-dns.html">http://enontech.com/unix/publications/obsd-dns/obsd-dns.html</ulink>.
+  2003
+</para>
+<para>
+  [postgresql-doc] The PostgreSQL Global Development Group. 2002.
+  Disponible en <literal>/usr/local/share/doc/postgresql/html</literal>
+  después de instalar paquete <literal>postgresql-doc</literal>.
+</para>
+<para>
+  [SecMySQL] Securing MySQL: step-by-step.
+  <ulink url="http://www.securityfocus.com/infocus/1726">http://www.securityfocus.com/infocus/1726</ulink>
+</para>
+<para>
+  [AALinux] Aprendiendo a aprender Linux: Guías para colegios con
+  plataforma de referencia S-Helio 1.1
+  <ulink url="http://structio.sourceforge.net">http://structio.sourceforge.net</ulink>
+  Feb/2003
+</para>
+<para>
+  [ethernet-cables] How-to - Ethernet Cables
+  <ulink url="http://www.ertyu.org/~steven_nikkel/ethernetcables.html">http://www.ertyu.org/~steven_nikkel/ethernetcables.html</ulink>
+  Mar/2005
+</para>
+<para>
+  [courier-cert] Courier imap SSL Certificates
+  <ulink url="http://milliwaysconsulting.net/support/systems/courier-ssl.html">http://milliwaysconsulting.net/support/systems/courier-ssl.html</ulink>
+  Consultado Jun/2007
+</para>
+<para>
+  [basico_adJ] Uso Básico de la distribución Aprendiendo de Jesús de
+  OpenBSD
+  <ulink url="http://structio.sourceforge.net/guias/basico_OpenBSD">http://structio.sourceforge.net/guias/basico_OpenBSD</ulink>
+  &ANIO-ACT;
+</para>
+<para>
+  [usuario_adJ] La distribución Aprendiendo de Jesús de OpenBSD como
+  Sistema de Escritorio
+  <ulink url="http://structio.sourceforge.net/guias/usuario_OpenBSD">http://structio.sourceforge.net/guias/usuario_OpenBSD</ulink>
+  &ANIO-ACT;
+</para>
+<para>
+  [wndw] Redes inalámbricas en los paises en desarrollo
+  <ulink url="http://www.wndw.net">http://www.wndw.net</ulink>. 2008.
+  Hacker Friendly LCC.
+</para>
+<para>
+  [taoietf] P.Hoffman The Tao of IETF: A Novice&quot;s Guide to the
+  Internet Engineering Task Force
+  <ulink url="http://www.ietf.org/tao.html">http://www.ietf.org/tao.html</ulink>.
+  Consultado en Feb.2011.
+</para>
+<para>
+  [osietf] Open Sources: Voices from the Open Source Revolution
+  <ulink url="http://www.oreilly.com/catalog/opensources/book/ietf.html">http://www.oreilly.com/catalog/opensources/book/ietf.html</ulink>.
+  1999. Consultado en Feb.2011.
+</para>
+<para>
+  [rfceditor] RFC Editor
+  <ulink url="http://www.rfc-editor.org">http://www.rfc-editor.org</ulink>.
+  Consultado en Feb.2011.
+</para>
+<para>
+  [rfces] Proyecto LuCAS - Especificaciones de estándares abiertos
+  <ulink url="http://lucas.hispalinux.es/htmls/estandares.html">http://lucas.hispalinux.es/htmls/estandares.html</ulink>.
+  Consultado en Feb.2011.
+</para>
+<para>
+  [rfc2131] RFC 2131. Dynamic Host Configuration Protocol. R. Droms
+  <ulink url="http://www.faqs.org/rfcs/rfc2131.html">http://www.faqs.org/rfcs/rfc2131.html</ulink>.
+  1997. Consultado en Ago.2011.
+</para>

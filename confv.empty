@@ -203,6 +203,10 @@ ISPELL=""
 # Corrector ortográfico internacional.
 # http://fmg-www.cs.ucla.edu/fmg-members/geoff/ispell.html
 
+PANDOC=""
+# Pasa de markdown a docbook
+# http://pandoc.org/
+
 JADE=""
 # Motor para procesar hojas de estilo DSSSL
 # Instale jade o openjade (http://openjade.sourceforge.net)
