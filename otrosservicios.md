@@ -237,7 +237,7 @@ y el listado de los usuarios con:
 Las claves de los diversos usuarios pueden cambiarse de forma análoga a
 la presentada para `postgres`:
 
-        ALTER ROLE EUSUARIO with UNENCRYPTED PASSWORD 'clave-plana';
+        ALTER ROLE &EUSUARIO; with UNENCRYPTED PASSWORD 'clave-plana';
 
 Desde PostgreSQL 8.1 se emplea un esquema de roles que unifica los
 conceptos de usuario y grupo. Además de exigir clave para cada ingreso,
@@ -256,7 +256,7 @@ principio no podrá ni siquiera examinar los datos de las tablas:
 
 Para dar permiso a otro rol puede usarse:
 
-        GRANT ALL on solicitud TO EUSUARIO2;
+        GRANT ALL on solicitud TO &EUSUARIO2;;
 
 ### Creación de una base de datos {#creacion-base}
 
@@ -336,7 +336,7 @@ solicitaran--- con una línea de la forma:
 ### Cotejación en PostgreSQL {#postgresql-cotejacion}
 
 Desde adJ 5.2 se incluye un porte de PostgreSQL (la versión incluida en
-adJ VER-ADJ es P-POSTGRESQL-SERVER) que soporta cotejaciones de acuerdo
+adJ &VER-ADJ; es &p-postgresql-server;) que soporta cotejaciones de acuerdo
 al locale, y por defecto se crean cotejaciones para todos los países de
 habla hispana, con nombres de la forma `es_CO_UTF_8`. Donde `CO`
 representa Colombia, pero se pueden emplear otras abreviaturas de países
@@ -419,7 +419,7 @@ fundador de MySQL después de que Oracle compró Sun y MySQL, pues
 consideraba que Oracle había hecho la compra para reducir competencia de
 sus bases de datos.
 
-Debe instalar los paquetes P-MARIADB-CLIENT y P-MARIADB-SERVER. Aunque
+Debe instalar los paquetes &p-mariadb-client; y &p-mariadb-server;. Aunque
 el nombre de los paquetes cambia los comandos para operarla siguen
 siendo los mismos. Tras instalar el servidor debe ejecutar
 `mysql_install_db`.

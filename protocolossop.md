@@ -12,7 +12,7 @@ dominios en los cuales buscar (`search`), retornar direcciones IP en
 orden (`sortlist`), opciones (`options`). Un ejemplo del archivo
 `/etc/resolv.conf` es:
 
-        search EDOMINIO
+        search &EDOMINIO;
         nameserver 192.168.16.1
         lookup file bind
 
@@ -172,8 +172,8 @@ configurarlo por primera vez pueden seguirse primero los pasos de
 Se sugiere que se agregue información de zonas de las cuales es maestro
 en en archivos del directorio `/var/named/master`. Pueden configurarse
 archivos como dice en [AA_Linux](#biblio) por ejemplo los datos un
-servidor DNS primario del dominio EDOMINIO pueden quedar en el archivo
-`/var/named/master/EDOMINIO`:
+servidor DNS primario del dominio &EDOMINIO; pueden quedar en el archivo
+`/var/named/master/&EDOMINIO;`:
 
         $TTL 1D
         @ IN  SOA  @  root.localhost. (
@@ -187,7 +187,7 @@ servidor DNS primario del dominio EDOMINIO pueden quedar en el archivo
         
             A       65.8.9.234
         
-            MX      5      correo.EDOMINIO.
+            MX      5      correo.&EDOMINIO;.
         
         correo  IN      A       201.2.3.74
         ns1     IN      A       201.2.3.74
@@ -195,40 +195,40 @@ servidor DNS primario del dominio EDOMINIO pueden quedar en el archivo
 
 Note que se declara el mismo dominio como servidor de nombre
 autoritario, se relaciona con la IP (65.8.9.234), el nombre
-`correo.EDOMINIO` identificara la misma máquina y es el nombre que se
-usará para intercambiar correos; el nombre `www.EDOMINIO` será un alias
+`correo.&EDOMINIO;` identificara la misma máquina y es el nombre que se
+usará para intercambiar correos; el nombre `www.&EDOMINIO;` será un alias
 para el mismo servidor. Note que todo nombre que no termine con punto
 (.), será completado por `bind` con el dominio (i.e `www` será
-completado a `www.EDOMINIO`, si se olvida el punto después de
-`correo.EDOMINIO`, `bind` lo completará a `correo.EDOMINIO.EDOMINIO`).
+completado a `www.&EDOMINIO;`, si se olvida el punto después de
+`correo.&EDOMINIO;`, `bind` lo completará a `correo.&EDOMINIO;.&EDOMINIO;`).
 Recuerde aumentar el número serial cada vez que haga algún cambio, para
 que la información pueda ser actualizada en los servidores secundarios.
 Puede probar cada archivo de zonas que haga con:
 
-        named-checkzone EDOMINIO /var/named/master/EDOMINIO
+        named-checkzone &EDOMINIO; /var/named/master/&EDOMINIO;
 
 Agregue una referencia al archivo de zonas maestro en
 `/var/named/etc/named.conf`, en la sección para zonas maestras algo de
 la forma:
 
-        zone "EDOMINIO" {
+        zone "&EDOMINIO;" {
           type master;
-          file "master/EDOMINIO";
+          file "master/&EDOMINIO;";
         }
 
 Si desea que un servidor sea secundario de algún servidor primario,
 agregue en `/var/named/etc/named.conf` en la sección para zonas esclavas
 algo como:
 
-        zone "EDOMINIO" {
+        zone "&EDOMINIO;" {
           type slave;
-          file "slave/EDOMINIO";
+          file "slave/&EDOMINIO;";
           masters { 65.8.9.234; };
         }
 
 Cuando `named` lea de nuevo sus archivos de configuración traerá la
 información del servidor primario y la dejará en el archivo
-`/var/named/slave/EDOMINIO`.
+`/var/named/slave/&EDOMINIO;`.
 
 El servidor se inicia con
 
@@ -238,7 +238,7 @@ Los errores que se produzcan antes de hacer `chroot` son enviados a
 `/var/log/servicio`. Para probar el funcionamiento antes de modificar
 `/etc/resolv.conf` puede usar:
 
-        dig @localhost EDOMINIO
+        dig @localhost &EDOMINIO;
 
 Si requiere volver a leer los archivos de configuración (por ejemplo
 después de cambiar los archivos de zonas) puede enviar la señal `SIGHUP`
@@ -265,7 +265,7 @@ con OpenBSD que maneja el DNS de su organización y si además cuenta con
 una DMZ tal que las peticiones a algunos puertos del cortafuegos son
 redirigidas a uno o más servidores, seguramente tendrá inconvenientes al
 resolver nombres de su dominio en la LAN, pues el nombre de su
-organización (digamos EDOMINIO) será resulto a la dirección externa, la
+organización (digamos &EDOMINIO;) será resulto a la dirección externa, la
 cual conectará al cortafuegos por el puerto pedido y tratará de
 redirigir la conexión al servidor en la DMZ (i.e se reflejará). Por este
 motivo desde su LAN en general no resolverá nombres de su dominio.
@@ -320,18 +320,18 @@ para computadores dentro de la LAN. Un posible archivo de configuración
                 type delegation-only;
             };
         
-            zone "EDOMINIO" {
+            zone "&EDOMINIO;" {
                 type master;
-                file "refleja/EDOMINIO.org";
+                file "refleja/&EDOMINIO;.org";
             };
         };
         view "external" { // Para Internet
             recursion no;
             additional-from-auth no;
             additional-from-cache no;
-            zone "EDOMINIO" {
+            zone "&EDOMINIO;" {
                 type master;
-            file "master/EDOMINIO";
+            file "master/&EDOMINIO;";
             };
             zone "168.74.245.200.IN-ADDR.ARPA" { // Para resolución inversa
                 type master;
@@ -339,8 +339,8 @@ para computadores dentro de la LAN. Un posible archivo de configuración
             };
         };
 
-El archivo `master/EDOMINIO` sería el típico para resolver externamente,
-mientras que en `refleja/EDOMINIO` tendría los mismo nombres del
+El archivo `master/&EDOMINIO;` sería el típico para resolver externamente,
+mientras que en `refleja/&EDOMINIO;` tendría los mismo nombres del
 anterior pero con las direcciones de la red local.
 `master/db.167.74.245.200` tendría datos para resolución de nombres
 inversa desde fuera de la organización, por ejemplo:
@@ -353,10 +353,10 @@ inversa desde fuera de la organización, por ejemplo:
           2D   ; Expiración secundaria
           1D ) ; Cache de registros de recurso
         
-        @       IN      NS      cortafuegos.EDOMINIO.
-            IN      PTR     www.EDOMINIO.
-            IN      PTR     correo.EDOMINIO
-            IN      PTR     ns1.EDOMINIO
+        @       IN      NS      cortafuegos.&EDOMINIO;.
+            IN      PTR     www.&EDOMINIO;.
+            IN      PTR     correo.&EDOMINIO;
+            IN      PTR     ns1.&EDOMINIO;
 
 ### Referencias y lecturas recomendadas {#referencias-dns}
 
@@ -463,7 +463,7 @@ puerta de enlace y la IP del servidor de nombres, se hace en el archivo
 `/etc/dhcpd.conf` con:
 
         shared-network LOCAL-NET {
-                option  domain-name "EDOMINIO";
+                option  domain-name "&EDOMINIO;";
                 option  domain-name-servers 192.168.17.1;
                 subnet 192.168.17.0 netmask 255.255.255.0 {
                         option routers 192.168.17.1;
@@ -558,8 +558,8 @@ Internet y en una red TCP/IP se basa en el protocolo SMTP (*Simple Mail
 Transfer Protocol*) descrito especialmente en los RFCs
 [821](ftp://ftp.rfc-editor.org/in-notes/rfc821.txt) y
 [1123](ftp://ftp.rfc-editor.org/in-notes/rfc1123.txt), funcionando sobre
-TCP/IP. En una situación típica en la que un usuario EUSUARIO@ECLIENTE
-envía un mensaje al usuario EUSUARIO2@ECLIENTE2 sin computadores
+TCP/IP. En una situación típica en la que un usuario &EUSUARIO;@&ECLIENTE;
+envía un mensaje al usuario &EUSUARIO2;@&&ECLIENTE;2; sin computadores
 intermediarios, se requiere:
 
 -   Que haya conexión física y a nivel de TCP/IP entre ambos
@@ -573,13 +573,13 @@ intermediarios, se requiere:
     redactar correos, como por ejemplo mail, mutt, mozilla-thunderbird
     (a ese programa se le llamará MUA - *Mail User Agent*[^smtp.1]).
 
-Si tanto EUSUARIO como EUSUARIO2 emplean como MUA `mail`, y ambos
+Si tanto &EUSUARIO; como &EUSUARIO2; emplean como MUA `mail`, y ambos
 computadores tiene como MTA sendmail, el proceso sería:
 
-EUSUARIO emplea `mail` en su computador ENOMCLIENTE para redactar el
-mensaje cuyo destinatario es EUSUARIO2.
+&EUSUARIO; emplea `mail` en su computador &ENOMCLIENTE; para redactar el
+mensaje cuyo destinatario es &EUSUARIO2;.
 
-En ENOMCLIENTE, el programa mail ejecuta sendmail para enviar el
+En &ENOMCLIENTE;, el programa mail ejecuta sendmail para enviar el
 mensaje. sendmail deja el mensaje en una cola de mensajes por enviar.
 Esa cola de mensajes es actualizada por sendmail a medida que envía o
 intenta enviar mensajes (si un mensaje no puede ser enviado sendmail
@@ -595,17 +595,17 @@ la dirección, si los hay intenta enviar a cada uno en orden de prioridad
 --los registros MX con menor número tienen mayor prioridad (ver
 [Servicio DNS](#servidor-dns)).
 
-En ENOMCLIENTE2 debe estar corriendo un proceso que acepte la conexión
+En &ENOMCLIENTE2; debe estar corriendo un proceso que acepte la conexión
 en el puerto 25, i.e. sendmail o algún otro MTA que reciba el mensaje
 siguiendo el protocolo SMTP.
 
-sendmail en ENOMCLIENTE2 agrega el mensaje que recibe en el archivo tipo
-texto `/var/mail/EUSUARIO2` que está en formato mbox.
+sendmail en &ENOMCLIENTE2; agrega el mensaje que recibe en el archivo tipo
+texto `/var/mail/&EUSUARIO2;` que está en formato mbox.
 
-Archivo donde exim deja los correos destinados al usuario EUSUARIO2.
+Archivo donde exim deja los correos destinados al usuario &EUSUARIO2;.
 
-Cuando EUSUARIO2 lo desee, podrá emplear `mail` para leer los correos
-que se hayan acumulado en `/var/mail/EUSUARIO2` ---a medida que los lea
+Cuando &EUSUARIO2; lo desee, podrá emplear `mail` para leer los correos
+que se hayan acumulado en `/var/mail/&EUSUARIO2;` ---a medida que los lea
 saldrán de ese archivo para quedar en `~/mbox`.
 
 Este es el esquema básico, aunque hay muchas otras situaciones en las
@@ -676,7 +676,7 @@ ejemplo:
         listen on all
 
         table aliases db:/etc/mail/aliases.db
-        accept from any for domain "EDOMINIO" alias <aliases> deliver to mbox
+        accept from any for domain "&EDOMINIO;" alias <aliases> deliver to mbox
         accept for all relay
 
 Si prefiere que los correos sean recibidos por procmail puede cambiar
@@ -685,7 +685,7 @@ recibir en formato maildir (por defecto en `~/Maildir` de cada usuario)
 y tener opción de procesar usuario a usuario con procmail via el archivo
 `~/.forward` es mejor:
 
-        accept from any for domain "EDOMINIO" alias <aliases> deliver to maildir
+        accept from any for domain "&EDOMINIO;" alias <aliases> deliver to maildir
 
 Al igual que con sendmail la tabla de alias que usa esta configuración
 es `/etc/mail/aliases.db`, la cual se generá después de hacer cambios a
@@ -694,21 +694,21 @@ es `/etc/mail/aliases.db`, la cual se generá después de hacer cambios a
         cd /etc/mail
         doas make
 
-Para asegurar el relevo de correos provenientes de EDOMINIO o de la IP
+Para asegurar el relevo de correos provenientes de &EDOMINIO; o de la IP
 192.168.1.2, basta agregar al mismo archivo de configuración:
 
-        accept from EDOMINIO for any relay
+        accept from &EDOMINIO; for any relay
         accept from 192.168.1.2 for any relay
 
 Para agregar autenticación y TLS , no es necesario cyrus-sasl basta
 generar certificado SSL (ver [xref](#smtp-auth-tls)) y dejar
-`EDOMINIO.crt` en `/etc/ssl/` y `EDOMINIO.key` en `/etc/ssl/private` y
+`&EDOMINIO;.crt` en `/etc/ssl/` y `&EDOMINIO;.key` en `/etc/ssl/private` y
 después cambiar en el archivo de configuración la línea con `listen`
 por:
 
-        pki EDOMINIO certificate "/etc/ssl/EDOMINIO.crt" \
-            key /etc/ssl/private/EDOMINIO.key"
-        listen on all port 25 tls pki EDOMINIO auth-optional
+        pki &EDOMINIO; certificate "/etc/ssl/&EDOMINIO;.crt" \
+            key /etc/ssl/private/&EDOMINIO;.key"
+        listen on all port 25 tls pki &EDOMINIO; auth-optional
 
 Puede ser más estricto con `tls-require` en lugar de `tls` y con `auth`
 en lugar de `auth-optional`.
@@ -716,11 +716,11 @@ en lugar de `auth-optional`.
 Para escuchar también en el puerto 465 (u otro puerto) cifrado por
 defecto puede agregar:
 
-        listen on all port 465 smtps pki EDOMINIO auth-optional
+        listen on all port 465 smtps pki &EDOMINIO; auth-optional
 
 y TLS estricto en el puerto 587:
 
-        listen on all port 587 tls pki EDOMINIO auth
+        listen on all port 587 tls pki &EDOMINIO; auth
 
 Para atender diversos dominios DNS, además de configurar el registro MX
 de cada dominio (ver [xref](#dominios-virtuales-correo)), agregar una
@@ -783,13 +783,13 @@ A continuación se presenta una prueba a este servicio:
         Trying ::1...
         Connected to localhost.
         Escape character is '^]'.
-        220 amor.EDOMINIO ESMTP Sendmail 8.13.8/8.13.3; Mon, 16 Oct 2006 12:42:41 -0500 (COT)
+        220 amor.&EDOMINIO; ESMTP Sendmail 8.13.8/8.13.3; Mon, 16 Oct 2006 12:42:41 -0500 (COT)
         HELO localhost
-        250 amor.EDOMINIO Hello EUSUARIO@localhost [IPv6:::1], pleased to meet you
-        MAIL FROM: <EUSUARIO@localhost>
-        250 2.1.0 <EUSUARIO@localhost>... Sender ok
-        RCPT TO: <EUSUARIO@localhost>
-        250 2.1.5 <EUSUARIO@localhost>... Recipient ok
+        250 amor.&EDOMINIO; Hello &EUSUARIO;@localhost [IPv6:::1], pleased to meet you
+        MAIL FROM: <&EUSUARIO;@localhost>
+        250 2.1.0 <&EUSUARIO;@localhost>... Sender ok
+        RCPT TO: <&EUSUARIO;@localhost>
+        250 2.1.5 <&EUSUARIO;@localhost>... Recipient ok
         DATA
         354 Enter mail, end with "." on a line by itself
         1 2 3
@@ -797,7 +797,7 @@ A continuación se presenta una prueba a este servicio:
         .
         250 2.0.0 k9GHgf1q019958 Message accepted for delivery
         quit
-        221 2.0.0 amor.EDOMINIO closing connection
+        221 2.0.0 amor.&EDOMINIO; closing connection
     Connection closed by foreign host.
 
 Para facilitar reiniciar el servicio en caso de inconvenientes se
@@ -816,7 +816,7 @@ las cuales recibir correo para reenviar en el archivo
 `grep relay-domains /etc/mail/sendmail.cf` ) Un ejemplo de tal archivo
 es:
 
-        EDOMINIO  # Acepta de todos los computadores del dominio
+        &EDOMINIO;  # Acepta de todos los computadores del dominio
         192.168.1  # Acepta de todos las IPs de la forma 192.168.1.x
 
 #### SMTP-AUTH y TLS {#smtp-auth-tls}
@@ -834,9 +834,9 @@ necesario emplear bien una conexión sobre SSL o bien TLS que es otra
 extensión a SMTP.
 
 Aunque `sendmail` soporta tanto TLS como SMTP-AUTH, la configuración por
-defecto de OpenBSD VER-OPENBSD no los incluye. En el caso de TLS lo
+defecto de OpenBSD &VER-OPENBSD; no los incluye. En el caso de TLS lo
 incluido en el sistema base es suficiente y el procedimiento de
-configuración se documenta en `man starttls`. En cuanto a SMTP-AUTH se
+configuración se documenta en `man starttls`.En cuanto a SMTP-AUTH se
 requiere una implementación de SASL, pero no hay ninguna incluida en el
 sistema base por lo que es necesario emplear el paquete `cyrus-sasl`.
 
@@ -903,7 +903,7 @@ actualizar a las fuentes más recientes, por ejemplo como usuario root:
         for i in `find . -name CVS`; do echo $i; 
             echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" > $i/Root;
         done
-        cvs -z3 update -Pd -rOPENBSD_VER-OPENBSD-U
+        cvs -z3 update -Pd -rOPENBSD_&VER-OPENBSD;-U
 
 Después indique que desea recompilar `sendmail` con soporte para
 autenticación creando o editando el archivo `/etc/mk.conf` para que
@@ -974,9 +974,9 @@ podría ser:
 Inicie un diálogo con `sendmail` con:
 
         doas sendmail -O LogLevel=20 -bs -Am
-        220 correo.EDOMINIO ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
+        220 correo.&EDOMINIO; ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
         EHLO LOCALHOST
-        250-correo.EDOMINIO Hello root@localhost, pleased to meet you
+        250-correo.&EDOMINIO; Hello root@localhost, pleased to meet you
         250-ENHANCEDSTATUSCODES
         250-PIPELINING
         250-8BITMIME
@@ -1016,14 +1016,14 @@ Retomando la sesion con `sendmail` y usando estos datos:
 
 puede intentar el envío de un correo por ejemplo con:
 
-        MAIL FROM:<EUSUARIO@EDOMINIO>
+        MAIL FROM:<&EUSUARIO;@&EDOMINIO;>
         250 OK                                                                          
-        RCPT TO:<EUSUARIO2@EDOMINIO>
+        RCPT TO:<&EUSUARIO2;@&EDOMINIO;>
         250 Accepted                                                                    
         DATA                                                                            
         354 Enter message, ending with "." on a line by itself                          
-        From: "EUSUARIO@EDOMINIO" <EUSUARIO@EDOMINIO>
-        To:  EUSUARIO2@EDOMINIO
+        From: "&EUSUARIO;@&EDOMINIO;" <&EUSUARIO;@&EDOMINIO;>
+        To:  &EUSUARIO2;@&EDOMINIO;
         Subject: probando
         1234                                                                            
         .                                                                               
@@ -1033,8 +1033,8 @@ puede intentar el envío de un correo por ejemplo con:
 De requerirlo puede rastrear problemas en `/var/log/maillog` y/o
 intentar el protocolo descrito de forma remota (o también local) con:
 
-        telnet correo.EDOMINIO 25
-        220 correo.EDOMINIO ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
+        telnet correo.&EDOMINIO; 25
+        220 correo.&EDOMINIO; ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
         EHLO [200.21.23.4]
 
 y remplazando 200.21.23.4 por la IP desde la que inicia la conexión.
@@ -1060,7 +1060,7 @@ protocolos. Por ejemplo `mozilla-thunderbird` lo soporta, basta que en
 la configuración del servidor SMTP indique que debe emplearse un usuario
 y que emplee TLS (puede usar tanto el puerto 25 como el 465). Tenga en
 cuenta que el nombre del usuario con el cual autenticarse debe incluir
-el dominio (e.g EUSUARIO@EDOMINIO).
+el dominio (e.g &EUSUARIO;@&EDOMINIO;).
 
 ##### Referencias {#referencias-smtp-auth-tls}
 
@@ -1112,15 +1112,15 @@ acepte correo para cada dominio. Para esto:
 
 -   Asegurese de tener un registro MX para el dominio que indique que su
     servidor es el servidor de correo del dominio. i.e en el archivo
-    maestro del dominio (digamos `/var/named/master/EDOMINIO`) algo
+    maestro del dominio (digamos `/var/named/master/&EDOMINIO;`) algo
     como:
 
-            MX      5       correo.EDOMINIO.
+            MX      5       correo.&EDOMINIO;.
             correo          IN      A       65.167.89.169
 
     ¡No omita el punto que va a continuación del nombre del servidor MX!
 
--   Agregue el dominio (e.g EDOMINIO) a los archivos
+-   Agregue el dominio (e.g &EDOMINIO;) a los archivos
     `/etc/local-host-names` y `/etc/mail/relay-domains`
 
 -   Reinicie `sendmail` con:
@@ -1128,14 +1128,14 @@ acepte correo para cada dominio. Para esto:
             pkill -HUP sendmail
 
 Con esta configuración todo correo a una dirección de la forma
-`EUSUARIO@EDOMINIO` será enviado a la cola de correos del usuario local
-EUSUARIO. Si lo requiere es posible agregar direcciones que se envíen a
+`&EUSUARIO;@&EDOMINIO;` será enviado a la cola de correos del usuario local
+&EUSUARIO;. Si lo requiere es posible agregar direcciones que se envíen a
 otro usuario local, agregando entradas al archivo
 `/etc/mail/virtusertable`, por ejemplo:
 
-        pablofelipe@EDOMINIO  EUSUARIO
+        pablofelipe@&EDOMINIO;  &EUSUARIO;
 
-reenviará todo correo dirigido a `pablofelipe@EDOMINIO` al usuario local
+reenviará todo correo dirigido a `pablofelipe@&EDOMINIO;` al usuario local
 ``.
 ### Protocolos para revisar correo {#protocolos-revisar-correo}
 
@@ -1148,7 +1148,7 @@ Courier.
 
 #### Implementación Dovecot de IMAPS y POP3S {#dovecot}
 
-Instale el paquete P-DOVECOT y asegurese de dejar `dovecot` en la
+Instale el paquete &p-dovecot; y asegurese de dejar `dovecot` en la
 variable `pkg_scripts` de `/etc/rc.conf.local` para que se inicie en
 cada arranque.
 
@@ -1216,18 +1216,18 @@ Una sencilla solución que no requiere mayores cambios es emplear
 vaya a usar POP3S o IMAPS cree los archivos `.forward` y `.procmailrc`,
 análogos a los siguientes (suponemos que se trata del usuario ``):
 
--   En `/home/EUSUARIO/.forward`
+-   En `/home/&EUSUARIO;/.forward`
 
             "| exec /usr/local/bin/procmail"
               
 
     las comillas son indispensables así como el símbolo '|'.
 
--   En `/home/EUSUARIO/.procmailrc`
+-   En `/home/&EUSUARIO;/.procmailrc`
 
             LINEBUF=4096
             #VERBOSE=on
-            PMDIR=/home/EUSUARIO/
+            PMDIR=/home/&EUSUARIO;/
             MAILDIR=$PMDIR/Maildir/
             FORMAIL=/usr/local/bin/formail
             SENDMAIL=/usr/sbin/sendmail
@@ -1235,30 +1235,30 @@ análogos a los siguientes (suponemos que se trata del usuario ``):
 
             :0
             * .*
-            /home/EUSUARIO/Maildir/
+            /home/&EUSUARIO;/Maildir/
 
     Note que el directorio de la variable `MAILDIR` termina con '/'.
     Esto es indispensable para indicar a `procmail` que debe guardar en
     esa ruta en formato Maildir.
 
 -   Deje además listo un directorio en formato Maildir en
-    `/home/EUSUARIO/Maildir` con:
+    `/home/&EUSUARIO;/Maildir` con:
 
-            maildirmake /home/EUSUARIO/Maildir
-            chown -R EUSUARIO:estudiante /home/EUSUARIO/Maildir
+            maildirmake /home/&EUSUARIO;/Maildir
+            chown -R &EUSUARIO;:estudiante /home/&EUSUARIO;/Maildir
               
 
 De esta forma cada vez que sendmail reciba un correo para el usuario
-local `` en vez de almacenar en `/var/mail/EUSUARIO` ejecutará la línea
-del archivo `/home/EUSUARIO/.forward`, la cual a su vez ejecutará
+local `` en vez de almacenar en `/var/mail/&EUSUARIO;` ejecutará la línea
+del archivo `/home/&EUSUARIO;/.forward`, la cual a su vez ejecutará
 procmail para procesar el correo que llega por entrada estándar.
-`procmail` empleará la configuración de `/home/EUSUARIO/.procmailrc` que
+`procmail` empleará la configuración de `/home/&EUSUARIO;/.procmailrc` que
 le indica guardar todo correo que llegue a la cuenta en
-`/home/EUSUARIO/Maildir/` (como se trata de un directorio y termina con
+`/home/&EUSUARIO;/Maildir/` (como se trata de un directorio y termina con
 '/', `procmail` identifica que debe salvar en formato `Maildir`, si
 fuera un archivo agregaría en formato `MBOX`).
 
-El usuario EUSUARIO podría probar su archivo de configuración de
+El usuario &EUSUARIO; podría probar su archivo de configuración de
 `procmail` modificando `~/.procmail` para quitar el comentario de la
 línea
 
@@ -1267,17 +1267,17 @@ línea
 
 y ejecutando:
 
-        cd /home/EUSUARIO
+        cd /home/&EUSUARIO;
         procmail 
         Mensaje de prueba
         Termínelo con Control-D
         .
         procmail: [21024] Fri Jul  1 18:32:30 2005
-        procmail: Assigning "PMDIR=/home/EUSUARIO/"
-        procmail: Assigning "MAILDIR=/home/EUSUARIO/Maildir/"
+        procmail: Assigning "PMDIR=/home/&EUSUARIO;/"
+        procmail: Assigning "MAILDIR=/home/&EUSUARIO;/Maildir/"
         procmail: Assigning "FORMAIL=/usr/local/bin/formail"
         procmail: Assigning "SENDMAIL=/usr/sbin/sendmail"
-        procmail: Assigning "LOGFILE=/home/EUSUARIO/log"
+        procmail: Assigning "LOGFILE=/home/&EUSUARIO;/log"
 
 Tras lo cual debe encontrar un nuevo archivo en `Maildir/new` con el
 mensaje de prueba.
@@ -1286,8 +1286,8 @@ Puede verificar el funcionamiento de `.forward` enviando un correo a la
 cuenta del usuario y revisando la bitácora `/var/log/maillog` donde
 deben aparecer un par de líneas análogas a:
 
-    Dec 19 18:31:59 servidor sendmail[22209]: kBJNVwMt022209: to=test@localhost, ctladdr=EUSUARIO (1000/1000), delay=00:00:01, xdelay=00:00:01, mailer=relay, pri=30061, relay=[127.0.0.1] [127.0.0.1], dsn=2.0.0, stat=Sent (kBJNVw3t021322 Message accepted for delivery)
-    Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bin/procmail", ctladdr=<test@EDOMINIO> (1008/10), delay=00:00:00, xdelay=00:00:00, mailer=prog, pri=30756, dsn=2.0.0, stat=Sent
+    Dec 19 18:31:59 servidor sendmail[22209]: kBJNVwMt022209: to=test@localhost, ctladdr=&EUSUARIO; (1000/1000), delay=00:00:01, xdelay=00:00:01, mailer=relay, pri=30061, relay=[127.0.0.1] [127.0.0.1], dsn=2.0.0, stat=Sent (kBJNVw3t021322 Message accepted for delivery)
+    Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bin/procmail", ctladdr=<test@&EDOMINIO;> (1008/10), delay=00:00:00, xdelay=00:00:00, mailer=prog, pri=30756, dsn=2.0.0, stat=Sent
             
 
 ##### POP3S con Courier {#pop3s-courier}
@@ -1368,7 +1368,7 @@ teniendo en cuenta que el correo debe estar en formato Maildir en el
 directorio `Maildir` del usuario que revisará. Una sesión típica sería:
 
         +OK Hello there.
-        user EUSUARIO
+        user &EUSUARIO;
         +OK Password required.
         pass ejem
         +OK logged in.
@@ -1449,7 +1449,7 @@ Una vez en ejecución puede hacer una prueba como:
 
         $ openssl s_client -connect localhost:993
         ...
-        AB LOGIN EUSUARIO MiClave
+        AB LOGIN &EUSUARIO; MiClave
         AB OK LOGIN Ok.
         BC SELECT "Inbox"
         BC NO Unable to open this mailbox.
@@ -1528,8 +1528,8 @@ servidores válidos como gmail, yahoo o hotmail o de servidores que no
 reintentan el envío como lo espera spamd. Tal comportamiento puede no
 resultar aceptable en algunas organizaciones.
 
-SpamAssassin (paquete P-P5-MAIL-SPAMASSASSIN) junto con procmail
-(paquete P-PROCMAIL) son una solución intermedia que permiten recibir
+SpamAssassin (paquete &p-p5-mail-spamassassin;) junto con procmail
+(paquete &p-procmail;) son una solución intermedia que permiten recibir
 todo correo pero intentan clasificar automáticamente (y con buena
 precisión) los que son no solicitados en carpetas separadas por usuario
 que configure el servicio.
@@ -1626,25 +1626,25 @@ Basta instalar el paquete `roundcubemail` o descargar ls fuentes más
 recientes de [](http://sourceforge.net/projects/roundcubemail/) e
 instalarlas en `/var/www/roundcubemail`, y seguir instrucciones del
 archivo INSTALL que resumimos a continuación junto con instrucciones de
-módulos, suponiendo que en el mismo servidor (`correo.EDOMINIO`) están
+módulos, suponiendo que en el mismo servidor (`correo.&EDOMINIO;`) están
 los servicios IMAPS y SMTP y que se empleará el motor de bases de datos
 PostgreSQL:
 
 1.  Tras instalar, el cliente quedará en `/var/www/roundcubemail` por lo
     que es necesario configurar el servidor web. Por ejemplo si el
-    correo de la organización se consultará en `correo.EDOMINIO` (IP
+    correo de la organización se consultará en `correo.&EDOMINIO;` (IP
     interna 192.168.60.1 y externa 200.200.200.200) con protocolo HTTPS,
     el archivo `/var/www/conf/httpd.conf` debe incluir:
 
             <VirtualHost 127.0.0.1:443 192.168.60.1:443 200.200.200.200:443>
             DocumentRoot "/var/www/roundcubemail/"
-            ServerName correo.EDOMINIO
+            ServerName correo.&EDOMINIO;
             
             <Directory /var/www/roundcubemail/>
                 AllowOverride All
             </Directory>
             
-            ServerAdmin admin@EDOMINIO
+            ServerAdmin admin@&EDOMINIO;
             ErrorLog logs/round-error_log
             TransferLog logs/round-access_log
             
@@ -1714,13 +1714,13 @@ PostgreSQL:
 
             $rcmail_config['auto_create_user'] = TRUE;
 
-            $rcmail_config['default_host'] = 'ssl://correo.EDOMINIO:993';
+            $rcmail_config['default_host'] = 'ssl://correo.&EDOMINIO;:993';
             
             $rcmail_config['default_port'] = 993;
             
             $rcmail_config['smtp_server'] = '127.0.0.1';
             
-            $rcmail_config['mail_domain'] = 'EDOMINIO';
+            $rcmail_config['mail_domain'] = '&EDOMINIO;';
 
     y en el archivo `config/db.inc.php` la línea:
 
@@ -1745,7 +1745,7 @@ PostgreSQL:
 
             doas chmod -R a+rx /var/www/roundcubemail/installer
 
-6.  Con un navegador examine el URL `https://correo.EDOMINIO/installer/`
+6.  Con un navegador examine el URL `https://correo.&EDOMINIO;/installer/`
     compruebe las dependencias solicitadas y realice las pruebas
     disponibles. Una vez concluya evite el uso de ese directorio
     ejecutando:
@@ -1820,7 +1820,7 @@ este webmail active el plugin password como se presenta a continuación:
 
 #### Instalación de Mailman (sin `chroot`) {#mailman}
 
-Instalar paquete de mailman `pkg_add $PKG_PATH/P-MAILMAN.tgz` que
+Instalar paquete de mailman `pkg_add $PKG_PATH/&p-mailman;.tgz` que
 requiere `` se crean automáticamente el grupo `_mailman` y el usuario
 `_mailman`
 
@@ -1917,17 +1917,17 @@ Asignar password al sitio de mailman con
 [^smtp.1]: De acuerdo al RFC 1123 los nombre MUA y MTA son propios del
     protocolo X.400.
 
-[^smtp.2]: De acuerdo al protocolo SMTP, sendmail de ENOMCLIENTE se
-    conectaría por el puerto 25 a sendmail en ENOMCLIENTE2 y enviaría
+[^smtp.2]: De acuerdo al protocolo SMTP, sendmail de &ENOMCLIENTE; se
+    conectaría por el puerto 25 a sendmail en &ENOMCLIENTE2; y enviaría
     los mensajes `EHLO`, `MAIL FROM:
-           EUSUARIO@ECLIENTE`, después enviaría
-    `RCPT TO: EUSUARIO2@ECLIENTE2`, después `DATA` y a continuación el
+           &EUSUARIO;@&ECLIENTE;`, después enviaría
+    `RCPT TO: &EUSUARIO2;@&&ECLIENTE;2;`, después `DATA` y a continuación el
     cuerpo del correo comenzando con el encabezado de acuerdo al RFC
     822, con un cuerpo de mensaje que emplee 7 bits y terminando con una
     línea que sólo tenga un punto. Por ejemplo
 
-            From: EUSUARIO@ECLIENTE
-            To: EUSUARIO2@ECLIENTE2
+            From: &EUSUARIO;@&ECLIENTE;
+            To: &EUSUARIO2;@&&ECLIENTE;2;
             Subject: Saludo
 
             Un cortisimo saludo para bendición de nuestro Creador.
@@ -1939,8 +1939,8 @@ Asignar password al sitio de mailman con
 
          
             sendmail -bm
-            EUSUARIO2@ECLIENTE2 -f
-            EUSUARIO@ECLIENTE 
+            &EUSUARIO2;@&&ECLIENTE;2; -f
+            &EUSUARIO;@&ECLIENTE; 
 
     (para emplear `-f` con sendmail debe ser usuario autorizado).
 
@@ -2201,14 +2201,14 @@ sin ánimo de lucro, letsencrypt.org es reconocida por los navegadores
 principales y ofrece todo tipo de certificados validos por 3 meses de
 manera gratuita (cada 3 meses debe renovarse con el mismo letsencrypt).
 
-Por ejemplo para un dominio EDOMINIO sólo certificado para el web:
+Por ejemplo para un dominio &EDOMINIO; sólo certificado para el web:
 
-        doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d EDOMINIO -d www.EDOMINIO 
+        doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO; 
 
 Si además de los dominios web necesita cubrir con el mismo certificado
-el servidor de correo: correo.EDOMINIO que tiene una raiz diferente:
+el servidor de correo: correo.&EDOMINIO; que tiene una raiz diferente:
 
-        doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d EDOMINIO -d www.EDOMINIO  -w /var/www/roundcubemail -d correo.EDOMINIO
+        doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO;  -w /var/www/roundcubemail -d correo.&EDOMINIO;
 
 
 ### Nginx
@@ -2316,18 +2316,18 @@ o bien
 
 el primer en caso de que corra Apache chroot y el segundo si no. En
 ambos casos se sugiere la siguiente secuencia para crear un directorio
-de publicación para el usuario EUSUARIO:
+de publicación para el usuario &EUSUARIO;:
 
-        cd /home/EUSUARIO
-        doas mkdir /var/www/users/EUSUARIO
-        doas ln -s /var/www/users/EUSUARIO public_html
-        doas chown EUSUARIO:EUSUARIO /var/www/users/EUSUARIO
+        cd /home/&EUSUARIO;
+        doas mkdir /var/www/users/&EUSUARIO;
+        doas ln -s /var/www/users/&EUSUARIO; public_html
+        doas chown &EUSUARIO;:&EUSUARIO; /var/www/users/&EUSUARIO;
         
 
 Así el usuario podrá publicar sus archivos en su subdirectorio
 `public_html` (como ocurre clásicamente) y desde un navegador local
-podrán verse con el URL: `http://localhost/~EUSUARIO/` o remotamente con
-`http://www.EDOMINIO/~EUSUARIO/`
+podrán verse con el URL: `http://localhost/~&EUSUARIO;/` o remotamente con
+`http://www.&EDOMINIO;/~&EUSUARIO;/`
 
 #### Dominios virtuales
 
@@ -2351,14 +2351,14 @@ manejar con un mismo servidor diversas direcciones DNS. Para activarlo:
     Agregue un dominio virtual por cada dominio que maneje, por ejemplo:
 
             <VirtualHost 65.167.63.234>
-                ServerAdmin EUSUARIO@EDOMINIO
+                ServerAdmin &EUSUARIO;@&EDOMINIO;
                 DocumentRoot /var/www/htdocs
-                ServerName www.EDOMINIO
-                ServerAlias EDOMINIO
-                ErrorLog logs/EDOMINIO-error_log
+                ServerName www.&EDOMINIO;
+                ServerAlias &EDOMINIO;
+                ErrorLog logs/&EDOMINIO;-error_log
                 Options ExecCgi Includes MultiViews Indexes FollowSymlinks 
                 SymLinksIfOwnerMatch
-                CustomLog logs/EDOMINIO-access_log common
+                CustomLog logs/&EDOMINIO;-access_log common
             </VirtualHost>
                 
 
