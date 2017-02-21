@@ -1,5 +1,5 @@
 # Reglas para generar HTML, PostScript y PDF de servidor_adJ
-# Basadas en infraestructura de dominio público de repasa 
+# Basadas en infraestructura de dominio pÃºblico de repasa 
 #   (http://structio.sourceforge.net/repasa)
 
 include Make.inc
@@ -8,14 +8,16 @@ include Make.inc
 
 EXT_DOCBOOK=xdbk
 
-SOURCES=$(PROYECTO).xdbk biblio.xdbk correo.xdbk dictd.xdbk dns.xdbk ftp.xdbk http.xdbk httpd.xdbk letsencrypt.xdbk nginx.xdbk apache.xdbk redes.xdbk lan-ethernet.xdbk inalambrica.xdbk modem-isdn.xdbk modem-nulo.xdbk mariadb.xdbk pol-correo.xdbk postgresql.xdbk quota.xdbk dhcpd.xdbk sshd.xdbk syslog.xdbk nat.xdbk cortafuegos.xdbk controlab.xdbk ntp.xdbk novedades.xdbk ftpproxy.xdbk ejemplopf.xdbk roundcubemail.xdbk opensmtpd.xdbk dovecot.xdbk
-# Listado de fuentes XML. Preferiblmente en el orden de inclusión.
+FUENTESDB=redes.xdbk interconexion.xdbk direcciones.xdbk protocolossop.xdbk otrosservicios.xdbk novedades.xdbk biblio.xdbk 
+
+SOURCES=$(PROYECTO).xdbk $(FUENTESDB)
+# Listado de fuentes XML. Preferiblmente en el orden de inclusiÃ³n.
 
 IMAGES= img/home.png img/prev.png img/toc-minus.png img/blank.png img/important.png img/toc-plus.png img/caution.png img/next.png img/tip.png img/up.png img/draft.png img/note.png img/toc-blank.png img/warning.png
 # Listado de imagenes, preferiblemente en formato PNG
 
 HTML_DIR=html
-# Directorio en el que se generará información en HTML (con reglas por defecto)
+# Directorio en el que se generarÃ¡ informaciÃ³n en HTML (con reglas por defecto)
 
 HTML_TARGET=$(HTML_DIR)/index.html
 # Nombre del HTML principal (debe coincidir con el especificado en estilohtml.xsl)
@@ -37,22 +39,22 @@ OTHER_HTML=
 PRECVS=guias/
 
 INDEX=indice.$(EXT_DOCBOOK)
-# Si habrá un índice, nombre del archivo con el que debe generarse (incluirlo al final del documento).
+# Si habrÃ¡ un Ã­ndice, nombre del archivo con el que debe generarse (incluirlo al final del documento).
 
 
 # Variables requeridas por comdist.mk
 
 GENDIST=Derechos.txt $(SOURCES) $(IMAGES)
-# Dependencias por cumplir antes de generar distribución
+# Dependencias por cumplir antes de generar distribuciÃ³n
 
 ACTHOST=git@github.com:pasosdeJesus/
-# Sitio en Internet donde actualizar. Método indicado por ACT_PROC de confv.sh
+# Sitio en Internet donde actualizar. MÃ©todo indicado por ACT_PROC de confv.sh
 
 ACTDIR=servidor_adJ
 # Directorio en ACTHOST por actualizar
 
 
-GENACT=ghtodo $(PROYECTO)-$(PRY_VERSION)_html.tar.gz #$(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf 
+GENACT=ghtodo $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf 
 # Dependencias por cumplir antes de actualizar sitio en Internet al publicar
 
 FILESACT=$(PROYECTO)-$(PRY_VERSION).tar.gz $(PROYECTO)-$(PRY_VERSION)_html.tar.gz $(HTML_DIR)/* #$(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).ps.gz $(PRINT_DIR)/$(PROYECTO)-$(PRY_VERSION).pdf 
@@ -72,18 +74,18 @@ ghtodo: distgh
 
 
 repasa:
-	DEF=$(PROYECTO).def CLA=$(PROYECTO).cla SEC=$(PROYECTO).sec DESC="Información extraida de $(PROYECTO) $(PRY_VERSION)" FECHA="$(FECHA_ACT)" BIBLIO="$(URLSITE)" TIPO_DERECHOS="Dominio Público" TIEMPO_DERECHOS="$(MES_ACT)" DERECHOS="Información cedida al dominio público de acuerdo a la legislación colombiana. Sin garantías" AUTORES="Vladimir Támara Patiño" IDSIGNIFICADO="adJ_servidor" $(AWK) -f herram/db2rep $(SOURCES)
+	DEF=$(PROYECTO).def CLA=$(PROYECTO).cla SEC=$(PROYECTO).sec DESC="InformaciÃ³n extraida de $(PROYECTO) $(PRY_VERSION)" FECHA="$(FECHA_ACT)" BIBLIO="$(URLSITE)" TIPO_DERECHOS="Dominio PÃºblico" TIEMPO_DERECHOS="$(MES_ACT)" DERECHOS="InformaciÃ³n cedida al dominio pÃºblico de acuerdo a la legislaciÃ³n colombiana. Sin garantÃ­as" AUTORES="Vladimir TÃ¡mara PatiÃ±o" IDSIGNIFICADO="adJ_servidor" $(AWK) -f herram/db2rep $(SOURCES)
 
 # Para usar DocBook
 include herram/comdocbook.mak
 
-# Para crear distribución de fuentes y publicar en Internet
+# Para crear distribuciÃ³n de fuentes y publicar en Internet
 include herram/comdist.mak
 
-# Elimina hasta configuración
+# Elimina hasta configuraciÃ³n
 limpiadist: limpiamas
 	rm -f confv.sh confv.ent Make.inc personaliza.ent
-	rm -rf $(HTML_DIR)
+	rm -rf $(HTML_DIR)/*
 	rm -rf $(PRINT_DIR)
 
 # Elimina archivos generables
@@ -97,8 +99,9 @@ limpiamas: limpia
 
 # Elimina backups y archivos temporales
 limpia:
-	rm -f *bak *~ *tmp confaux.tmp $(PROYECTO)-$(PRY_VERSION)_html.tar.gz
+	rm -f *bak *~ *.tmp confaux.tmp $(PROYECTO)-$(PRY_VERSION)_html.tar.gz
 	rm -f $(PROYECTO)-4.1.*
+	rm -f $(FUENTESDB)
 
 infoversion.ent:
 	echo '<?xml version="1.0" encoding="ISO-8859-1"?>' > infoversion.ent
@@ -120,7 +123,10 @@ Derechos.txt: $(PROYECTO).$(EXT_DOCBOOK)
 	$(W3M) $(W3M_OPT) -dump html/index.html | awk -f herram/conthtmldoc.awk > Derechos.txt
 
 instala:
-	mkdir -p $(DESTDIR)$(INSDOC)
-	install html/*html html/*png $(DESTDIR)$(INSDOC)
-	if (test -f $(PRINT_DIR)/$(PROYECTO).ps) then { install imp/*ps $(DESTDIR)$(INSDOC); } fi;
+	mkdir -p $(DESTDIR)$(INSDOC)/img/
+	install html/*html $(DESTDIR)$(INSDOC)
+	install img/*png $(DESTDIR)$(INSDOC)/img/
+	if (test -f $(PRINT_DIR)/$(PROYECTO).ps) then { \
+		install imp/*ps $(DESTDIR)$(INSDOC);\
+	} fi;
 

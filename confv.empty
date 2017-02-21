@@ -13,7 +13,7 @@ PROYECTO="servidor_adJ"
 # Nombre del proyecto
 #
 
-PRY_VERSION="5.9"
+PRY_VERSION="6.0"
 # Versión
 #
 
@@ -202,6 +202,10 @@ GZIP=""
 ISPELL=""
 # Corrector ortográfico internacional.
 # http://fmg-www.cs.ucla.edu/fmg-members/geoff/ispell.html
+
+PANDOC=""
+# Pasa de markdown a docbook
+# http://pandoc.org/
 
 JADE=""
 # Motor para procesar hojas de estilo DSSSL
