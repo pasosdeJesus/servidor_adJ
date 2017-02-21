@@ -219,7 +219,7 @@
       </p><p>
         Otra posibilidad es cambiar la configuración después de haber
         inicializado sin autenticación. Para esto cambie la clave del
-        administrador con<sup>[<a name="idp985352048" href="#ftn.idp985352048">29</a>]</sup>:
+        administrador con<sup>[<a name="idp545941872" href="#ftn.idp545941872">29</a>]</sup>:
       </p><pre class="programlisting">
     psql -U postgres template1 
     template1=# alter user postgres with password 'MiClave';
@@ -247,7 +247,7 @@
         Las claves de los diversos usuarios pueden cambiarse de forma
         análoga a la presentada para <code class="literal">postgres</code>:
       </p><pre class="programlisting">
-    ALTER ROLE EUSUARIO with UNENCRYPTED PASSWORD 'clave-plana';
+    ALTER ROLE pablo with UNENCRYPTED PASSWORD 'clave-plana';
 </pre><p>
         Desde PostgreSQL 8.1 se emplea un esquema de roles que unifica
         los conceptos de usuario y grupo. Además de exigir clave para
@@ -268,7 +268,7 @@
 </pre><p>
         Para dar permiso a otro rol puede usarse:
       </p><pre class="programlisting">
-    GRANT ALL on solicitud TO EUSUARIO2;
+    GRANT ALL on solicitud TO &amp;EUSUARIO2;;
 </pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="creacion-base"></a>6.2.3. Creación de una base de datos</h4></div></div></div><p>
         Para crear la base de datos <code class="literal">prueba</code> puede usar
         el superusuario con la opción <code class="literal">-U postgres</code> o
@@ -351,10 +351,10 @@
     *:*:*:usuario:clave
 </pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="postgresql-cotejacion"></a>6.2.5. Cotejación en PostgreSQL</h4></div></div></div><p>
         Desde adJ 5.2 se incluye un porte de PostgreSQL (la versión
-        incluida en adJ VER-ADJ es P-POSTGRESQL-SERVER) que soporta
-        cotejaciones de acuerdo al locale, y por defecto se crean
-        cotejaciones para todos los países de habla hispana, con nombres
-        de la forma <code class="literal">es_CO_UTF_8</code>. Donde
+        incluida en adJ 6.0 es &amp;p-postgresql-server;) que
+        soporta cotejaciones de acuerdo al locale, y por defecto se
+        crean cotejaciones para todos los países de habla hispana, con
+        nombres de la forma <code class="literal">es_CO_UTF_8</code>. Donde
         <code class="literal">CO</code> representa Colombia, pero se pueden
         emplear otras abreviaturas de países como se usan en Internet
         (estándar ISO-3166-1): ES CO PE VE EC GT CU BO HN PY SV CR PA GQ
@@ -432,10 +432,10 @@
       Oracle compró Sun y MySQL, pues consideraba que Oracle había hecho
       la compra para reducir competencia de sus bases de datos.
     </p><p>
-      Debe instalar los paquetes P-MARIADB-CLIENT y P-MARIADB-SERVER.
-      Aunque el nombre de los paquetes cambia los comandos para operarla
-      siguen siendo los mismos. Tras instalar el servidor debe ejecutar
-      <code class="literal">mysql_install_db</code>.
+      Debe instalar los paquetes &amp;p-mariadb-client; y
+      &amp;p-mariadb-server;. Aunque el nombre de los paquetes cambia
+      los comandos para operarla siguen siendo los mismos. Tras instalar
+      el servidor debe ejecutar <code class="literal">mysql_install_db</code>.
     </p><p>
       Inicialice el directorio donde estarán las bases de datos con
     </p><pre class="programlisting">
@@ -626,7 +626,7 @@
       3, <code class="literal">ldapd</code>. No incluye cliente para LDAP pero
       desde la línea de comandos puede emplearse el paquete
       <code class="literal">openldap-client</code> o como interfaz web
-      <code class="literal">phpldapadmin</code><sup>[<a name="idp1600498544" href="#ftn.idp1600498544">30</a>]</sup>.
+      <code class="literal">phpldapadmin</code><sup>[<a name="idm552947984" href="#ftn.idm552947984">30</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-ldapd"></a>6.4.1. Instalación de ldapd</h4></div></div></div><p>
         No necesita instalar paquetes para la operación como servidor.
       </p><p>
@@ -833,10 +833,10 @@
             <a href="http://www.tumfatig.net/20120817/monitoring-openbsds-ldap-daemon/" target="_top">http://www.tumfatig.net/20120817/monitoring-openbsds-ldap-daemon/</a>.
           </p></li><li><p>
             <a href="http://openbsd.7691.n7.nabble.com/dev-random-as-chrooted-named-s-entropy-source-current-td64344.html" target="_top">http://openbsd.7691.n7.nabble.com/dev-random-as-chrooted-named-s-entropy-source-current-td64344.html</a>.
-          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp985352048" href="#idp985352048">29</a>] </sup>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp545941872" href="#idp545941872">29</a>] </sup>
             Note que de esta forma puede cambiar la clave de otros
             usuarios de PostgreSQL.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1600498544" href="#idp1600498544">30</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm552947984" href="#idm552947984">30</a>] </sup>
           Si emplea un adJ 5.2 y planea conectarse desde clientes
           digamos en Ubuntu reciente requerirá el parche descrito en
           <a xmlns="" href="http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html" target="_top">http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</a>
