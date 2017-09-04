@@ -194,7 +194,7 @@
 <!ENTITY p-harfbuzz "harfbuzz-1.4.5">
 <!ENTITY p-harfbuzz-icu "harfbuzz-icu-1.4.5">
 <!ENTITY p-help2man "help2man-1.47.4">
-<!ENTITY p-hevea "hevea-2.23p0">
+<!ENTITY p-hevea "hevea-2.23p2">
 <!ENTITY p-hexedit "hexedit-1.2.12">
 <!ENTITY p-hicolor-icon-theme "hicolor-icon-theme-0.15">
 <!ENTITY p-htop "htop-2.0.2">
@@ -342,7 +342,7 @@
 <!ENTITY p-m4 "m4-1.4.18">
 <!ENTITY p-mariadb-client "mariadb-client-10.0.30v1">
 <!ENTITY p-mariadb-server "mariadb-server-10.0.30v1">
-<!ENTITY p-markup "markup-0.2.12p2">
+<!ENTITY p-markup "markup-0.2.12p4">
 <!ENTITY p-meanwhile "meanwhile-1.0.2p5">
 <!ENTITY p-meta-tracker "meta-tracker-1.10.5">
 <!ENTITY p-metaauto "metaauto-1.0p1">
@@ -367,8 +367,10 @@
 <!ENTITY p-npth "npth-1.2">
 <!ENTITY p-nspr "nspr-4.13.1">
 <!ENTITY p-nss "nss-3.29.3">
-<!ENTITY p-ocaml "ocaml-4.03.0p0">
-<!ENTITY p-ocaml-labltk "ocaml-labltk-8.06.2p2">
+<!ENTITY p-ocaml "ocaml-4.05.0">
+<!ENTITY p-ocaml-camlp4 "ocaml-camlp4-4.05">
+<!ENTITY p-ocaml-labltk "ocaml-labltk-8.06.3">
+<!ENTITY p-ocamlbuild "ocamlbuild-0.9.2p3">
 <!ENTITY p-openal "openal-1.16.0v0">
 <!ENTITY p-opencore-amr "opencore-amr-0.1.3p0">
 <!ENTITY p-openjade "openjade-1.3.3pre1p2">
@@ -617,7 +619,7 @@
 <!ENTITY p-realboy "realboy-0.2.2">
 <!ENTITY p-recode "recode-3.6p9">
 <!ENTITY p-redland "redland-1.0.17p3">
-<!ENTITY p-repasa "repasa-1.4p5">
+<!ENTITY p-repasa "repasa-1.4p6">
 <!ENTITY p-rrdtool "rrdtool-1.6.0p2">
 <!ENTITY p-rrdupdate "rrdupdate-1.6.0">
 <!ENTITY p-rsync "rsync-3.1.2p0">
@@ -635,7 +637,7 @@
 <!ENTITY p-sdl-image "sdl-image-1.2.12p3">
 <!ENTITY p-servidor_adJ "servidor_adJ-6.0">
 <!ENTITY p-shared-mime-info "shared-mime-info-1.8">
-<!ENTITY p-sigue "sigue-1.2p2">
+<!ENTITY p-sigue "sigue-1.2p3">
 <!ENTITY p-silc-client "silc-client-1.1.11">
 <!ENTITY p-silc-toolkit "silc-toolkit-1.1.12p0">
 <!ENTITY p-sleuthkit "sleuthkit-4.3.0">
@@ -654,7 +656,6 @@
 <!ENTITY p-t1utils "t1utils-1.39">
 <!ENTITY p-taglib "taglib-1.9.1p1">
 <!ENTITY p-tcl "tcl-8.5.18p1">
-<!ENTITY p-tcl "tcl-8.6.4p1">
 <!ENTITY p-tdb "tdb-1.3.12">
 <!ENTITY p-tevent "tevent-0.9.29">
 <!ENTITY p-texi2html "texi2html-5.0">
@@ -664,7 +665,6 @@
 <!ENTITY p-texlive_texmf-minimal "texlive_texmf-minimal-2015">
 <!ENTITY p-tiff "tiff-4.0.8">
 <!ENTITY p-tk "tk-8.5.18p1">
-<!ENTITY p-tk "tk-8.6.4p1">
 <!ENTITY p-totem-pl-parser "totem-pl-parser-3.10.7p0">
 <!ENTITY p-tremor "tremor-20120410p1">
 <!ENTITY p-twolame "twolame-0.3.13p1">
