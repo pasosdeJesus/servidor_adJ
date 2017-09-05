@@ -1,0 +1,2518 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Dispositivos de interconexión</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
+HREF="t1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Redes, protocolos e Internet"
+HREF="x24.htm"><LINK
+REL="NEXT"
+TITLE="Direcciones, enrutamiento, transporte y cortafuegos"
+HREF="x735.htm"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x24.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x735.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="dispositivos_de_interconexion"
+>Dispositivos de interconexión</A
+></H1
+><P
+>&#13;    Durante el arranque, OpenBSD detecta la gran mayoría de dispositivos
+    conectados a un computador. Una vez en operación puede examinar la
+    detección con <TT
+CLASS="literal"
+>dmesg</TT
+>.
+  </P
+><P
+>&#13;    Si durante el arranque algún dispositivo no es detectado o es
+    detectado incorrectamente, puede intentar hacer modificaciones
+    durante el arranque iniciando con <TT
+CLASS="literal"
+>bsd -c</TT
+> cuando
+    esté en el prompt de arranque del programa <TT
+CLASS="literal"
+>boot</TT
+>
+    (ver <A
+HREF="a3004.htm"
+>usuario_OpenBSD</A
+>).
+  </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="modem-nulo"
+>Conexión con un módem nulo</A
+></H2
+><P
+>&#13;      Para conectar una terminal a un sistema OpenBSD puede emplearse un
+      módem nulo. La terminal puede ser un computador con OpenBSD o con
+      cualquier otro sistema operativo y un programa que permita ver la
+      información que llegue a un puerto serial y enviar la que se
+      teclee (por ejemplo sirven varios programas para comunicarse vía
+      módem).
+    </P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="modem-nulo-hardware"
+>Módem Nulo</A
+></H3
+><P
+>&#13;        Un módem nulo es un cable serial que tiene en sus extremos dos
+        conectores hembra para puerto serial y que intercambia algunas
+        conexiones. Si ambos conectores son de 25 pines, todos los
+        cables deben estar sueltos excepto:
+      </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;            (DSR) 6 &#38; (DCD) 8 -- 20,
+          </P
+></LI
+><LI
+><P
+>&#13;            (TxD) 2 -- 3,
+          </P
+></LI
+><LI
+><P
+>&#13;            (RxD) 3 -- 2,
+          </P
+></LI
+><LI
+><P
+>&#13;            (RTS) 4 -- 5,
+          </P
+></LI
+><LI
+><P
+>&#13;            (CTS) 5 -- 4,
+          </P
+></LI
+><LI
+><P
+>&#13;            (SG) 7 -- 7,
+          </P
+></LI
+><LI
+><P
+>&#13;            (DTR) 20 -- 6 &#38; 8.
+          </P
+></LI
+></UL
+><P
+>&#13;        En un conector de 9 pines la nomenclatura es: 1 DCD, 2 TxD, 3
+        RxD, 4 DTR, 5 SG, 6 DSR, 7 RTS y 8 CTS.
+      </P
+><P
+>&#13;        Un módem nulo mínimo sólo requiere que se conecten SG - SG
+        (tierra), TxD - RxD (transmisión de uno con recepción del otro)
+        y RxD - TxD. Sin embargo para poder efectuar control de flujo
+        también deben conectarse los demás.
+      </P
+><P
+>&#13;        Aunque en el comercio es posible comprar un módem nulo, también
+        es relativamente fácil ensamblar uno, una vez tenga conectores,
+        cable y cautín. Si hace su propio módem nulo puede probar que la
+        conexión haya quedado bien empleando un ohmiometro.
+      </P
+><P
+>&#13;        Una vez se conecte un módem nulo puede probarlo enviando
+        mensajes por el puerto serial del uno y viendo lo que recibe en
+        el otro. Por ejemplo si conecta dos sistemas OpenBSD empleando
+        en ambos el primer puerto serial, en uno de los dos puede
+        ejecutar (como usuario <TT
+CLASS="literal"
+>root</TT
+>)
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    cat &#60; /dev/cua00
+</PRE
+><P
+>&#13;        mientras que en el otro ejecute
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    cat &#62; /dev/cua00
+</PRE
+><P
+>&#13;        cuando escriba en el segundo y presione ENTER, en el primero
+        recibirá el mensaje y líneas en blanco (<TT
+CLASS="literal"
+>cat</TT
+>
+        no es el programa apropiado para establecer la comunicación,
+        sólo para probar).
+      </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="servidor"
+>Servidor</A
+></H3
+><P
+>&#13;        Con un módem nulo conectado y funcionado puede configurarse un
+        sistema OpenBSD como servidor para que permita conectar
+        terminales a un puerto serial. Debe configurarse el programa
+        <TT
+CLASS="literal"
+>init</TT
+> para que durante el arranque ejecute un
+        programa que reciba conexiones por el puerto serial (tal
+        programa normalmente es <TT
+CLASS="literal"
+>getty</TT
+>).
+      </P
+><P
+>&#13;        Basta editar el archivo <TT
+CLASS="literal"
+>/etc/ttys</TT
+>, quitar el
+        comentario a la línea apropiada para que quede:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    tty00   "/usr/libexec/getty std.9600"   vt220 on secure
+</PRE
+><P
+>&#13;        Después puede reiniciar el sistema o reiniciar
+        <TT
+CLASS="literal"
+>init</TT
+> con: <TT
+CLASS="literal"
+>kill -HUP 1</TT
+>.
+      </P
+><P
+>&#13;        En la línea modificada a <TT
+CLASS="literal"
+>/etc/ttys</TT
+>,
+        <TT
+CLASS="literal"
+>tty00</TT
+> se refiere a
+        <TT
+CLASS="literal"
+>/dev/tty00</TT
+> (i.e el dispositivo del primer
+        puerto serial); <TT
+CLASS="literal"
+>/usr/libexec/getty std.9600</TT
+>
+        es el comando por ejecutar al arranque para manejar ese
+        dispositivo<A
+NAME="AEN288"
+HREF="#FTN.AEN288"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>; <TT
+CLASS="literal"
+>vt220</TT
+> indica el tipo de terminal
+        que se conectará; <TT
+CLASS="literal"
+>on</TT
+> y
+        <TT
+CLASS="literal"
+>secure</TT
+> son banderas<A
+NAME="AEN296"
+HREF="#FTN.AEN296"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+> para <TT
+CLASS="literal"
+>init</TT
+>, el primero indica que
+        se esperan conexiones por esa línea tty y el segundo indica que
+        puede iniciar conexiones el usuario root.
+      </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="Terminal"
+>Terminal</A
+></H3
+><P
+>&#13;        Una vez conectado su módem nulo a un servidor OpenBSD ya
+        configurado para recibir conexiones por el puerto serial, puede
+        conectar una terminal.
+      </P
+><P
+>&#13;        Si la terminal cuenta con un sistema operativo, puede emplear un
+        programa de comunicaciones. Con este debe poder ver los mensajes
+        de login del servidor. Desde ahí puede entrar como un usuario de
+        ese sistema y trabajar como en una de las consolas virtuales
+        (sin ambiente X).
+      </P
+><P
+>&#13;        Si el computador que va a conectar es un sistema OpenBSD puede
+        emplear el programa <TT
+CLASS="literal"
+>tip</TT
+> como usuario root:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    tip tty0 
+</PRE
+><P
+>&#13;        Es posible que tenga que intentar varias veces, si configura el
+        servidor con una velocidad diferente puede especificarla por
+        ejemplo con <TT
+CLASS="literal"
+>tip -38400 tty0</TT
+>
+      </P
+><P
+>&#13;        <TT
+CLASS="literal"
+>tip</TT
+> empleará la descripción de
+        <TT
+CLASS="literal"
+>tty0</TT
+> disponible en
+        <TT
+CLASS="literal"
+>/etc/remote</TT
+> (que por defecto está configurado
+        para representar el primer puerto serial). Le permitirá ver la
+        información que el servidor envíe, enviar información al
+        servidor y hacer algunas operaciones especiales comenzando con
+        el carácter '~'. Por ejemplo terminar la sesión con '~.', enviar
+        un archivo con '~p' o recibir un archivo con '~g'.
+      </P
+><P
+>&#13;        Dado que puede haber inconvenientes enviando o recibiendo
+        archivos de 8 bits, los archivos (especialmente binarios) que
+        envíe o reciba con <TT
+CLASS="literal"
+>tip</TT
+> debe codificarlos
+        antes con <TT
+CLASS="literal"
+>uuencode</TT
+> y decodificarlos después
+        de transmitidos con <TT
+CLASS="literal"
+>uudecode</TT
+>. Para codificar
+        un archivo <TT
+CLASS="literal"
+>prog.tgz</TT
+> y dejarlo codificado en
+        <TT
+CLASS="literal"
+>prog.tgz.uue</TT
+>:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    uuencode prog.tgz &#60; prog.tgz &#62; prog.tgz.uue
+</PRE
+><P
+>&#13;        posteriormente para decodificarlo:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    uudecode prog.tgz.uue
+</PRE
+><P
+>&#13;        El inconveniente del método descrito es que
+        <TT
+CLASS="literal"
+>tip</TT
+> no verifica la información transmitida.
+        Una alternativa es emplear un protocolo como Zmodem. Para eso
+        instale tanto en cliente como en servidor el paquete
+        <TT
+CLASS="literal"
+>zmtx-zmrx</TT
+> (o <TT
+CLASS="literal"
+>lrzsz</TT
+>).
+        Cuando desee transmitir un archivo del servidor al cliente,
+        inicie la transmisión en el servidor:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    zmtx Mattich2.pdf
+</PRE
+><P
+>&#13;        y en el cliente desde <TT
+CLASS="literal"
+>tip</TT
+> use
+        <TT
+CLASS="literal"
+>~C zmrx</TT
+>. Para enviar un archivo del cliente
+        al servidor ejecute en el servidor: <TT
+CLASS="literal"
+>zmrx</TT
+> y
+        después desde <TT
+CLASS="literal"
+>tip</TT
+> use:
+        <TT
+CLASS="literal"
+>~C zmtx miarchivo.txt</TT
+>
+      </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="ppp-sobre-modem-nulo"
+>PPP sobre Módem Nulo</A
+></H3
+><P
+>&#13;        Una vez esté conectado un cliente con un servidor OpenBSD, es
+        posible emplear el protocolo PPP<A
+NAME="AEN336"
+HREF="#FTN.AEN336"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+> para permitirle al computador cliente acceder a
+        Internet o a la red a la que esté conectado el servidor.
+      </P
+><P
+>&#13;        Una forma posible para lograr conectividad a Internet en una
+        Intranet es asignando una dirección estática de la red al
+        cliente y empleando el servidor para que actúe como proxy a
+        nivel ARP.
+      </P
+><P
+>&#13;        En el servidor asegúrese de tener en el archivo
+        <TT
+CLASS="literal"
+>/etc/ppp/ppp.conf</TT
+>:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    default:
+      set log Phase Chat LCP IPCP CCP tun command
+      set device /dev/cua00
+      set speed 115200
+      set ctsrts on
+      set dial ""
+    
+    modemnulo:
+      set timeout 0
+      set lqrperiod 10
+      enable proxy
+      enable lqr
+      accept lqr
+      allow users SuLogin
+</PRE
+><P
+>&#13;        Remplazando <TT
+CLASS="literal"
+>SuLogin</TT
+>,
+        <TT
+CLASS="literal"
+>SuClave</TT
+> y las direcciones de red por las
+        apropiadas. Por su parte el archivo
+        <TT
+CLASS="literal"
+>/etc/ppp/ppp.conf</TT
+> del cliente debe contener:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    default:
+     set log Phase Chat LCP IPCP CCP tun command
+     set device /dev/cua00
+     set speed 115200
+     set ctsrts on
+     set dial ""
+    
+    modemnulo:
+      set dial ""
+      set authkey SuClave
+      set login "TIMEOUT 3 ogin:-\\r-login: SuLogin word: \\P $ ppp\\s\\-direct\\smodemnulo\\r"
+      set lqrperiod 10
+      set timeout 0
+      set ifaddr 192.168.16.20 192.168.16.131
+      add default HISADDR
+      enable lqr
+      accept lqr
+      enable dns
+</PRE
+><P
+>&#13;        Después pude iniciar la comunicación desde el cliente con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ppp -ddial modemnulo
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-modem-nulo"
+>Referencias y lecturas recomendadas</A
+></H3
+><P
+>&#13;        Puede consultar más sobre la conexión física de un módem nulo en
+        <A
+HREF="a3004.htm"
+>CablesModemNulo</A
+>. Puede consultar
+        sobre comunicaciones seriales en FreeBSD (similar a OpenBSD) en
+        el capítulo "Serial Communications" de
+        <A
+HREF="a3004.htm"
+>FreeBSDHandbook</A
+> Para emplear un
+        sistema OpenBSD mínimo como consola de algunos eventos de un
+        servidor OpenBSD puede consultar
+        <A
+HREF="a3004.htm"
+>SerialOpenBSD</A
+>. La configuración
+        del servidor OpenBSD que le permite atender conexiones por el
+        puerto serial puede verse en las siguientes páginas man: init 8,
+        ttys 5 y getty 8. La configuración de un cliente OpenBSD para
+        funcionar como consola puede consultarse en: tip 1 y remote 5.
+        Para conocer más sobre PPP puede consultarse el
+        <A
+HREF="ftp://ftp.rfc-editor.org/in-notes/rfc1661.txt"
+TARGET="_top"
+>RFC
+        1661</A
+>, la implementación particular de el protocolo de
+        usuario en OpenBSD en la página del manual. El archivo de
+        configuración por defecto también cuenta con comentarios que
+        ayudan.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="modem-isdn"
+>Conexión a Internet con un módem o módem ISDN</A
+></H2
+><P
+>&#13;      Es posible conectar un sistema OpenBSD a Internet empleando un
+      módem o un módem ISDN. Para esto el módem que se emplea debe estar
+      soportado y debe configurarse <TT
+CLASS="literal"
+>ppp</TT
+> para realizar
+      la conexión.
+    </P
+><P
+>&#13;      Hay diversos tipos de módems (tarjetas ISA, PCI, módems externos
+      USB o seriales), los módems externos que se conectan a puerto
+      serial son los más fáciles de configurar, algunos módems USB
+      también son soportados (los que tengan comandos y datos
+      multiplexados --como indica la página del manual del controlador
+      <TT
+CLASS="literal"
+>umodem</TT
+>) y eventualmente es posible hacer
+      funcionar tarjetas ISDN ISA o PCI
+      (<A
+HREF="http://people.freebsd.org/~hm/i4b-home/"
+TARGET="_top"
+>http://people.freebsd.org/~hm/i4b-home/</A
+>).
+    </P
+><P
+>&#13;      Los módems y los módems ISDN reciben comandos AT y se configuran
+      empleando <TT
+CLASS="literal"
+>ppp</TT
+>. Por ejemplo el archivo
+      <TT
+CLASS="literal"
+>/etc/ppp/ppp.conf</TT
+> podría incluir porciones como
+      las siguientes (remplazando el número de teléfono, el nombre de la
+      cuenta y la clave por los correctos):
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    default:
+      set log Phase Chat LCP IPCP CCP tun command
+      set device /dev/cua01
+      set speed 115200
+      set dial "ABORT BUSY ABORT NO\\sCARRIER TIMEOUT 5 \"\" AT \
+        OK-AT-OK ATE1Q0 OK \\dATDT\\T TIMEOUT 40 CONNECT"
+    
+    
+    PAP:
+     set phone 019478909891 
+     set authname micuenta@miproveedor.com
+     set authkey laclaveusada
+     set timeout 120
+     add default HISADDR
+     enable dns
+</PRE
+><P
+>&#13;      Para conectarse ejecute
+      <TT
+CLASS="literal"
+>/usr/sbin/ppp -ddial PAP</TT
+> desde una cuenta que
+      pertenezca al grupo <TT
+CLASS="literal"
+>network</TT
+>. Cuando se
+      establezca la conexión quedará asociada una dirección IP a una
+      interfaz <TT
+CLASS="literal"
+>tun</TT
+> (e.g a <TT
+CLASS="literal"
+>tun0</TT
+>).
+      Puede también emplear el siguiente script para realizar la
+      conexión:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    #!/bin/sh
+    # Dominio público. 2004.
+    
+    # Usa configuracion de /etc/ppp/ppp.conf regla PAP
+    
+    netw=`groups | sed -e "s/.*network.*/1/g"`;
+    if (test "$netw" != "1") then {
+        echo "Para usar PPP debe ser del grupo network";
+        exit 1;
+    } fi;
+    
+    IP=`/sbin/ifconfig tun0 | tail -n 1 | sed -e "s/.*inet \([.0-9]*\) .*/\1/g"`;
+    esta=`echo $IP | sed -e "s/^[0-9][.0-9]*$/SI/g"`
+    if (test "$esta" = "SI") then {
+        echo "Ya está conectado, IP es $IP";
+        exit 0;
+    } fi;
+    /usr/sbin/ppp -ddial PAP
+    while (test "$esta" != "SI") ; do
+        sleep 1;
+        IP=`/sbin/ifconfig tun0 | tail -n 1 | sed -e "s/.*inet \([.0-9]*\) .*/\1/g"`;
+        esta=`echo $IP | sed -e "s/^[0-9][.0-9]*$/SI/g"`
+    done
+    
+    echo "Conectado. La IP es $IP";
+</PRE
+><P
+>&#13;      Y el siguiente que facilita la desconexión:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    pid=`ps ax | grep "[p]pp" | sed -e "s/^[ ]*\([0-9]*\) .*$/\1/g"`;
+    espid=`echo $pid | sed -e "s/^[0-9][0-9]*$/SI/g"`;
+    if (test "$espid" != "SI") then {
+      echo "No está conectado";
+      exit 1;
+    } fi;
+    kill -HUP $pid
+    echo "Desconectado";
+</PRE
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="adsl-pppoe"
+>Conexión a Internet ADSL con pppoe</A
+></H2
+><P
+>&#13;      En Colombia los proveedores de acceso a Internet en planes de
+      Banda Ancha típicamente emplean dispositivos y configuraciones que
+      permiten conectar un computador como si fuera un equipo más en una
+      red Ethernet. En tal caso basta conocer la IP que tendrá el
+      computador (o si se usará dhcp), la mascara de red y la dirección
+      de la puerta de enlace, y configurar como se explica en la sección
+      de redes LAN Ethernet (ver
+      <A
+HREF="x233.htm#lan-ethernet"
+>la sección de nombre <I
+>Uso y configuración en una red LAN Ethernet</I
+></A
+>.
+    </P
+><P
+>&#13;      Puede ocurrir que su proveedor emplee un módem que requiera el
+      protocolo <TT
+CLASS="literal"
+>pppoe</TT
+> (e.g con un Módems Marconi). En
+      tal caso el proveedor puede brindar dos opciones para la
+      configuración del módem:
+    </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;          Enrutador (router): Se conecta a un HUB o a un computador y
+          hace NAT para todos los computadores cliente conectados. En la
+          LAN basta configurar la IP de cada equipo para que estén en la
+          misma subred del enrutador y que cada uno emplee como
+          compuerta/pasarela al módem.
+        </P
+></LI
+><LI
+><P
+>&#13;          Puente (bridge): En esta configuración se requiere un servidor
+          que haga NAT y enrute.
+        </P
+></LI
+></UL
+><P
+>&#13;      Si el módem ADSL se conecta con un cable Ethernet y el proveedor
+      ofrece ppp, no debe configurarse la tarjeta de red, sino una
+      interfaz nueva tun0 Por esto en el archivo de configuración de la
+      tarjeta digamos <TT
+CLASS="literal"
+>/etc/hostname.rl0</TT
+> (reemplazar
+      <TT
+CLASS="literal"
+>rl0</TT
+> con interfaz en su caso, examinar posibles
+      interfaces con <TT
+CLASS="literal"
+>ifconfig</TT
+>) deje:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    up
+    
+</PRE
+><P
+>&#13;      Edite <TT
+CLASS="literal"
+>/etc/ppp/ppp.conf</TT
+> (si no existe cópielo
+      de <TT
+CLASS="literal"
+>/etc/ppp/ppp.conf.smaple</TT
+>), para que quede
+      una sección como la siguiente:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    pppoe:
+     set log Phase Chat LCP IPCP CCP tun command
+     set redial 15 0
+     set reconnect 15 10000
+     set device "!/usr/sbin/pppoe -i rl0"
+     set mtu max 1492
+     set mru max 1492
+     set speed sync
+     disable acfcomp protocomp
+     deny acfcomp
+     enable lqr
+     set lqrperiod 5
+     set cd 5
+     set dial
+     set login
+     set timeout 0
+     set authname "usuario"
+     set authkey "miclave"
+     add! default HISADDR
+     enable mssfixup
+    
+</PRE
+><P
+>&#13;      Cambiando la interfaz de red, el usuario y la clave. Podrá probar
+      la conexión con:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    ppp -ddial -nat pppoe
+    
+</PRE
+><P
+>&#13;      Si desea que en cada arranque se conecte automáticamente, tal como
+      se explica en
+      <A
+HREF="http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html"
+TARGET="_top"
+>http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html</A
+>
+      agregue a <TT
+CLASS="literal"
+>/etc/rc.local</TT
+>:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
+    if [ -z "$IPADSL" ]; then
+        echo -n "Estableciendo conexion PPPoE DSL"; ppp -ddial pppoe
+        for i in 10 9 8 7 6 5 4 3 2 1 0; do 
+            sleep 5             
+            echo -n "$i"        
+            IPADSL=$(netstat -rn | grep tun0 | grep ^[0-9] | awk '{print$2}')
+            if [ -z "$IPADSL" ]; then
+                    break
+            fi                  
+        done     
+    fi
+</PRE
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-pppoe"
+>Referencias y lecturas recomendadas</A
+></H3
+><P
+>&#13;        Página del manual <TT
+CLASS="literal"
+>pppoe</TT
+>.
+      </P
+><P
+>&#13;        http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="lan-ethernet"
+>Uso y configuración en una red LAN Ethernet</A
+></H2
+><P
+>&#13;      La red local (LAN) Ethernet más simple puede conformarse con 2
+      computadores cada uno con tarjeta ethernet interconectados por un
+      cable UTP cruzado. Sin embargo típicamente una red ethernet consta
+      de varios computadores con tarjetas Ethernet interconectados por
+      uno o más<A
+NAME="AEN409"
+HREF="#FTN.AEN409"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+> concentradores (también llamado
+      <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>hub</I
+></SPAN
+> o <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>switch</I
+></SPAN
+>) y cables
+      UTP directos de cada computador a algún concentrador. La velocidad
+      de la red depende de la velocidad de las tarjetas de red, la
+      velocidad de los concentradores y la categoria de los cables. Esta
+      velocidad se mide en Megabits (millones de bits por segundo), y
+      sus valores típicos son 10Mb, 100Mb, 1000Mb o 1Gb y recientemente
+      10Gb.
+    </P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="tarjetas-ethernet"
+>Tarjetas Ethernet</A
+></H3
+><P
+>&#13;        La inmensa mayoría de tarjetas Ethernet de 10MB, 100MB y 1000MB,
+        así como algunas de 10G son soportadas por OpenBSD, la lista
+        completa la puede consultar en:
+        <A
+HREF="http://www.openbsd.org/amd64.html"
+TARGET="_top"
+>http://www.openbsd.org/amd64.html</A
+>. Por su
+        parte las tarjetas populares que hemos identificado como no
+        soportadas son: Encore ENL832-TX-RENT, Encore ENL832-TX-EN.
+      </P
+><P
+>&#13;        En cada computador, cada dispositivo de interconexión se asocia
+        a una interfaz de red cuando es detectado en el momento del
+        arranque (o por demanda como en el caso de
+        <TT
+CLASS="literal"
+>tun0</TT
+>). Estas interfaces se administran con
+        <TT
+CLASS="literal"
+>ifconfig</TT
+>, por ejemplo para listarlas todas
+        utilice:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ifconfig -a
+</PRE
+><P
+>&#13;        A continuación se presenta un ejemplo de la salida de este
+        comando:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    lo0: flags=8049&#60;UP,LOOPBACK,RUNNING,MULTICAST&#62; mtu 33160
+        priority: 0
+        groups: lo
+        inet 127.0.0.1 netmask 0xff000000
+        inet6 ::1 prefixlen 128
+        inet6 fe80::1%lo0 prefixlen 64 scopeid 0x6
+    re0: flags=8843&#60;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&#62; mtu 1500
+        lladdr 00:14:d1:1a:cf:b2
+        priority: 0
+        groups: egress
+        media: Ethernet autoselect (100baseTX full-duplex,rxpause,txpause)
+        status: active
+        inet 189.148.51.41 netmask 0xffffff00 broadcast 189.148.51.255
+        inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
+    re1: flags=8843&#60;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&#62; mtu 1500
+        lladdr 00:14:d1:1a:ce:93
+        priority: 0
+        media: Ethernet autoselect (1000baseT full-duplex)
+        status: active
+        inet 192.168.2.1 netmask 0xffffff00 broadcast 192.168.2.255
+        inet6 fe80::214:d1ff:fe1a:ce93%re1 prefixlen 64 scopeid 0x2
+    re2: flags=8802&#60;BROADCAST,SIMPLEX,MULTICAST&#62; mtu 1500
+        lladdr 00:14:d1:1a:cf:af
+        priority: 0
+        media: Ethernet autoselect (10baseT half-duplex)
+        status: no carrier
+    vr0: flags=8843LGUP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&#62; mtu 1500
+        lladdr 00:19:db:82:8f:93
+        priority: 0
+        media: Ethernet autoselect (100baseTX full-duplex)
+        status: active
+        inet 192.168.1.1 netmask 0xffffff00 broadcast 192.168.1.255
+        inet6 fe80::219:dbff:fe82:8f93%vr0 prefixlen 64 scopeid 0x4
+    enc0: flags=0LG&#62; mtu 1536
+        priority: 0
+    pflog0: flags=141LGUP,RUNNING,PROMISC&#62; mtu 33160
+        priority: 0
+        groups: pflog
+</PRE
+><P
+>&#13;        Es como una tabla con 2 columnas, en la de la izquierda se lista
+        el nombre de la interfaz de red (en este ejemplo
+        <TT
+CLASS="literal"
+>lo0</TT
+>, <TT
+CLASS="literal"
+>re0</TT
+>,
+        <TT
+CLASS="literal"
+>re1</TT
+>, <TT
+CLASS="literal"
+>re2</TT
+>,
+        <TT
+CLASS="literal"
+>vr0</TT
+>, <TT
+CLASS="literal"
+>enc0</TT
+>,
+        <TT
+CLASS="literal"
+>pflog0</TT
+>), y a la derecha las características
+        de cada interfaz, por ejemplo las características de la interfaz
+        <TT
+CLASS="literal"
+>re0</TT
+> son:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    flags=8843&#60;UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST&#62; mtu 1500
+    lladdr 00:14:d1:1a:cf:b2
+    priority: 0
+    groups: egress
+    media: Ethernet autoselect (100baseTX full-duplex,rxpause,txpause)
+    status: active
+    inet 189.148.51.41 netmask 0xffffff00 broadcast 189.148.51.255
+    inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
+</PRE
+><P
+>&#13;        Algunas de las interfaces corresponden a tarjetas de red (en
+        este ejemplo <TT
+CLASS="literal"
+>re0</TT
+>, <TT
+CLASS="literal"
+>re1</TT
+>,
+        <TT
+CLASS="literal"
+>re2</TT
+> y <TT
+CLASS="literal"
+>vr0</TT
+>) mientras que
+        otras son virtuales, como <TT
+CLASS="literal"
+>lo0</TT
+> que representa
+        el mismo computador, <TT
+CLASS="literal"
+>enc0</TT
+> que sirve para
+        cifrados con IPSec y <TT
+CLASS="literal"
+>pflog0</TT
+> que permite
+        examinar en tiempo real actividad del cortafuegos
+        <TT
+CLASS="literal"
+>pf</TT
+>.
+      </P
+><P
+>&#13;        Con respecto a las propiedades de cada interfaz física,
+        resaltamos
+      </P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="literal"
+>status</TT
+></DT
+><DD
+><P
+>&#13;              Puede ser <TT
+CLASS="literal"
+>active</TT
+> para indicar que hay
+              cable conectado a la tarjeta en un extremo y el otro
+              extremo está conectado a algún concentrador (o a otro
+              computador si es cruzado). Note que en el ejemplo la
+              interfaz <TT
+CLASS="literal"
+>re2</TT
+> no está conectada.
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>lladdr</TT
+></DT
+><DD
+><P
+>&#13;              Con la dirección MAC de la tarjeta de red (un número único
+              para cada tarjeta fabricada).
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>inet</TT
+></DT
+><DD
+><P
+>&#13;              Propiedades IPv4, por ejemplo:
+            </P
+><PRE
+CLASS="programlisting"
+>&#13;    inet 189.148.51.41 netmask 0xffffff00 broadcast 189.148.51.255
+</PRE
+><P
+>&#13;              Indica que la IP es 189.148.51.41, con mascara de red
+              255.255.255.0 (en hexadecimal 255 es
+              <TT
+CLASS="literal"
+>ff</TT
+>), y dirección para envíos masivos
+              (broadcast) 189.148.51.255.
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>inet6</TT
+></DT
+><DD
+><P
+>&#13;              Propiedades IPv6, por ejemplo:
+            </P
+><PRE
+CLASS="programlisting"
+>&#13;    inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
+</PRE
+><P
+>&#13;              Indica que la dirección IPv6 es
+              <TT
+CLASS="literal"
+>fe80::214:d1ff:fe1a:cfb2</TT
+>
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>media</TT
+></DT
+><DD
+><P
+>&#13;              Que indica tipo de medio físico que está conectado o
+              configurado en esa interfaz. En el ejemplo presentado las
+              interfaces <TT
+CLASS="literal"
+>re0</TT
+> y <TT
+CLASS="literal"
+>vr0</TT
+>
+              están operando a 100Mb (Megabit), mientras que la interfaz
+              <TT
+CLASS="literal"
+>re1</TT
+> está operando a 1Gb (Gigabit).
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>flags</TT
+></DT
+><DD
+><P
+>&#13;              Que indica banderas que tiene activa la interfaz y la MTU
+              (Unidad de transferencia máxima). Note que
+              <TT
+CLASS="literal"
+>lo0</TT
+> es la única que tiene la bandera
+              <TT
+CLASS="literal"
+>LOOPBACK</TT
+> la cual indica que esa
+              interfaz es virtual y se refiere al mismo computador.
+            </P
+></DD
+></DL
+></DIV
+><P
+>&#13;        Los dispositivos reconocidos en el momento del arranque que se
+        asocian a interfaces de red, así como los que no logran
+        configurarse, pueden verse con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    dmesg | less
+</PRE
+><P
+>&#13;        Un ejemplo típico de una tarjeta Ethernet reconocida es:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    re0 at pci0 dev 8 function 0 "Realtek 8169" rev 0x10: RTL8169/8110SB (0x1000), apic 2 int 16 (irq 10), address 00:14:d1:1a:cf:b2
+</PRE
+><P
+>&#13;        Note que se lista el nombre de la interfaz (i.e
+        <TT
+CLASS="literal"
+>re0</TT
+>), los recursos de hardware que emplea y
+        la dirección MAC (i.e <TT
+CLASS="literal"
+>00:14:d1:1a:cf:b2</TT
+>).
+      </P
+><P
+>&#13;        OpenBSD incluye documentación completa para cada tipo de
+        dispositivo detectable (por ejemplo opciones); para el caso del
+        controlador del ejemplo anterior puede verse con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    man re
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="configuracion-interfaz"
+>Configuración de una interfaz de red</A
+></H3
+><P
+>&#13;        Debe configurar cada interfaz de red en un archivo con un nombre
+        de la forma <TT
+CLASS="literal"
+>/etc/hostname.interfaz</TT
+>. Por
+        ejemplo para el caso de la tarjeta con controlador
+        <TT
+CLASS="literal"
+>re</TT
+> e interfaz asignada por el kernel en el
+        arranque <TT
+CLASS="literal"
+>re0</TT
+>, seria
+        <TT
+CLASS="literal"
+>/etc/hostname.re0</TT
+>.
+      </P
+><P
+>&#13;        Como se explica en <TT
+CLASS="literal"
+>man hostname.if</TT
+> en el caso
+        de una red IPv4 con DHCP basta que ese archivo tenga la línea:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    dhcp
+</PRE
+><P
+>&#13;        Si el direccionamiento en la red local es estático, tal archivo
+        debe tener en una línea separados por un espacio los siguientes
+        datos (en este orden):
+      </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;            Familia de direcciones. Tìpicamente <TT
+CLASS="literal"
+>inet</TT
+>
+          </P
+></LI
+><LI
+><P
+>&#13;            IP (e.g <TT
+CLASS="literal"
+>189.148.51.41</TT
+>)
+          </P
+></LI
+><LI
+><P
+>&#13;            Mascara de red (e.g <TT
+CLASS="literal"
+>255.255.255.0</TT
+>)
+          </P
+></LI
+><LI
+><P
+>&#13;            Dirección de broadcast o la palabra <TT
+CLASS="literal"
+>NONE</TT
+>
+          </P
+></LI
+><LI
+><P
+>&#13;            Eventualmente opciones
+          </P
+></LI
+></UL
+><P
+>&#13;        La línea completa sería:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    inet 189.148.51.41 255.255.255.0 NONE
+</PRE
+><P
+>&#13;        Un archivo como estos lo puede crear y/o editar con cualquier
+        editor de texto (por ejemplo <TT
+CLASS="literal"
+>mg</TT
+> o
+        <TT
+CLASS="literal"
+>vim</TT
+>). Si tiene sesión de X-Window puede
+        emplear desde una terminal
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas touch /etc/hostname.re0; doas xfw /etc/hostname.re0
+</PRE
+><P
+>&#13;        Estas ediciones también las puede hacer en adJ con botón derecho
+        sobre el escritorio Dispositivos-&#62;Red-&#62;Configurar
+        Interfaces, que le permitirá editar cada uno de los archivos de
+        cada interfaz de red detectada por ifconfig (excepto lo0, enc0,
+        pflog0, tun).
+      </P
+><A
+NAME="AEN529"
+></A
+><BLOCKQUOTE
+CLASS="BLOCKQUOTE"
+><P
+>&#13;          <SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>Warning</B
+></SPAN
+>
+        </P
+><P
+>&#13;          Es importante que la línea del archivo
+          <TT
+CLASS="literal"
+>/etc/hostname.re0</TT
+> que configura sus
+          propiedades IPv4, termine con el caracter fin de línea, es
+          decir que en el editor con el que la edite termine la línea
+          con la tecla RETORNO.
+        </P
+></BLOCKQUOTE
+><P
+>&#13;        Y la IP de la compuerta de su red (ver
+        <A
+HREF="x735.htm#ipv4"
+>la sección de nombre <I
+>Introducción a TCP/IPv4</I
+></A
+>) se configura en
+        <TT
+CLASS="literal"
+>/etc/mygate</TT
+> que también debe editar con su
+        editor preferido y que también debe terminar con fin de línea.
+        Un ejemplo típico del contenido sería una línea con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    189.148.51.1
+</PRE
+><P
+>&#13;        Con adJ puede hacer botón derecho sobre el escritorio
+        Dispositivos-&#62;Red-&#62;Configurar Puerta de Enlace.
+      </P
+><P
+>&#13;        Después de hacer cambios a la configuración de red es posible
+        que pueda reiniciar el sistema de redes con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas sh /etc/netstart
+</PRE
+><P
+>&#13;        aunque en algunos casos es necesario reiniciar el computador.
+      </P
+><P
+>&#13;        Note que si ha cambiado una tarjeta de red es posible que antes
+        de reinicar debe reconfigurar el cortafuegos en el archivo
+        <TT
+CLASS="literal"
+>/etc/pf.conf</TT
+>
+      </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="protocolo-arp"
+>Protocolo ARP</A
+></H3
+><P
+>&#13;        La tabla del protocolo ARP asocia direcciones físicas de
+        tarjetas de red conectadas a su red con direcciones IP. Para
+        examinar tal tabla use:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    arp -a 
+</PRE
+><P
+>&#13;        es posible agregar entradas de manera permanente o eliminarlas
+        con las opciones <TT
+CLASS="literal"
+>-s</TT
+> y <TT
+CLASS="literal"
+>-d</TT
+>
+        respectivamente.
+      </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="cableado"
+>Cableado de una red local</A
+></H3
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="planeación"
+>Planeación</A
+></H4
+><P
+>&#13;          Necesitará un concentrador preferiblemente de 1Gb con
+          suficientes puertos para todos los computadores que tenga o
+          varios interconectados en cascada, cable UTP categoria 5e o 6
+          con conectores RJ-45 y en cada computador deberá tener una
+          tarjeta Ethernet (preferiblemente de 1GB) con un puerto para
+          un conector RJ-45 (ver
+          <A
+HREF="x233.htm#configuracion-interfaz"
+>Configuración de una
+          interfaz de red</A
+>).
+        </P
+><P
+>&#13;          El espacio físico en el que esté la red será la primera
+          restricción que debe tener en cuenta. Haga un plano de ese
+          espacio con las distancias a escala, ubique los computadores y
+          diseñe el recorrido de los cables al concentrador. Hay varias
+          recomendaciones que puede tener en cuenta al diseñar el mapa:
+        </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;              Es aconsejable por estética y seguridad que los cables
+              vayan por canaletas.
+            </P
+></LI
+><LI
+><P
+>&#13;              La longitud máxima de cada cable (para unir concentrador y
+              computador) es de 100 m.
+            </P
+><P
+>&#13;              100 Longitud máxima de un cable entre un computador y un
+              concentrador en una red Ethernet.
+            </P
+></LI
+><LI
+><P
+>&#13;              Busque que los cables/canaletas vayan por las paredes del
+              recinto y estén resguardadas (para evitar que alguien se
+              tropiece).
+            </P
+></LI
+></UL
+><P
+>&#13;          En el mapa que haga también puede consignar las direcciones IP
+          que planee usar en cada computador. Emplee direcciones
+          asignadas para redes privadas, por ejemplo 192.168.1.1 al
+          servidor y los clientes 192.168.1.2, 192.168.1.3 y así
+          sucesivamente. Cómo compuerta emplee en todos los clientes la
+          dirección del servidor y como máscara de red emplee
+          <TT
+CLASS="literal"
+>255.255.255.0</TT
+> (ver
+          <A
+HREF="x735.htm#ipv4"
+>la sección de nombre <I
+>Introducción a TCP/IPv4</I
+></A
+> ).
+        </P
+></DIV
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="adquisicion-de-hardware"
+>Adquisición de Hardware</A
+></H4
+><P
+>&#13;          Para hacer la adquisición de Hardware tenga en cuenta:
+        </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;              Los nombres de los componentes pueden variar de un almacén
+              a otro, algunos sinónimos son:
+            </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;                  tarjeta ethernet, tarjeta con conectores RJ45
+                </P
+></LI
+><LI
+><P
+>&#13;                  concentrador o <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>hub</I
+></SPAN
+> o
+                  <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>switch</I
+></SPAN
+> repetidor
+                </P
+></LI
+><LI
+><P
+>&#13;                  cable de pares trenzados, par trenzado, twisted pair,
+                  cable Ethernet, UTP (<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>Unshielded Twisted
+                  Pair</I
+></SPAN
+>).
+                </P
+></LI
+></UL
+></LI
+><LI
+><P
+>&#13;              Use el plano de red para determinar la longitud de cada
+              cable, recuerde que todo computador debe tener un cable
+              que lo una con el concentrador (compre un poco más de la
+              longitud que midió pues al intentar ensamblar los
+              conectores podría perder algo de cable en cada intento).
+            </P
+></LI
+><LI
+><P
+>&#13;              El concentrador debe tener suficientes puertos para todos
+              los computadores (pueden ponerse varios concentradores en
+              cascada).
+            </P
+></LI
+><LI
+><P
+>&#13;              Cada computador debe tener una tarjeta de red Ethernet
+              preferiblemente 1Gb que pueda usar desde OpenBSD (ver
+              <A
+HREF="x233.htm#configuracion-interfaz"
+>Configuración de
+              una interfaz de red</A
+>) ---recordar que las más
+              incompatibles son las populares Encore.
+            </P
+></LI
+><LI
+><P
+>&#13;              Cada cable debe tener dos conectores RJ-45. Uno para
+              conectarlo al computador y el otro para conectarlo al
+              concentrador. (Compre varios conectores RJ-45 adicionales
+              pues al intentar ensamblar podría perder algunos).
+            </P
+><P
+>&#13;              RJ45 Este es el tipo de conectores que debe ir en cada
+              extremo de un cable UTP en una red Ethernet como la que
+              sugerimos.
+            </P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="instalacion-de-cables-y-concentrador"
+>Instalación</A
+></H4
+><P
+>&#13;          Una vez tenga instaladas las tarjetas de red debe conectar los
+          cables a tales tarjetas y al concentrador. Como eventualmente
+          usted mismo hará los cables, en esta sección damos
+          instrucciones para que le resulte fácil el proceso. Requerirá
+          unas pinzas especiales <A
+NAME="AEN598"
+HREF="#FTN.AEN598"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+> para conectores RJ-45 y un probador
+          (<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>tester</I
+></SPAN
+>) para comprobar que fluye
+          corriente en los cables que haga.
+        </P
+><P
+>&#13;          Ubique en el espacio para la red los computadores y los cables
+          (verifique que las medidas de su plano hayan sido correctas).
+        </P
+><P
+>&#13;          Ponga en cada extremo de cada uno de los cables un conector
+          RJ-45 empleando unas pinzas especiales. Como el cable UTP se
+          compone de 8 cablecitos de colores tenga en cuenta:
+        </P
+><P
+>&#13;          Deje entre 8mm y 12 mm de los 8 cables al descubierto.
+          <A
+NAME="AEN604"
+HREF="#FTN.AEN604"
+><SPAN
+CLASS="footnote"
+>[6]</SPAN
+></A
+>
+        </P
+><P
+>&#13;          Al preparar los cables tenga en cuenta que las tarjetas de
+          100MB y 1000MB requieren un orden especial de los cables que
+          conforman un UTP 5, UTP 5e o UTP 6, si no aplica este orden,
+          con algunos cables de varios metros puede tener problemas de
+          comunicación (ni siquiera podrá resolver ARP). En redes de
+          10MB y 100MB puede usar cualquier de estos tipos de cables,
+          pero para redes de 1000MB debe usar UTP 5e o UTP 6. Hay dos
+          secuencias estandarizadas para los cables que conforman un UTP
+          5/5e/6, de las cuales la más común es la TIA/EIA-568-B:
+        </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;              Para cables directos (que unen por ejemplo un computador a
+              un concentrador), los dos extremos del cable se ponen en
+              el conector RJ-45 siguiendo la misma secuencia: 1 -
+              blanco/naranja, 2 - naranja, 3 - blanco/verde, 4 - azul, 5
+              - blanco/azul, 6 - verde, 7 - blanco/cafe, 8 - cafe
+            </P
+></LI
+><LI
+><P
+>&#13;              Para un cable cruzado (que permite unir dos computadores o
+              en algunos casos 2 concentradores): Lado 1: 1 -
+              blanco/naranja, 2 - naranja, 3 - blanco/verde, 4 - azul, 5
+              - blanco/azul, 6 - verde, 7 - blanco/cafe, 8 - cafe. Lado
+              2: 1 - blanco/verde, 2 - verde , 3 - blanco/naranja, 4 -
+              blanco/cafe, 5 - cafe, 6 - naranja, 7 - azul, 8 -
+              blanco/azul.
+            </P
+></LI
+></UL
+><P
+>&#13;          Empareje los 8 cablecitos antes de intentar ponerlos en el
+          conector RJ-45. Pongalos en el orden antes indicado para
+          cables directos.
+        </P
+><P
+>&#13;          El conector RJ45 tiene varios canales, por cada uno de esos
+          canales debe pasar un cablecito de color. Empuje bien los
+          cablecitos hasta el fondo del conector RJ-45 y con las pinzas
+          especiales baje los contactos del conector y asegure el cable.
+        </P
+><P
+>&#13;          Después de ensamblar el primer extremo verifique con un
+          probador que todos los cablecitos hagan contacto. Después
+          ensamble el segundo extremo empleando la misma secuencia de
+          colores y después verifique que estén haciendo buen contacto
+          con un probador.
+        </P
+><P
+>&#13;          Una vez tenga los cables verifique que la tarjeta de red de
+          cada computador esté bien instalada (algunas tienen luces
+          <A
+NAME="AEN616"
+HREF="#FTN.AEN616"
+><SPAN
+CLASS="footnote"
+>[7]</SPAN
+></A
+> que se encienden cuando transmite o recibe
+          información por el cable), y conecte con cables todas las
+          tarjetas al concentrador.
+        </P
+><P
+>&#13;          Verifique también que cada tarjeta de red sea reconocida por
+          el kernel y asigne la IP que planeó para cada una (ver
+          <A
+HREF="x233.htm#configuracion-interfaz"
+>Configuración de una
+          interfaz de red</A
+>).
+        </P
+><P
+>&#13;          Finalmente verifique la instalación transmitiendo paquetes de
+          un computador a otro. Por ejemplo desde el servidor (tal vez
+          con IP 192.168.1.1) intente conectarse a un cliente (tal vez
+          IP 192.168.1.2) con <TT
+CLASS="literal"
+>ping</TT
+> :
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    ping 192.168.1.2    
+</PRE
+><P
+>&#13;          y viceversa.
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-lan"
+>Referencias</A
+></H3
+><P
+></P
+><UL
+><LI
+><P
+>&#13;            FAQ de OpenBSD Sección 6.
+          </P
+></LI
+><LI
+><P
+>&#13;            Páginas <TT
+CLASS="literal"
+>man</TT
+> de <TT
+CLASS="literal"
+>arp</TT
+>,
+            <TT
+CLASS="literal"
+>route</TT
+>, <TT
+CLASS="literal"
+>ifconfig</TT
+>,
+            <TT
+CLASS="literal"
+>hostname.if</TT
+>
+          </P
+></LI
+><LI
+><P
+>&#13;            Sobre cables Ethernet puede consultarse en
+            <A
+HREF="a3004.htm"
+>ethernet_cables</A
+>
+          </P
+></LI
+></UL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="red-inalambrica"
+>Red Local Inalámbrica: uso y configuración</A
+></H2
+><P
+>&#13;      Las redes inalámbrica emplean ondas electromagnéticas transmitidas
+      por aire, por lo que no se requieren cables, aunque el rango de
+      alcance es limitado por el tipo de antenas que se empleen y los
+      obstáculos (sin antenas especiales piense en menos de 50 metros
+      con línea de vista y menos cuando hay paredes y otros obstáculos).
+    </P
+><P
+>&#13;      Para redes locales los protocolos más utilizados son IEEE 802.11a,
+      802.11b y 802.11g, que emplean rangos del espectro
+      electromagnético (como 2.4GHz) los cuales pueden usarse sin
+      requerir permiso en Colombia y dan tasas de transferencia entre
+      11Mbps y 54Mbps.
+    </P
+><P
+>&#13;      Una red local inalámbrica requiere un Punto de Acceso Inalámbrico
+      (en inglés <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>Acces Point</I
+></SPAN
+>) que atienda
+      peticiones y de respuestas a todos los computadores cliente que se
+      conecten. Tal Punto de Acceso Inalámbrico puede ser un dispositivo
+      dedicado o bien un computador con OpenBSD que cuente con una
+      tarjeta de inalámbrica que soporte el modo
+      <TT
+CLASS="literal"
+>hostap</TT
+>.
+    </P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="cliente-inalambrico"
+>OpenBSD como cliente en una red inalámbrica</A
+></H3
+><P
+>&#13;        Hay una amplia gama de tarjetas de red inalámbricas (tanto PCI,
+        como USB) con controladores para OpenBSD, sin embargo varias
+        tarjetas de red populares no son soportadas, por lo que antes de
+        comprar examine el listado de tarjetas soportadas en:
+        <A
+HREF="http://dhobsd.pasosdejesus.org/?id=CompatibilidadHardware"
+TARGET="_top"
+>http://dhobsd.pasosdejesus.org/?id=CompatibilidadHardware</A
+>.
+        Una vez conecte su tarjeta de red inalámbrica, búsque la
+        interfaz de red asociada con
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ifconfig
+</PRE
+><P
+>&#13;        o algunos detalles de lo que se ve del hardware con
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    dmess | less
+</PRE
+><P
+>&#13;        Por ejemplo una Intel PRO/Wireless se ve así:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    wpi0 at pci3 dev 0 function 0 "Intel PRO/Wireless 3945ABG" rev 0x02: irq 10, MoW1, address 00:1b:77:d6:52:ee
+</PRE
+><P
+>&#13;        y una D-Link USB típica se ve:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    rum0 at uhub0 port 5 "Ralink 802.11 bg WLAN" rev 2.00/0.01 addr 2
+    rum0: MAC/BBP RT2573 (rev 0x2573a), RF RT2528, address 00:1e:58:b0:db:68
+</PRE
+><P
+>&#13;        En algunos casos OpenBSD incluye el controlador completo de
+        fuentes abiertas para a la tarjeta (por ejemplo
+        <TT
+CLASS="literal"
+>rum0</TT
+>) pero en otros es necesario descargar
+        firmware adicional (por ejemplo <TT
+CLASS="literal"
+>wpi0</TT
+>). Vea la
+        página del controlador para encontrar detalles, por ejemplo en
+        el caso de <TT
+CLASS="literal"
+>wpi0</TT
+> al examinar
+        <TT
+CLASS="literal"
+>man wpi</TT
+> se ve que esta tarjeta requiere
+        firmware adicional que debe instalar con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas pkg_add http://damien.bergamini.free.fr/packages/openbsd/wpi-firmware-3.2.tgz
+</PRE
+><P
+>&#13;        Después de tener controlador completo puede buscar redes
+        inalámbricas cercanas con
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas ifconfig rum0 scan 
+</PRE
+><P
+>&#13;        remplazando <TT
+CLASS="literal"
+>rum0</TT
+> por la interfaz de su
+        tarjeta. Verá un listado de redes próximas con identificación,
+        calidad de la señal, velocidad y tipo de encripción.
+      </P
+><P
+>&#13;        Para conectarse a una red basta configurar la tarjeta con la
+        identificación, tipo de encripción y clave apropiadas y
+        posteriormente asignar una IP en la red inalámbrica, bien
+        manualmente o bien por DHCP si el Access Point lo soporta (como
+        ocurre típicamente). Para configurar a una red de nombre MIRED
+        que no emplea encripción:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas ifconfig rum0 nwid MIRED 
+</PRE
+><P
+>&#13;        Si la red emplea encripción WEP (un mecanismo de encripción
+        débil), puede especificar la llave de encripción en hexadecimal:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas ifconfig rum0 nwid MIRED nwkey 0x123498a2d2
+</PRE
+><P
+>&#13;        o en ASCII:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas ifconfig rum0 nwid MIRED nwkey "clave"
+</PRE
+><P
+>&#13;        Si la red emplea encripción WAP (un mecanismo de encripción más
+        fuerte):
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas ifconfig rum0 nwid MIRED wpakey MICLAVE
+</PRE
+><P
+>&#13;        Después puede examinar nuevamente con
+        <TT
+CLASS="literal"
+>ifconfig</TT
+> si ya se ve estado Activo en la
+        interfaz de red lo cual le confirma que logró conexión y
+        posteriormente puede establecer la IP bien manualmente si conoce
+        el segmente de red:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ifconfig rum0 192.168.1.15
+</PRE
+><P
+>&#13;        o bien automáticamente si el Acess Point soporta DHCP con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas dhclient rum0
+</PRE
+><P
+>&#13;        Tras esto al examinar con <TT
+CLASS="literal"
+>ifconfig</TT
+> se ve algo
+        como:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    rum0: flags=8c43&#60;UP,BROADCAST,RUNNING,OACTIVE,SIMPLEX,MULTICAST&#62; mtu 1500
+            lladdr 00:1e:58:b0:db:68
+            priority: 4
+            groups: wlan egress
+            media: IEEE802.11 autoselect (OFDM36 mode 11g)
+            status: active
+            ieee80211: nwid MIRED chan 1 bssid 00:02:6f:5f:f8:6a 117dB nwkey &#60;not displayed&#62; 100dBm
+            inet 192.168.44.50 netmask 0xffffff00 broadcast 192.168.44.255
+            inet6 fe80::21e:58ff:feb0:db68%rum0 prefixlen 64 scopeid 0x6
+</PRE
+><P
+>&#13;        Si requiere conectarse en cada arranque del computador configure
+        en <TT
+CLASS="literal"
+>hostname.rum0</TT
+> (cambiando rum0 por su
+        interfaz). Por ejemplo si tiene una IP fija con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    inet 192.168.44.50 255.255.255.0 NONE nwid "MIRED" nwkey "clave"
+</PRE
+><P
+>&#13;        o si requiere DHCP:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    dhcp NONE NONE NONE nwid "MIRED" nwkey "0x1112131415"
+</PRE
+><P
+>&#13;        o si es WPA con DHCP:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    dhcp nwid "MIRED" wpakey "clave"
+</PRE
+><P
+>&#13;        El tráfico de red inalámbrico puede examinarse con el paquete
+        <TT
+CLASS="literal"
+>kismet</TT
+>, el cual tiene un archivo de
+        configuración (<TT
+CLASS="literal"
+>/etc/kismet.conf</TT
+>) en el que
+        debe especificarse el controlador usado.
+      </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="dispositivo-AP"
+>Dispositivo dedicado que obra como Punto de Acceso
+      Inalámbrico</A
+></H3
+><P
+>&#13;        Estos dispositivo cuentan con una antena (típicamente pequeña)
+        para la red inalámbrica y un conector para cable Ethernet que se
+        conecta a la red cableada, la cual típicamente va a Internet.
+      </P
+><P
+>&#13;        Normalmente los dispositivos que obran como Punto de Acceso
+        Inalámbrico (Acces Point) cuentan con un servicio de
+        configuración que opera sobre HTTP por lo que pueden conectarse
+        a un computador y emplear un navegador web.
+      </P
+><P
+>&#13;        Para conectarlo a un computador basta que ponga un cable
+        Ethernet sin cruzar entre ambos y que ambos estén en el mismo
+        segmento de red con IPs diferentes. La IP inicial de su Punto de
+        Acceso Inalámbrico seguramente la podrá ver en el manual del
+        usuario (típicamente es 192.168.0.1 o 192.1681.1.1 con máscara
+        de red 255.255.255.0). Para determinar la IP de un Punto de
+        Accesos Inalámbrico también puede intentar conectándolo a un
+        computador y usando <TT
+CLASS="literal"
+>tcpdump</TT
+> para examinar el
+        tráfico que pasa por la interfaz de red a la cual conecte el
+        Punto de Acceso Inalámbrico.
+      </P
+><P
+>&#13;        Una vez determine la IP del Punto de Acceso Inalámbrico ponga el
+        computador con el que configurará en el mismo segmento de red.
+        Por ejemplo si el Access Point tiene IP 192.168.1.1 y lo conectó
+        a la interfaz <TT
+CLASS="literal"
+>rl0</TT
+>, configure esa interfaz de
+        red por ejemplo con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ifconfig rl0 192.168.1.2 
+</PRE
+><P
+>&#13;        tras lo cual ya debe poder ejecutar:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ping 192.168.1.1
+</PRE
+><P
+>&#13;        obtener respuesta del Punto de Acceso Inalámbrico y configurarlo
+        abriendo en un navegador el URL
+        <TT
+CLASS="literal"
+>http://192.168.1.1</TT
+>.
+      </P
+><P
+>&#13;        El Punto de Acceso Inalámbrico normalmente obrará como enrutador
+        y hará NAT a una nueva red que será independiente de la red
+        cableada a la cual lo conecte. Por ejemplo si lo conecta por
+        cable Ethernet a una red con IPs 192.168.190/24, podrá enrutar y
+        hacer NAT a otra red como la 192.168.1/24. Algunos Puntos de
+        Acceso Inalámbricos (como el EnGenius EOC 1650) soportan un modo
+        puente que permite distribuir con DHCP algunas direcciones de la
+        misma red cableada. Esto tiene la ventaja de dejar tanto la red
+        inalámbrica como la cableada en el mismo segmento de red.
+      </P
+><P
+>&#13;        Las particularidades de configuración de cada Punto de Accesso
+        Inalámbrico varían de un modelo a otro, pero normalmente debe
+        especificar:
+      </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;            IP, máscara de red, puerta de enlace y servidor DNS en la
+            red cableada.
+          </P
+></LI
+><LI
+><P
+>&#13;            IP, máscara de red y rango de direcciones por repartir en la
+            red inalámbrica.
+          </P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="PAI"
+>OpenBSD como Punto de Acceso Inalámbrico</A
+></H3
+><P
+>&#13;        Si cuenta con una tarjeta de red inalámbrica con controladores
+        para OpenBSD y que soporte el modo <TT
+CLASS="literal"
+>hostap</TT
+>
+        (como puede consultar en la página del manual del controlador)
+        es sencillo configurar un Punto de Acceso Inalámbrico,
+        continuando las instrucciones de la sección
+        <A
+HREF="x233.htm#cliente-inalambrico"
+>OpenBSD como cliente en una
+        red inalámbrica</A
+>.
+      </P
+><P
+>&#13;        Supongamos que su tarjeta esta asociada a la interfaz
+        <TT
+CLASS="literal"
+>ath0</TT
+>, que desea emplear el segmento
+        192.168.3/24, llamar a la red CASA con encripción WEP y clave
+        "uvwxy". Basta que en
+        <TT
+CLASS="literal"
+>/etc/hostname.ath0</TT
+> configure:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    inet 192.168.3.1 255.255.255.0 NONE media autoselect \
+    mediaopt hostap nwid CASA chan 11 nwkey "uvwxy"
+</PRE
+><P
+>&#13;        Tras esto desde los portatiles y computadores cercanos debe
+        poder ver la red CASA y conectarse con WEP y la clave uvwxy.
+      </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-wlan"
+>Referencias</A
+></H3
+><P
+></P
+><UL
+><LI
+><P
+>&#13;            Páginas <TT
+CLASS="literal"
+>man</TT
+> de
+            <TT
+CLASS="literal"
+>ifconfig</TT
+>, <TT
+CLASS="literal"
+>wpi</TT
+>
+          </P
+></LI
+><LI
+><P
+>&#13;            Ver <A
+HREF="a3004.htm"
+>wndw</A
+>
+          </P
+></LI
+></UL
+></DIV
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notas</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN288"
+HREF="x233.htm#AEN288"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>&#13;            Como parámetro getty recibe características de la línea que
+            deben estar especificadas en
+            <TT
+CLASS="literal"
+>/etc/gettytab</TT
+>. En este caso
+            <TT
+CLASS="literal"
+>std.9600</TT
+> especifica la velocidad de
+            transmisión. Empleando un módem nulo con control de flujo es
+            posible emplear velocidades mayores hasta
+            <TT
+CLASS="literal"
+>std.115200</TT
+>.
+          </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN296"
+HREF="x233.htm#AEN296"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>&#13;            banderas del inglés <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>flags</I
+></SPAN
+>
+          </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN336"
+HREF="x233.htm#AEN336"
+><SPAN
+CLASS="footnote"
+>[3]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>&#13;            PPP es un protocolo especificado en el RFC 1661.
+          </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN409"
+HREF="x233.htm#AEN409"
+><SPAN
+CLASS="footnote"
+>[4]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>&#13;          Pueden ponerse concentradores en cascada.
+        </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN598"
+HREF="x233.htm#AEN598"
+><SPAN
+CLASS="footnote"
+>[5]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>&#13;              En Colombia a tal "pinza especial" se le conoce
+              como "ponchadora".
+            </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN604"
+HREF="x233.htm#AEN604"
+><SPAN
+CLASS="footnote"
+>[6]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>&#13;              Pablo Chamorro nos indicó que "algunas pinzas tienen
+              un tope, entonces al colocar las puntas de los cables
+              junto al tope, el corte de la envoltura del cable siempre
+              se realiza en el mismo punto para que ni sobre ni falte y
+              así no hay que preocuparse por estimar el punto de
+              corte."
+            </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN616"
+HREF="x233.htm#AEN616"
+><SPAN
+CLASS="footnote"
+>[7]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>&#13;              Luces es traducción de <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>LED (Light emitting
+              diode)</I
+></SPAN
+>.
+            </P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x24.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="t1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x735.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Redes, protocolos e Internet</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Direcciones, enrutamiento, transporte y cortafuegos</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
