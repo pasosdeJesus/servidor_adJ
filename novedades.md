@@ -1,3 +1,6 @@
+Versión 6.1
+
+:   - Nueva sección  ([xref](#autoridad_certificadora))
 Versión 6.0
 
 :   -   Guía migrada a Markdown

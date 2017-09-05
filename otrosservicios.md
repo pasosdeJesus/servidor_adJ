@@ -407,8 +407,8 @@ Puede restablecer una copia con
 
 -   Páginas del manual de Unix: psql 1
 
-[^aut.1]: Note que de esta forma puede cambiar la clave de otros usuarios de
-    PostgreSQL.
+[^aut.1]: Note que de esta forma puede cambiar la clave de otros 
+    usuarios de PostgreSQL.
 
 
 ## MariaDB
@@ -598,7 +598,7 @@ Referencias:
     [](http://www.netadmintools.com/art90.html)
 
 
-## Servidor ldapd
+## Servidor ldapd {#ldapd}
 
 LDAP (Lightweight Directory Access Protocol) es un protocolo para
 mantener e intercambiar información almacenada en directorios (i.e bases
@@ -816,3 +816,167 @@ hace por defecto el instalador de adJ 5.5). Para esto verifique que en
 [^lda.1]: Si emplea un adJ 5.2 y planea conectarse desde clientes digamos en
     Ubuntu reciente requerirá el parche descrito en
     [](http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html)
+
+
+## Autoridad certificadora interna {#autoridad_certificadora}
+
+Los servicios en red (en particular ldapd, ver [xref](#ldapd)  y 
+postgresql remoto, ver [xref](#postgresql)) 
+requieren cada vez más comunicaciones cifradas y suelen emplear 
+SSL o TLS que requieren certificados públicos firmados por 
+autoridades certificadoras.  
+
+Cada vez los programas, librerías y lenguajes están verificando con más 
+insistencia que los certificados sean efectivamente firmados por 
+autoridades certificadoras.  
+
+En genral las autoridades certificadoras cobran por emitir firmas para 
+certificados.  Sin embargo <http://letsencrypt.org> es una autoridad 
+certificadora que expide certificados gratuitos para sitios públicos 
+pero no para sitios en redes internas por cuanto el proceso de 
+expedición de certificados 
+requiere resolver por DNS desde sus servidores el dominio para el cual 
+se está creando el certificado.  Además sus certificados son de 
+3 meses por cuanto deben renovarse cada 3 meses.  
+
+Esto hace necesario que cada organización que requiere servicios 
+cifrados con SSL o TLS en su red interna (como PostgreSQL remoto o 
+LDAP) cuente con su propia autoridad certificadora interna
+
+###  Conceptos
+
+Las operaciones con SSL dependen en cliente y en servidor de la 
+librería LibreSSL (en otros sistemas OpenSSL). Esta incluye el 
+programa openssl para hacer varias operaciones, incluyendo operaciones 
+de una autoridad certificadora.
+
+Un certificado SSL siempre se asocia a una llave privada (el 
+certificado es la llave pública).
+
+El proceso para crear un certificado es:
+
+1. Crear la llave privada para el certificado (extensión .key)
+2. Generar el certificado (llave pública) pero sin firma (extensión .csr)
+3. Firmar el certificado con una autoridad certificadora y generar el certificado
+4. Usar el certificado firmado junto con la llave privada para realizar conexiones (el certificado firmado se compartirá, mientras que la llave privada no)
+
+Los archivos intermedios pueden examinarse así:
+
+- Solicitudes: `openssl req -noout -text -in client.csr`
+- Llaves: `openssl rsa -check -in client.key`
+- Certificados: `openssl x509 -noout -text -in client.crt`
+
+La autoridad certificadora no es más que un certificado autofirmado 
+que se configura y se usa consistentemente como autoridad certificadora.
+
+### Configuración de servidor
+
+Supongamos que ubicamos en `/var/postgresql/data` los 
+archivos de la autoridad certificadora:
+
+- `root.crt` Autoridad certificadora (igual a server.crt)
+- `root.crl` Lista de revocación
+- `server.crt` Certificado del servidor
+- `server.key` Llave privada del servidor
+
+Se pueden generar así (como se explica en 
+<https://www.howtoforge.com/postgresql-ssl-certificates>):
+
+
+openssl genrsa -des3 -out server.key 1024
+openssl rsa -in server.key -out server.key
+chmod 400 server.key
+chown postgres.postgres server.key
+openssl req -new -key server.key -days 3650 -out server.crt -x509 -subj '/C=CA/ST=British Columbia/L=Comox/O=TheBrain.ca/CN=thebrain.ca/emailAddress=info@thebrain.ca'
+ 
+### Generación de un par de certificados
+
+LDAP requiere que el CN del certificado corresponda al nombre del 
+computador en la red interna.
+
+Los certificados para clientes de PostgreSQL requieren que el CN del 
+Certificado corresponda al usuario en la base de datos.
+
+En el computador que hará la conexión (en este ejemplo 
+`apbd2.miong.org.co`) ejecute:
+
+  mkdir ~/ssl
+  cd ~/ssl
+  openssl genrsa -des3 -out apbd2.miong.org.co.key 1024
+  openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
+
+De una clave temporal y borrela con
+
+  openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
+
+Cree la solicitud de certificado con:
+
+  openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=CINEP/CN=apbd2.miong.org.co'
+
+Copie la solicitud `apbd2.miong.org.co.csr` al servidor 
+apbd1.miong.org.co y dejela en el directorio `/var/postgresql/data`
+
+Y allí ejecute:
+
+  doas su - 
+  cd /var/postgresql/data
+  openssl x509 -req -days 3650 -in apbd2.miong.org.co.csr -CA root.crt -CAkey server.key -out apbd2.miong.org.co.crt -CAcreateserial
+
+A continuación copie el certificado generado 
+(`apbd2.miong.org.co.crt`)  al computador cliente donde se usará:
+
+  scp apbd2.miong.org.co.crt apbd2.miong.org.co:~/ssl/
+
+### Uso de los certificados
+
+#### Caso PostgreSQL
+
+En el servidor edite el archivo `/var/postgresql/data/pg_hba.conf` y 
+asegurese de agregar una línea para el usuario y el computador 
+cliente:
+  hostssl all usuario 192.168.100.11/32 cert clientcert=1
+
+Reinicie PostgreSQL.
+
+  doas sh /etc/rc.d/postgresql -d restart
+
+Desde el cliente ejecute:
+
+  doas chmod 0600 /home/usis/.postgresql/usuario.key
+
+y pruebe la conexión asegurando que se usa el certificado del usuario 
+respectivo:
+
+  PGSSLCERT=/home/usis/.postgresql/usuario.crt \
+  PGSSLKEY=/home/usis/.postgresql/usuario.key \
+  psql -h192.168.100.21 -Uusuario usuario
+
+Configure la aplicación para que en cada arranque o uso establezca:
+
+  PGSSLCERT=/home/usis/.postgresql/usuario.crt 
+  PGSSLKEY=/home/usis/.postgresql/usuario.key
+
+#### Caso LDAPD
+
+Ubique el ceritifcado y llave en `/etc/ldad/certs/` del servidor 
+donde corre ldapd:
+
+  doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
+
+Configure `/etc/ldapd.conf`
+
+  listen on $if1 tls certificate apbd2.miong.org.co
+
+En los computadores que realicen conexiones al LDAP asegurese de 
+agregar la llave de la entidad certificadora 
+`/var/postgresql/data/root.crt`, es decir en el servidor apbd1 ejecute:
+
+  cd /var/postgresql/data
+  openssl x509 -noout -text -in root.crt > root-paracerts
+
+Copie el archivo `root-paracerts` en el cliente y agregue ese archivo 
+al final de `/etc/ssl/cert.pem`
+
+### Referencias
+- https://www.howtoforge.com/postgresql-ssl-certificates
+
