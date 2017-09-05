@@ -14,7 +14,7 @@ TITLE="Protocolos de soporte y de usuario"
 HREF="x935.htm"><LINK
 REL="NEXT"
 TITLE="Novedades"
-HREF="a2803.htm"></HEAD
+HREF="a2806.htm"></HEAD
 ><BODY
 CLASS="sect1"
 BGCOLOR="#FFFFFF"
@@ -56,7 +56,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="a2803.htm"
+HREF="a2806.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
@@ -2110,8 +2110,8 @@ NAME="configuración-de-servidor"
         <TT
 CLASS="literal"
 >/var/postgresql/data</TT
-> los siguientes archivos
-        de la autoridad certificadora:
+> los archivos de la
+        autoridad certificadora:
       </P
 ><P
 ></P
@@ -2151,6 +2151,22 @@ CLASS="literal"
           </P
 ></LI
 ></UL
+><P
+>&#13;        Se pueden generar así (como se explica en
+        <A
+HREF="https://www.howtoforge.com/postgresql-ssl-certificates"
+TARGET="_top"
+>https://www.howtoforge.com/postgresql-ssl-certificates</A
+>):
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    openssl genrsa -des3 -out server.key 1024
+    openssl rsa -in server.key -out server.key
+    chmod 400 server.key
+    chown postgres.postgres server.key
+    openssl req -new -key server.key -days 3650 -out server.crt -x509 -subj '/C=CO/ST=Bogota/L=MiOng/O=MiOng/CN=miong.org.co/emailAddress=info@miong.org'
+</PRE
 ></DIV
 ><DIV
 CLASS="sect3"
@@ -2175,26 +2191,27 @@ CLASS="literal"
 >apbd2.miong.org.co</TT
 >) ejecute:
       </P
-><P
->&#13;        mkdir ~/ssl cd ~/ssl openssl genrsa -des3 -out
-        apbd2.miong.org.co.key 1024 openssl rsa -in
-        apbd2.miong.org.co.key -out apbd2.miong.org.co.key
-      </P
+><PRE
+CLASS="programlisting"
+>&#13;    mkdir ~/ssl
+    cd ~/ssl
+    openssl genrsa -des3 -out apbd2.miong.org.co.key 1024
+    openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
+</PRE
 ><P
 >&#13;        De una clave temporal y borrela con
       </P
-><P
->&#13;        openssl rsa -in apbd2.miong.org.co.key -out
-        apbd2.miong.org.co.key
-      </P
+><PRE
+CLASS="programlisting"
+>&#13;    openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
+</PRE
 ><P
 >&#13;        Cree la solicitud de certificado con:
       </P
-><P
->&#13;        openssl req -new -key apbd2.miong.org.co.key -out
-        apbd2.miong.org.co.csr -subj
-        '/C=CO/ST=Cundinamarca/L=Bogota/O=CINEP/CN=apbd2.miong.org.co'
-      </P
+><PRE
+CLASS="programlisting"
+>&#13;    openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=CINEP/CN=apbd2.miong.org.co'
+</PRE
 ><P
 >&#13;        Copie la solicitud <TT
 CLASS="literal"
@@ -2209,11 +2226,12 @@ CLASS="literal"
 ><P
 >&#13;        Y allí ejecute:
       </P
-><P
->&#13;        doas su - cd /var/postgresql/data openssl x509 -req -days 3650
-        -in apbd2.miong.org.co.csr -CA root.crt -CAkey server.key -out
-        apbd2.miong.org.co.crt -CAcreateserial
-      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas su - 
+    cd /var/postgresql/data
+    openssl x509 -req -days 3650 -in apbd2.miong.org.co.csr -CA root.crt -CAkey server.key -out apbd2.miong.org.co.crt -CAcreateserial
+</PRE
 ><P
 >&#13;        A continuación copie el certificado generado
         (<TT
@@ -2222,9 +2240,10 @@ CLASS="literal"
 >) al computador
         cliente donde se usará:
       </P
-><P
->&#13;        scp apbd2.miong.org.co.crt apbd2.miong.org.co:~/ssl/
-      </P
+><PRE
+CLASS="programlisting"
+>&#13;    scp apbd2.miong.org.co.crt apbd2.miong.org.co:~/ssl/
+</PRE
 ></DIV
 ><DIV
 CLASS="sect3"
@@ -2255,32 +2274,36 @@ CLASS="literal"
 ><P
 >&#13;          Reinicie PostgreSQL.
         </P
-><P
->&#13;          doas sh /etc/rc.d/postgresql -d restart
-        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas sh /etc/rc.d/postgresql -d restart
+</PRE
 ><P
 >&#13;          Desde el cliente ejecute:
         </P
-><P
->&#13;          doas chmod 0600 /home/usis/.postgresql/usuario.key
-        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas chmod 0600 /home/usis/.postgresql/usuario.key
+</PRE
 ><P
 >&#13;          y pruebe la conexión asegurando que se usa el certificado del
           usuario respectivo:
         </P
-><P
-CLASS="literallayout"
->PGSSLCERT=/home/usis/.postgresql/usuario.crt<br>
-PGSSLKEY=/home/usis/.postgresql/usuario.key<br>
-psql&nbsp;-h192.168.100.21&nbsp;-Uusuario&nbsp;usuario</P
+><PRE
+CLASS="programlisting"
+>&#13;    PGSSLCERT=/home/usis/.postgresql/usuario.crt \
+    PGSSLKEY=/home/usis/.postgresql/usuario.key \
+    psql -h192.168.100.21 -Uusuario usuario
+</PRE
 ><P
 >&#13;          Configure la aplicación para que en cada arranque o uso
           establezca:
         </P
-><P
->&#13;          PGSSLCERT=/home/usis/.postgresql/usuario.crt
-          PGSSLKEY=/home/usis/.postgresql/usuario.key
-        </P
+><PRE
+CLASS="programlisting"
+>&#13;    PGSSLCERT=/home/usis/.postgresql/usuario.crt 
+    PGSSLKEY=/home/usis/.postgresql/usuario.key
+</PRE
 ></DIV
 ><DIV
 CLASS="sect4"
@@ -2298,18 +2321,20 @@ CLASS="literal"
 > del servidor donde corre
           ldapd:
         </P
-><P
->&#13;          doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
-        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
+</PRE
 ><P
 >&#13;          Configure <TT
 CLASS="literal"
 >/etc/ldapd.conf</TT
 >
         </P
-><P
->&#13;          listen on $if1 tls certificate apbd2.miong.org.co
-        </P
+><PRE
+CLASS="programlisting"
+>&#13;    listen on $if1 tls certificate apbd2.miong.org.co
+</PRE
 ><P
 >&#13;          En los computadores que realicen conexiones al LDAP asegurese
           de agregar la llave de la entidad certificadora
@@ -2319,10 +2344,11 @@ CLASS="literal"
 >, es decir en
           el servidor apbd1 ejecute:
         </P
-><P
->&#13;          cd /var/postgresql/data openssl x509 -noout -text -in root.crt
-          &#62; root-paracerts
-        </P
+><PRE
+CLASS="programlisting"
+>&#13;    cd /var/postgresql/data
+    openssl x509 -noout -text -in root.crt &#62; root-paracerts
+</PRE
 ><P
 >&#13;          Copie el archivo <TT
 CLASS="literal"
@@ -2450,7 +2476,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="a2803.htm"
+HREF="a2806.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD

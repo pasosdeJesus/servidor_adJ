@@ -219,7 +219,7 @@
       </p><p>
         Otra posibilidad es cambiar la configuración después de haber
         inicializado sin autenticación. Para esto cambie la clave del
-        administrador con<sup>[<a name="idm764530256" href="#ftn.idm764530256">29</a>]</sup>:
+        administrador con<sup>[<a name="idm48511568" href="#ftn.idm48511568">29</a>]</sup>:
       </p><pre class="programlisting">
     psql -U postgres template1 
     template1=# alter user postgres with password 'MiClave';
@@ -626,7 +626,7 @@
       3, <code class="literal">ldapd</code>. No incluye cliente para LDAP pero
       desde la línea de comandos puede emplearse el paquete
       <code class="literal">openldap-client</code> o como interfaz web
-      <code class="literal">phpldapadmin</code><sup>[<a name="idm1209291728" href="#ftn.idm1209291728">30</a>]</sup>.
+      <code class="literal">phpldapadmin</code><sup>[<a name="idp604030768" href="#ftn.idp604030768">30</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-ldapd"></a>6.4.1. Instalación de ldapd</h4></div></div></div><p>
         No necesita instalar paquetes para la operación como servidor.
       </p><p>
@@ -895,8 +895,8 @@
         autoridad certificadora.
       </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="configuraci%C3%B3n-de-servidor"></a>6.5.2. Configuración de servidor</h4></div></div></div><p>
         Supongamos que ubicamos en
-        <code class="literal">/var/postgresql/data</code> los siguientes archivos
-        de la autoridad certificadora:
+        <code class="literal">/var/postgresql/data</code> los archivos de la
+        autoridad certificadora:
       </p><div class="itemizedlist"><ul type="disc" compact><li><p>
             <code class="literal">root.crt</code> Autoridad certificadora (igual a
             server.crt)
@@ -906,7 +906,16 @@
             <code class="literal">server.crt</code> Certificado del servidor
           </p></li><li><p>
             <code class="literal">server.key</code> Llave privada del servidor
-          </p></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="generaci%C3%B3n-de-un-par-de-certificados"></a>6.5.3. Generación de un par de certificados</h4></div></div></div><p>
+          </p></li></ul></div><p>
+        Se pueden generar así (como se explica en
+        <a href="https://www.howtoforge.com/postgresql-ssl-certificates" target="_top">https://www.howtoforge.com/postgresql-ssl-certificates</a>):
+      </p><pre class="programlisting">
+    openssl genrsa -des3 -out server.key 1024
+    openssl rsa -in server.key -out server.key
+    chmod 400 server.key
+    chown postgres.postgres server.key
+    openssl req -new -key server.key -days 3650 -out server.crt -x509 -subj '/C=CO/ST=Bogota/L=MiOng/O=MiOng/CN=miong.org.co/emailAddress=info@miong.org'
+</pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="generaci%C3%B3n-de-un-par-de-certificados"></a>6.5.3. Generación de un par de certificados</h4></div></div></div><p>
         LDAP requiere que el CN del certificado corresponda al nombre
         del computador en la red interna.
       </p><p>
@@ -915,38 +924,36 @@
       </p><p>
         En el computador que hará la conexión (en este ejemplo
         <code class="literal">apbd2.miong.org.co</code>) ejecute:
-      </p><p>
-        mkdir ~/ssl cd ~/ssl openssl genrsa -des3 -out
-        apbd2.miong.org.co.key 1024 openssl rsa -in
-        apbd2.miong.org.co.key -out apbd2.miong.org.co.key
-      </p><p>
+      </p><pre class="programlisting">
+    mkdir ~/ssl
+    cd ~/ssl
+    openssl genrsa -des3 -out apbd2.miong.org.co.key 1024
+    openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
+</pre><p>
         De una clave temporal y borrela con
-      </p><p>
-        openssl rsa -in apbd2.miong.org.co.key -out
-        apbd2.miong.org.co.key
-      </p><p>
+      </p><pre class="programlisting">
+    openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
+</pre><p>
         Cree la solicitud de certificado con:
-      </p><p>
-        openssl req -new -key apbd2.miong.org.co.key -out
-        apbd2.miong.org.co.csr -subj
-        '/C=CO/ST=Cundinamarca/L=Bogota/O=CINEP/CN=apbd2.miong.org.co'
-      </p><p>
+      </p><pre class="programlisting">
+    openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=CINEP/CN=apbd2.miong.org.co'
+</pre><p>
         Copie la solicitud <code class="literal">apbd2.miong.org.co.csr</code> al
         servidor apbd1.miong.org.co y dejela en el directorio
         <code class="literal">/var/postgresql/data</code>
       </p><p>
         Y allí ejecute:
-      </p><p>
-        doas su - cd /var/postgresql/data openssl x509 -req -days 3650
-        -in apbd2.miong.org.co.csr -CA root.crt -CAkey server.key -out
-        apbd2.miong.org.co.crt -CAcreateserial
-      </p><p>
+      </p><pre class="programlisting">
+    doas su - 
+    cd /var/postgresql/data
+    openssl x509 -req -days 3650 -in apbd2.miong.org.co.csr -CA root.crt -CAkey server.key -out apbd2.miong.org.co.crt -CAcreateserial
+</pre><p>
         A continuación copie el certificado generado
         (<code class="literal">apbd2.miong.org.co.crt</code>) al computador
         cliente donde se usará:
-      </p><p>
-        scp apbd2.miong.org.co.crt apbd2.miong.org.co:~/ssl/
-      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="uso-de-los-certificados"></a>6.5.4. Uso de los certificados</h4></div></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="caso-postgresql"></a>6.5.4.1. Caso PostgreSQL</h5></div></div></div><p>
+      </p><pre class="programlisting">
+    scp apbd2.miong.org.co.crt apbd2.miong.org.co:~/ssl/
+</pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="uso-de-los-certificados"></a>6.5.4. Uso de los certificados</h4></div></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="caso-postgresql"></a>6.5.4.1. Caso PostgreSQL</h5></div></div></div><p>
           En el servidor edite el archivo
           <code class="literal">/var/postgresql/data/pg_hba.conf</code> y
           asegurese de agregar una línea para el usuario y el computador
@@ -954,51 +961,53 @@
           clientcert=1
         </p><p>
           Reinicie PostgreSQL.
-        </p><p>
-          doas sh /etc/rc.d/postgresql -d restart
-        </p><p>
+        </p><pre class="programlisting">
+    doas sh /etc/rc.d/postgresql -d restart
+</pre><p>
           Desde el cliente ejecute:
-        </p><p>
-          doas chmod 0600 /home/usis/.postgresql/usuario.key
-        </p><p>
+        </p><pre class="programlisting">
+    doas chmod 0600 /home/usis/.postgresql/usuario.key
+</pre><p>
           y pruebe la conexión asegurando que se usa el certificado del
           usuario respectivo:
-        </p><div class="literallayout"><p>PGSSLCERT=/home/usis/.postgresql/usuario.crt<br>
-PGSSLKEY=/home/usis/.postgresql/usuario.key<br>
-psql -h192.168.100.21 -Uusuario usuario</p></div><p>
+        </p><pre class="programlisting">
+    PGSSLCERT=/home/usis/.postgresql/usuario.crt \
+    PGSSLKEY=/home/usis/.postgresql/usuario.key \
+    psql -h192.168.100.21 -Uusuario usuario
+</pre><p>
           Configure la aplicación para que en cada arranque o uso
           establezca:
-        </p><p>
-          PGSSLCERT=/home/usis/.postgresql/usuario.crt
-          PGSSLKEY=/home/usis/.postgresql/usuario.key
-        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="caso-ldapd"></a>6.5.4.2. Caso LDAPD</h5></div></div></div><p>
+        </p><pre class="programlisting">
+    PGSSLCERT=/home/usis/.postgresql/usuario.crt 
+    PGSSLKEY=/home/usis/.postgresql/usuario.key
+</pre></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="caso-ldapd"></a>6.5.4.2. Caso LDAPD</h5></div></div></div><p>
           Ubique el ceritifcado y llave en
           <code class="literal">/etc/ldad/certs/</code> del servidor donde corre
           ldapd:
-        </p><p>
-          doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
-        </p><p>
+        </p><pre class="programlisting">
+    doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
+</pre><p>
           Configure <code class="literal">/etc/ldapd.conf</code>
-        </p><p>
-          listen on $if1 tls certificate apbd2.miong.org.co
-        </p><p>
+        </p><pre class="programlisting">
+    listen on $if1 tls certificate apbd2.miong.org.co
+</pre><p>
           En los computadores que realicen conexiones al LDAP asegurese
           de agregar la llave de la entidad certificadora
           <code class="literal">/var/postgresql/data/root.crt</code>, es decir en
           el servidor apbd1 ejecute:
-        </p><p>
-          cd /var/postgresql/data openssl x509 -noout -text -in root.crt
-          &gt; root-paracerts
-        </p><p>
+        </p><pre class="programlisting">
+    cd /var/postgresql/data
+    openssl x509 -noout -text -in root.crt &gt; root-paracerts
+</pre><p>
           Copie el archivo <code class="literal">root-paracerts</code> en el
           cliente y agregue ese archivo al final de
           <code class="literal">/etc/ssl/cert.pem</code>
         </p></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias"></a>6.5.5. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
             https://www.howtoforge.com/postgresql-ssl-certificates
-          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm764530256" href="#idm764530256">29</a>] </sup>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm48511568" href="#idm48511568">29</a>] </sup>
             Note que de esta forma puede cambiar la clave de otros
             usuarios de PostgreSQL.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1209291728" href="#idm1209291728">30</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp604030768" href="#idp604030768">30</a>] </sup>
           Si emplea un adJ 5.2 y planea conectarse desde clientes
           digamos en Ubuntu reciente requerirá el parche descrito en
           <a xmlns="" href="http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html" target="_top">http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</a>
