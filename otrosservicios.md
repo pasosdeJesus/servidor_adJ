@@ -883,11 +883,11 @@ Se pueden generar así (como se explica en
 <https://www.howtoforge.com/postgresql-ssl-certificates>):
 
 
-openssl genrsa -des3 -out server.key 1024
-openssl rsa -in server.key -out server.key
-chmod 400 server.key
-chown postgres.postgres server.key
-openssl req -new -key server.key -days 3650 -out server.crt -x509 -subj '/C=CA/ST=British Columbia/L=Comox/O=TheBrain.ca/CN=thebrain.ca/emailAddress=info@thebrain.ca'
+        openssl genrsa -des3 -out server.key 1024
+        openssl rsa -in server.key -out server.key
+        chmod 400 server.key
+        chown postgres.postgres server.key
+        openssl req -new -key server.key -days 3650 -out server.crt -x509 -subj '/C=CO/ST=Bogota/L=MiOng/O=MiOng/CN=miong.org.co/emailAddress=info@miong.org'
  
 ### Generación de un par de certificados
 
@@ -900,32 +900,32 @@ Certificado corresponda al usuario en la base de datos.
 En el computador que hará la conexión (en este ejemplo 
 `apbd2.miong.org.co`) ejecute:
 
-  mkdir ~/ssl
-  cd ~/ssl
-  openssl genrsa -des3 -out apbd2.miong.org.co.key 1024
-  openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
+        mkdir ~/ssl
+        cd ~/ssl
+        openssl genrsa -des3 -out apbd2.miong.org.co.key 1024
+        openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
 
 De una clave temporal y borrela con
 
-  openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
+        openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
 
 Cree la solicitud de certificado con:
 
-  openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=CINEP/CN=apbd2.miong.org.co'
+        openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=CINEP/CN=apbd2.miong.org.co'
 
 Copie la solicitud `apbd2.miong.org.co.csr` al servidor 
 apbd1.miong.org.co y dejela en el directorio `/var/postgresql/data`
 
 Y allí ejecute:
 
-  doas su - 
-  cd /var/postgresql/data
-  openssl x509 -req -days 3650 -in apbd2.miong.org.co.csr -CA root.crt -CAkey server.key -out apbd2.miong.org.co.crt -CAcreateserial
+        doas su - 
+        cd /var/postgresql/data
+        openssl x509 -req -days 3650 -in apbd2.miong.org.co.csr -CA root.crt -CAkey server.key -out apbd2.miong.org.co.crt -CAcreateserial
 
 A continuación copie el certificado generado 
 (`apbd2.miong.org.co.crt`)  al computador cliente donde se usará:
 
-  scp apbd2.miong.org.co.crt apbd2.miong.org.co:~/ssl/
+        scp apbd2.miong.org.co.crt apbd2.miong.org.co:~/ssl/
 
 ### Uso de los certificados
 
@@ -934,49 +934,50 @@ A continuación copie el certificado generado
 En el servidor edite el archivo `/var/postgresql/data/pg_hba.conf` y 
 asegurese de agregar una línea para el usuario y el computador 
 cliente:
-  hostssl all usuario 192.168.100.11/32 cert clientcert=1
+        hostssl all usuario 192.168.100.11/32 cert clientcert=1
 
 Reinicie PostgreSQL.
 
-  doas sh /etc/rc.d/postgresql -d restart
+        doas sh /etc/rc.d/postgresql -d restart
 
 Desde el cliente ejecute:
 
-  doas chmod 0600 /home/usis/.postgresql/usuario.key
+        doas chmod 0600 /home/usis/.postgresql/usuario.key
 
 y pruebe la conexión asegurando que se usa el certificado del usuario 
 respectivo:
 
-  PGSSLCERT=/home/usis/.postgresql/usuario.crt \
-  PGSSLKEY=/home/usis/.postgresql/usuario.key \
-  psql -h192.168.100.21 -Uusuario usuario
+        PGSSLCERT=/home/usis/.postgresql/usuario.crt \
+        PGSSLKEY=/home/usis/.postgresql/usuario.key \
+        psql -h192.168.100.21 -Uusuario usuario
 
 Configure la aplicación para que en cada arranque o uso establezca:
 
-  PGSSLCERT=/home/usis/.postgresql/usuario.crt 
-  PGSSLKEY=/home/usis/.postgresql/usuario.key
+        PGSSLCERT=/home/usis/.postgresql/usuario.crt 
+        PGSSLKEY=/home/usis/.postgresql/usuario.key
 
 #### Caso LDAPD
 
 Ubique el ceritifcado y llave en `/etc/ldad/certs/` del servidor 
 donde corre ldapd:
 
-  doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
+        doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
 
 Configure `/etc/ldapd.conf`
 
-  listen on $if1 tls certificate apbd2.miong.org.co
+        listen on $if1 tls certificate apbd2.miong.org.co
 
 En los computadores que realicen conexiones al LDAP asegurese de 
 agregar la llave de la entidad certificadora 
 `/var/postgresql/data/root.crt`, es decir en el servidor apbd1 ejecute:
 
-  cd /var/postgresql/data
-  openssl x509 -noout -text -in root.crt > root-paracerts
+        cd /var/postgresql/data
+        openssl x509 -noout -text -in root.crt > root-paracerts
 
 Copie el archivo `root-paracerts` en el cliente y agregue ese archivo 
 al final de `/etc/ssl/cert.pem`
 
 ### Referencias
-- https://www.howtoforge.com/postgresql-ssl-certificates
+
+- <https://www.howtoforge.com/postgresql-ssl-certificates>
 
