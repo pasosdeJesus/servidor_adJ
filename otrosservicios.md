@@ -535,14 +535,15 @@ y posteriormente restaurarla con:
 
 ### MariaDB y servidor web con chroot {#chroot-mysql}
 
-Puede emplear aplicaciones para Apache en modo `chroot` que usen bases
+Puede emplear aplicaciones para nginx o Apache en modo `chroot` que usen bases
 de datos MariaDB de tres formas: (1) Conectándose a un puerto TCP/IP
 donde responda MariaDB, (2) poniendo el socket de MariaDB en un
 directorio dentro de la jaula del servidor web o (3) Corriendo MariaDB
 dentro de la jaula `chroot` (ver
 <http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot>).
 
-Para correro MariaDB dentro de A continuación documentamos como ubicar
+Para correr MariaDB dentro de la jaula usada por nginx, a continuación 
+documentamos como ubicar
 el socket de MariaDB dentro de la jaula del servidor web (/var/www/).
 
 Una vez instale `maria-server` cree el directorio en el cual ubicará el
