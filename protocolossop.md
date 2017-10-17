@@ -1148,7 +1148,7 @@ Courier.
 
 #### Implementación Dovecot de IMAPS y POP3S {#dovecot}
 
-Instale el paquete P-DOVECOT y asegurese de dejar `dovecot` en la
+Instale el paquete &p-dovecot; y asegurese de dejar `dovecot` en la
 variable `pkg_scripts` de `/etc/rc.conf.local` para que se inicie en
 cada arranque.
 
@@ -1528,8 +1528,8 @@ servidores válidos como gmail, yahoo o hotmail o de servidores que no
 reintentan el envío como lo espera spamd. Tal comportamiento puede no
 resultar aceptable en algunas organizaciones.
 
-SpamAssassin (paquete P-P5-MAIL-SPAMASSASSIN) junto con procmail
-(paquete P-PROCMAIL) son una solución intermedia que permiten recibir
+SpamAssassin (paquete &p-p5-mail-spamassassin;) junto con procmail
+(paquete &p-procmail;) son una solución intermedia que permiten recibir
 todo correo pero intentan clasificar automáticamente (y con buena
 precisión) los que son no solicitados en carpetas separadas por usuario
 que configure el servicio.
