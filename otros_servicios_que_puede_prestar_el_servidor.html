@@ -219,7 +219,7 @@
       </p><p>
         Otra posibilidad es cambiar la configuración después de haber
         inicializado sin autenticación. Para esto cambie la clave del
-        administrador con<sup>[<a name="idp3698077720" href="#ftn.idp3698077720">29</a>]</sup>:
+        administrador con<sup>[<a name="idm2110046672" href="#ftn.idm2110046672">29</a>]</sup>:
       </p><pre class="programlisting">
     psql -U postgres template1 
     template1=# alter user postgres with password 'MiClave';
@@ -247,7 +247,7 @@
         Las claves de los diversos usuarios pueden cambiarse de forma
         análoga a la presentada para <code class="literal">postgres</code>:
       </p><pre class="programlisting">
-    ALTER ROLE EUSUARIO with UNENCRYPTED PASSWORD 'clave-plana';
+    ALTER ROLE pablo with UNENCRYPTED PASSWORD 'clave-plana';
 </pre><p>
         Desde PostgreSQL 8.1 se emplea un esquema de roles que unifica
         los conceptos de usuario y grupo. Además de exigir clave para
@@ -268,7 +268,7 @@
 </pre><p>
         Para dar permiso a otro rol puede usarse:
       </p><pre class="programlisting">
-    GRANT ALL on solicitud TO EUSUARIO2;
+    GRANT ALL on solicitud TO &amp;EUSUARIO2;;
 </pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="creacion-base"></a>6.2.3. Creación de una base de datos</h4></div></div></div><p>
         Para crear la base de datos <code class="literal">prueba</code> puede usar
         el superusuario con la opción <code class="literal">-U postgres</code> o
@@ -351,7 +351,7 @@
     *:*:*:usuario:clave
 </pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="postgresql-cotejacion"></a>6.2.5. Cotejación en PostgreSQL</h4></div></div></div><p>
         Desde adJ 5.2 se incluye un porte de PostgreSQL (la versión
-        incluida en adJ &amp;ver-adj; es &amp;p-postgresql-server;) que
+        incluida en adJ 6.1 es &amp;p-postgresql-server;) que
         soporta cotejaciones de acuerdo al locale, y por defecto se
         crean cotejaciones para todos los países de habla hispana, con
         nombres de la forma <code class="literal">es_CO_UTF_8</code>. Donde
@@ -548,7 +548,7 @@
       </p><pre class="programlisting">
     mysql &lt; /respaldomysql/dump-1nov2007.sql
 </pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="chroot-mysql"></a>6.3.4. MariaDB y servidor web con chroot</h4></div></div></div><p>
-        Puede emplear aplicaciones para Apache en modo
+        Puede emplear aplicaciones para nginx o Apache en modo
         <code class="literal">chroot</code> que usen bases de datos MariaDB de
         tres formas: (1) Conectándose a un puerto TCP/IP donde responda
         MariaDB, (2) poniendo el socket de MariaDB en un directorio
@@ -556,9 +556,9 @@
         dentro de la jaula <code class="literal">chroot</code> (ver
         <a href="http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot" target="_top">http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot</a>).
       </p><p>
-        Para correro MariaDB dentro de A continuación documentamos como
-        ubicar el socket de MariaDB dentro de la jaula del servidor web
-        (/var/www/).
+        Para correr MariaDB dentro de la jaula usada por nginx, a
+        continuación documentamos como ubicar el socket de MariaDB
+        dentro de la jaula del servidor web (/var/www/).
       </p><p>
         Una vez instale <code class="literal">maria-server</code> cree el
         directorio en el cual ubicará el socket, digamos:
@@ -626,7 +626,7 @@
       3, <code class="literal">ldapd</code>. No incluye cliente para LDAP pero
       desde la línea de comandos puede emplearse el paquete
       <code class="literal">openldap-client</code> o como interfaz web
-      <code class="literal">phpldapadmin</code><sup>[<a name="idp2352784024" href="#ftn.idp2352784024">30</a>]</sup>.
+      <code class="literal">phpldapadmin</code><sup>[<a name="idm2080942928" href="#ftn.idm2080942928">30</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-ldapd"></a>6.4.1. Instalación de ldapd</h4></div></div></div><p>
         No necesita instalar paquetes para la operación como servidor.
       </p><p>
@@ -804,7 +804,7 @@
         con:
       </p><pre class="programlisting">
     ldapsearch -x -b 'dc=www,dc=pasosdeJesus,dc=org' '(objectclass=*)'
-</pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="phpldapadmin"></a>6.4.4. Instalación y configuración de
+</pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalaci%C3%B3n-y-configuraci%C3%B3n-de-phpldapadmin"></a>6.4.4. Instalación y configuración de
       <code class="literal">phpldapadmin</code></h4></div></div></div><p>
         Instale el paquete y siga las instrucciones que de (por ejemplo
         activar <code class="literal">php-ldap</code>):
@@ -1004,10 +1004,10 @@
           <code class="literal">/etc/ssl/cert.pem</code>
         </p></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias"></a>6.5.5. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
             <a href="https://www.howtoforge.com/postgresql-ssl-certificates" target="_top">https://www.howtoforge.com/postgresql-ssl-certificates</a>
-          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp3698077720" href="#idp3698077720">29</a>] </sup>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2110046672" href="#idm2110046672">29</a>] </sup>
             Note que de esta forma puede cambiar la clave de otros
             usuarios de PostgreSQL.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2352784024" href="#idp2352784024">30</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2080942928" href="#idm2080942928">30</a>] </sup>
           Si emplea un adJ 5.2 y planea conectarse desde clientes
           digamos en Ubuntu reciente requerirá el parche descrito en
           <a xmlns="" href="http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html" target="_top">http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</a>
