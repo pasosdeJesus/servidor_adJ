@@ -1,3 +1,7 @@
+Versión 6.2
+
+:   - Nueva sección  ([xref](#base-postgresql-remota))
+
 Versión 6.1
 
 :   - Nueva sección  ([xref](#autoridad_certificadora))
