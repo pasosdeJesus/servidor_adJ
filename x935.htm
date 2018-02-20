@@ -127,7 +127,7 @@ CLASS="literal"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    search EDOMINIO
+>&#13;    search miong.org
     nameserver 192.168.16.1
     lookup file bind
 </PRE
@@ -524,14 +524,14 @@ CLASS="literal"
 >/var/named/master</TT
 >. Pueden configurarse
         archivos como dice en <A
-HREF="a3008.htm"
+HREF="a3100.htm"
 >AA_Linux</A
 > por
-        ejemplo los datos un servidor DNS primario del dominio EDOMINIO
-        pueden quedar en el archivo
+        ejemplo los datos un servidor DNS primario del dominio
+        miong.org pueden quedar en el archivo
         <TT
 CLASS="literal"
->/var/named/master/EDOMINIO</TT
+>/var/named/master/miong.org</TT
 >:
       </P
 ><PRE
@@ -548,7 +548,7 @@ CLASS="programlisting"
     
         A       65.8.9.234
     
-        MX      5      correo.EDOMINIO.
+        MX      5      correo.miong.org.
     
     correo  IN      A       201.2.3.74
     ns1     IN      A       201.2.3.74
@@ -559,36 +559,37 @@ CLASS="programlisting"
         autoritario, se relaciona con la IP (65.8.9.234), el nombre
         <TT
 CLASS="literal"
->correo.EDOMINIO</TT
-> identificara la misma máquina
-        y es el nombre que se usará para intercambiar correos; el nombre
-        <TT
+>correo.miong.org</TT
+> identificara la misma
+        máquina y es el nombre que se usará para intercambiar correos;
+        el nombre <TT
 CLASS="literal"
->www.EDOMINIO</TT
-> será un alias para el mismo
-        servidor. Note que todo nombre que no termine con punto (.),
-        será completado por <TT
+>www.miong.org</TT
+> será un alias
+        para el mismo servidor. Note que todo nombre que no termine con
+        punto (.), será completado por <TT
 CLASS="literal"
 >bind</TT
-> con el dominio (i.e
-        <TT
+> con el
+        dominio (i.e <TT
 CLASS="literal"
 >www</TT
 > será completado a
         <TT
 CLASS="literal"
->www.EDOMINIO</TT
->, si se olvida el punto después
-        de <TT
+>www.miong.org</TT
+>, si se olvida el punto
+        después de <TT
 CLASS="literal"
->correo.EDOMINIO</TT
->, <TT
+>correo.miong.org</TT
+>,
+        <TT
 CLASS="literal"
 >bind</TT
->
-        lo completará a <TT
+> lo completará a
+        <TT
 CLASS="literal"
->correo.EDOMINIO.EDOMINIO</TT
+>correo.miong.org.miong.org</TT
 >).
         Recuerde aumentar el número serial cada vez que haga algún
         cambio, para que la información pueda ser actualizada en los
@@ -597,7 +598,7 @@ CLASS="literal"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    named-checkzone EDOMINIO /var/named/master/EDOMINIO
+>&#13;    named-checkzone miong.org /var/named/master/miong.org
 </PRE
 ><P
 >&#13;        Agregue una referencia al archivo de zonas maestro en
@@ -609,9 +610,9 @@ CLASS="literal"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    zone "EDOMINIO" {
+>&#13;    zone "miong.org" {
       type master;
-      file "master/EDOMINIO";
+      file "master/miong.org";
     }
 </PRE
 ><P
@@ -625,9 +626,9 @@ CLASS="literal"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    zone "EDOMINIO" {
+>&#13;    zone "miong.org" {
       type slave;
-      file "slave/EDOMINIO";
+      file "slave/miong.org";
       masters { 65.8.9.234; };
     }
 </PRE
@@ -640,7 +641,7 @@ CLASS="literal"
         dejará en el archivo
         <TT
 CLASS="literal"
->/var/named/slave/EDOMINIO</TT
+>/var/named/slave/miong.org</TT
 >.
       </P
 ><P
@@ -668,7 +669,7 @@ CLASS="literal"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    dig @localhost EDOMINIO
+>&#13;    dig @localhost miong.org
 </PRE
 ><P
 >&#13;        Si requiere volver a leer los archivos de configuración (por
@@ -728,11 +729,11 @@ NAME="vistas"
           puertos del cortafuegos son redirigidas a uno o más
           servidores, seguramente tendrá inconvenientes al resolver
           nombres de su dominio en la LAN, pues el nombre de su
-          organización (digamos EDOMINIO) será resulto a la dirección
-          externa, la cual conectará al cortafuegos por el puerto pedido
-          y tratará de redirigir la conexión al servidor en la DMZ (i.e
-          se reflejará). Por este motivo desde su LAN en general no
-          resolverá nombres de su dominio.
+          organización (digamos miong.org) será resulto a la
+          dirección externa, la cual conectará al cortafuegos por el
+          puerto pedido y tratará de redirigir la conexión al servidor
+          en la DMZ (i.e se reflejará). Por este motivo desde su LAN en
+          general no resolverá nombres de su dominio.
         </P
 ><P
 >&#13;          Una solución (ver
@@ -792,18 +793,18 @@ CLASS="programlisting"
             type delegation-only;
         };
     
-        zone "EDOMINIO" {
+        zone "miong.org" {
             type master;
-            file "refleja/EDOMINIO.org";
+            file "refleja/miong.org.org";
         };
     };
     view "external" { // Para Internet
         recursion no;
         additional-from-auth no;
         additional-from-cache no;
-        zone "EDOMINIO" {
+        zone "miong.org" {
             type master;
-        file "master/EDOMINIO";
+        file "master/miong.org";
         };
         zone "168.74.245.200.IN-ADDR.ARPA" { // Para resolución inversa
             type master;
@@ -814,14 +815,14 @@ CLASS="programlisting"
 ><P
 >&#13;          El archivo <TT
 CLASS="literal"
->master/EDOMINIO</TT
-> sería el típico
-          para resolver externamente, mientras que en
+>master/miong.org</TT
+> sería el
+          típico para resolver externamente, mientras que en
           <TT
 CLASS="literal"
->refleja/EDOMINIO</TT
-> tendría los mismo nombres
-          del anterior pero con las direcciones de la red local.
+>refleja/miong.org</TT
+> tendría los mismo
+          nombres del anterior pero con las direcciones de la red local.
           <TT
 CLASS="literal"
 >master/db.167.74.245.200</TT
@@ -839,10 +840,10 @@ CLASS="programlisting"
       2D   ; Expiración secundaria
       1D ) ; Cache de registros de recurso
     
-    @       IN      NS      cortafuegos.EDOMINIO.
-        IN      PTR     www.EDOMINIO.
-        IN      PTR     correo.EDOMINIO
-        IN      PTR     ns1.EDOMINIO
+    @       IN      NS      cortafuegos.miong.org.
+        IN      PTR     www.miong.org.
+        IN      PTR     correo.miong.org
+        IN      PTR     ns1.miong.org
 </PRE
 ></DIV
 ></DIV
@@ -861,7 +862,7 @@ NAME="referencias-dns"
 ><P
 >&#13;            Sección sobre DNS de las guías Aprendiendo a aprender Linux.
             <A
-HREF="a3008.htm"
+HREF="a3100.htm"
 >AA_Linux</A
 >
           </P
@@ -870,7 +871,7 @@ HREF="a3008.htm"
 ><P
 >&#13;            Referencia para administradores de BIND 9
             <A
-HREF="a3008.htm"
+HREF="a3100.htm"
 >bind9arm</A
 >.
           </P
@@ -894,7 +895,7 @@ TARGET="_top"
 ><LI
 ><P
 >&#13;            <A
-HREF="a3008.htm"
+HREF="a3100.htm"
 >openbsdDnsDhcp</A
 >.
           </P
@@ -1027,7 +1028,7 @@ NAME="dhcp"
 ><P
 >&#13;      El protocolo DHCP se describen en el RFC 2131 (ver
       <A
-HREF="a3008.htm"
+HREF="a3100.htm"
 >rfc2131</A
 >), se trata de un modelo
       cliente-servidor en el que el servidor DHCP localiza direcciones
@@ -1121,7 +1122,7 @@ CLASS="literal"
 ><PRE
 CLASS="programlisting"
 >&#13;    shared-network LOCAL-NET {
-            option  domain-name "EDOMINIO";
+            option  domain-name "miong.org";
             option  domain-name-servers 192.168.17.1;
             subnet 192.168.17.0 netmask 255.255.255.0 {
                     option routers 192.168.17.1;
@@ -1159,7 +1160,7 @@ NAME="referencias-dhcpd"
       </P
 ><P
 >&#13;        El RFC 2131 (ver <A
-HREF="a3008.htm"
+HREF="a3100.htm"
 >rfc2131</A
 >).
       </P
@@ -1317,9 +1318,9 @@ TARGET="_top"
 >1123</A
 >,
         funcionando sobre TCP/IP. En una situación típica en la que un
-        usuario EUSUARIO@ECLIENTE envía un mensaje al usuario
-        EUSUARIO2@ECLIENTE2 sin computadores intermediarios, se
-        requiere:
+        usuario pablo@amor.miong.org envía un mensaje al
+        usuario &#38;EUSUARIO2;@&#38;amor.miong.org2; sin computadores
+        intermediarios, se requiere:
       </P
 ><P
 ></P
@@ -1367,7 +1368,7 @@ CLASS="footnote"
 ></LI
 ></UL
 ><P
->&#13;        Si tanto EUSUARIO como EUSUARIO2 emplean como MUA
+>&#13;        Si tanto pablo como &#38;EUSUARIO2; emplean como MUA
         <TT
 CLASS="literal"
 >mail</TT
@@ -1375,20 +1376,21 @@ CLASS="literal"
         sendmail, el proceso sería:
       </P
 ><P
->&#13;        EUSUARIO emplea <TT
+>&#13;        pablo emplea <TT
 CLASS="literal"
 >mail</TT
 > en su computador
-        ENOMCLIENTE para redactar el mensaje cuyo destinatario es
-        EUSUARIO2.
+        amor para redactar el mensaje cuyo destinatario es
+        &#38;EUSUARIO2;.
       </P
 ><P
->&#13;        En ENOMCLIENTE, el programa mail ejecuta sendmail para enviar el
-        mensaje. sendmail deja el mensaje en una cola de mensajes por
-        enviar. Esa cola de mensajes es actualizada por sendmail a
-        medida que envía o intenta enviar mensajes (si un mensaje no
-        puede ser enviado sendmail puede reintentar el envío cierto
-        número de veces, haciendo pausas entre un intento y otro).
+>&#13;        En amor, el programa mail ejecuta sendmail para
+        enviar el mensaje. sendmail deja el mensaje en una cola de
+        mensajes por enviar. Esa cola de mensajes es actualizada por
+        sendmail a medida que envía o intenta enviar mensajes (si un
+        mensaje no puede ser enviado sendmail puede reintentar el envío
+        cierto número de veces, haciendo pausas entre un intento y
+        otro).
       </P
 ><P
 >&#13;        Enviar un mensaje significa crear una conexión TCP con el MTA
@@ -1412,33 +1414,35 @@ HREF="x935.htm#servidor-dns"
 >).
       </P
 ><P
->&#13;        En ENOMCLIENTE2 debe estar corriendo un proceso que acepte la
-        conexión en el puerto 25, i.e. sendmail o algún otro MTA que
+>&#13;        En &#38;ENOMCLIENTE2; debe estar corriendo un proceso que acepte
+        la conexión en el puerto 25, i.e. sendmail o algún otro MTA que
         reciba el mensaje siguiendo el protocolo SMTP.
       </P
 ><P
->&#13;        sendmail en ENOMCLIENTE2 agrega el mensaje que recibe en el
-        archivo tipo texto <TT
+>&#13;        sendmail en &#38;ENOMCLIENTE2; agrega el mensaje que recibe en
+        el archivo tipo texto
+        <TT
 CLASS="literal"
->/var/mail/EUSUARIO2</TT
-> que
-        está en formato mbox.
+>/var/mail/&#38;EUSUARIO2;</TT
+> que está en formato
+        mbox.
       </P
 ><P
 >&#13;        Archivo donde exim deja los correos destinados al usuario
-        EUSUARIO2.
+        &#38;EUSUARIO2;.
       </P
 ><P
->&#13;        Cuando EUSUARIO2 lo desee, podrá emplear <TT
-CLASS="literal"
->mail</TT
->
-        para leer los correos que se hayan acumulado en
+>&#13;        Cuando &#38;EUSUARIO2; lo desee, podrá emplear
         <TT
 CLASS="literal"
->/var/mail/EUSUARIO2</TT
-> ---a medida que los lea
-        saldrán de ese archivo para quedar en <TT
+>mail</TT
+> para leer los correos que se hayan
+        acumulado en <TT
+CLASS="literal"
+>/var/mail/&#38;EUSUARIO2;</TT
+> ---a
+        medida que los lea saldrán de ese archivo para quedar en
+        <TT
 CLASS="literal"
 >~/mbox</TT
 >.
@@ -1574,7 +1578,7 @@ CLASS="programlisting"
 >&#13;    listen on all
 
     table aliases db:/etc/mail/aliases.db
-    accept from any for domain "EDOMINIO" alias &#60;aliases&#62; deliver to mbox
+    accept from any for domain "miong.org" alias &#60;aliases&#62; deliver to mbox
     accept for all relay
 </PRE
 ><P
@@ -1600,7 +1604,7 @@ CLASS="literal"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    accept from any for domain "EDOMINIO" alias &#60;aliases&#62; deliver to maildir
+>&#13;    accept from any for domain "miong.org" alias &#60;aliases&#62; deliver to maildir
 </PRE
 ><P
 >&#13;        Al igual que con sendmail la tabla de alias que usa esta
@@ -1620,13 +1624,13 @@ CLASS="programlisting"
     doas make
 </PRE
 ><P
->&#13;        Para asegurar el relevo de correos provenientes de EDOMINIO o de
-        la IP 192.168.1.2, basta agregar al mismo archivo de
-        configuración:
+>&#13;        Para asegurar el relevo de correos provenientes de
+        miong.org o de la IP 192.168.1.2, basta agregar al mismo
+        archivo de configuración:
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    accept from EDOMINIO for any relay
+>&#13;    accept from miong.org for any relay
     accept from 192.168.1.2 for any relay
 </PRE
 ><P
@@ -1640,14 +1644,15 @@ HREF="x935.htm#smtp-auth-tls"
 >) y dejar
         <TT
 CLASS="literal"
->EDOMINIO.crt</TT
-> en <TT
+>miong.org.crt</TT
+> en
+        <TT
 CLASS="literal"
 >/etc/ssl/</TT
->
-        y <TT
+> y
+        <TT
 CLASS="literal"
->EDOMINIO.key</TT
+>miong.org.key</TT
 > en
         <TT
 CLASS="literal"
@@ -1661,9 +1666,9 @@ CLASS="literal"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    pki EDOMINIO certificate "/etc/ssl/EDOMINIO.crt" \
-        key /etc/ssl/private/EDOMINIO.key"
-    listen on all port 25 tls pki EDOMINIO auth-optional
+>&#13;    pki miong.org certificate "/etc/ssl/miong.org.crt" \
+        key /etc/ssl/private/miong.org.key"
+    listen on all port 25 tls pki miong.org auth-optional
 </PRE
 ><P
 >&#13;        Puede ser más estricto con <TT
@@ -1688,14 +1693,14 @@ CLASS="literal"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    listen on all port 465 smtps pki EDOMINIO auth-optional
+>&#13;    listen on all port 465 smtps pki miong.org auth-optional
 </PRE
 ><P
 >&#13;        y TLS estricto en el puerto 587:
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    listen on all port 587 tls pki EDOMINIO auth
+>&#13;    listen on all port 587 tls pki miong.org auth
 </PRE
 ><P
 >&#13;        Para atender diversos dominios DNS, además de configurar el
@@ -1854,13 +1859,13 @@ CLASS="programlisting"
     Trying ::1...
     Connected to localhost.
     Escape character is '^]'.
-    220 amor.EDOMINIO ESMTP Sendmail 8.13.8/8.13.3; Mon, 16 Oct 2006 12:42:41 -0500 (COT)
+    220 amor.miong.org ESMTP Sendmail 8.13.8/8.13.3; Mon, 16 Oct 2006 12:42:41 -0500 (COT)
     HELO localhost
-    250 amor.EDOMINIO Hello EUSUARIO@localhost [IPv6:::1], pleased to meet you
-    MAIL FROM: &#60;EUSUARIO@localhost&#62;
-    250 2.1.0 &#60;EUSUARIO@localhost&#62;... Sender ok
-    RCPT TO: &#60;EUSUARIO@localhost&#62;
-    250 2.1.5 &#60;EUSUARIO@localhost&#62;... Recipient ok
+    250 amor.miong.org Hello pablo@localhost [IPv6:::1], pleased to meet you
+    MAIL FROM: &#60;pablo@localhost&#62;
+    250 2.1.0 &#60;pablo@localhost&#62;... Sender ok
+    RCPT TO: &#60;pablo@localhost&#62;
+    250 2.1.5 &#60;pablo@localhost&#62;... Recipient ok
     DATA
     354 Enter mail, end with "." on a line by itself
     1 2 3
@@ -1868,7 +1873,7 @@ CLASS="programlisting"
     .
     250 2.0.0 k9GHgf1q019958 Message accepted for delivery
     quit
-    221 2.0.0 amor.EDOMINIO closing connection
+    221 2.0.0 amor.miong.org closing connection
 Connection closed by foreign host.
 </PRE
 ><P
@@ -1917,7 +1922,7 @@ CLASS="literal"
         </P
 ><PRE
 CLASS="programlisting"
->&#13;    EDOMINIO  # Acepta de todos los computadores del dominio
+>&#13;    miong.org  # Acepta de todos los computadores del dominio
     192.168.1  # Acepta de todos las IPs de la forma 192.168.1.x
 </PRE
 ></DIV
@@ -1949,16 +1954,17 @@ NAME="smtp-auth-tls"
 CLASS="literal"
 >sendmail</TT
 > soporta tanto TLS como
-          SMTP-AUTH, la configuración por defecto de OpenBSD VER-OPENBSD
-          no los incluye. En el caso de TLS lo incluido en el sistema
-          base es suficiente y el procedimiento de configuración se
-          documenta en <TT
+          SMTP-AUTH, la configuración por defecto de OpenBSD
+          6.2 no los incluye. En el caso de TLS lo
+          incluido en el sistema base es suficiente y el procedimiento
+          de configuración se documenta en
+          <TT
 CLASS="literal"
 >man starttls</TT
->. En cuanto a
-          SMTP-AUTH se requiere una implementación de SASL, pero no hay
-          ninguna incluida en el sistema base por lo que es necesario
-          emplear el paquete <TT
+>.En cuanto a SMTP-AUTH se
+          requiere una implementación de SASL, pero no hay ninguna
+          incluida en el sistema base por lo que es necesario emplear el
+          paquete <TT
 CLASS="literal"
 >cyrus-sasl</TT
 >.
@@ -2111,7 +2117,7 @@ CLASS="programlisting"
     for i in `find . -name CVS`; do echo $i; 
         echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" &#62; $i/Root;
     done
-    cvs -z3 update -Pd -rOPENBSD_VER-OPENBSD-U
+    cvs -z3 update -Pd -rOPENBSD_6.2-U
 </PRE
 ><P
 >&#13;            Después indique que desea recompilar
@@ -2258,9 +2264,9 @@ CLASS="literal"
 ><PRE
 CLASS="programlisting"
 >&#13;    doas sendmail -O LogLevel=20 -bs -Am
-    220 correo.EDOMINIO ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
+    220 correo.miong.org ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
     EHLO LOCALHOST
-    250-correo.EDOMINIO Hello root@localhost, pleased to meet you
+    250-correo.miong.org Hello root@localhost, pleased to meet you
     250-ENHANCEDSTATUSCODES
     250-PIPELINING
     250-8BITMIME
@@ -2329,14 +2335,14 @@ CLASS="programlisting"
           </P
 ><PRE
 CLASS="programlisting"
->&#13;    MAIL FROM:&#60;EUSUARIO@EDOMINIO&#62;
+>&#13;    MAIL FROM:&#60;pablo@miong.org&#62;
     250 OK                                                                          
-    RCPT TO:&#60;EUSUARIO2@EDOMINIO&#62;
+    RCPT TO:&#60;&#38;EUSUARIO2;@miong.org&#62;
     250 Accepted                                                                    
     DATA                                                                            
     354 Enter message, ending with "." on a line by itself                          
-    From: "EUSUARIO@EDOMINIO" &#60;EUSUARIO@EDOMINIO&#62;
-    To:  EUSUARIO2@EDOMINIO
+    From: "pablo@miong.org" &#60;pablo@miong.org&#62;
+    To:  &#38;EUSUARIO2;@miong.org
     Subject: probando
     1234                                                                            
     .                                                                               
@@ -2353,8 +2359,8 @@ CLASS="literal"
           </P
 ><PRE
 CLASS="programlisting"
->&#13;    telnet correo.EDOMINIO 25
-    220 correo.EDOMINIO ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
+>&#13;    telnet correo.miong.org 25
+    220 correo.miong.org ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
     EHLO [200.21.23.4]
 </PRE
 ><P
@@ -2404,7 +2410,7 @@ CLASS="literal"
             emplearse un usuario y que emplee TLS (puede usar tanto el
             puerto 25 como el 465). Tenga en cuenta que el nombre del
             usuario con el cual autenticarse debe incluir el dominio
-            (e.g EUSUARIO@EDOMINIO).
+            (e.g pablo@miong.org).
           </P
 ></DIV
 ><DIV
@@ -2560,12 +2566,13 @@ NAME="dominios-virtuales-correo"
             dominio. i.e en el archivo maestro del dominio (digamos
             <TT
 CLASS="literal"
->/var/named/master/EDOMINIO</TT
->) algo como:
+>/var/named/master/miong.org</TT
+>) algo
+            como:
           </P
 ><PRE
 CLASS="programlisting"
->&#13;    MX      5       correo.EDOMINIO.
+>&#13;    MX      5       correo.miong.org.
     correo          IN      A       65.167.89.169
 </PRE
 ><P
@@ -2575,7 +2582,7 @@ CLASS="programlisting"
 ></LI
 ><LI
 ><P
->&#13;            Agregue el dominio (e.g EDOMINIO) a los archivos
+>&#13;            Agregue el dominio (e.g miong.org) a los archivos
             <TT
 CLASS="literal"
 >/etc/local-host-names</TT
@@ -2603,11 +2610,11 @@ CLASS="programlisting"
 >&#13;        Con esta configuración todo correo a una dirección de la forma
         <TT
 CLASS="literal"
->EUSUARIO@EDOMINIO</TT
-> será enviado a la cola de
-        correos del usuario local EUSUARIO. Si lo requiere es posible
-        agregar direcciones que se envíen a otro usuario local,
-        agregando entradas al archivo
+>pablo@miong.org</TT
+> será enviado a
+        la cola de correos del usuario local pablo. Si lo
+        requiere es posible agregar direcciones que se envíen a otro
+        usuario local, agregando entradas al archivo
         <TT
 CLASS="literal"
 >/etc/mail/virtusertable</TT
@@ -2615,15 +2622,16 @@ CLASS="literal"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    pablofelipe@EDOMINIO  EUSUARIO
+>&#13;    pablofelipe@miong.org  pablo
 </PRE
 ><P
 >&#13;        reenviará todo correo dirigido a
         <TT
 CLASS="literal"
->pablofelipe@EDOMINIO</TT
-> al usuario local ``. ###
-        Protocolos para revisar correo {#protocolos-revisar-correo}
+>pablofelipe@miong.org</TT
+> al usuario local
+        ``. ### Protocolos para revisar correo
+        {#protocolos-revisar-correo}
       </P
 ><P
 >&#13;        Para extraer correos de un servidor pueden emplearse los
@@ -2839,7 +2847,7 @@ CLASS="literal"
 ><P
 >&#13;                En <TT
 CLASS="literal"
->/home/EUSUARIO/.forward</TT
+>/home/pablo/.forward</TT
 >
               </P
 ><PRE
@@ -2854,14 +2862,14 @@ CLASS="programlisting"
 ><P
 >&#13;                En <TT
 CLASS="literal"
->/home/EUSUARIO/.procmailrc</TT
+>/home/pablo/.procmailrc</TT
 >
               </P
 ><PRE
 CLASS="programlisting"
 >&#13;    LINEBUF=4096
     #VERBOSE=on
-    PMDIR=/home/EUSUARIO/
+    PMDIR=/home/pablo/
     MAILDIR=$PMDIR/Maildir/
     FORMAIL=/usr/local/bin/formail
     SENDMAIL=/usr/sbin/sendmail
@@ -2869,7 +2877,7 @@ CLASS="programlisting"
 
     :0
     * .*
-    /home/EUSUARIO/Maildir/
+    /home/pablo/Maildir/
 </PRE
 ><P
 >&#13;                Note que el directorio de la variable
@@ -2889,13 +2897,13 @@ CLASS="literal"
 >&#13;                Deje además listo un directorio en formato Maildir en
                 <TT
 CLASS="literal"
->/home/EUSUARIO/Maildir</TT
+>/home/pablo/Maildir</TT
 > con:
               </P
 ><PRE
 CLASS="programlisting"
->&#13;    maildirmake /home/EUSUARIO/Maildir
-    chown -R EUSUARIO:estudiante /home/EUSUARIO/Maildir
+>&#13;    maildirmake /home/pablo/Maildir
+    chown -R pablo:estudiante /home/pablo/Maildir
 </PRE
 ></LI
 ></UL
@@ -2905,19 +2913,19 @@ CLASS="programlisting"
             `<TT
 CLASS="literal"
 >en vez de almacenar en</TT
->/var/mail/EUSUARIO<TT
+>/var/mail/pablo<TT
 CLASS="literal"
 >ejecutará la línea del archivo</TT
->/home/EUSUARIO/.forward<TT
+>/home/pablo/.forward<TT
 CLASS="literal"
 >, la cual a su vez ejecutará procmail para procesar el correo que llega por entrada estándar.</TT
 >procmail<TT
 CLASS="literal"
 >empleará la configuración de</TT
->/home/EUSUARIO/.procmailrc<TT
+>/home/pablo/.procmailrc<TT
 CLASS="literal"
 >que le indica guardar todo correo que llegue a la cuenta en</TT
->/home/EUSUARIO/Maildir/<TT
+>/home/pablo/Maildir/<TT
 CLASS="literal"
 >(como se trata de un directorio y termina con '/',</TT
 >procmail<TT
@@ -2929,7 +2937,7 @@ CLASS="literal"
 >MBOX`).
           </P
 ><P
->&#13;            El usuario EUSUARIO podría probar su archivo de
+>&#13;            El usuario pablo podría probar su archivo de
             configuración de <TT
 CLASS="literal"
 >procmail</TT
@@ -2950,17 +2958,17 @@ CLASS="programlisting"
           </P
 ><PRE
 CLASS="programlisting"
->&#13;    cd /home/EUSUARIO
+>&#13;    cd /home/pablo
     procmail 
     Mensaje de prueba
     Termínelo con Control-D
     .
     procmail: [21024] Fri Jul  1 18:32:30 2005
-    procmail: Assigning "PMDIR=/home/EUSUARIO/"
-    procmail: Assigning "MAILDIR=/home/EUSUARIO/Maildir/"
+    procmail: Assigning "PMDIR=/home/pablo/"
+    procmail: Assigning "MAILDIR=/home/pablo/Maildir/"
     procmail: Assigning "FORMAIL=/usr/local/bin/formail"
     procmail: Assigning "SENDMAIL=/usr/sbin/sendmail"
-    procmail: Assigning "LOGFILE=/home/EUSUARIO/log"
+    procmail: Assigning "LOGFILE=/home/pablo/log"
 </PRE
 ><P
 >&#13;            Tras lo cual debe encontrar un nuevo archivo en
@@ -2984,8 +2992,8 @@ CLASS="literal"
           </P
 ><PRE
 CLASS="programlisting"
->&#13;Dec 19 18:31:59 servidor sendmail[22209]: kBJNVwMt022209: to=test@localhost, ctladdr=EUSUARIO (1000/1000), delay=00:00:01, xdelay=00:00:01, mailer=relay, pri=30061, relay=[127.0.0.1] [127.0.0.1], dsn=2.0.0, stat=Sent (kBJNVw3t021322 Message accepted for delivery)
-Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bin/procmail", ctladdr=&#60;test@EDOMINIO&#62; (1008/10), delay=00:00:00, xdelay=00:00:00, mailer=prog, pri=30756, dsn=2.0.0, stat=Sent
+>&#13;Dec 19 18:31:59 servidor sendmail[22209]: kBJNVwMt022209: to=test@localhost, ctladdr=pablo (1000/1000), delay=00:00:01, xdelay=00:00:01, mailer=relay, pri=30061, relay=[127.0.0.1] [127.0.0.1], dsn=2.0.0, stat=Sent (kBJNVw3t021322 Message accepted for delivery)
+Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bin/procmail", ctladdr=&#60;test@miong.org&#62; (1008/10), delay=00:00:00, xdelay=00:00:00, mailer=prog, pri=30756, dsn=2.0.0, stat=Sent
         
 </PRE
 ></DIV
@@ -3149,7 +3157,7 @@ CLASS="literal"
 ><PRE
 CLASS="programlisting"
 >&#13;    +OK Hello there.
-    user EUSUARIO
+    user pablo
     +OK Password required.
     pass ejem
     +OK logged in.
@@ -3335,7 +3343,7 @@ CLASS="programlisting"
 CLASS="programlisting"
 >&#13;    $ openssl s_client -connect localhost:993
     ...
-    AB LOGIN EUSUARIO MiClave
+    AB LOGIN pablo MiClave
     AB OK LOGIN Ok.
     BC SELECT "Inbox"
     BC NO Unable to open this mailbox.
@@ -3761,12 +3769,13 @@ CLASS="literal"
 >, y
           seguir instrucciones del archivo INSTALL que resumimos a
           continuación junto con instrucciones de módulos, suponiendo
-          que en el mismo servidor (<TT
+          que en el mismo servidor
+          (<TT
 CLASS="literal"
->correo.EDOMINIO</TT
->)
-          están los servicios IMAPS y SMTP y que se empleará el motor de
-          bases de datos PostgreSQL:
+>correo.miong.org</TT
+>) están los servicios
+          IMAPS y SMTP y que se empleará el motor de bases de datos
+          PostgreSQL:
         </P
 ><P
 ></P
@@ -3783,7 +3792,7 @@ CLASS="literal"
               correo de la organización se consultará en
               <TT
 CLASS="literal"
->correo.EDOMINIO</TT
+>correo.miong.org</TT
 > (IP interna
               192.168.60.1 y externa 200.200.200.200) con protocolo
               HTTPS, el archivo
@@ -3796,13 +3805,13 @@ CLASS="literal"
 CLASS="programlisting"
 >&#13;    &#60;VirtualHost 127.0.0.1:443 192.168.60.1:443 200.200.200.200:443&#62;
     DocumentRoot "/var/www/roundcubemail/"
-    ServerName correo.EDOMINIO
+    ServerName correo.miong.org
 
     &#60;Directory /var/www/roundcubemail/&#62;
         AllowOverride All
     &#60;/Directory&#62;
 
-    ServerAdmin admin@EDOMINIO
+    ServerAdmin admin@miong.org
     ErrorLog logs/round-error_log
     TransferLog logs/round-access_log
 
@@ -3960,13 +3969,13 @@ CLASS="programlisting"
 
     $rcmail_config['auto_create_user'] = TRUE;
 
-    $rcmail_config['default_host'] = 'ssl://correo.EDOMINIO:993';
+    $rcmail_config['default_host'] = 'ssl://correo.miong.org:993';
 
     $rcmail_config['default_port'] = 993;
 
     $rcmail_config['smtp_server'] = '127.0.0.1';
 
-    $rcmail_config['mail_domain'] = 'EDOMINIO';
+    $rcmail_config['mail_domain'] = 'miong.org';
 </PRE
 ><P
 >&#13;              y en el archivo <TT
@@ -4026,7 +4035,7 @@ CLASS="programlisting"
 >&#13;              Con un navegador examine el URL
               <TT
 CLASS="literal"
->https://correo.EDOMINIO/installer/</TT
+>https://correo.miong.org/installer/</TT
 >
               compruebe las dependencias solicitadas y realice las
               pruebas disponibles. Una vez concluya evite el uso de ese
@@ -4221,7 +4230,7 @@ CLASS="literal"
 >&#13;          Instalar paquete de mailman
           <TT
 CLASS="literal"
->pkg_add $PKG_PATH/P-MAILMAN.tgz</TT
+>pkg_add $PKG_PATH/&#38;p-mailman;.tgz</TT
 > que
           requiere
           `<TT
@@ -5040,21 +5049,21 @@ NAME="letsencrypt"
         gratuita (cada 3 meses debe renovarse con el mismo letsencrypt).
       </P
 ><P
->&#13;        Por ejemplo para un dominio EDOMINIO sólo certificado para el
-        web:
+>&#13;        Por ejemplo para un dominio miong.org sólo certificado para
+        el web:
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d EDOMINIO -d www.EDOMINIO 
+>&#13;    doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d miong.org -d www.miong.org 
 </PRE
 ><P
 >&#13;        Si además de los dominios web necesita cubrir con el mismo
-        certificado el servidor de correo: correo.EDOMINIO que tiene una
-        raiz diferente:
+        certificado el servidor de correo: correo.miong.org que
+        tiene una raiz diferente:
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d EDOMINIO -d www.EDOMINIO  -w /var/www/roundcubemail -d correo.EDOMINIO
+>&#13;    doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d miong.org -d www.miong.org  -w /var/www/roundcubemail -d correo.miong.org
 </PRE
 ></DIV
 ><DIV
@@ -5351,14 +5360,15 @@ CLASS="programlisting"
 ><P
 >&#13;          el primer en caso de que corra Apache chroot y el segundo si
           no. En ambos casos se sugiere la siguiente secuencia para
-          crear un directorio de publicación para el usuario EUSUARIO:
+          crear un directorio de publicación para el usuario
+          pablo:
         </P
 ><PRE
 CLASS="programlisting"
->&#13;    cd /home/EUSUARIO
-    doas mkdir /var/www/users/EUSUARIO
-    doas ln -s /var/www/users/EUSUARIO public_html
-    doas chown EUSUARIO:EUSUARIO /var/www/users/EUSUARIO
+>&#13;    cd /home/pablo
+    doas mkdir /var/www/users/pablo
+    doas ln -s /var/www/users/pablo public_html
+    doas chown pablo:pablo /var/www/users/pablo
     
 </PRE
 ><P
@@ -5370,11 +5380,12 @@ CLASS="literal"
           desde un navegador local podrán verse con el URL:
           <TT
 CLASS="literal"
->http://localhost/~EUSUARIO/</TT
-> o remotamente
-          con <TT
+>http://localhost/~pablo/</TT
+> o
+          remotamente con
+          <TT
 CLASS="literal"
->http://www.EDOMINIO/~EUSUARIO/</TT
+>http://www.miong.org/~pablo/</TT
 >
         </P
 ></DIV
@@ -5452,14 +5463,14 @@ CLASS="programlisting"
 ><PRE
 CLASS="programlisting"
 >&#13;    &#60;VirtualHost 65.167.63.234&#62;
-        ServerAdmin EUSUARIO@EDOMINIO
+        ServerAdmin pablo@miong.org
         DocumentRoot /var/www/htdocs
-        ServerName www.EDOMINIO
-        ServerAlias EDOMINIO
-        ErrorLog logs/EDOMINIO-error_log
+        ServerName www.miong.org
+        ServerAlias miong.org
+        ErrorLog logs/miong.org-error_log
         Options ExecCgi Includes MultiViews Indexes FollowSymlinks 
         SymLinksIfOwnerMatch
-        CustomLog logs/EDOMINIO-access_log common
+        CustomLog logs/miong.org-access_log common
     &#60;/VirtualHost&#62;
 </PRE
 ></LI
@@ -5872,33 +5883,34 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="95%"
 ><P
->&#13;            De acuerdo al protocolo SMTP, sendmail de ENOMCLIENTE se
-            conectaría por el puerto 25 a sendmail en ENOMCLIENTE2 y
-            enviaría los mensajes <TT
+>&#13;            De acuerdo al protocolo SMTP, sendmail de amor
+            se conectaría por el puerto 25 a sendmail en
+            &#38;ENOMCLIENTE2; y enviaría los mensajes
+            <TT
 CLASS="literal"
 >EHLO</TT
 >,
             <TT
 CLASS="literal"
->MAIL FROM:        EUSUARIO@ECLIENTE</TT
+>MAIL FROM:        pablo@amor.miong.org</TT
 >,
             después enviaría
             <TT
 CLASS="literal"
->RCPT TO: EUSUARIO2@ECLIENTE2</TT
->, después
-            <TT
+>RCPT TO: &#38;EUSUARIO2;@&#38;amor.miong.org2;</TT
+>,
+            después <TT
 CLASS="literal"
 >DATA</TT
-> y a continuación el cuerpo del
-            correo comenzando con el encabezado de acuerdo al RFC 822,
-            con un cuerpo de mensaje que emplee 7 bits y terminando con
-            una línea que sólo tenga un punto. Por ejemplo
+> y a continuación el cuerpo
+            del correo comenzando con el encabezado de acuerdo al RFC
+            822, con un cuerpo de mensaje que emplee 7 bits y terminando
+            con una línea que sólo tenga un punto. Por ejemplo
           </P
 ><PRE
 CLASS="programlisting"
->&#13;    From: EUSUARIO@ECLIENTE
-    To: EUSUARIO2@ECLIENTE2
+>&#13;    From: pablo@amor.miong.org
+    To: &#38;EUSUARIO2;@&#38;amor.miong.org2;
     Subject: Saludo
 
     Un cortisimo saludo para bendición de nuestro Creador.
@@ -5916,8 +5928,8 @@ CLASS="literal"
 ><PRE
 CLASS="programlisting"
 >&#13;    sendmail -bm
-    EUSUARIO2@ECLIENTE2 -f
-    EUSUARIO@ECLIENTE 
+    &#38;EUSUARIO2;@&#38;amor.miong.org2; -f
+    pablo@amor.miong.org 
 </PRE
 ><P
 >&#13;            (para emplear <TT

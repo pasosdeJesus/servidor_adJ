@@ -14,7 +14,7 @@ TITLE="Protocolos de soporte y de usuario"
 HREF="x935.htm"><LINK
 REL="NEXT"
 TITLE="Novedades"
-HREF="a2807.htm"></HEAD
+HREF="a2892.htm"></HEAD
 ><BODY
 CLASS="sect1"
 BGCOLOR="#FFFFFF"
@@ -56,7 +56,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="a2807.htm"
+HREF="a2892.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
@@ -619,7 +619,7 @@ CLASS="literal"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    ALTER ROLE EUSUARIO with UNENCRYPTED PASSWORD 'clave-plana';
+>&#13;    ALTER ROLE pablo with UNENCRYPTED PASSWORD 'clave-plana';
 </PRE
 ><P
 >&#13;        Desde PostgreSQL 8.1 se emplea un esquema de roles que unifica
@@ -652,7 +652,7 @@ CLASS="programlisting"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    GRANT ALL on solicitud TO EUSUARIO2;
+>&#13;    GRANT ALL on solicitud TO &#38;EUSUARIO2;;
 </PRE
 ></DIV
 ><DIV
@@ -879,7 +879,7 @@ NAME="postgresql-cotejacion"
 ></H3
 ><P
 >&#13;        Desde adJ 5.2 se incluye un porte de PostgreSQL (la versión
-        incluida en adJ &#38;ver-adj; es &#38;p-postgresql-server;) que
+        incluida en adJ 6.2 es &#38;p-postgresql-server;) que
         soporta cotejaciones de acuerdo al locale, y por defecto se
         crean cotejaciones para todos los países de habla hispana, con
         nombres de la forma <TT
@@ -1013,6 +1013,336 @@ CLASS="sect3"
 ><H3
 CLASS="sect3"
 ><A
+NAME="base-postgresql-remota"
+>Base PostgreSQL remota</A
+></H3
+><P
+>&#13;        PostgreSQL permite conexiones remotas y cifradas, así que la
+        aplicación puede estar en un servidor y la base de datos en
+        otra.
+      </P
+><P
+CLASS="literallayout"
+>Para&nbsp;la&nbsp;operación&nbsp;cifrada&nbsp;se&nbsp;requiere&nbsp;un&nbsp;certificado&nbsp;para&nbsp;el&nbsp;servidor&nbsp;y&nbsp;un&nbsp;certificado&nbsp;para&nbsp;cada&nbsp;usuario&nbsp;de&nbsp;la&nbsp;base&nbsp;de&nbsp;datos&nbsp;que&nbsp;se&nbsp;emplee&nbsp;en&nbsp;conexiones&nbsp;remotas.&nbsp;Los&nbsp;certificados&nbsp;para&nbsp;los&nbsp;clientes&nbsp;deben&nbsp;tener&nbsp;el&nbsp;CN&nbsp;con&nbsp;el&nbsp;nombre&nbsp;del&nbsp;usuario&nbsp;que&nbsp;hará&nbsp;la&nbsp;conexión.<br>
+Por&nbsp;lo&nbsp;mismo&nbsp;en&nbsp;lugar&nbsp;de&nbsp;comprar&nbsp;certificados&nbsp;para&nbsp;esto&nbsp;es&nbsp;más&nbsp;práctico&nbsp;tener&nbsp;una&nbsp;autoridad&nbsp;certificadora&nbsp;que&nbsp;pueda&nbsp;firmarlos.</P
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="autoridad-certificadora-ssl"
+>Autoridad certificadora SSL</A
+></H4
+><P
+>&#13;          Las operaciones con SSL depende en cliente y en servidor de la
+          librería LibreSSL (en otros sistemas OpenSSL). Esta incluye el
+          programa <TT
+CLASS="literal"
+>openssl</TT
+> para hacer varias
+          operaciones, incluyendo operaciones de una autoridad
+          certificadora.
+        </P
+><P
+>&#13;          Un certificado SSL siempre va con una llave privada (el
+          certificado es la llave pública).
+        </P
+><P
+>&#13;          El proceso para crear un certificado es:
+        </P
+><P
+></P
+><OL
+COMPACT="COMPACT"
+TYPE="1"
+><LI
+><P
+>&#13;              Crear la llave privada para el certificado (extensión
+              .key)
+            </P
+></LI
+><LI
+><P
+>&#13;              Generar el certificado (llave pública) pero sin firma
+              (extensión .csr)
+            </P
+></LI
+><LI
+><P
+>&#13;              Firmar el certificado con una autoridad certificadora y
+              generar el certificado
+            </P
+></LI
+><LI
+><P
+>&#13;              Usar el certificado firmado junto con la llave privada
+              para realizar conexiones (el certificado firmado se
+              compartirá, mientras que la llave privada no)
+            </P
+></LI
+></OL
+><P
+>&#13;          Los archivos intermedios pueden examinarse así:
+        </P
+><P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><P
+>&#13;              Solicitudes:
+              <TT
+CLASS="literal"
+>openssl req -noout -text -in client.csr</TT
+>
+            </P
+></LI
+><LI
+><P
+>&#13;              Llaves:
+              <TT
+CLASS="literal"
+>openssl rsa -check -in client.key</TT
+>
+            </P
+></LI
+><LI
+><P
+>&#13;              Certificados:
+              <TT
+CLASS="literal"
+>openssl x509 -noout -text -in client.crt</TT
+>
+            </P
+></LI
+></UL
+><P
+>&#13;          La autoridad certificadora no es más que un certificado
+          autofirmado que se configura y usa consistentemente como
+          autoridad certificadora.
+        </P
+></DIV
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="configuración-de-servidor"
+>Configuración de servidor</A
+></H4
+><P
+>&#13;          En el servidor deben quedar certificados del servidor en
+          <TT
+CLASS="literal"
+>/var/postgresql/data</TT
+>:
+        </P
+><P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><P
+>&#13;              root.crt Autoridad certificadora (igual a server.crt)
+            </P
+></LI
+><LI
+><P
+>&#13;              root.crl Lista de revocación
+            </P
+></LI
+><LI
+><P
+>&#13;              server.crt Certificado del servidor
+            </P
+></LI
+><LI
+><P
+>&#13;              server.key Llave privada del servidor
+            </P
+></LI
+></UL
+><P
+>&#13;          Por cada cliente que se va a conectar debe configurarse en
+          <TT
+CLASS="literal"
+>/var/postgresql/data/pg_hba.conf</TT
+> el/los
+          usuarios que se conectarán. Contrario a lo especificado en la
+          documentación de PostgreSQL en casos de SSL en ese archivo
+          sólo nos han funcionado líneas de la forma:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    hostssl all usuario 192.168.100.11/32 cert clientcert=1
+</PRE
+><P
+>&#13;          Es decir conexión SSL exigiendo certificado al cliente y que
+          la autenticación sea por certificado. Lo cual también exige
+          que el certificado del cliente tenga el CN igual al usuario.
+        </P
+></DIV
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="configuración-de-cada-cliente"
+>configuración de cada cliente</A
+></H4
+><P
+CLASS="literallayout"
+>Para&nbsp;cada&nbsp;usuario&nbsp;debe&nbsp;hacerse&nbsp;un&nbsp;certificado&nbsp;que&nbsp;se&nbsp;ubica&nbsp;en&nbsp;cada&nbsp;comptuador&nbsp;cliente&nbsp;en&nbsp;<TT
+CLASS="literal"
+>~/.postgresql/{usuario.crt, usuario.key}</TT
+><br>
+donde&nbsp;usuario&nbsp;debe&nbsp;correponder&nbsp;al&nbsp;usuario&nbsp;en&nbsp;la&nbsp;base&nbsp;de&nbsp;datos&nbsp;y&nbsp;al&nbsp;CN&nbsp;del&nbsp;certificado.</P
+><P
+>&#13;          Desde el servidor puede generar y firmar certificado para
+          cliente por 10 años (cambie <TT
+CLASS="literal"
+>usuario</TT
+> por el
+          usuario PostgreSQL dueño de la bae de datos y que usara desde
+          los clientes para conectarse, si prefiere un lapsode tiemo
+          diferente especifiquelo en días después de la opción
+          <TT
+CLASS="literal"
+>-days</TT
+>):
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas su - 
+    cd /var/postgresql/data
+    openssl genrsa -des3 -out usuario.key 1024
+    openssl rsa -in usuario.key -out usuario.key
+    openssl req -new -key usuario.key -out usuario.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=Pasos de Jesús/CN=usuario'
+    openssl x509 -req -days 3650 -in usuario.csr -CA root.crt -CAkey server.key -out usuario.crt -CAcreateserial
+</PRE
+><P
+>&#13;          A continuación copie el certificado generado
+          (<TT
+CLASS="literal"
+>usuario.crt</TT
+>) y la llave privada
+          (<TT
+CLASS="literal"
+>usuario.key</TT
+>) al computador cliente donde
+          se usará:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    scp usuario.key usuario.crt mius@192.168.100.11:~/.postgresql/
+</PRE
+><P
+>&#13;          En el servidor edite el archivo
+          <TT
+CLASS="literal"
+>/var/postgresql/data/pg_hba.conf</TT
+> y
+          asegurese de agregar una línea para el usuario y el computador
+          cliente:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    hostssl all usuario 192.168.100.11/32 cert clientcert=1
+</PRE
+><P
+>&#13;          Reinicie PostgreSQL.
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas sh /etc/rc.d/postgresql -d restart
+</PRE
+><P
+>&#13;          Desde el cliente ejecute:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas chmod 0600 /home/usis/.postgresql/usuario.key
+</PRE
+><P
+>&#13;          y pruebe la conexión asegurando que se usa el certificado del
+          usuario respectivo:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    PGSSLCERT=/home/usis/.postgresql/usuario.crt \
+    PGSSLKEY=/home/usis/.postgresql/usuario.key  \
+    psql -h192.168.100.21 -Uusuario usuario
+</PRE
+><P
+>&#13;          Configure la aplicación para que en cada arranque o uso
+          establezca:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    PGSSLCERT=/home/usis/.postgresql/usuario.crt 
+    PGSSLKEY=/home/usis/.postgresql/usuario.key
+</PRE
+><DIV
+CLASS="sect5"
+><H5
+CLASS="sect5"
+><A
+NAME="clientes-en-php"
+>Clientes en PHP</A
+></H5
+><P
+>&#13;            Copie las llaves dentro de la jaula chroot, haga que el
+            dueño sea www:www e incluya en alguna fuente usada antes de
+            las conexiones a base de datos (por ejemplo intente en
+            index.php):
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    putenv('PGSSLCERT=/ojs/certs/ojs.crt');
+    putenv('PGSSLKEY=/ojs/certs/ojs.key');
+</PRE
+></DIV
+><DIV
+CLASS="sect5"
+><H5
+CLASS="sect5"
+><A
+NAME="clientes-en-ruby-on-rails"
+>Clientes en Ruby on Rails</A
+></H5
+><P
+>&#13;            En <TT
+CLASS="literal"
+>config/database.yml</TT
+> debe verse algo
+            como:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    username: usuario
+    host: 192.168.100.21
+    sslmode: "require"
+</PRE
+><P
+>&#13;            y al hacer operaciones que usen base de datos (rails
+            dbconsole, iniciar unicorn, etc) asegurese de ejecutarlas en
+            un ambiente donde se definan bien las variables PGSSLCERT y
+            PGSSLKEY, por ejemplo:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    PGSSLCERT=/home/usis/.postgresql/usuario.crt \
+    PGSSLKEY=/home/usis/.postgresql/usuario.key \
+    rails dbconsole
+</PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
 NAME="referencias-postgresql"
 >Referencias y lecturas recomendadas</A
 ></H3
@@ -1042,6 +1372,16 @@ TARGET="_top"
 ><LI
 ><P
 >&#13;            Páginas del manual de Unix: psql 1
+          </P
+></LI
+><LI
+><P
+>&#13;            SSL Certificates For PostgreSQL :
+            <A
+HREF="https://www.howtoforge.com/postgresql-ssl-certificates"
+TARGET="_top"
+>https://www.howtoforge.com/postgresql-ssl-certificates</A
+>
           </P
 ></LI
 ></UL
@@ -1338,7 +1678,7 @@ NAME="chroot-mysql"
 >MariaDB y servidor web con chroot</A
 ></H3
 ><P
->&#13;        Puede emplear aplicaciones para Apache en modo
+>&#13;        Puede emplear aplicaciones para nginx o Apache en modo
         <TT
 CLASS="literal"
 >chroot</TT
@@ -1357,9 +1697,9 @@ TARGET="_top"
 >).
       </P
 ><P
->&#13;        Para correro MariaDB dentro de A continuación documentamos como
-        ubicar el socket de MariaDB dentro de la jaula del servidor web
-        (/var/www/).
+>&#13;        Para correr MariaDB dentro de la jaula usada por nginx, a
+        continuación documentamos como ubicar el socket de MariaDB
+        dentro de la jaula del servidor web (/var/www/).
       </P
 ><P
 >&#13;        Una vez instale <TT
@@ -1515,8 +1855,8 @@ CLASS="literal"
 CLASS="literal"
 >phpldapadmin</TT
 ><A
-NAME="AEN2598"
-HREF="#FTN.AEN2598"
+NAME="AEN2683"
+HREF="#FTN.AEN2683"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -2102,7 +2442,7 @@ CLASS="sect3"
 ><H3
 CLASS="sect3"
 ><A
-NAME="configuración-de-servidor"
+NAME="configuración-de-servidor-1"
 >Configuración de servidor</A
 ></H3
 ><P
@@ -2423,8 +2763,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN2598"
-HREF="x2239.htm#AEN2598"
+NAME="FTN.AEN2683"
+HREF="x2239.htm#AEN2683"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -2480,7 +2820,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="a2807.htm"
+HREF="a2892.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
