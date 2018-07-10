@@ -460,7 +460,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
     </p><p>
       En su modo de operación dinámico el servidor le asigna una IP a un
       sólo cliente por cierto periodo de tiempo, al cabo del cual podría
-      asignarle otra IP<sup>[<a name="idp3809745320" href="#ftn.idp3809745320">25</a>]</sup>.
+      asignarle otra IP<sup>[<a name="idm92212184" href="#ftn.idm92212184">25</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="cliente-DHCP"></a>5.3.1. Configuración de un cliente DHCP</h4></div></div></div><p>
         La configuración de un computador para operar como cliente de
         DHCP depende del sistema operativo, en el caso de Windows en las
@@ -575,7 +575,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
         <a href="ftp://ftp.rfc-editor.org/in-notes/rfc1123.txt" target="_top">1123</a>,
         funcionando sobre TCP/IP. En una situación típica en la que un
         usuario pablo@amor.miong.org envía un mensaje al
-        usuario &amp;EUSUARIO2;@&amp;amor.miong.org2; sin computadores
+        usuario rodrigo@respeto.miong.org sin computadores
         intermediarios, se requiere:
       </p><div class="itemizedlist"><ul type="disc"><li><p>
             Que haya conexión física y a nivel de TCP/IP entre ambos
@@ -589,15 +589,15 @@ dig @192.168.100.100 correo.miescuela.edu.co
             Que ambos usuarios tengan un programa con el que puedan leer
             y redactar correos, como por ejemplo mail, mutt,
             mozilla-thunderbird (a ese programa se le llamará MUA -
-            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idp3849183784" href="#ftn.idp3849183784">26</a>]</sup>).
+            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idm1602966872" href="#ftn.idm1602966872">26</a>]</sup>).
           </p></li></ul></div><p>
-        Si tanto pablo como &amp;EUSUARIO2; emplean como MUA
+        Si tanto pablo como rodrigo emplean como MUA
         <code class="literal">mail</code>, y ambos computadores tiene como MTA
         sendmail, el proceso sería:
       </p><p>
         pablo emplea <code class="literal">mail</code> en su computador
         amor para redactar el mensaje cuyo destinatario es
-        &amp;EUSUARIO2;.
+        rodrigo.
       </p><p>
         En amor, el programa mail ejecuta sendmail para
         enviar el mensaje. sendmail deja el mensaje en una cola de
@@ -610,28 +610,28 @@ dig @192.168.100.100 correo.miescuela.edu.co
         Enviar un mensaje significa crear una conexión TCP con el MTA
         destino o con otro MTA que actúe de intermediario, típicamente
         en el puerto TCP 25, y transmitir el mensaje siguiendo las
-        reglas del protocolo SMTP <sup>[<a name="idp2267289640" href="#ftn.idp2267289640">27</a>]</sup>. Para establecer el computador con el cual
+        reglas del protocolo SMTP <sup>[<a name="idm2567662168" href="#ftn.idm2567662168">27</a>]</sup>. Para establecer el computador con el cual
         conectarse sendmail revisa con el resolvedor DNS, registros MX
         asociados con el dominio de la dirección, si los hay intenta
         enviar a cada uno en orden de prioridad --los registros MX con
         menor número tienen mayor prioridad (ver
         <a href="protocolos_de_soporte_y_de_usuario.html#servidor-dns" title="5.1. Servicio DNS">Servicio DNS</a>).
       </p><p>
-        En &amp;ENOMCLIENTE2; debe estar corriendo un proceso que acepte
+        En respeto debe estar corriendo un proceso que acepte
         la conexión en el puerto 25, i.e. sendmail o algún otro MTA que
         reciba el mensaje siguiendo el protocolo SMTP.
       </p><p>
-        sendmail en &amp;ENOMCLIENTE2; agrega el mensaje que recibe en
+        sendmail en respeto agrega el mensaje que recibe en
         el archivo tipo texto
-        <code class="literal">/var/mail/&amp;EUSUARIO2;</code> que está en formato
+        <code class="literal">/var/mail/rodrigo</code> que está en formato
         mbox.
       </p><p>
         Archivo donde exim deja los correos destinados al usuario
-        &amp;EUSUARIO2;.
+        rodrigo.
       </p><p>
-        Cuando &amp;EUSUARIO2; lo desee, podrá emplear
+        Cuando rodrigo lo desee, podrá emplear
         <code class="literal">mail</code> para leer los correos que se hayan
-        acumulado en <code class="literal">/var/mail/&amp;EUSUARIO2;</code> ---a
+        acumulado en <code class="literal">/var/mail/rodrigo</code> ---a
         medida que los lea saldrán de ese archivo para quedar en
         <code class="literal">~/mbox</code>.
       </p><p>
@@ -873,7 +873,7 @@ Connection closed by foreign host.
         </p><p>
           Aunque <code class="literal">sendmail</code> soporta tanto TLS como
           SMTP-AUTH, la configuración por defecto de OpenBSD
-          6.2 no los incluye. En el caso de TLS lo
+          6.3 no los incluye. En el caso de TLS lo
           incluido en el sistema base es suficiente y el procedimiento
           de configuración se documenta en
           <code class="literal">man starttls</code>.En cuanto a SMTP-AUTH se
@@ -951,7 +951,7 @@ Connection closed by foreign host.
     for i in `find . -name CVS`; do echo $i; 
         echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" &gt; $i/Root;
     done
-    cvs -z3 update -Pd -rOPENBSD_6.2-U
+    cvs -z3 update -Pd -rOPENBSD_6.3-U
 </pre><p>
             Después indique que desea recompilar
             <code class="literal">sendmail</code> con soporte para autenticación
@@ -1074,12 +1074,12 @@ Connection closed by foreign host.
           </p><pre class="programlisting">
     MAIL FROM:&lt;pablo@miong.org&gt;
     250 OK                                                                          
-    RCPT TO:&lt;&amp;EUSUARIO2;@miong.org&gt;
+    RCPT TO:&lt;rodrigo@miong.org&gt;
     250 Accepted                                                                    
     DATA                                                                            
     354 Enter message, ending with "." on a line by itself                          
     From: "pablo@miong.org" &lt;pablo@miong.org&gt;
-    To:  &amp;EUSUARIO2;@miong.org
+    To:  rodrigo@miong.org
     Subject: probando
     1234                                                                            
     .                                                                               
@@ -1199,7 +1199,7 @@ Connection closed by foreign host.
         {#protocolos-revisar-correo}
       </p><p>
         Para extraer correos de un servidor pueden emplearse los
-        protocolos inseguros<sup>[<a name="idp2230659112" href="#ftn.idp2230659112">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
+        protocolos inseguros<sup>[<a name="idp961815080" href="#ftn.idp961815080">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
         POP3S e IMAPS En esta sección se describe la configuración
         extra-rápida pero insegura de POP3, y la configuración segura
         pero que requiere configuración más delicada de POP3S e IMAPS
@@ -2592,7 +2592,7 @@ chmod og-r /var/mail/cuenta
         </p><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="lecturas-ssi"></a>5.7.4.5.1. Lecturas recomendadas</h6></div></div></div><p>
             Hay información completa sobre SSI en el manual de Apache
             <a href="http://httpd.apache.org/docs/howto/ssi.html" target="_top">http://httpd.apache.org/docs/howto/ssi.html</a>
-          </p></div></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp3809745320" href="#idp3809745320">25</a>] </sup>
+          </p></div></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm92212184" href="#idm92212184">25</a>] </sup>
           Típicamente un cliente enviará un paquete DHCPDISCOVER a toda
           la red (opcionalmente con sugerencia de la IP que quiere), un
           servidor que reciba tal paquete le responderá con un DHCPOFFER
@@ -2600,24 +2600,24 @@ chmod og-r /var/mail/cuenta
           puede responder con DHCPREQUEST para confirmar los parámetros
           y el servidor responde con un DHCPACK para confirmar
           asignación.
-        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp3849183784" href="#idp3849183784">26</a>] </sup>
+        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1602966872" href="#idm1602966872">26</a>] </sup>
                 De acuerdo al RFC 1123 los nombre MUA y MTA son propios
                 del protocolo X.400.
-              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2267289640" href="#idp2267289640">27</a>] </sup>
+              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2567662168" href="#idm2567662168">27</a>] </sup>
             De acuerdo al protocolo SMTP, sendmail de amor
             se conectaría por el puerto 25 a sendmail en
-            &amp;ENOMCLIENTE2; y enviaría los mensajes
+            respeto y enviaría los mensajes
             <code xmlns="" class="literal">EHLO</code>,
             <code xmlns="" class="literal">MAIL FROM:        pablo@amor.miong.org</code>,
             después enviaría
-            <code xmlns="" class="literal">RCPT TO: &amp;EUSUARIO2;@&amp;amor.miong.org2;</code>,
+            <code xmlns="" class="literal">RCPT TO: rodrigo@respeto.miong.org</code>,
             después <code xmlns="" class="literal">DATA</code> y a continuación el cuerpo
             del correo comenzando con el encabezado de acuerdo al RFC
             822, con un cuerpo de mensaje que emplee 7 bits y terminando
             con una línea que sólo tenga un punto. Por ejemplo
           </p><pre class="programlisting">
     From: pablo@amor.miong.org
-    To: &amp;EUSUARIO2;@&amp;amor.miong.org2;
+    To: rodrigo@respeto.miong.org
     Subject: Saludo
 
     Un cortisimo saludo para bendición de nuestro Creador.
@@ -2629,12 +2629,12 @@ chmod og-r /var/mail/cuenta
             transparente empleando directamente sendmail :
           </p><pre class="programlisting">
     sendmail -bm
-    &amp;EUSUARIO2;@&amp;amor.miong.org2; -f
+    rodrigo@respeto.miong.org -f
     pablo@amor.miong.org 
 </pre><p>
             (para emplear <code class="literal">-f</code> con sendmail debe ser
             usuario autorizado).
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2230659112" href="#idp2230659112">28</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp961815080" href="#idp961815080">28</a>] </sup>
             Son inseguros porque transmiten claves y el contenido de los
             mensajes planos por la red
           </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="otros_servicios_que_puede_prestar_el_servidor.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">4. Direcciones, enrutamiento, transporte y cortafuegos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 6. Otros servicios que puede prestar el servidor</td></tr></table></div></body></html>

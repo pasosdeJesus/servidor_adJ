@@ -1319,7 +1319,7 @@ TARGET="_top"
 >,
         funcionando sobre TCP/IP. En una situación típica en la que un
         usuario pablo@amor.miong.org envía un mensaje al
-        usuario &#38;EUSUARIO2;@&#38;amor.miong.org2; sin computadores
+        usuario rodrigo@respeto.miong.org sin computadores
         intermediarios, se requiere:
       </P
 ><P
@@ -1368,7 +1368,7 @@ CLASS="footnote"
 ></LI
 ></UL
 ><P
->&#13;        Si tanto pablo como &#38;EUSUARIO2; emplean como MUA
+>&#13;        Si tanto pablo como rodrigo emplean como MUA
         <TT
 CLASS="literal"
 >mail</TT
@@ -1381,7 +1381,7 @@ CLASS="literal"
 >mail</TT
 > en su computador
         amor para redactar el mensaje cuyo destinatario es
-        &#38;EUSUARIO2;.
+        rodrigo.
       </P
 ><P
 >&#13;        En amor, el programa mail ejecuta sendmail para
@@ -1414,32 +1414,32 @@ HREF="x935.htm#servidor-dns"
 >).
       </P
 ><P
->&#13;        En &#38;ENOMCLIENTE2; debe estar corriendo un proceso que acepte
+>&#13;        En respeto debe estar corriendo un proceso que acepte
         la conexión en el puerto 25, i.e. sendmail o algún otro MTA que
         reciba el mensaje siguiendo el protocolo SMTP.
       </P
 ><P
->&#13;        sendmail en &#38;ENOMCLIENTE2; agrega el mensaje que recibe en
+>&#13;        sendmail en respeto agrega el mensaje que recibe en
         el archivo tipo texto
         <TT
 CLASS="literal"
->/var/mail/&#38;EUSUARIO2;</TT
+>/var/mail/rodrigo</TT
 > que está en formato
         mbox.
       </P
 ><P
 >&#13;        Archivo donde exim deja los correos destinados al usuario
-        &#38;EUSUARIO2;.
+        rodrigo.
       </P
 ><P
->&#13;        Cuando &#38;EUSUARIO2; lo desee, podrá emplear
+>&#13;        Cuando rodrigo lo desee, podrá emplear
         <TT
 CLASS="literal"
 >mail</TT
 > para leer los correos que se hayan
         acumulado en <TT
 CLASS="literal"
->/var/mail/&#38;EUSUARIO2;</TT
+>/var/mail/rodrigo</TT
 > ---a
         medida que los lea saldrán de ese archivo para quedar en
         <TT
@@ -1955,7 +1955,7 @@ CLASS="literal"
 >sendmail</TT
 > soporta tanto TLS como
           SMTP-AUTH, la configuración por defecto de OpenBSD
-          6.2 no los incluye. En el caso de TLS lo
+          6.3 no los incluye. En el caso de TLS lo
           incluido en el sistema base es suficiente y el procedimiento
           de configuración se documenta en
           <TT
@@ -2117,7 +2117,7 @@ CLASS="programlisting"
     for i in `find . -name CVS`; do echo $i; 
         echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" &#62; $i/Root;
     done
-    cvs -z3 update -Pd -rOPENBSD_6.2-U
+    cvs -z3 update -Pd -rOPENBSD_6.3-U
 </PRE
 ><P
 >&#13;            Después indique que desea recompilar
@@ -2337,12 +2337,12 @@ CLASS="programlisting"
 CLASS="programlisting"
 >&#13;    MAIL FROM:&#60;pablo@miong.org&#62;
     250 OK                                                                          
-    RCPT TO:&#60;&#38;EUSUARIO2;@miong.org&#62;
+    RCPT TO:&#60;rodrigo@miong.org&#62;
     250 Accepted                                                                    
     DATA                                                                            
     354 Enter message, ending with "." on a line by itself                          
     From: "pablo@miong.org" &#60;pablo@miong.org&#62;
-    To:  &#38;EUSUARIO2;@miong.org
+    To:  rodrigo@miong.org
     Subject: probando
     1234                                                                            
     .                                                                               
@@ -5885,7 +5885,7 @@ WIDTH="95%"
 ><P
 >&#13;            De acuerdo al protocolo SMTP, sendmail de amor
             se conectaría por el puerto 25 a sendmail en
-            &#38;ENOMCLIENTE2; y enviaría los mensajes
+            respeto y enviaría los mensajes
             <TT
 CLASS="literal"
 >EHLO</TT
@@ -5897,7 +5897,7 @@ CLASS="literal"
             después enviaría
             <TT
 CLASS="literal"
->RCPT TO: &#38;EUSUARIO2;@&#38;amor.miong.org2;</TT
+>RCPT TO: rodrigo@respeto.miong.org</TT
 >,
             después <TT
 CLASS="literal"
@@ -5910,7 +5910,7 @@ CLASS="literal"
 ><PRE
 CLASS="programlisting"
 >&#13;    From: pablo@amor.miong.org
-    To: &#38;EUSUARIO2;@&#38;amor.miong.org2;
+    To: rodrigo@respeto.miong.org
     Subject: Saludo
 
     Un cortisimo saludo para bendición de nuestro Creador.
@@ -5928,7 +5928,7 @@ CLASS="literal"
 ><PRE
 CLASS="programlisting"
 >&#13;    sendmail -bm
-    &#38;EUSUARIO2;@&#38;amor.miong.org2; -f
+    rodrigo@respeto.miong.org -f
     pablo@amor.miong.org 
 </PRE
 ><P
