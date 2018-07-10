@@ -160,5 +160,5 @@ ispell: $(HTML_TARGET)
 .md.xdbk:
 	mkdir -p tmp
 	$(PANDOC) -t docbook -o tmp/$@ $<
-	sed -e "s/<link linkend=\"\([^\"]*\)\">xref<\/link>/<xref linkend=\"\1\"\/>/g;s/&amp;\([-A-Z]*\);/\&\1;/g;" tmp/$@ > $@
+	sed -e "s/<link linkend=\"\([^\"]*\)\">xref<\/link>/<xref linkend=\"\1\"\/>/g;s/&amp;\([-A-Z0-9]*\);/\&\1;/g;" tmp/$@ > $@
 

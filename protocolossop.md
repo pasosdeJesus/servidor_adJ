@@ -559,7 +559,7 @@ Transfer Protocol*) descrito especialmente en los RFCs
 [821](ftp://ftp.rfc-editor.org/in-notes/rfc821.txt) y
 [1123](ftp://ftp.rfc-editor.org/in-notes/rfc1123.txt), funcionando sobre
 TCP/IP. En una situación típica en la que un usuario &EUSUARIO;@&ECLIENTE;
-envía un mensaje al usuario &EUSUARIO2;@&&ECLIENTE;2; sin computadores
+envía un mensaje al usuario &EUSUARIO2;@&ECLIENTE2; sin computadores
 intermediarios, se requiere:
 
 -   Que haya conexión física y a nivel de TCP/IP entre ambos
@@ -1921,13 +1921,13 @@ Asignar password al sitio de mailman con
     conectaría por el puerto 25 a sendmail en &ENOMCLIENTE2; y enviaría
     los mensajes `EHLO`, `MAIL FROM:
            &EUSUARIO;@&ECLIENTE;`, después enviaría
-    `RCPT TO: &EUSUARIO2;@&&ECLIENTE;2;`, después `DATA` y a continuación el
+    `RCPT TO: &EUSUARIO2;@&ECLIENTE2;`, después `DATA` y a continuación el
     cuerpo del correo comenzando con el encabezado de acuerdo al RFC
     822, con un cuerpo de mensaje que emplee 7 bits y terminando con una
     línea que sólo tenga un punto. Por ejemplo
 
             From: &EUSUARIO;@&ECLIENTE;
-            To: &EUSUARIO2;@&&ECLIENTE;2;
+            To: &EUSUARIO2;@&ECLIENTE2;
             Subject: Saludo
 
             Un cortisimo saludo para bendición de nuestro Creador.
@@ -1939,7 +1939,7 @@ Asignar password al sitio de mailman con
 
          
             sendmail -bm
-            &EUSUARIO2;@&&ECLIENTE;2; -f
+            &EUSUARIO2;@&ECLIENTE2; -f
             &EUSUARIO;@&ECLIENTE; 
 
     (para emplear `-f` con sendmail debe ser usuario autorizado).
