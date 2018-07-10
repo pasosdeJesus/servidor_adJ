@@ -152,7 +152,7 @@ nivel de kernel se puede controlar con:
     algunos computadores, por ejemplo:
 
         127.0.0.1       localhost
-        192.168.1.1    ESERV ENOMSERV
+        192.168.1.1    &ESERV; &ENOMSERV;
                  
 
 `sysctl`
