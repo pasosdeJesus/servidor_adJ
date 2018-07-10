@@ -41,7 +41,7 @@ Versión 5.5
 
     -   Actualizada [xref](#mariadb).
 
-    -   Nueva [xref](#servidor-ldapd) en capítulo 6.
+    -   Nueva [xref](#ldapd) en capítulo 6.
 
 Versión 5.4
 
