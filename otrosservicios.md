@@ -548,7 +548,7 @@ y al hacer operaciones que usen base de datos (rails dbconsole, iniciar unicorn,
     usuarios de PostgreSQL.
 
 
-## MariaDB
+## MariaDB {#mariadb}
 
 A partir de OpenBSD/adJ 5.7 MariaDB remplaza a MySQL. Según
 <https://es.wikipedia.org/wiki/MariaDB> MariaDB fue iniciada por el
@@ -571,7 +571,7 @@ Para aumentar el límite de archivos que el usuario `_mysql` de clase
         mysql:\
             :openfiles-cur=2048:\
             :openfiles-max=4096:\
-            :tc=daemon:
+            :tc=servicio:
 
 tenga en cuenta no dejar espacios al final de cada línea y que desde la
 segunda línea cada una comiencen con el caracter tabulador. A
@@ -580,8 +580,10 @@ continuación regenere el archivo binario `/etc/login.conf.db` con
         cd /etc
         doas cap_mkdb /etc/login.conf 
 
-Después agregue `mysqld` a `pkg_scripts` en `/etc/rc.conf.local`. A
-continuación lance el servidor con:
+Después agregue `mysqld` a `pkg_scripts` en `/etc/rc.conf.local` por ejemplo con:
+	doas rcctl enable mysqld
+
+A continuación lance el servidor con:
 
         doas sh /etc/rc.d/mysqld start
 

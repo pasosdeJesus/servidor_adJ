@@ -1,3 +1,7 @@
+Versión 6.3
+
+:   - Actualizada documentacion de MariaDB ([xref](#mariadb))
+
 Versión 6.2
 
 :   - Nueva sección  ([xref](#base-postgresql-remota))
