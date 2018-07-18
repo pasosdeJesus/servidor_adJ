@@ -14,7 +14,7 @@ TITLE="Protocolos de soporte y de usuario"
 HREF="x935.htm"><LINK
 REL="NEXT"
 TITLE="Novedades"
-HREF="a2892.htm"></HEAD
+HREF="a2893.htm"></HEAD
 ><BODY
 CLASS="sect1"
 BGCOLOR="#FFFFFF"
@@ -56,7 +56,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="a2892.htm"
+HREF="a2893.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
@@ -879,7 +879,7 @@ NAME="postgresql-cotejacion"
 ></H3
 ><P
 >&#13;        Desde adJ 5.2 se incluye un porte de PostgreSQL (la versión
-        incluida en adJ 6.3 es &#38;p-postgresql-server;) que
+        incluida en adJ 6.3 es postgresql-server-10.4) que
         soporta cotejaciones de acuerdo al locale, y por defecto se
         crean cotejaciones para todos los países de habla hispana, con
         nombres de la forma <TT
@@ -1407,8 +1407,8 @@ TARGET="_top"
       la compra para reducir competencia de sus bases de datos.
     </P
 ><P
->&#13;      Debe instalar los paquetes &#38;p-mariadb-client; y
-      &#38;p-mariadb-server;. Aunque el nombre de los paquetes cambia
+>&#13;      Debe instalar los paquetes mariadb-client-10.0.34v1 y
+      mariadb-server-10.0.34v1. Aunque el nombre de los paquetes cambia
       los comandos para operarla siguen siendo los mismos. Tras instalar
       el servidor debe ejecutar <TT
 CLASS="literal"
@@ -1441,7 +1441,7 @@ CLASS="programlisting"
 >&#13;    mysql:\
         :openfiles-cur=2048:\
         :openfiles-max=4096:\
-        :tc=daemon:
+        :tc=servicio:
 </PRE
 ><P
 >&#13;      tenga en cuenta no dejar espacios al final de cada línea y que
@@ -1469,8 +1469,11 @@ CLASS="literal"
       <TT
 CLASS="literal"
 >/etc/rc.conf.local</TT
->. A continuación lance el
-      servidor con:
+> por ejemplo con: doas rcctl
+      enable mysqld
+    </P
+><P
+>&#13;      A continuación lance el servidor con:
     </P
 ><PRE
 CLASS="programlisting"
@@ -1855,8 +1858,8 @@ CLASS="literal"
 CLASS="literal"
 >phpldapadmin</TT
 ><A
-NAME="AEN2683"
-HREF="#FTN.AEN2683"
+NAME="AEN2684"
+HREF="#FTN.AEN2684"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -2763,8 +2766,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN2683"
-HREF="x2239.htm#AEN2683"
+NAME="FTN.AEN2684"
+HREF="x2239.htm#AEN2684"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -2820,7 +2823,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="a2892.htm"
+HREF="a2893.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD

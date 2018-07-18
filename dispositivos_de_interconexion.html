@@ -85,9 +85,9 @@
         <code class="literal">/dev/tty00</code> (i.e el dispositivo del primer
         puerto serial); <code class="literal">/usr/libexec/getty std.9600</code>
         es el comando por ejecutar al arranque para manejar ese
-        dispositivo<sup>[<a name="idm1292068184" href="#ftn.idm1292068184">17</a>]</sup>; <code class="literal">vt220</code> indica el tipo de terminal
+        dispositivo<sup>[<a name="idm977555416" href="#ftn.idm977555416">17</a>]</sup>; <code class="literal">vt220</code> indica el tipo de terminal
         que se conectará; <code class="literal">on</code> y
-        <code class="literal">secure</code> son banderas<sup>[<a name="idp163115688" href="#ftn.idp163115688">18</a>]</sup> para <code class="literal">init</code>, el primero indica que
+        <code class="literal">secure</code> son banderas<sup>[<a name="idp2554738984" href="#ftn.idp2554738984">18</a>]</sup> para <code class="literal">init</code>, el primero indica que
         se esperan conexiones por esa línea tty y el segundo indica que
         puede iniciar conexiones el usuario root.
       </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="Terminal"></a>3.1.3. Terminal</h4></div></div></div><p>
@@ -150,7 +150,7 @@
         <code class="literal">~C zmtx miarchivo.txt</code>
       </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="ppp-sobre-modem-nulo"></a>3.1.4. PPP sobre Módem Nulo</h4></div></div></div><p>
         Una vez esté conectado un cliente con un servidor OpenBSD, es
-        posible emplear el protocolo PPP<sup>[<a name="idp327030440" href="#ftn.idp327030440">19</a>]</sup> para permitirle al computador cliente acceder a
+        posible emplear el protocolo PPP<sup>[<a name="idp185143592" href="#ftn.idp185143592">19</a>]</sup> para permitirle al computador cliente acceder a
         Internet o a la red a la que esté conectado el servidor.
       </p><p>
         Una forma posible para lograr conectividad a Internet en una
@@ -395,7 +395,7 @@
       computadores cada uno con tarjeta ethernet interconectados por un
       cable UTP cruzado. Sin embargo típicamente una red ethernet consta
       de varios computadores con tarjetas Ethernet interconectados por
-      uno o más<sup>[<a name="idm460697560" href="#ftn.idm460697560">20</a>]</sup> concentradores (también llamado
+      uno o más<sup>[<a name="idm564428632" href="#ftn.idm564428632">20</a>]</sup> concentradores (también llamado
       <span class="emphasis"><em>hub</em></span> o <span class="emphasis"><em>switch</em></span>) y cables
       UTP directos de cada computador a algún concentrador. La velocidad
       de la red depende de la velocidad de las tarjetas de red, la
@@ -724,7 +724,7 @@
           cables a tales tarjetas y al concentrador. Como eventualmente
           usted mismo hará los cables, en esta sección damos
           instrucciones para que le resulte fácil el proceso. Requerirá
-          unas pinzas especiales <sup>[<a name="idm3267547608" href="#ftn.idm3267547608">21</a>]</sup> para conectores RJ-45 y un probador
+          unas pinzas especiales <sup>[<a name="idp652889512" href="#ftn.idp652889512">21</a>]</sup> para conectores RJ-45 y un probador
           (<span class="emphasis"><em>tester</em></span>) para comprobar que fluye
           corriente en los cables que haga.
         </p><p>
@@ -736,7 +736,7 @@
           compone de 8 cablecitos de colores tenga en cuenta:
         </p><p>
           Deje entre 8mm y 12 mm de los 8 cables al descubierto.
-          <sup>[<a name="idm3267547480" href="#ftn.idm3267547480">22</a>]</sup>
+          <sup>[<a name="idp1845723048" href="#ftn.idp1845723048">22</a>]</sup>
         </p><p>
           Al preparar los cables tenga en cuenta que las tarjetas de
           100MB y 1000MB requieren un orden especial de los cables que
@@ -779,7 +779,7 @@
         </p><p>
           Una vez tenga los cables verifique que la tarjeta de red de
           cada computador esté bien instalada (algunas tienen luces
-          <sup>[<a name="idm2370223960" href="#ftn.idm2370223960">23</a>]</sup> que se encienden cuando transmite o recibe
+          <sup>[<a name="idp301444392" href="#ftn.idp301444392">23</a>]</sup> que se encienden cuando transmite o recibe
           información por el cable), y conecte con cables todas las
           tarjetas al concentrador.
         </p><p>
@@ -1017,7 +1017,7 @@
             <code class="literal">ifconfig</code>, <code class="literal">wpi</code>
           </p></li><li><p>
             Ver <a href="biblio.html" title="B. Bibliografia">wndw</a>
-          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1292068184" href="#idm1292068184">17</a>] </sup>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm977555416" href="#idm977555416">17</a>] </sup>
             Como parámetro getty recibe características de la línea que
             deben estar especificadas en
             <code xmlns="" class="literal">/etc/gettytab</code>. En este caso
@@ -1025,23 +1025,23 @@
             transmisión. Empleando un módem nulo con control de flujo es
             posible emplear velocidades mayores hasta
             <code xmlns="" class="literal">std.115200</code>.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp163115688" href="#idp163115688">18</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2554738984" href="#idp2554738984">18</a>] </sup>
             banderas del inglés <span xmlns="" class="emphasis"><em>flags</em></span>
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp327030440" href="#idp327030440">19</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp185143592" href="#idp185143592">19</a>] </sup>
             PPP es un protocolo especificado en el RFC 1661.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm460697560" href="#idm460697560">20</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm564428632" href="#idm564428632">20</a>] </sup>
           Pueden ponerse concentradores en cascada.
-        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3267547608" href="#idm3267547608">21</a>] </sup>
+        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp652889512" href="#idp652889512">21</a>] </sup>
               En Colombia a tal "pinza especial" se le conoce
               como "ponchadora".
-            </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3267547480" href="#idm3267547480">22</a>] </sup>
+            </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1845723048" href="#idp1845723048">22</a>] </sup>
               Pablo Chamorro nos indicó que "algunas pinzas tienen
               un tope, entonces al colocar las puntas de los cables
               junto al tope, el corte de la envoltura del cable siempre
               se realiza en el mismo punto para que ni sobre ni falte y
               así no hay que preocuparse por estimar el punto de
               corte."
-            </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2370223960" href="#idm2370223960">23</a>] </sup>
+            </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp301444392" href="#idp301444392">23</a>] </sup>
               Luces es traducción de <span xmlns="" class="emphasis"><em>LED (Light emitting
               diode)</em></span>.
             </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="redes_protocolos_e_internet.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">2. Redes, protocolos e Internet </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 4. Direcciones, enrutamiento, transporte y cortafuegos</td></tr></table></div></body></html>
