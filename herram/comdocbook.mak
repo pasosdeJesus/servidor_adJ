@@ -48,8 +48,8 @@ $(HTML_TARGET): $(HTML_PROC)
 
 # To generate HTML in multiple pages with xsltproc
 dbrep_html_xsltproc: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(INDEX) $(SOURCES) $(IMAGES) $(XSLT_HTML) 
-	$(MKDIR) -p $(HTML_DIR)
-	for i in $(IMAGES)  ; do $(CP) $$i $(HTML_DIR)/`basename $$i`; done 
+	$(MKDIR) -p $(HTML_DIR)/img/
+	for i in $(IMAGES)  ; do $(CP) $$i $(HTML_DIR)/img/`basename $$i`; done 
 	bp=`pwd`;cd $(HTML_DIR) && $(RM) -f *html && $(XSLTPROC) --catalogs --nonet $$bp/$(XSLT_HTML) $$bp/$(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
 	for i in $(HTML_DIR)/*html; do $(CP) $$i $$i.bak; $(SED) -e "s/­/-/g" $$i.bak > $$i; done
 	rm -f $(HTML_DIR)/*bak
@@ -114,15 +114,15 @@ $(INDEX): $(INDEX).m
 	cat $(INDEX).m >> $@
 
 $(INDEX).m: HTML.index.m
-	$(PERL) -S $(COLLATEINDEX) -o $@ HTML.index.m
+	LANG=C $(PERL) -S $(COLLATEINDEX) -o $@ HTML.index.m
 
 HTML.index.m: $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) $(SOURCES)
 	echo $(COLLATEINDEX);
 	if (test ! -f $(INDEX)) then { \
-        $(PERL) -S $(COLLATEINDEX) -N -o $(INDEX); \
+        LANG=C $(PERL) -S $(COLLATEINDEX) -N -o $(INDEX); \
 	} fi;
 	$(MKDIR) -p $(HTML_DIR)
-	-cd $(HTML_DIR) && $(RM) -f * && SP_ENCODING=UTF-8 $(JADE) -c$(CATALOG_DSSSL) -D .. -D $(DOCBOOK_DSSSL)/html -t sgml -ihtml -V html-index -d docbook.dsl $(SGML_XML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
+	-cd $(HTML_DIR) && $(RM) -rf * && SP_ENCODING=UTF-8 $(JADE) -c$(CATALOG_DSSSL) -D .. -D $(DOCBOOK_DSSSL)/html -t sgml -ihtml -V html-index -d docbook.dsl $(SGML_XML) $(PROYECTO)-4.1.2.$(EXT_DOCBOOK) 
 	if (test -f html/HTML.index) then { \
 	$(MV) html/HTML.index HTML.index.m; } \
 	else { \
@@ -160,5 +160,5 @@ ispell: $(HTML_TARGET)
 .md.xdbk:
 	mkdir -p tmp
 	$(PANDOC) -t docbook -o tmp/$@ $<
-	sed -e "s/<link linkend=\"\([^\"]*\)\">xref<\/link>/<xref linkend=\"\1\"\/>/g;s/&amp;\([-A-Z0-9]*\);/\&\1;/g;" tmp/$@ > $@
+	sed -e "s/<link linkend=\"\([^\"]*\)\">xref<\/link>/<xref linkend=\"\1\"\/>/g;s/&amp;\([-A-Z0-9a-z]*\);/\&\1;/g;" tmp/$@ > $@
 

@@ -1528,7 +1528,7 @@ servidores válidos como gmail, yahoo o hotmail o de servidores que no
 reintentan el envío como lo espera spamd. Tal comportamiento puede no
 resultar aceptable en algunas organizaciones.
 
-SpamAssassin (paquete &p-p5-mail-spamassassin;) junto con procmail
+SpamAssassin (paquete &p-p5-Mail-SpamAssassin;) junto con procmail
 (paquete &p-procmail;) son una solución intermedia que permiten recibir
 todo correo pero intentan clasificar automáticamente (y con buena
 precisión) los que son no solicitados en carpetas separadas por usuario
