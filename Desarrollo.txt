@@ -181,14 +181,14 @@ particular:
 * Las convenciones para DocBook para logros, indicadores, definiciones y
   ejercicios.
 * Algunos archivos genéricos
-	conf.sh, herram/confaux.sh  	
+	conf.sh, herram_confsh/confaux.sh  	
 		Establecer valor de variables de configuración 
 		en la plataforma donde se ejecuta
 	docbookrep_*	
 		Hojas de éstilo de repasa
-	herram/comdocbook.mak	
+	herram_confsh/comdocbook.mak	
 		Porciones del Makefile para generar HTML/PS/PDF
-	herram/comdist.mak	
+	herram_confsh/comdist.mak	
 		Porciones del Makefile para distribución 
 		y publicación
 

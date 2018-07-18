@@ -25,8 +25,8 @@ if (test ! -f confv.sh) then {
 
 
 # Leyendo funciones para ayudar en configuración
-. herram/confaux.sh
-. herram/misc.sh
+. herram_confsh/confaux.sh
+. herram_confsh/misc.sh
 
 # Reconociendo línea de comandos
 
@@ -151,7 +151,7 @@ FALLAS
 
 VER TAMBIÉN
 	Para mejorar este script o hacer uno similar ver fuentes de 
-	herram/confaux.sh
+	herram_confsh/confaux.sh
 
 
 CRÉDITOS Y DERECHOS DE REPRODUCCIÓN 
@@ -372,7 +372,7 @@ if (test "$VERBOSE_FLAG" -gt "0") then {
 echo ",s|/usr/bin/awk|$AWK|g
 w
 q
-" | ed herram/db2rep 2> /dev/null
+" | ed herram_confsh/db2rep 2> /dev/null
 
 if (test ! -f personaliza.ent -a -f personaliza.ent.plantilla) then {
 	cp personaliza.ent.plantilla personaliza.ent
