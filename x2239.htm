@@ -14,7 +14,7 @@ TITLE="Protocolos de soporte y de usuario"
 HREF="x935.htm"><LINK
 REL="NEXT"
 TITLE="Novedades"
-HREF="a2893.htm"></HEAD
+HREF="a2896.htm"></HEAD
 ><BODY
 CLASS="sect1"
 BGCOLOR="#FFFFFF"
@@ -56,7 +56,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="a2893.htm"
+HREF="a2896.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
@@ -356,7 +356,7 @@ CLASS="programlisting"
 ></LI
 ></UL
 ><P
->&#13;        Inicialmente el servidor queda configurado con sockets Unix
+>&#13;        Inicialmente el servidor queda configurado con un zócalo Unix
         (solo desde la misma máquina). Puede comprobar que está
         corriendo el servidor (postmaster) con:
       </P
@@ -365,7 +365,7 @@ CLASS="programlisting"
 >&#13;    pgrep post
 </PRE
 ><P
->&#13;        y revisar el socket examinando la presencia del archivo
+>&#13;        y revisar el zócalo examinando la presencia del archivo
         <TT
 CLASS="literal"
 >/var/www/tmp/.s.PGSQL.5432</TT
@@ -412,7 +412,7 @@ CLASS="literal"
 CLASS="literal"
 >/var/www</TT
 >) no se
-        permiten conexiones TCP/IP y se emplea una ruta para los sockets
+        permiten conexiones TCP/IP y se emplea una ruta para los zócalos
         diferente a la ruta por defecto (i.e <TT
 CLASS="literal"
 >/tmp</TT
@@ -450,7 +450,7 @@ CLASS="literal"
 CLASS="literal"
 >/var/www/</TT
 > puede tener configurado su
-        directorio para sockets en <TT
+        directorio para zócalos en <TT
 CLASS="literal"
 >/var/www/tmp</TT
 >, en
@@ -986,7 +986,7 @@ NAME="respaldo-postgresql"
 ></H3
 ><P
 >&#13;        Para sacar una copia de respaldo de todas las base de datos
-        manejadas con PostgreSQL (y suponiendo que el socket está en
+        manejadas con PostgreSQL (y suponiendo que el zócalo está en
         <TT
 CLASS="literal"
 >/var/www/tmp</TT
@@ -1499,7 +1499,7 @@ CLASS="literal"
 ><PRE
 CLASS="programlisting"
 >&#13;    /usr/local/bin/mysqladmin -u root  password 'nueva-clave' 
-    /usr/local/bin/mysqladmin -u root -pnueva-clave -h ESERV password 'nueva-clave'
+    /usr/local/bin/mysqladmin -u root -pnueva-clave -h Jesus.miong.org password 'nueva-clave'
     
 </PRE
 ><P
@@ -1686,10 +1686,11 @@ NAME="chroot-mysql"
 CLASS="literal"
 >chroot</TT
 > que usen bases de datos MariaDB de
-        tres formas: (1) Conectándose a un puerto TCP/IP donde responda
-        MariaDB, (2) poniendo el socket de MariaDB en un directorio
-        dentro de la jaula del servidor web o (3) Corriendo MariaDB
-        dentro de la jaula <TT
+        tres formas: (1) Conectando la aplicación web a la base de datos
+        mediante un puerto TCP/IP donde responda MariaDB, (2) poniendo
+        el zócalo de MariaDB en un directorio dentro de la jaula del
+        servidor web o (3) Corriendo MariaDB dentro de la jaula
+        <TT
 CLASS="literal"
 >chroot</TT
 > (ver
@@ -1700,26 +1701,26 @@ TARGET="_top"
 >).
       </P
 ><P
->&#13;        Para correr MariaDB dentro de la jaula usada por nginx, a
-        continuación documentamos como ubicar el socket de MariaDB
-        dentro de la jaula del servidor web (/var/www/).
+>&#13;        A continuación documentamos como ubicar el zócalo de MariaDB
+        dentro de la jaula del servidor web (/var/www/) que nos parece
+        un método seguro y fácil e implementar.
       </P
 ><P
 >&#13;        Una vez instale <TT
 CLASS="literal"
->maria-server</TT
+>mariadb-server</TT
 > cree el
-        directorio en el cual ubicará el socket, digamos:
+        directorio en el cual ubicará el zócalo, digamos:
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    mkdir -p /var/www/var/run/mysql/
-    chown _mysql:_mysql /var/www/var/run/mysql/
-    chmod a+w /var/www/var/run/mysql/
-    chmod +t /var/www/var/run/mysql/
+>&#13;        doas mkdir -p /var/www/var/run/mysql/
+        doas chown _mysql:_mysql /var/www/var/run/mysql/
+        doas chmod a+w /var/www/var/run/mysql/
+        doas chmod +t /var/www/var/run/mysql/
 </PRE
 ><P
->&#13;        y después inicie MariaDB indicando la ruta del socket con la
+>&#13;        y después inicie MariaDB indicando la ruta del zócalo con la
         opción <TT
 CLASS="literal"
 >--socket</TT
@@ -1732,32 +1733,39 @@ CLASS="literal"
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    mysqld_flags="--socket=/var/www/var/run/mysql/mysql.sock"
+>&#13;        mysqld_flags="--socket=/var/www/var/run/mysql/mysql.sock"
 </PRE
 ><P
->&#13;        e inicie desde <TT
-CLASS="literal"
->/etc/rc.local</TT
-> con:
+>&#13;        y reinicie el servicio con:
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    pgrep mysqld &#62; /dev/null
-    if [ "$?" != 0  -a X"${mysqld_flags}" != X"NO" -a \
-        -x /usr/local/bin/mysqld_safe ]; then
-        echo -n ' mysqld ' 
-        /usr/local/bin/mysqld_safe ${mysqld_flags} &#38;
-    fi
+>&#13;    doas rcctl -d restart mysqld
 </PRE
 ><P
->&#13;        Sus aplicaciones PHP pueden entonces conectarse con:
+>&#13;        Puede verificar que el zócalo queda bien ubicado con:
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    $dbhost  = "localhost";
-    $dbuname = "miusuario";
-    $dbpass  = "miclave";
-    mysql_connect($dbhost, $dbuname, $dbpass);
+>&#13;    $ ls -l /var/www/var/run/mysql/
+</PRE
+><P
+>&#13;        que debe responde con algo como
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    srwxrwxrwx  1 _mysql  _mysql  0 Jul 18 21:41 mysql.sock     
+</PRE
+><P
+>&#13;        Así una aplicación PHP que corran en el mismo servidor podrían
+        realizar una conexión con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;        $dbhost  = "localhost";
+        $dbuname = "miusuario";
+        $dbpass  = "miclave";
+        mysql_connect($dbhost, $dbuname, $dbpass);
 </PRE
 ><P
 >&#13;        Tenga en cuenta también que otros binarios de MariaDB también
@@ -1858,8 +1866,8 @@ CLASS="literal"
 CLASS="literal"
 >phpldapadmin</TT
 ><A
-NAME="AEN2684"
-HREF="#FTN.AEN2684"
+NAME="AEN2687"
+HREF="#FTN.AEN2687"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -2766,8 +2774,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN2684"
-HREF="x2239.htm#AEN2684"
+NAME="FTN.AEN2687"
+HREF="x2239.htm#AEN2687"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -2823,7 +2831,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="a2893.htm"
+HREF="a2896.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
