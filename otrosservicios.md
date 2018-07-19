@@ -135,13 +135,13 @@ escrito describe son:
 
             pkg_scripts="cron montaencres montaencpos postgresql httpd cupsd"
 
-Inicialmente el servidor queda configurado con sockets Unix (solo desde
+Inicialmente el servidor queda configurado con un zócalo Unix (solo desde
 la misma máquina). Puede comprobar que está corriendo el servidor
 (postmaster) con:
 
         pgrep post
 
-y revisar el socket examinando la presencia del archivo
+y revisar el zócalo examinando la presencia del archivo
 `/var/www/tmp/.s.PGSQL.5432` (otra ubicación puede ser
 `/tmp/.s.PGSQL.5432`).
 
@@ -160,7 +160,7 @@ conexiones simultáneamente, consulte primero
 
 En adJ por seguridad (e.g cuando ejecuta Apache con `chroot` en
 `/var/www`) no se permiten conexiones TCP/IP y se emplea una ruta para
-los sockets diferente a la ruta por defecto (i.e `/tmp`), se trata de
+los zócalos diferente a la ruta por defecto (i.e `/tmp`), se trata de
 `/var/www/tmp`, que se define en el archivo de configuración de
 PostgreSQL con:
 
@@ -175,7 +175,7 @@ Antes de reiniciar PostgreSQL asegúrese de crear el directorio:
 También tenga en cuenta que las diversas herramientas reciben como
 parámetro adicional `-h ruta`. Por ejemplo si ejecuta Apache con
 `chroot` en `/var/www/` puede tener configurado su directorio para
-sockets en `/var/www/tmp`, en ese caso puede iniciar `psql` con la base
+zócalos en `/var/www/tmp`, en ese caso puede iniciar `psql` con la base
 `prueba` usando:
 
         psql -h /var/www/tmp prueba
@@ -386,7 +386,7 @@ También podrá renombrar cotejaciones que haya creado con
 ### Copias de respaldo {#respaldo-postgresql}
 
 Para sacar una copia de respaldo de todas las base de datos manejadas
-con PostgreSQL (y suponiendo que el socket está en `/var/www/tmp`):
+con PostgreSQL (y suponiendo que el zócalo está en `/var/www/tmp`):
 ingrese a la cuenta del administrador:
 
         doas su - _postgresql
@@ -593,7 +593,7 @@ Después puede establecer una clave para el usuario `root` de MariaDB
 cuando ingresa desde `localhost` con:
 
         /usr/local/bin/mysqladmin -u root  password 'nueva-clave' 
-        /usr/local/bin/mysqladmin -u root -pnueva-clave -h ESERV password 'nueva-clave'
+        /usr/local/bin/mysqladmin -u root -pnueva-clave -h &ESERV; password 'nueva-clave'
         
 
 Después puede iniciar una sesión, crear bases de datos, crear usuarios y
@@ -674,46 +674,59 @@ y posteriormente restaurarla con:
 
 ### MariaDB y servidor web con chroot {#chroot-mysql}
 
-Puede emplear aplicaciones para nginx o Apache en modo `chroot` que usen bases
-de datos MariaDB de tres formas: (1) Conectándose a un puerto TCP/IP
-donde responda MariaDB, (2) poniendo el socket de MariaDB en un
-directorio dentro de la jaula del servidor web o (3) Corriendo MariaDB
-dentro de la jaula `chroot` (ver
+Puede emplear aplicaciones para nginx o Apache en modo `chroot` que usen 
+bases de datos MariaDB de tres formas: (1) Conectando la aplicación web a la 
+base de datos mediante un puerto TCP/IP donde responda MariaDB, 
+(2) poniendo el zócalo de MariaDB en un directorio dentro de la 
+jaula del servidor web o (3) Corriendo MariaDB dentro de la 
+jaula `chroot` (ver
 <http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot>).
 
-Para correr MariaDB dentro de la jaula usada por nginx, a continuación 
-documentamos como ubicar
-el socket de MariaDB dentro de la jaula del servidor web (/var/www/).
+A continuación documentamos como ubicar el zócalo de MariaDB dentro de la 
+jaula del servidor web (/var/www/) que nos parece un método seguro y 
+fácil e implementar.
+ 
+Una vez instale `mariadb-server` cree el directorio en el cual ubicará el
+zócalo, digamos:
 
-Una vez instale `maria-server` cree el directorio en el cual ubicará el
-socket, digamos:
-
-        mkdir -p /var/www/var/run/mysql/
-        chown _mysql:_mysql /var/www/var/run/mysql/
-        chmod a+w /var/www/var/run/mysql/
-        chmod +t /var/www/var/run/mysql/
-
-y después inicie MariaDB indicando la ruta del socket con la opción
+```sh
+        doas mkdir -p /var/www/var/run/mysql/
+        doas chown _mysql:_mysql /var/www/var/run/mysql/
+        doas chmod a+w /var/www/var/run/mysql/
+        doas chmod +t /var/www/var/run/mysql/
+```
+y después inicie MariaDB indicando la ruta del zócalo con la opción
 `--socket`, por ejemplo para que el cambio se efectúe en cada inicio,
 edite `/etc/rc.conf.local` para agregar:
 
+```sh
         mysqld_flags="--socket=/var/www/var/run/mysql/mysql.sock"
+```
 
-e inicie desde `/etc/rc.local` con:
+y reinicie el servicio con:
 
-        pgrep mysqld > /dev/null
-        if [ "$?" != 0  -a X"${mysqld_flags}" != X"NO" -a \
-            -x /usr/local/bin/mysqld_safe ]; then
-            echo -n ' mysqld ' 
-            /usr/local/bin/mysqld_safe ${mysqld_flags} &
-        fi
+```sh
+	doas rcctl -d restart mysqld
+```
 
-Sus aplicaciones PHP pueden entonces conectarse con:
+Puede verificar que el zócalo queda bien ubicado con:
+```sh
+	$ ls -l /var/www/var/run/mysql/
+```
+que debe responde con algo como
+```sh
+	srwxrwxrwx  1 _mysql  _mysql  0 Jul 18 21:41 mysql.sock     
+```
 
+Así una aplicación PHP que corran en el mismo servidor podrían realizar
+una conexión con:
+
+```php
         $dbhost  = "localhost";
         $dbuname = "miusuario";
         $dbpass  = "miclave";
         mysql_connect($dbhost, $dbuname, $dbpass);
+```
 
 Tenga en cuenta también que otros binarios de MariaDB también requerirán
 la opción `--socket=/var/www/var/run/mysql/mysql.sock` al ejecutarse por
