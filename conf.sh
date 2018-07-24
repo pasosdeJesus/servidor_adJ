@@ -7,7 +7,7 @@
 # Créditos
 # Manejo de variables de configuración: Miembros de Structio.  
 #	http://structio.sourceforge.net/
-# Línea de comandos: WWWeb Tide Team 
+# Línea de ordenes: WWWeb Tide Team 
 #	http://www.ebbtide.com/Util/ksh_parse.html 
 # que también es de dominio público de acuerdo a http://www.ebbtide.com/Util/
 # "The following utilities have been written by the members of WWWeb Tide 
@@ -28,7 +28,7 @@ if (test ! -f confv.sh) then {
 . herram_confsh/confaux.sh
 . herram_confsh/misc.sh
 
-# Reconociendo línea de comandos
+# Reconociendo línea de ordenes
 
 BASENAME=$(basename $0)
 USAGE="$BASENAME [-v] [-h] [-M] [-p prefijo]"
