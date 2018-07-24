@@ -217,7 +217,7 @@ JADETEX=""
 
 
 MAKE=""
-# Ejecuta comandos requeridos
+# Ejecuta ordenes requeridas
 # Herramienta estándar en sistemas Unix
 
 MKDIR=""
@@ -229,7 +229,7 @@ MV=""
 # Herramienta estándar en sistemas Unix
 
 NCFTPPUT=""
-# Programa para transferir archivos desde línea de comandos usando el protocolo FTP
+# Programa para transferir archivos desde línea de ordenes usando el protocolo FTP
 # Es una herramienta del proyecto ncftp cliente http://www.ncftpd.com/
 
 PDFJADETEX=""
@@ -249,7 +249,7 @@ RM=""
 # Herramienta típica en sistemas Unix.
 
 SCP=""
-# Programa para transferir archivos desde la línea de comandos usando SSH
+# Programa para transferir archivos desde la línea de ordenes usando SSH
 # Es una herramienta del proyecto ssh  http://www.openssh.org
 
 SED=""
