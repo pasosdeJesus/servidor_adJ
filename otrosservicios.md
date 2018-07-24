@@ -267,7 +267,7 @@ bases de datos:
         createdb prueba
         psql prueba
 
-Desde la interfaz `psql`, pueden darse comandos SQL y otros específicos
+Desde la interfaz `psql`, pueden darse ordenes SQL y otros específicos
 de PostgreSQL (ver [Uso de una base de datos](#uso-base)). En particular
 el usuario `postgres` y desde cuentas con permiso para crear usuarios,
 puede crear otros usuarios (globales para todas las bases de datos
@@ -276,11 +276,11 @@ clave, desde `psql` ingresar:
 
         CREATE USER usejemplo
 
-El comando `CREATE USER` presentado puede ir seguido de `CREATEUSER`
+La orden `CREATE USER` presentado puede ir seguido de `CREATEUSER`
 para crear un superusuario (sin restricción alguna), o `CREATEDB` para
 crear un usuario que pueda crear bases de datos o `PASSWORD 'clave'`
 para crear un usuario con una clave (emplea autenticación configurada).
-Desde la línea de comandos puede crearse un usuario con:
+Desde la línea de ordenes puede crearse un usuario con:
 
         createuser usejemplo
 
@@ -288,24 +288,24 @@ Para eliminar un usuario desde `psql` se usa:
 
         DROP USER usejemplo;
 
-y para eliminarlo desde línea de comandos:
+y para eliminarlo desde línea de ordenes:
 
         dropuser usejemplo
 
-Puede ejecutarse un script SQL (`crea.sql`) desde la línea de comandos a
+Puede ejecutarse un script SQL (`crea.sql`) desde la línea de ordenes a
 un base de datos con
 
         psql -d test -U ejusuario --password -f crea.sql
 
 ### Uso de una base de datos {#uso-base}
 
-Puede emplear `psql`, la interfaz texto que acepta comandos SQL y que se
+Puede emplear `psql`, la interfaz texto que acepta ordenes SQL y que se
 distribuye con PostgreSQL. Para esto, entre a una base (digamos `b1908`)
 como un usuario (digamos `u1908`) con:
 
         psql -U u1908 -d b1908
 
-En esta interfaz puede dar comandos SQL y algunos comandos internos que
+En esta interfaz puede dar ordenes SQL y algunas ordenes internos que
 puede listar con `\h`. Algunos ejemplos de operaciones útiles son:
 
 `\dt`
@@ -323,7 +323,7 @@ puede listar con `\h`. Algunos ejemplos de operaciones útiles son:
 
 `\h update`
 
-:   Da ayuda sobre el comando `update` (que permite actualizar registros
+:   Da ayuda sobre la orden `update` (que permite actualizar registros
     de una tabla.)
 
 Es recomendable que los usuarios del sistema que también son usuarios de
@@ -557,7 +557,7 @@ consideraba que Oracle había hecho la compra para reducir competencia de
 sus bases de datos.
 
 Debe instalar los paquetes &p-mariadb-client; y &p-mariadb-server;. Aunque
-el nombre de los paquetes cambia los comandos para operarla siguen
+el nombre de los paquetes cambia las ordenes para operarla siguen
 siendo los mismos. Tras instalar el servidor debe ejecutar
 `mysql_install_db`.
 
@@ -763,7 +763,7 @@ usuarios de una organización para permitir su autenticación en otros
 servicios (e.g nombres, apellidos, dirección, teléfono, login, clave).
 
 OpenBSD incluye (desde OpenBSD 4.8) un servidor para LDAP versión 3,
-`ldapd`. No incluye cliente para LDAP pero desde la línea de comandos
+`ldapd`. No incluye cliente para LDAP pero desde la línea de ordenes
 puede emplearse el paquete `openldap-client` o como interfaz web
 `phpldapadmin`[^lda.1].
 

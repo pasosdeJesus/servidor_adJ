@@ -85,7 +85,7 @@ Después puede reiniciar el sistema o reiniciar `init` con:
 
 En la línea modificada a `/etc/ttys`, `tty00` se refiere a `/dev/tty00`
 (i.e el dispositivo del primer puerto serial);
-`/usr/libexec/getty std.9600` es el comando por ejecutar al arranque
+`/usr/libexec/getty std.9600` es la orden por ejecutar al arranque
 para manejar ese dispositivo[^dis.1]; `vt220` indica el tipo de terminal que
 se conectará; `on` y `secure` son banderas[^dis.2] para `init`, el primero
 indica que se esperan conexiones por esa línea tty y el segundo indica
@@ -235,12 +235,12 @@ debe configurarse `ppp` para realizar la conexión.
 Hay diversos tipos de módems (tarjetas ISA, PCI, módems externos USB o
 seriales), los módems externos que se conectan a puerto serial son los
 más fáciles de configurar, algunos módems USB también son soportados
-(los que tengan comandos y datos multiplexados --como indica la página
+(los que tengan ordens y datos multiplexados --como indica la página
 del manual del controlador `umodem`) y eventualmente es posible hacer
 funcionar tarjetas ISDN ISA o PCI
 ([http://people.freebsd.org/~hm/i4b-home/](http://people.freebsd.org/~hm/i4b-home/)).
 
-Los módems y los módems ISDN reciben comandos AT y se configuran
+Los módems y los módems ISDN reciben ordens AT y se configuran
 empleando `ppp`. Por ejemplo el archivo `/etc/ppp/ppp.conf` podría
 incluir porciones como las siguientes (remplazando el número de
 teléfono, el nombre de la cuenta y la clave por los correctos):
@@ -421,7 +421,7 @@ demanda como en el caso de `tun0`). Estas interfaces se administran con
 
         ifconfig -a
 
-A continuación se presenta un ejemplo de la salida de este comando:
+A continuación se presenta un ejemplo de la salida de esta orden:
 
         lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 33160
             priority: 0

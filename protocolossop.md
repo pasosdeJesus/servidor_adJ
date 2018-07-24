@@ -440,7 +440,7 @@ TCP/IPv4 de la tarjeta puede especificarse obtener dirección
 automáticamente. En el caso de Linux Ubuntu al Editar las Conexiones de
 Red puede especificarse que una tarjeta de red usará DHCP. Un OpenBSD
 con una interfaz de red (digamos `rl0`) se configura como cliente de
-DHCP desde la línea de comandos con:
+DHCP desde la línea de ordenes con:
 
         doas dhclient rl0 
 
@@ -529,7 +529,7 @@ y uso de cada uno y la configuración de paquetes que implementan los
 protocolos auxiliares POP3S e IMAPS, de clientes de correo web y de
 listas de correo.
 
-adJ cuenta con los comandos `prepsendmail` y `prepopensmtpd` que
+adJ cuenta con las ordenes `prepsendmail` y `prepopensmtpd` que
 configuran de manera automática sendmail y OpenSMTPD respectivamente con
 TLS y SASL, así como POP3S e IMAPS. Soportan opcionalmente mantener el
 correo en una partición cifrada y copia de respaldo del correo en otra
@@ -951,7 +951,7 @@ Verifique también que estén las siguientes líneas:
         DAEMON_OPTIONS(`Family=inet6, Address=::, Name=MTA6, M=s')dnl
         DAEMON_OPTIONS(`Family=inet6, Address=::, Port=465, Name=MTA6, M=s')dnl
 
-Para habilitar el comando `STARTTLS` (que inicia encripción) en el
+Para habilitar la orden `STARTTLS` (que inicia encripción) en el
 servidor estándar del puerto 25 y otro servidor que sólo acepta
 conexiones encriptadas en el puerto 465.
 
@@ -1489,8 +1489,8 @@ cuentas nuevas así:
         chmod go-r /var/mail/usuario
 
     y ajuste el archivo `.procmailrc`. Es recomendable que haga esto en
-    un script que primero ejecute `adduser`, y que sería el nuevo
-    comando para crear cuentas en el sistema.
+    un script que primero ejecute `adduser`, y que sería la nueva
+    orden para crear cuentas en el sistema.
 
 Esta configuración se aplicará a nuevas cuentas que cree, pero debe
 replicarla en cuentas ya creadas:
@@ -1680,7 +1680,7 @@ PostgreSQL:
 
             ALTER USER roundcube WITH PASSWORD 'nueva_clave';
 
-    Salir con '\\q' y desde la línea de comandos ingresar a la nueva
+    Salir con '\\q' y desde la línea de ordenes ingresar a la nueva
     base con:
 
             psql -h /var/www/tmp -Uroundcube roundcubemail
