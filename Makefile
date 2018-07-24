@@ -125,7 +125,7 @@ Derechos.txt: $(PROYECTO).$(EXT_DOCBOOK)
 instala:
 	mkdir -p $(DESTDIR)$(INSDOC)/img/
 	install html/*html $(DESTDIR)$(INSDOC)
-	install img/*png $(DESTDIR)$(INSDOC)/img/
+	install html/img/*png $(DESTDIR)$(INSDOC)/img/
 	if (test -f $(PRINT_DIR)/$(PROYECTO).ps) then { \
 		install imp/*ps $(DESTDIR)$(INSDOC);\
 	} fi;
