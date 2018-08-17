@@ -1,0 +1,2860 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Otros servicios que puede prestar el servidor</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
+HREF="t1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Protocolos de soporte y de usuario"
+HREF="x935.htm"><LINK
+REL="NEXT"
+TITLE="Novedades"
+HREF="a2895.htm"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x935.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="a2895.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="otros_servicios_que_puede_prestar_el_servidor"
+>Otros servicios que puede prestar el servidor</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="cuotas"
+>Cuotas</A
+></H2
+><P
+>&#13;      Pueden emplearse cuotas para limitar el espacio en disco y la
+      cantidad de archivos que un usuario o un grupo puede tener.
+    </P
+><P
+>&#13;      Para usarlo debe: (1) especificar sistemas de archivos en los que
+      se usará cuota (2) especificar cuota por usuario o grupo y (3)
+      activar chequeo de cuota durante el arranque.
+    </P
+><P
+>&#13;      Indique los sistemas de archivos en los que usará cuota, en
+      <TT
+CLASS="literal"
+>/etc/fstab</TT
+> agregando como opción del sistema de
+      archivos: <TT
+CLASS="literal"
+>userquota</TT
+> y/o
+      <TT
+CLASS="literal"
+>groupquota</TT
+>. Por ejemplo:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    /dev/wd0d /home ffs rw,nodev,nosuid,userquota 1 2
+</PRE
+><P
+>&#13;      Después active el sistema de cuotas con:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas quotaon -a
+</PRE
+><P
+>&#13;      Para especificar la cuota por usuario o por grupo emplee
+      <TT
+CLASS="literal"
+>edquota</TT
+>, por ejemplo:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas edquota pabram
+</PRE
+><P
+>&#13;      que lo dejará en un editor en el que podrá cambiar las
+      especificaciones de la cuota en cada sistema de archivos con
+      cuotas:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    Quotas for user pabram:
+    /home: blocks in use: 1292980, limits (soft = 1000000, hard = 2000000)
+        inodes in use: 142318, limits (soft = 0, hard = 0)
+</PRE
+><P
+>&#13;      el límite blando podrá extenderse para cada usuario por un periodo
+      de tiempo (en este ejemplo), tras el cual se convertirá en un
+      límite duro. Límites en 0 indican que no hay restricción.
+    </P
+><P
+>&#13;      Puede replicar la configuración de cuotas en otros usuarios con:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas edquota -p pabram pedgar juamar margo
+</PRE
+><P
+>&#13;      Después de especificar las cuotas de los usuarios puede verificar
+      la política de cuotas con:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    repquota -a
+</PRE
+><P
+>&#13;      o chequear que se cumplan todas las cuotas con:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    quotacheck -a
+</PRE
+><P
+>&#13;      Para activar sistema de cuotas y que las cuotas sean verificadas
+      cada vez que el sistema inicia agregue la siguiente línea al
+      archivo <TT
+CLASS="literal"
+>/etc/rc.conf.local</TT
+>:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    check_quotas=YES
+</PRE
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-quota"
+>Referencias y lecturas recomendadas</A
+></H3
+><P
+>&#13;        Las siguientes páginas del manual de OpenBSD: quota 1, edquota
+        8, quotaon 8, quotaoff 8, quotacheck 8 y repquota 8. En el FAQ
+        de OpenBSD hay una sección sobre quotas:
+        <A
+HREF="http://www.openbsd.org/faq/faq10.html#Quotas"
+TARGET="_top"
+>http://www.openbsd.org/faq/faq10.html#Quotas</A
+>
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="postgresql"
+>Motor de bases de datos PostgreSQL</A
+></H2
+><P
+>&#13;      PostgreSQL es un motor de bases de datos relacionales (RDBMS) que
+      verifica integridad referencial con gran funcionalidad como base
+      de datos, aunque un poco más lenta que otros motores. Su licencia
+      es tipo BSD. En esta sección describimos brevemente la instalación
+      y uso en un sistema adJ.
+    </P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="primera-instalacion"
+>Primera instalación del servidor</A
+></H3
+><P
+>&#13;        Este motor de bases de datos se instala con el archivo de
+        ordenes <TT
+CLASS="literal"
+>/inst-adJ.sh</TT
+> que en instalaciones
+        tipicas de adJ basta ejecutar y volver a ejecutar para
+        actualizar o para volver a inicializar PostgreSQL u otro paquete
+        de esta distribución. En caso de actualizar este archivo sacará
+        respaldo de la información de la base de 2 formas (copiando
+        directorios de PostgreSQL y sacando un volcado de toda la base).
+      </P
+><P
+>&#13;        A continuación se dan detalles del proceso de instalación y uso
+        de PostgreSQL en caso de que requiera instalar por su cuenta o
+        aprender más sobre este motor de bases de datos.
+      </P
+><P
+>&#13;        Para emplearlo por primera vez instale el paquete
+        `<TT
+CLASS="literal"
+>(también es recomendable</TT
+>postgresql-docs`).
+      </P
+><P
+>&#13;        Este paquete deja instrucciones específicas para inicializar la
+        base de datos, permitir conexiones de red e inicializar la base
+        de datos cada vez que arranque el sistema en:
+        <TT
+CLASS="literal"
+>/usr/local/share/doc/postgresql/README.OpenBSD</TT
+>.
+        Los pasos que este escrito describe son:
+      </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;            Opcional. El paquete de PostgreSQL disponible crea el
+            usuario del sistema <TT
+CLASS="literal"
+>_postgresql</TT
+>, sin
+            embargo si está actualizando o lo requiere puede crearlo
+            con:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas useradd -c "Administrador de PostgreSQL" -g =uid -m -d /var/postgresql \
+    -s /bin/sh -u 503 _postgresql 
+    doas passwd _postgresql
+</PRE
+></LI
+><LI
+><P
+>&#13;            A diferencia de versiones anteriores, este paquete ya no
+            inicializa la base. Inicialicela con:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas mkdir -p /var/postgresql/data
+    doas chown -R _postgresql:_postgresql /var/postgresql
+    doas su - _postgresql
+    initdb -D /var/postgresql/data -Upostgres --encoding=ISO8859-1
+</PRE
+><P
+>&#13;            En adJ se emplea por defecto autenticación md5, que requiere
+            suministrar clave cada vez que se carga la interfaz
+            <TT
+CLASS="literal"
+>psql</TT
+> o abre conexiones. Si no desea
+            autenticación md5, al inicializar la base con
+            <TT
+CLASS="literal"
+>initdb</TT
+> emplee la opción
+            <TT
+CLASS="literal"
+>--auth=trust</TT
+>. Una vez inicializada puede
+            cambiar de un método a otro en el archivo
+            <TT
+CLASS="literal"
+>/var/postgresql/data/pg_hba.conf</TT
+>
+          </P
+></LI
+><LI
+><P
+>&#13;            Altamente Recomendado. Agregue a
+            <TT
+CLASS="literal"
+>/etc/sysctl.conf</TT
+>:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    kern.seminfo.semmni=256
+    kern.seminfo.semmns=2048
+    kern.shminfo.shmmax=50331648
+</PRE
+></LI
+><LI
+><P
+>&#13;            Configurar servicio para que inicie en el arranque y se
+            detenga al apagar. En <TT
+CLASS="literal"
+>/etc/rc.conf.local</TT
+>
+            agregue:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    pg_ctl_flags="start \
+        -D /var/postgresql/data -l /var/postgresql/logfile \
+        -o '-D /var/postgresql/data'"
+</PRE
+><P
+>&#13;            y en el mismo archivo en la línea donde se define
+            <TT
+CLASS="literal"
+>pkg_scripts</TT
+> agregue postgresql, así un
+            computador donde estén configuradas las particiones
+            cifradas, respaldo cifrado y los servicios httpd, cupsd
+            dirá:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    pkg_scripts="cron montaencres montaencpos postgresql httpd cupsd"
+</PRE
+></LI
+></UL
+><P
+>&#13;        Inicialmente el servidor queda configurado con un zócalo Unix
+        (solo desde la misma máquina). Puede comprobar que está
+        corriendo el servidor (postmaster) con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    pgrep post
+</PRE
+><P
+>&#13;        y revisar el zócalo examinando la presencia del archivo
+        <TT
+CLASS="literal"
+>/var/www/tmp/.s.PGSQL.5432</TT
+> (otra ubicación
+        puede ser <TT
+CLASS="literal"
+>/tmp/.s.PGSQL.5432</TT
+>).
+      </P
+><P
+>&#13;        Para emplear el protocolo TCP/IP para conexiones desde algunas
+        máquinas de su elección, edite
+        <TT
+CLASS="literal"
+>/var/postgresql/data/pg_hba.conf</TT
+> y agregue
+        por ejemplo máquinas y usuarios que puedan hacer conexiones.
+        También edite
+        <TT
+CLASS="literal"
+>/var/postgresql/data/postgresql.conf</TT
+> para que
+        incluya líneas de configuración como:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    max_connections = 100
+    port = 5432
+</PRE
+><P
+>&#13;        Para mejorar desempeño especialmente en sitios que atiendan
+        bastantes conexiones simultáneamente, consulte primero
+        <TT
+CLASS="literal"
+>/usr/local/share/doc/postgresql/README.OpenBSD</TT
+>.
+      </P
+><P
+>&#13;        En adJ por seguridad (e.g cuando ejecuta Apache con
+        <TT
+CLASS="literal"
+>chroot</TT
+> en <TT
+CLASS="literal"
+>/var/www</TT
+>) no se
+        permiten conexiones TCP/IP y se emplea una ruta para los zócalos
+        diferente a la ruta por defecto (i.e <TT
+CLASS="literal"
+>/tmp</TT
+>),
+        se trata de <TT
+CLASS="literal"
+>/var/www/tmp</TT
+>, que se define en el
+        archivo de configuración de PostgreSQL con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    unix_socket_directory = '/var/www/tmp'
+</PRE
+><P
+>&#13;        Antes de reiniciar PostgreSQL asegúrese de crear el directorio:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas mkdir  /var/www/tmp
+    doas chmod a+w /var/www/tmp
+    doas chmod +t /var/www/tmp
+</PRE
+><P
+>&#13;        También tenga en cuenta que las diversas herramientas reciben
+        como parámetro adicional <TT
+CLASS="literal"
+>-h ruta</TT
+>. Por ejemplo
+        si ejecuta Apache con <TT
+CLASS="literal"
+>chroot</TT
+> en
+        <TT
+CLASS="literal"
+>/var/www/</TT
+> puede tener configurado su
+        directorio para zócalos en <TT
+CLASS="literal"
+>/var/www/tmp</TT
+>, en
+        ese caso puede iniciar <TT
+CLASS="literal"
+>psql</TT
+> con la base
+        <TT
+CLASS="literal"
+>prueba</TT
+> usando:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    psql -h /var/www/tmp prueba
+</PRE
+><P
+>&#13;        En paquetes anteriores al de adJ 4.1 el superusuario de la base
+        coincidía con el usuario del sistema
+        <TT
+CLASS="literal"
+>_postgresql</TT
+>, desde 4.1 el superusuario de la
+        base es <TT
+CLASS="literal"
+>postgres</TT
+>, así que para realizar
+        operaciones debe agregarse la opción
+        <TT
+CLASS="literal"
+>-U postgres</TT
+>. El instalador de adJ
+        seleccionará una clave con el programa <TT
+CLASS="literal"
+>apg</TT
+> y
+        la dejará en el archivo
+        <TT
+CLASS="literal"
+>/var/postgresql/.pgpass</TT
+> en una línea de la
+        forma:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    *:*:*:postgres:clave
+</PRE
+><P
+>&#13;        De esta manera desde la cuenta <TT
+CLASS="literal"
+>_postgresql</TT
+> no
+        necesitará dar la clave del usuario <TT
+CLASS="literal"
+>postgres</TT
+>.
+      </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="autenticacion"
+>Habilitando autenticación</A
+></H3
+><P
+>&#13;        Por defecto la forma de inicializar PostgreSQL no establecerá
+        una clave de administrador ni exigirá autenticación para cuentas
+        que se conecten desde la misma máquina. Sin embargo esto debe
+        mejorarse si tiene varias cuentas en el mismo servidor.
+      </P
+><P
+>&#13;        Una manera es en el momento de la inicialización de la base de
+        datos con las opciones <TT
+CLASS="literal"
+>--auth</TT
+> y
+        <TT
+CLASS="literal"
+>--pwfile</TT
+> o <TT
+CLASS="literal"
+>-W</TT
+> de
+        <TT
+CLASS="literal"
+>initdb</TT
+>, por ejemplo:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    su - _postgresql
+    echo "MiClave" &#62; clave.txt
+    initdb -Upostgres --auth=md5 --pwfile=clave.txt -D/var/postgresql/data
+</PRE
+><P
+>&#13;        que inicializará PostgreSQL con autenticación md5 y clave de
+        administrador <TT
+CLASS="literal"
+>MiClave</TT
+>
+      </P
+><P
+>&#13;        Otra posibilidad es cambiar la configuración después de haber
+        inicializado sin autenticación. Para esto cambie la clave del
+        administrador con<A
+NAME="AEN2355"
+HREF="#FTN.AEN2355"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    psql -U postgres template1 
+    template1=# alter user postgres with password 'MiClave';
+</PRE
+><P
+>&#13;        Después edite
+        <TT
+CLASS="literal"
+>/var/postgresql/data/pg_hba.conf</TT
+> y cambie en
+        las lineas de acceso la palabra <TT
+CLASS="literal"
+>trusted</TT
+> por
+        <TT
+CLASS="literal"
+>md5</TT
+>, por ejemplo:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    local   all         all                               md5
+    host    all         all         127.0.0.1/32          md5
+    host    all         all         ::1/128               md5
+</PRE
+><P
+>&#13;        Detenga el servidor y vuelvalo a iniciar, notará que todo
+        intento de ingreso exige la clave.
+      </P
+><P
+>&#13;        El listado de bases de datos puede consultarse con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    SELECT * FROM pg_database ;
+</PRE
+><P
+>&#13;        y el listado de los usuarios con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    SELECT username FROM pg_users;
+</PRE
+><P
+>&#13;        Las claves de los diversos usuarios pueden cambiarse de forma
+        análoga a la presentada para <TT
+CLASS="literal"
+>postgres</TT
+>:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ALTER ROLE pablo with UNENCRYPTED PASSWORD 'clave-plana';
+</PRE
+><P
+>&#13;        Desde PostgreSQL 8.1 se emplea un esquema de roles que unifica
+        los conceptos de usuario y grupo. Además de exigir clave para
+        cada ingreso, cada rol de PostgreSQL que crea objetos puede
+        modificar permisos para restringir o dar acceso a otros roles.
+        Por ejemplo para restringir el acceso a una tabla
+        <TT
+CLASS="literal"
+>cuenta</TT
+>:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    REVOKE ALL ON cuenta FROM PUBLIC;
+</PRE
+><P
+>&#13;        Cuando un rol crea una base de datos, queda como dueño de todas
+        las tablas y en principio es el único que puede acceder a estas.
+        Otro rol en principio no podrá ni siquiera examinar los datos de
+        las tablas:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    SELECT * FROM solicitud;
+    ERROR:  permission denied for relation solicitud
+</PRE
+><P
+>&#13;        Para dar permiso a otro rol puede usarse:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    GRANT ALL on solicitud TO rodrigo;
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="creacion-base"
+>Creación de una base de datos</A
+></H3
+><P
+>&#13;        Para crear la base de datos <TT
+CLASS="literal"
+>prueba</TT
+> puede usar
+        el superusuario con la opción <TT
+CLASS="literal"
+>-U postgres</TT
+> o
+        desde una cuenta que tenga permiso para crear bases de datos:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    createdb prueba
+    psql prueba
+</PRE
+><P
+>&#13;        Desde la interfaz <TT
+CLASS="literal"
+>psql</TT
+>, pueden darse ordenes
+        SQL y otros específicos de PostgreSQL (ver
+        <A
+HREF="x2238.htm#uso-base"
+>Uso de una base de datos</A
+>). En
+        particular el usuario <TT
+CLASS="literal"
+>postgres</TT
+> y desde
+        cuentas con permiso para crear usuarios, puede crear otros
+        usuarios (globales para todas las bases de datos manejadas por
+        el servidor). Por ejemplo para crear un usuario normal sin
+        clave, desde <TT
+CLASS="literal"
+>psql</TT
+> ingresar:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    CREATE USER usejemplo
+</PRE
+><P
+>&#13;        La orden <TT
+CLASS="literal"
+>CREATE USER</TT
+> presentado puede ir
+        seguido de <TT
+CLASS="literal"
+>CREATEUSER</TT
+> para crear un
+        superusuario (sin restricción alguna), o
+        <TT
+CLASS="literal"
+>CREATEDB</TT
+> para crear un usuario que pueda
+        crear bases de datos o <TT
+CLASS="literal"
+>PASSWORD 'clave'</TT
+> para
+        crear un usuario con una clave (emplea autenticación
+        configurada). Desde la línea de ordenes puede crearse un usuario
+        con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    createuser usejemplo
+</PRE
+><P
+>&#13;        Para eliminar un usuario desde <TT
+CLASS="literal"
+>psql</TT
+> se usa:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    DROP USER usejemplo;
+</PRE
+><P
+>&#13;        y para eliminarlo desde línea de ordenes:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    dropuser usejemplo
+</PRE
+><P
+>&#13;        Puede ejecutarse un script SQL (<TT
+CLASS="literal"
+>crea.sql</TT
+>)
+        desde la línea de ordenes a un base de datos con
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    psql -d test -U ejusuario --password -f crea.sql
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="uso-base"
+>Uso de una base de datos</A
+></H3
+><P
+>&#13;        Puede emplear <TT
+CLASS="literal"
+>psql</TT
+>, la interfaz texto que
+        acepta ordenes SQL y que se distribuye con PostgreSQL. Para
+        esto, entre a una base (digamos <TT
+CLASS="literal"
+>b1908</TT
+>) como
+        un usuario (digamos <TT
+CLASS="literal"
+>u1908</TT
+>) con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    psql -U u1908 -d b1908
+</PRE
+><P
+>&#13;        En esta interfaz puede dar ordenes SQL y algunas ordenes
+        internos que puede listar con <TT
+CLASS="literal"
+>\h</TT
+>. Algunos
+        ejemplos de operaciones útiles son:
+      </P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="literal"
+>\dt</TT
+></DT
+><DD
+><P
+>&#13;              para ver tablas disponibles.
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>\d usuarios</TT
+></DT
+><DD
+><P
+>&#13;              Describe la estructura de la tabla
+              <TT
+CLASS="literal"
+>usuarios</TT
+>
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>SELECT victim_nombre,victim_apellido FROM victimas WHERE victim_edad&#60;=12;</TT
+></DT
+><DD
+><P
+>&#13;              Que muestre los nombres de niños de 12 años o menos
+              listados en la tabla <TT
+CLASS="literal"
+>victimas</TT
+>
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>\h update</TT
+></DT
+><DD
+><P
+>&#13;              Da ayuda sobre la orden <TT
+CLASS="literal"
+>update</TT
+> (que
+              permite actualizar registros de una tabla.)
+            </P
+></DD
+></DL
+></DIV
+><P
+>&#13;        Es recomendable que los usuarios del sistema que también son
+        usuarios de PostgreSQL creen el archivo
+        <TT
+CLASS="literal"
+>~/.pgpass</TT
+> donde puede almacenarse la clave
+        que usa en PostgreSQL ---de forma que las diversas herramientas
+        no la solicitaran--- con una línea de la forma:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    *:*:*:usuario:clave
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="postgresql-cotejacion"
+>Cotejación en PostgreSQL</A
+></H3
+><P
+>&#13;        Desde adJ 5.2 se incluye un porte de PostgreSQL (la versión
+        incluida en adJ 6.3 es postgresql-server-10.4) que
+        soporta cotejaciones de acuerdo al locale, y por defecto se
+        crean cotejaciones para todos los países de habla hispana, con
+        nombres de la forma <TT
+CLASS="literal"
+>es_CO_UTF_8</TT
+>. Donde
+        <TT
+CLASS="literal"
+>CO</TT
+> representa Colombia, pero se pueden
+        emplear otras abreviaturas de países como se usan en Internet
+        (estándar ISO-3166-1): ES CO PE VE EC GT CU BO HN PY SV CR PA GQ
+        MX AR CH DO NI UY PR.
+      </P
+><P
+>&#13;        Puede examinar las cotejaciones disponibles ingresando al
+        interprete <TT
+CLASS="literal"
+>psql</TT
+> y ejecutando:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    SELECT * FROM pg_collation;
+</PRE
+><P
+>&#13;        Puede crear una cotejación (digamos <TT
+CLASS="literal"
+>esp</TT
+>) para
+        un locale soportado por el sistema operativo y con la misma
+        codificación de su base de datos (digamos
+        <TT
+CLASS="literal"
+>es_CO.ISO8859-1</TT
+>) con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    CREATE COLLATION esp (LOCALE='es_CO.ISO8859-1');
+</PRE
+><P
+>&#13;        Una vez creada puede realizar operaciones empleándola por
+        ejemplo:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    SELECT 'Á' &#60; 'B' COLLATE "esp";
+    ...
+    SELECT nombre FROM clase ORDER BY nombre COLLATE "esp";
+</PRE
+><P
+>&#13;        la primera sentencia dará:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ?column? 
+    ----------
+    t
+    (1 row)
+</PRE
+><P
+>&#13;        Puede crear columnas de tablas especificando el tipo de
+        cotejación por defecto para operaciones con esa columna.
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    CREATE TABLE ejc (
+    nombre VARCHAR(100) COLLATE "esp"
+    );
+</PRE
+><P
+>&#13;        o cambiar las existentes:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ALTER TABLE clase ALTER nombre TYPE VARCHAR(500) COLLATE "esp";
+</PRE
+><P
+>&#13;        También podrá renombrar cotejaciones que haya creado con
+        <TT
+CLASS="literal"
+>ALTER COLLATION esp RENAME TO es_CO_ISO8859_1;</TT
+>,
+        así como borrarlas con <TT
+CLASS="literal"
+>DROP COLLATION esp;</TT
+>.
+        Puede consultar más en
+        <A
+HREF="http://www.postgresql.org/docs/9.1/static/collation.html"
+TARGET="_top"
+>http://www.postgresql.org/docs/9.1/static/collation.html</A
+>.
+      </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="respaldo-postgresql"
+>Copias de respaldo</A
+></H3
+><P
+>&#13;        Para sacar una copia de respaldo de todas las base de datos
+        manejadas con PostgreSQL (y suponiendo que el zócalo está en
+        <TT
+CLASS="literal"
+>/var/www/tmp</TT
+>): ingrese a la cuenta del
+        administrador:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas su - _postgresql
+    pg_dumpall -U postgres -h /var/www/tmp/ \
+        --inserts --attribute-inserts &#62; /respaldos/pgdump.sql
+</PRE
+><P
+>&#13;        Puede restablecer una copia con
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    psql -U postgres -h /var/www/tmp/ \
+        -f /respaldos/pgdump.sql template1
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="base-postgresql-remota"
+>Base PostgreSQL remota</A
+></H3
+><P
+>&#13;        PostgreSQL permite conexiones remotas y cifradas, así que la
+        aplicación puede estar en un servidor y la base de datos en
+        otra.
+      </P
+><P
+CLASS="literallayout"
+>Para&nbsp;la&nbsp;operación&nbsp;cifrada&nbsp;se&nbsp;requiere&nbsp;un&nbsp;certificado&nbsp;para&nbsp;el&nbsp;servidor&nbsp;y&nbsp;un&nbsp;certificado&nbsp;para&nbsp;cada&nbsp;usuario&nbsp;de&nbsp;la&nbsp;base&nbsp;de&nbsp;datos&nbsp;que&nbsp;se&nbsp;emplee&nbsp;en&nbsp;conexiones&nbsp;remotas.&nbsp;Los&nbsp;certificados&nbsp;para&nbsp;los&nbsp;clientes&nbsp;deben&nbsp;tener&nbsp;el&nbsp;CN&nbsp;con&nbsp;el&nbsp;nombre&nbsp;del&nbsp;usuario&nbsp;que&nbsp;hará&nbsp;la&nbsp;conexión.<br>
+Por&nbsp;lo&nbsp;mismo&nbsp;en&nbsp;lugar&nbsp;de&nbsp;comprar&nbsp;certificados&nbsp;para&nbsp;esto&nbsp;es&nbsp;más&nbsp;práctico&nbsp;tener&nbsp;una&nbsp;autoridad&nbsp;certificadora&nbsp;que&nbsp;pueda&nbsp;firmarlos.</P
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="autoridad-certificadora-ssl"
+>Autoridad certificadora SSL</A
+></H4
+><P
+>&#13;          Las operaciones con SSL depende en cliente y en servidor de la
+          librería LibreSSL (en otros sistemas OpenSSL). Esta incluye el
+          programa <TT
+CLASS="literal"
+>openssl</TT
+> para hacer varias
+          operaciones, incluyendo operaciones de una autoridad
+          certificadora.
+        </P
+><P
+>&#13;          Un certificado SSL siempre va con una llave privada (el
+          certificado es la llave pública).
+        </P
+><P
+>&#13;          El proceso para crear un certificado es:
+        </P
+><P
+></P
+><OL
+COMPACT="COMPACT"
+TYPE="1"
+><LI
+><P
+>&#13;              Crear la llave privada para el certificado (extensión
+              .key)
+            </P
+></LI
+><LI
+><P
+>&#13;              Generar el certificado (llave pública) pero sin firma
+              (extensión .csr)
+            </P
+></LI
+><LI
+><P
+>&#13;              Firmar el certificado con una autoridad certificadora y
+              generar el certificado
+            </P
+></LI
+><LI
+><P
+>&#13;              Usar el certificado firmado junto con la llave privada
+              para realizar conexiones (el certificado firmado se
+              compartirá, mientras que la llave privada no)
+            </P
+></LI
+></OL
+><P
+>&#13;          Los archivos intermedios pueden examinarse así:
+        </P
+><P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><P
+>&#13;              Solicitudes:
+              <TT
+CLASS="literal"
+>openssl req -noout -text -in client.csr</TT
+>
+            </P
+></LI
+><LI
+><P
+>&#13;              Llaves:
+              <TT
+CLASS="literal"
+>openssl rsa -check -in client.key</TT
+>
+            </P
+></LI
+><LI
+><P
+>&#13;              Certificados:
+              <TT
+CLASS="literal"
+>openssl x509 -noout -text -in client.crt</TT
+>
+            </P
+></LI
+></UL
+><P
+>&#13;          La autoridad certificadora no es más que un certificado
+          autofirmado que se configura y usa consistentemente como
+          autoridad certificadora.
+        </P
+></DIV
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="configuración-de-servidor"
+>Configuración de servidor</A
+></H4
+><P
+>&#13;          En el servidor deben quedar certificados del servidor en
+          <TT
+CLASS="literal"
+>/var/postgresql/data</TT
+>:
+        </P
+><P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><P
+>&#13;              root.crt Autoridad certificadora (igual a server.crt)
+            </P
+></LI
+><LI
+><P
+>&#13;              root.crl Lista de revocación
+            </P
+></LI
+><LI
+><P
+>&#13;              server.crt Certificado del servidor
+            </P
+></LI
+><LI
+><P
+>&#13;              server.key Llave privada del servidor
+            </P
+></LI
+></UL
+><P
+>&#13;          Por cada cliente que se va a conectar debe configurarse en
+          <TT
+CLASS="literal"
+>/var/postgresql/data/pg_hba.conf</TT
+> el/los
+          usuarios que se conectarán. Contrario a lo especificado en la
+          documentación de PostgreSQL en casos de SSL en ese archivo
+          sólo nos han funcionado líneas de la forma:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    hostssl all usuario 192.168.100.11/32 cert clientcert=1
+</PRE
+><P
+>&#13;          Es decir conexión SSL exigiendo certificado al cliente y que
+          la autenticación sea por certificado. Lo cual también exige
+          que el certificado del cliente tenga el CN igual al usuario.
+        </P
+></DIV
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="configuración-de-cada-cliente"
+>configuración de cada cliente</A
+></H4
+><P
+CLASS="literallayout"
+>Para&nbsp;cada&nbsp;usuario&nbsp;debe&nbsp;hacerse&nbsp;un&nbsp;certificado&nbsp;que&nbsp;se&nbsp;ubica&nbsp;en&nbsp;cada&nbsp;comptuador&nbsp;cliente&nbsp;en&nbsp;<TT
+CLASS="literal"
+>~/.postgresql/{usuario.crt, usuario.key}</TT
+><br>
+donde&nbsp;usuario&nbsp;debe&nbsp;correponder&nbsp;al&nbsp;usuario&nbsp;en&nbsp;la&nbsp;base&nbsp;de&nbsp;datos&nbsp;y&nbsp;al&nbsp;CN&nbsp;del&nbsp;certificado.</P
+><P
+>&#13;          Desde el servidor puede generar y firmar certificado para
+          cliente por 10 años (cambie <TT
+CLASS="literal"
+>usuario</TT
+> por el
+          usuario PostgreSQL dueño de la bae de datos y que usara desde
+          los clientes para conectarse, si prefiere un lapsode tiemo
+          diferente especifiquelo en días después de la opción
+          <TT
+CLASS="literal"
+>-days</TT
+>):
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas su - 
+    cd /var/postgresql/data
+    openssl genrsa -des3 -out usuario.key 1024
+    openssl rsa -in usuario.key -out usuario.key
+    openssl req -new -key usuario.key -out usuario.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=Pasos de Jesús/CN=usuario'
+    openssl x509 -req -days 3650 -in usuario.csr -CA root.crt -CAkey server.key -out usuario.crt -CAcreateserial
+</PRE
+><P
+>&#13;          A continuación copie el certificado generado
+          (<TT
+CLASS="literal"
+>usuario.crt</TT
+>) y la llave privada
+          (<TT
+CLASS="literal"
+>usuario.key</TT
+>) al computador cliente donde
+          se usará:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    scp usuario.key usuario.crt mius@192.168.100.11:~/.postgresql/
+</PRE
+><P
+>&#13;          En el servidor edite el archivo
+          <TT
+CLASS="literal"
+>/var/postgresql/data/pg_hba.conf</TT
+> y
+          asegurese de agregar una línea para el usuario y el computador
+          cliente:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    hostssl all usuario 192.168.100.11/32 cert clientcert=1
+</PRE
+><P
+>&#13;          Reinicie PostgreSQL.
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas sh /etc/rc.d/postgresql -d restart
+</PRE
+><P
+>&#13;          Desde el cliente ejecute:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas chmod 0600 /home/usis/.postgresql/usuario.key
+</PRE
+><P
+>&#13;          y pruebe la conexión asegurando que se usa el certificado del
+          usuario respectivo:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    PGSSLCERT=/home/usis/.postgresql/usuario.crt \
+    PGSSLKEY=/home/usis/.postgresql/usuario.key  \
+    psql -h192.168.100.21 -Uusuario usuario
+</PRE
+><P
+>&#13;          Configure la aplicación para que en cada arranque o uso
+          establezca:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    PGSSLCERT=/home/usis/.postgresql/usuario.crt 
+    PGSSLKEY=/home/usis/.postgresql/usuario.key
+</PRE
+><DIV
+CLASS="sect5"
+><H5
+CLASS="sect5"
+><A
+NAME="clientes-en-php"
+>Clientes en PHP</A
+></H5
+><P
+>&#13;            Copie las llaves dentro de la jaula chroot, haga que el
+            dueño sea www:www e incluya en alguna fuente usada antes de
+            las conexiones a base de datos (por ejemplo intente en
+            index.php):
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    putenv('PGSSLCERT=/ojs/certs/ojs.crt');
+    putenv('PGSSLKEY=/ojs/certs/ojs.key');
+</PRE
+></DIV
+><DIV
+CLASS="sect5"
+><H5
+CLASS="sect5"
+><A
+NAME="clientes-en-ruby-on-rails"
+>Clientes en Ruby on Rails</A
+></H5
+><P
+>&#13;            En <TT
+CLASS="literal"
+>config/database.yml</TT
+> debe verse algo
+            como:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    username: usuario
+    host: 192.168.100.21
+    sslmode: "require"
+</PRE
+><P
+>&#13;            y al hacer operaciones que usen base de datos (rails
+            dbconsole, iniciar unicorn, etc) asegurese de ejecutarlas en
+            un ambiente donde se definan bien las variables PGSSLCERT y
+            PGSSLKEY, por ejemplo:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    PGSSLCERT=/home/usis/.postgresql/usuario.crt \
+    PGSSLKEY=/home/usis/.postgresql/usuario.key \
+    rails dbconsole
+</PRE
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-postgresql"
+>Referencias y lecturas recomendadas</A
+></H3
+><P
+></P
+><UL
+><LI
+><P
+>&#13;            Documentación del paquete postgresql (README.OpenBSD,
+            INSTALL).
+          </P
+></LI
+><LI
+><P
+>&#13;            Documentación disponible en el paquete
+            <TT
+CLASS="literal"
+>postgresql-doc</TT
+> (ver postgresql-doc) y en
+            <A
+HREF="http://www.postgresql.org/docs"
+TARGET="_top"
+>http://www.postgresql.org/docs</A
+>.
+          </P
+></LI
+><LI
+><P
+>&#13;            Páginas del manual de Unix: psql 1
+          </P
+></LI
+><LI
+><P
+>&#13;            SSL Certificates For PostgreSQL :
+            <A
+HREF="https://www.howtoforge.com/postgresql-ssl-certificates"
+TARGET="_top"
+>https://www.howtoforge.com/postgresql-ssl-certificates</A
+>
+          </P
+></LI
+></UL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="mariadb"
+>MariaDB</A
+></H2
+><P
+>&#13;      A partir de OpenBSD/adJ 5.7 MariaDB remplaza a MySQL. Según
+      <A
+HREF="https://es.wikipedia.org/wiki/MariaDB"
+TARGET="_top"
+>https://es.wikipedia.org/wiki/MariaDB</A
+>
+      MariaDB fue iniciada por el fundador de MySQL después de que
+      Oracle compró Sun y MySQL, pues consideraba que Oracle había hecho
+      la compra para reducir competencia de sus bases de datos.
+    </P
+><P
+>&#13;      Debe instalar los paquetes mariadb-client-10.0.34v1 y
+      mariadb-server-10.0.34v1. Aunque el nombre de los paquetes cambia
+      las ordenes para operarla siguen siendo los mismos. Tras instalar
+      el servidor debe ejecutar <TT
+CLASS="literal"
+>mysql_install_db</TT
+>.
+    </P
+><P
+>&#13;      Inicialice el directorio donde estarán las bases de datos con
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas /usr/local/bin/mysql_install_db
+</PRE
+><P
+>&#13;      Para aumentar el límite de archivos que el usuario
+      <TT
+CLASS="literal"
+>_mysql</TT
+> de clase <TT
+CLASS="literal"
+>mysql</TT
+> puede
+      abrir agregue a <TT
+CLASS="literal"
+>/etc/login.conf</TT
+>:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    mysql:\
+        :openfiles-cur=2048:\
+        :openfiles-max=4096:\
+        :tc=servicio:
+</PRE
+><P
+>&#13;      tenga en cuenta no dejar espacios al final de cada línea y que
+      desde la segunda línea cada una comiencen con el caracter
+      tabulador. A continuación regenere el archivo binario
+      <TT
+CLASS="literal"
+>/etc/login.conf.db</TT
+> con
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    cd /etc
+    doas cap_mkdb /etc/login.conf 
+</PRE
+><P
+>&#13;      Después agregue <TT
+CLASS="literal"
+>mysqld</TT
+> a
+      <TT
+CLASS="literal"
+>pkg_scripts</TT
+> en
+      <TT
+CLASS="literal"
+>/etc/rc.conf.local</TT
+> por ejemplo con: doas rcctl
+      enable mysqld
+    </P
+><P
+>&#13;      A continuación lance el servidor con:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas sh /etc/rc.d/mysqld start
+</PRE
+><P
+>&#13;      Los errores quedarán en <TT
+CLASS="literal"
+>/var/mysql/host.err</TT
+>.
+    </P
+><P
+>&#13;      Después puede establecer una clave para el usuario
+      <TT
+CLASS="literal"
+>root</TT
+> de MariaDB cuando ingresa desde
+      <TT
+CLASS="literal"
+>localhost</TT
+> con:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    /usr/local/bin/mysqladmin -u root  password 'nueva-clave' 
+    /usr/local/bin/mysqladmin -u root -pnueva-clave -h Jesus.miong.org password 'nueva-clave'
+    
+</PRE
+><P
+>&#13;      Después puede iniciar una sesión, crear bases de datos, crear
+      usuarios y otorgarles privilegios.
+    </P
+><P
+>&#13;      Para apagar el servidor mysql:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    mysqladmin -u root -p shutdown
+    
+</PRE
+><P
+>&#13;      Si desea usar mysql con php, instale además de los paquetes
+      básicos de php (<TT
+CLASS="literal"
+>php-core-v</TT
+> y
+      <TT
+CLASS="literal"
+>php-mysql-v</TT
+>)
+    </P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="uso-mariadb"
+>Uso básico</A
+></H3
+><PRE
+CLASS="programlisting"
+>&#13;    mysql -u root -p 
+</PRE
+><P
+>&#13;        puede crear la base de datos <TT
+CLASS="literal"
+>datos</TT
+>, y un
+        usuario <TT
+CLASS="literal"
+>erfurt</TT
+> que la pueda administrar (i.e
+        con todos los privilegios excepto GRANT) y con clave
+        <TT
+CLASS="literal"
+>vsewf</TT
+> usando:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    CREATE DATABASE datos;
+    GRANT ALL PRIVILEGES ON datos.* TO erfurt@localhost IDENTIFIED BY 'vsewf';
+</PRE
+><P
+>&#13;        Algunas operaciones usuales del administrador son:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    SHOW DATABASES;
+</PRE
+><P
+>&#13;        que muestra todas las bases disponibles.
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    USE base1;
+</PRE
+><P
+>&#13;        que permite usar la base base1.
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    SHOW TABLES;
+</PRE
+><P
+>&#13;        que muestra todas las tablas de la base activa.
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    DESCRIBE tabla;
+    SHOW CREATE TABLE tabla;
+</PRE
+><P
+>&#13;        que presentan estructura de la tabla.
+      </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="clave-mysql"
+>Cambio de la clave de administrador</A
+></H3
+><P
+>&#13;        Si olvida la clave de root después de haberla establecido puede
+        cambiarla entrando a la cuenta de administrador:
+      </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;            Detenga el servidor.
+          </P
+></LI
+><LI
+><P
+>&#13;            Inicie el servidor con
+            <TT
+CLASS="literal"
+>/usr/local/libexec/mysqld --user=root --skip-grant-tables</TT
+>
+          </P
+></LI
+><LI
+><P
+>&#13;            Ejecute:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    # mysql
+    mysql&#62; USE mysql
+    mysql&#62; UPDATE USER SET PASSWORD=password('miclave') WHERE user='root';
+    mysql&#62; FLUSH PRIVILEGES;
+    mysql&#62; EXIT
+</PRE
+></LI
+><LI
+><P
+>&#13;            Vuelva a apagar el servidor y reinicielo con:
+            <TT
+CLASS="literal"
+>/usr/local/bin/mysqld_safe &#38;</TT
+>
+          </P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="recuperacion-backups"
+>Recuperación y backups</A
+></H3
+><P
+>&#13;        MariaDB mantiene bases de datos en directorios y las tablas en
+        archivos. No es recomendable que modifique tales archivos, al
+        menos no, mientras el servidor esté activo.
+      </P
+><P
+>&#13;        Para sacar una copia de respaldo de todas las bases de datos
+        con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    mysqldump --force -p --all-databases &#62; /respaldomysql/dump-1nov2007.sql
+</PRE
+><P
+>&#13;        y posteriormente restaurarla con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    mysql &#60; /respaldomysql/dump-1nov2007.sql
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="chroot-mysql"
+>MariaDB y servidor web con chroot</A
+></H3
+><P
+>&#13;        Puede emplear aplicaciones para nginx o Apache en modo
+        <TT
+CLASS="literal"
+>chroot</TT
+> que usen bases de datos MariaDB de
+        tres formas: (1) Conectando la aplicación web a la base de datos
+        mediante un puerto TCP/IP donde responda MariaDB, (2) poniendo
+        el zócalo de MariaDB en un directorio dentro de la jaula del
+        servidor web o (3) Corriendo MariaDB dentro de la jaula
+        <TT
+CLASS="literal"
+>chroot</TT
+> (ver
+        <A
+HREF="http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot"
+TARGET="_top"
+>http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot</A
+>).
+      </P
+><P
+>&#13;        A continuación documentamos como ubicar el zócalo de MariaDB
+        dentro de la jaula del servidor web (/var/www/) que nos parece
+        un método seguro y fácil e implementar.
+      </P
+><P
+>&#13;        Una vez instale <TT
+CLASS="literal"
+>mariadb-server</TT
+> cree el
+        directorio en el cual ubicará el zócalo, digamos:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;        doas mkdir -p /var/www/var/run/mysql/
+        doas chown _mysql:_mysql /var/www/var/run/mysql/
+        doas chmod a+w /var/www/var/run/mysql/
+        doas chmod +t /var/www/var/run/mysql/
+</PRE
+><P
+>&#13;        y después inicie MariaDB indicando la ruta del zócalo con la
+        opción <TT
+CLASS="literal"
+>--socket</TT
+>, por ejemplo para que el
+        cambio se efectúe en cada inicio, edite
+        <TT
+CLASS="literal"
+>/etc/rc.conf.local</TT
+> para agregar:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;        mysqld_flags="--socket=/var/www/var/run/mysql/mysql.sock"
+</PRE
+><P
+>&#13;        y reinicie el servicio con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas rcctl -d restart mysqld
+</PRE
+><P
+>&#13;        Puede verificar que el zócalo queda bien ubicado con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    $ ls -l /var/www/var/run/mysql/
+</PRE
+><P
+>&#13;        que debe responde con algo como
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    srwxrwxrwx  1 _mysql  _mysql  0 Jul 18 21:41 mysql.sock     
+</PRE
+><P
+>&#13;        Así una aplicación PHP que corran en el mismo servidor podrían
+        realizar una conexión con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;        $dbhost  = "localhost";
+        $dbuname = "miusuario";
+        $dbpass  = "miclave";
+        mysql_connect($dbhost, $dbuname, $dbpass);
+</PRE
+><P
+>&#13;        Tenga en cuenta también que otros binarios de MariaDB también
+        requerirán la opción
+        <TT
+CLASS="literal"
+>--socket=/var/www/var/run/mysql/mysql.sock</TT
+> al
+        ejecutarse por ejemplo:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    mysqldump --socket=/var/www/var/run/mysql/mysql.sock  
+        \-p --all-databases
+    
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="lecutras-mysql"
+>Lecturas recomendadas</A
+></H3
+><P
+>&#13;        Referencias:
+      </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;            Una explicación de algo de la instalación y el uso de MySQL
+            en OpenBSD:
+            <A
+HREF="http://www.sancho2k.net/filemgmt_data/files/mysql_notes.html"
+TARGET="_top"
+>http://www.sancho2k.net/filemgmt_data/files/mysql_notes.html</A
+>
+          </P
+></LI
+><LI
+><P
+>&#13;            La documentación de MariaDB :
+            <A
+HREF="https://mariadb.com/kb/en/mariadb/documentation/"
+TARGET="_top"
+>https://mariadb.com/kb/en/mariadb/documentation/</A
+>
+          </P
+></LI
+><LI
+><P
+>&#13;            Ayuda para cambiar clave de root en sistemas Linux:
+            <A
+HREF="http://www.netadmintools.com/art90.html"
+TARGET="_top"
+>http://www.netadmintools.com/art90.html</A
+>
+          </P
+></LI
+></UL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ldapd"
+>Servidor ldapd</A
+></H2
+><P
+>&#13;      LDAP (Lightweight Directory Access Protocol) es un protocolo para
+      mantener e intercambiar información almacenada en directorios (i.e
+      bases de datos especiales), su versión 3 se define en los RFC
+      2251, 2256, 2829, 2830 y 3377.
+    </P
+><P
+>&#13;      Un uso típico de LDAP es mantener en un servidor información de
+      los usuarios de una organización para permitir su autenticación en
+      otros servicios (e.g nombres, apellidos, dirección, teléfono,
+      login, clave).
+    </P
+><P
+>&#13;      OpenBSD incluye (desde OpenBSD 4.8) un servidor para LDAP versión
+      3, <TT
+CLASS="literal"
+>ldapd</TT
+>. No incluye cliente para LDAP pero
+      desde la línea de ordenes puede emplearse el paquete
+      <TT
+CLASS="literal"
+>openldap-client</TT
+> o como interfaz web
+      <TT
+CLASS="literal"
+>phpldapadmin</TT
+><A
+NAME="AEN2686"
+HREF="#FTN.AEN2686"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+>.
+    </P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="instalacion-ldapd"
+>Instalación de ldapd</A
+></H3
+><P
+>&#13;        No necesita instalar paquetes para la operación como servidor.
+      </P
+><P
+>&#13;        La configuración que se presenta emplea LDAPS para conexiones en
+        la red local, empleando un certificados cuyas llaves pública y
+        privada debe copiarse a <TT
+CLASS="literal"
+>/etc/ldap/certs</TT
+> y
+        ejecutar:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    cd /etc/ldap/certs
+    chown _ldapd:_ldapd *
+    chmod 0640 /etc/ldap/certs/*key
+    chmod 0644 /etc/ldap/certs/*crt 
+</PRE
+><P
+>&#13;        Para configurar el servidor, verifique que exista el usuario
+        <TT
+CLASS="literal"
+>_ldapd</TT
+> y el grupo <TT
+CLASS="literal"
+>_ldapd</TT
+> y
+        edite <TT
+CLASS="literal"
+>/etc/ldapd.conf</TT
+>:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    schema "/etc/ldap/core.schema"                                                  
+    schema "/etc/ldap/inetorgperson.schema"                                         
+    schema "/etc/ldap/nis.schema"                                                   
+     
+    lan_if = "re1"
+    
+    listen on $lan_if ldaps certificate www.pasosdeJesus.org
+    listen on lo0 secure
+    listen on "/var/run/ldapi"
+    
+    namespace "dc=www,dc=pasosdeJesus,dc=org" {
+            rootdn          "cn=root,dc=www,dc=pasosdeJesus,dc=org"
+            rootpw          "secret"
+            index           sn
+            index           givenName
+            index           cn
+            index           mail
+            index           objectClass
+            index           sn
+            fsync           on
+    }                                                                               
+</PRE
+><P
+>&#13;        Recuerde que la clave del directorio debe ser mejor que la
+        presentada (i.e remplace <TT
+CLASS="literal"
+>secret</TT
+> por una buena
+        clave). En lugar de poner la clave plana también es posible
+        poner la cadena generada con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas slappasswd -v -u -h {CRYPT} -s secret
+</PRE
+><P
+>&#13;        que en el caso de la clave '<TT
+CLASS="literal"
+>secret</TT
+>' es
+        '<TT
+CLASS="literal"
+>{CRYPT}uPUCy906TIu/k</TT
+>'
+      </P
+><P
+>&#13;        La configuración por defecto emplea
+        <TT
+CLASS="literal"
+>/var/db/ldap</TT
+> como directorio para mantener
+        las bases de datos y mantiene una por cada espacio de nombres
+        (namespace). Las conexiones no cifradas por defecto operan en el
+        puerto 389 y deben autenticarse con SASL (a menos que tengan la
+        opción <TT
+CLASS="literal"
+>secure</TT
+> para permitir autenticación
+        plana) y las que empleen certificado iran cifradas en el puerto
+        636.
+      </P
+><P
+>&#13;        Cada vez que modifique el archivo de configuración del servidor,
+        puede verificarlo con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas ldapd -n
+</PRE
+><P
+>&#13;        Para iniciar el servidor LDAP en modo de depuración para ver
+        posibles errores:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas ldadpd -dv
+</PRE
+><P
+>&#13;        Tras verificar el funcionamiento, para que en cada arranque se
+        inicie el servidor puede agregar a
+        <TT
+CLASS="literal"
+>/etc/rc.conf.local</TT
+>:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ldapd_flags=""
+    pkg_scripts = "ldapd"
+</PRE
+><P
+>&#13;        E iniciar el servicio con
+        <TT
+CLASS="literal"
+>/etc/rc.d/ldapd start</TT
+> y detenerlo con
+        <TT
+CLASS="literal"
+>/etc/rc.d/ldadp stop</TT
+>
+      </P
+><P
+>&#13;        Es muy recomendable que agregue el esquema LDAP de Courier, de
+        esta forma tomada de {3}:
+      </P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;            Descarguelo y renombrelo:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas ftp -o /etc/ldap/courier.schema \
+    http://courier.cvs.sourceforge.net/viewvc/courier/libs/authlib/authldap.schema
+</PRE
+></LI
+><LI
+><P
+>&#13;            Edite /etc/ldap/courier.schema y quite comentario a las
+            líneas:
+          </P
+><PRE
+CLASS="programlisting"
+>&#13;    attributetype ( 1.3.6.1.4.1.10018.1.1.14 NAME 'mailhost'                        
+            DESC 'Host to which incoming POP/IMAP connections should be proxied'
+            EQUALITY caseIgnoreIA5Match                                        
+            SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )  
+</PRE
+></LI
+><LI
+><P
+>&#13;            Reinicie ldapd
+          </P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="pruebas-openldap"
+>Pruebas Iniciales con openldap-client</A
+></H3
+><P
+>&#13;        Instale el paquete con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas pkg_add openldap-client
+</PRE
+><P
+>&#13;        Verifique localmente que el servidor no cifrado corre con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ldapsearch -x -b 'dc=www,dc=pasosdeJesus,dc=org' '(objectclass=*)'
+</PRE
+><P
+>&#13;        Respecto al servidor cifrado puede analizar la conexión SSL con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    openssl s_client -connect 192.168.2.1:465
+</PRE
+><P
+>&#13;        Puede verificar sus certificados contra la entidad que los
+        expide siguiendo instrucciones de {4}.
+      </P
+><P
+>&#13;        Puede deshabilitar la verificación de certificados de ldapsearch
+        poniendo en <TT
+CLASS="literal"
+>/etc/openldap/ldap.conf</TT
+>:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    TLS_REQCERT never
+</PRE
+><P
+>&#13;        Para hacer pruebas desde otro computador, tenga en cuenta que en
+        OpenBSD ldapsearch utiliza openssl mientras que por ejemplo en
+        Ubuntu emplea GNUTLS, por esto eventualmente puede requerir
+        descargar certificado de autoridad certificadora (digamos
+        gd.pem) y ejecutar:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas cat /etc/ssl/certs/gd.pem &#62;&#62; /etc/ssl/certs/ca-certificates.crt 
+</PRE
+><P
+>&#13;        Además de modificar <TT
+CLASS="literal"
+>/etc/ldap/ldap.conf</TT
+> para
+        agregar
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="datos-iniciales-ldapd"
+>Adición de datos iniciales</A
+></H3
+><P
+>&#13;        Una vez esté corriendo <TT
+CLASS="literal"
+>ldapd</TT
+> deberá iniciar
+        un directorio para su organización y los usuarios que se
+        autenticarán. Puede agregar estos datos con el programa
+        <TT
+CLASS="literal"
+>ldapadd</TT
+> que hace parte de openldap-client.
+        Programa que recibe datos en formato ldif, por ejemplo leidos de
+        un archivo. Un primer archivo con datos de la organización puede
+        ser <TT
+CLASS="literal"
+>org.ldif</TT
+> y contener:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    dn:     dc=www,dc=pasosdeJesus,dc=org
+    objectClass:    dcObject
+    objectClass:    organization
+    o:      Pasos de Jesús
+    dc:     correo
+
+    dn: cn=admin,dc=correo,dc=pasosdeJesus,dc=org
+    objectClass: organizationalRole
+    cn: admin
+
+    dn:ou=gente, dc=correo,dc=pasosdeJesus,dc=org
+    objectClass:    top
+    objectClass:    organizationalUnit
+    ou:     gente
+
+    dn:ou=grupos,dc=correo,dc=pasosdeJesus,dc=org
+    objectClass:    top
+    objectClass:    organizationalUnit
+    ou:     grupos
+
+    dn:ou=sendmail,dc=www,dc=pasosdeJesus,dc=org
+    ou: sendmail
+    objectClass: top
+    objectClass: organizationalUnit
+    userPassword: sendmail
+</PRE
+><P
+>&#13;        Nota: Al agregar información verifique no dejar espacios en
+        blanco al final de cada línea. Se pueden agregar
+        <TT
+CLASS="literal"
+>org.ldif</TT
+> con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ldapadd -x -D "cn=admin,dc=www,dc=pasosdeJesus,dc=org" -W \
+    -h www.pasosdeJesus.org -f org.ldif
+</PRE
+><P
+>&#13;        Además de poder revisar los mensajes que
+        <TT
+CLASS="literal"
+>slapd</TT
+> genere al ejecutarse en modo de
+        depuración, podrá consultar los datos ingresados al directorio
+        con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    ldapsearch -x -b 'dc=www,dc=pasosdeJesus,dc=org' '(objectclass=*)'
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="phpldapadmin"
+>Instalación y configuración de
+      <TT
+CLASS="literal"
+>phpldapadmin</TT
+></A
+></H3
+><P
+>&#13;        Instale el paquete y siga las instrucciones que de (por ejemplo
+        activar <TT
+CLASS="literal"
+>php-ldap</TT
+>):
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas pkg_add phpldapadmin
+</PRE
+><P
+>&#13;        También debe asegurar que pueden emplearse los dispositivos de
+        generación de números aleatorios en la jaula chroot de Apache
+        (esto lo hace por defecto el instalador de adJ 5.5). Para esto
+        verifique que en <TT
+CLASS="literal"
+>/etc/fstab</TT
+> al montar la
+        partición <TT
+CLASS="literal"
+>/var</TT
+> este permitiendo dispositivos
+        (que no este la opción <TT
+CLASS="literal"
+>nodev</TT
+>) y ejecute:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    cd /var/www
+    doas mkdir -p dev
+    cd dev
+    /dev/MAKEDEV arandom
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-ldapd"
+>Referencias y lecturas recomendadas</A
+></H3
+><P
+></P
+><UL
+><LI
+><P
+>&#13;            Las siguientes páginas man: ldapd 8. ldapctl 8. ldapd.conf
+            5.
+          </P
+></LI
+><LI
+><P
+>&#13;            <A
+HREF="http://dhobsd.pasosdejesus.org/index.php?id=ldapd"
+TARGET="_top"
+>http://dhobsd.pasosdejesus.org/index.php?id=ldapd</A
+>.
+          </P
+></LI
+><LI
+><P
+>&#13;            <A
+HREF="http://www.cyberciti.biz/faq/test-ssl-certificates-diagnosis-ssl-certificate/"
+TARGET="_top"
+>http://www.cyberciti.biz/faq/test-ssl-certificates-diagnosis-ssl-certificate/</A
+>.
+          </P
+></LI
+><LI
+><P
+>&#13;            <A
+HREF="http://www.tumfatig.net/20120817/monitoring-openbsds-ldap-daemon/"
+TARGET="_top"
+>http://www.tumfatig.net/20120817/monitoring-openbsds-ldap-daemon/</A
+>.
+          </P
+></LI
+><LI
+><P
+>&#13;            <A
+HREF="http://openbsd.7691.n7.nabble.com/dev-random-as-chrooted-named-s-entropy-source-current-td64344.html"
+TARGET="_top"
+>http://openbsd.7691.n7.nabble.com/dev-random-as-chrooted-named-s-entropy-source-current-td64344.html</A
+>.
+          </P
+></LI
+></UL
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="autoridad_certificadora"
+>Autoridad certificadora interna</A
+></H2
+><P
+>&#13;      Los servicios en red (en particular ldapd, ver
+      <A
+HREF="x2238.htm#ldapd"
+>la sección de nombre <I
+>Servidor ldapd</I
+></A
+> y postgresql remoto, ver
+      <A
+HREF="x2238.htm#postgresql"
+>la sección de nombre <I
+>Motor de bases de datos PostgreSQL</I
+></A
+>) requieren cada vez más
+      comunicaciones cifradas y suelen emplear SSL o TLS que requieren
+      certificados públicos firmados por autoridades certificadoras.
+    </P
+><P
+>&#13;      Cada vez los programas, librerías y lenguajes están verificando
+      con más insistencia que los certificados sean efectivamente
+      firmados por autoridades certificadoras.
+    </P
+><P
+>&#13;      En genral las autoridades certificadoras cobran por emitir firmas
+      para certificados. Sin embargo
+      <A
+HREF="http://letsencrypt.org"
+TARGET="_top"
+>http://letsencrypt.org</A
+>
+      es una autoridad certificadora que expide certificados gratuitos
+      para sitios públicos pero no para sitios en redes internas por
+      cuanto el proceso de expedición de certificados requiere resolver
+      por DNS desde sus servidores el dominio para el cual se está
+      creando el certificado. Además sus certificados son de 3 meses por
+      cuanto deben renovarse cada 3 meses.
+    </P
+><P
+>&#13;      Esto hace necesario que cada organización que requiere servicios
+      cifrados con SSL o TLS en su red interna (como PostgreSQL remoto o
+      LDAP) cuente con su propia autoridad certificadora interna
+    </P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="conceptos"
+>Conceptos</A
+></H3
+><P
+>&#13;        Las operaciones con SSL dependen en cliente y en servidor de la
+        librería LibreSSL (en otros sistemas OpenSSL). Esta incluye el
+        programa openssl para hacer varias operaciones, incluyendo
+        operaciones de una autoridad certificadora.
+      </P
+><P
+>&#13;        Un certificado SSL siempre se asocia a una llave privada (el
+        certificado es la llave pública).
+      </P
+><P
+>&#13;        El proceso para crear un certificado es:
+      </P
+><P
+></P
+><OL
+COMPACT="COMPACT"
+TYPE="1"
+><LI
+><P
+>&#13;            Crear la llave privada para el certificado (extensión .key)
+          </P
+></LI
+><LI
+><P
+>&#13;            Generar el certificado (llave pública) pero sin firma
+            (extensión .csr)
+          </P
+></LI
+><LI
+><P
+>&#13;            Firmar el certificado con una autoridad certificadora y
+            generar el certificado
+          </P
+></LI
+><LI
+><P
+>&#13;            Usar el certificado firmado junto con la llave privada para
+            realizar conexiones (el certificado firmado se compartirá,
+            mientras que la llave privada no)
+          </P
+></LI
+></OL
+><P
+>&#13;        Los archivos intermedios pueden examinarse así:
+      </P
+><P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><P
+>&#13;            Solicitudes:
+            <TT
+CLASS="literal"
+>openssl req -noout -text -in client.csr</TT
+>
+          </P
+></LI
+><LI
+><P
+>&#13;            Llaves: <TT
+CLASS="literal"
+>openssl rsa -check -in client.key</TT
+>
+          </P
+></LI
+><LI
+><P
+>&#13;            Certificados:
+            <TT
+CLASS="literal"
+>openssl x509 -noout -text -in client.crt</TT
+>
+          </P
+></LI
+></UL
+><P
+>&#13;        La autoridad certificadora no es más que un certificado
+        autofirmado que se configura y se usa consistentemente como
+        autoridad certificadora.
+      </P
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="configuración-de-servidor-1"
+>Configuración de servidor</A
+></H3
+><P
+>&#13;        Supongamos que ubicamos en
+        <TT
+CLASS="literal"
+>/var/postgresql/data</TT
+> los archivos de la
+        autoridad certificadora:
+      </P
+><P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><P
+>&#13;            <TT
+CLASS="literal"
+>root.crt</TT
+> Autoridad certificadora (igual a
+            server.crt)
+          </P
+></LI
+><LI
+><P
+>&#13;            <TT
+CLASS="literal"
+>root.crl</TT
+> Lista de revocación
+          </P
+></LI
+><LI
+><P
+>&#13;            <TT
+CLASS="literal"
+>server.crt</TT
+> Certificado del servidor
+          </P
+></LI
+><LI
+><P
+>&#13;            <TT
+CLASS="literal"
+>server.key</TT
+> Llave privada del servidor
+          </P
+></LI
+></UL
+><P
+>&#13;        Se pueden generar así (como se explica en
+        <A
+HREF="https://www.howtoforge.com/postgresql-ssl-certificates"
+TARGET="_top"
+>https://www.howtoforge.com/postgresql-ssl-certificates</A
+>):
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    openssl genrsa -des3 -out server.key 1024
+    openssl rsa -in server.key -out server.key
+    chmod 400 server.key
+    chown postgres.postgres server.key
+    openssl req -new -key server.key -days 3650 -out server.crt -x509 -subj '/C=CO/ST=Bogota/L=MiOng/O=MiOng/CN=miong.org.co/emailAddress=info@miong.org'
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="generación-de-un-par-de-certificados"
+>Generación de un par de certificados</A
+></H3
+><P
+>&#13;        LDAP requiere que el CN del certificado corresponda al nombre
+        del computador en la red interna.
+      </P
+><P
+>&#13;        Los certificados para clientes de PostgreSQL requieren que el CN
+        del Certificado corresponda al usuario en la base de datos.
+      </P
+><P
+>&#13;        En el computador que hará la conexión (en este ejemplo
+        <TT
+CLASS="literal"
+>apbd2.miong.org.co</TT
+>) ejecute:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    mkdir ~/ssl
+    cd ~/ssl
+    openssl genrsa -des3 -out apbd2.miong.org.co.key 1024
+    openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
+</PRE
+><P
+>&#13;        De una clave temporal y borrela con
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
+</PRE
+><P
+>&#13;        Cree la solicitud de certificado con:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=CINEP/CN=apbd2.miong.org.co'
+</PRE
+><P
+>&#13;        Copie la solicitud <TT
+CLASS="literal"
+>apbd2.miong.org.co.csr</TT
+> al
+        servidor apbd1.miong.org.co y dejela en el directorio
+        <TT
+CLASS="literal"
+>/var/postgresql/data</TT
+>
+      </P
+><P
+>&#13;        Y allí ejecute:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas su - 
+    cd /var/postgresql/data
+    openssl x509 -req -days 3650 -in apbd2.miong.org.co.csr -CA root.crt -CAkey server.key -out apbd2.miong.org.co.crt -CAcreateserial
+</PRE
+><P
+>&#13;        A continuación copie el certificado generado
+        (<TT
+CLASS="literal"
+>apbd2.miong.org.co.crt</TT
+>) al computador
+        cliente donde se usará:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    scp apbd2.miong.org.co.crt apbd2.miong.org.co:~/ssl/
+</PRE
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="uso-de-los-certificados"
+>Uso de los certificados</A
+></H3
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="caso-postgresql"
+>Caso PostgreSQL</A
+></H4
+><P
+>&#13;          En el servidor edite el archivo
+          <TT
+CLASS="literal"
+>/var/postgresql/data/pg_hba.conf</TT
+> y
+          asegurese de agregar una línea para el usuario y el computador
+          cliente: hostssl all usuario 192.168.100.11/32 cert
+          clientcert=1
+        </P
+><P
+>&#13;          Reinicie PostgreSQL.
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas sh /etc/rc.d/postgresql -d restart
+</PRE
+><P
+>&#13;          Desde el cliente ejecute:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas chmod 0600 /home/usis/.postgresql/usuario.key
+</PRE
+><P
+>&#13;          y pruebe la conexión asegurando que se usa el certificado del
+          usuario respectivo:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    PGSSLCERT=/home/usis/.postgresql/usuario.crt \
+    PGSSLKEY=/home/usis/.postgresql/usuario.key \
+    psql -h192.168.100.21 -Uusuario usuario
+</PRE
+><P
+>&#13;          Configure la aplicación para que en cada arranque o uso
+          establezca:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    PGSSLCERT=/home/usis/.postgresql/usuario.crt 
+    PGSSLKEY=/home/usis/.postgresql/usuario.key
+</PRE
+></DIV
+><DIV
+CLASS="sect4"
+><H4
+CLASS="sect4"
+><A
+NAME="caso-ldapd"
+>Caso LDAPD</A
+></H4
+><P
+>&#13;          Ubique el ceritifcado y llave en
+          <TT
+CLASS="literal"
+>/etc/ldad/certs/</TT
+> del servidor donde corre
+          ldapd:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
+</PRE
+><P
+>&#13;          Configure <TT
+CLASS="literal"
+>/etc/ldapd.conf</TT
+>
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    listen on $if1 tls certificate apbd2.miong.org.co
+</PRE
+><P
+>&#13;          En los computadores que realicen conexiones al LDAP asegurese
+          de agregar la llave de la entidad certificadora
+          <TT
+CLASS="literal"
+>/var/postgresql/data/root.crt</TT
+>, es decir en
+          el servidor apbd1 ejecute:
+        </P
+><PRE
+CLASS="programlisting"
+>&#13;    cd /var/postgresql/data
+    openssl x509 -noout -text -in root.crt &#62; root-paracerts
+</PRE
+><P
+>&#13;          Copie el archivo <TT
+CLASS="literal"
+>root-paracerts</TT
+> en el
+          cliente y agregue ese archivo al final de
+          <TT
+CLASS="literal"
+>/etc/ssl/cert.pem</TT
+>
+        </P
+></DIV
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias"
+>Referencias</A
+></H3
+><P
+></P
+><UL
+COMPACT="COMPACT"
+><LI
+><P
+>&#13;            <A
+HREF="https://www.howtoforge.com/postgresql-ssl-certificates"
+TARGET="_top"
+>https://www.howtoforge.com/postgresql-ssl-certificates</A
+>
+          </P
+></LI
+></UL
+></DIV
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notas</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN2355"
+HREF="x2238.htm#AEN2355"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>&#13;            Note que de esta forma puede cambiar la clave de otros
+            usuarios de PostgreSQL.
+          </P
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN2686"
+HREF="x2238.htm#AEN2686"
+><SPAN
+CLASS="footnote"
+>[2]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>&#13;          Si emplea un adJ 5.2 y planea conectarse desde clientes
+          digamos en Ubuntu reciente requerirá el parche descrito en
+          <A
+HREF="http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html"
+TARGET="_top"
+>http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</A
+>
+        </P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x935.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="t1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="a2895.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Protocolos de soporte y de usuario</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Novedades</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
