@@ -1668,12 +1668,12 @@ PostgreSQL:
     > bitacora `imap` donde quedan claves planas.
 
 2.  Para configurar una base de datos en PostgreSQL con socket en
-    `/var/www/tmp` (ver [???](#postgresql)) ejecutar:
+    `/var/www/var/run/postgresql` (ver [???](#postgresql)) ejecutar:
 
             doas su - _postgresql
-            createuser -h /var/www/tmp -Upostgres roundcube
-            createdb -h /var/www/tmp -Upostgres -E UNICODE roundcubemail -T template0
-            psql -h /var/www/tmp -Upostgres template1
+            createuser -h /var/www/var/run/postgresql -Upostgres roundcube
+            createdb -h /var/www/var/run/postgresql -Upostgres -E UNICODE roundcubemail -T template0
+            psql -h /var/www/var/run/postgresql -Upostgres template1
 
     y desde la interfaz administrativa de PostgreSQL establezcla una
     clave para el usuario `roundcube` con:
@@ -1683,7 +1683,7 @@ PostgreSQL:
     Salir con '\\q' y desde la línea de ordenes ingresar a la nueva
     base con:
 
-            psql -h /var/www/tmp -Uroundcube roundcubemail
+            psql -h /var/www/var/run/postgresql -Uroundcube roundcubemail
 
     le solicitará la clave que estableció para el usuario `roundcube`, a
     continuación desde la interfaz de PostgreSQL ejecute el script de

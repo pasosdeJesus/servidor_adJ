@@ -106,7 +106,7 @@ escrito describe son:
             doas mkdir -p /var/postgresql/data
             doas chown -R _postgresql:_postgresql /var/postgresql
             doas su - _postgresql
-            initdb -D /var/postgresql/data -Upostgres --encoding=ISO8859-1
+            initdb --auth=md5 -D /var/postgresql/data -U postgres --encoding=UTF8
 
     En adJ se emplea por defecto autenticación md5, que requiere
     suministrar clave cada vez que se carga la interfaz `psql` o abre
@@ -142,7 +142,8 @@ la misma máquina). Puede comprobar que está corriendo el servidor
         pgrep post
 
 y revisar el zócalo examinando la presencia del archivo
-`/var/www/tmp/.s.PGSQL.5432` (otra ubicación puede ser
+`/var/www/var/run/postgresql/.s.PGSQL.5432` (otra ubicación más
+común pero fuera de la jaula chroot para servidores web es
 `/tmp/.s.PGSQL.5432`).
 
 Para emplear el protocolo TCP/IP para conexiones desde algunas máquinas
@@ -161,24 +162,24 @@ conexiones simultáneamente, consulte primero
 En adJ por seguridad (e.g cuando ejecuta Apache con `chroot` en
 `/var/www`) no se permiten conexiones TCP/IP y se emplea una ruta para
 los zócalos diferente a la ruta por defecto (i.e `/tmp`), se trata de
-`/var/www/tmp`, que se define en el archivo de configuración de
+`/var/www/var/run/postgresql`, que se define en el archivo de configuración de
 PostgreSQL con:
 
-        unix_socket_directory = '/var/www/tmp'
+        unix_socket_directories = '/var/www/var/run/postgresql'
 
 Antes de reiniciar PostgreSQL asegúrese de crear el directorio:
 
-        doas mkdir  /var/www/tmp
-        doas chmod a+w /var/www/tmp
-        doas chmod +t /var/www/tmp
+        doas mkdir  /var/www/var/run/postgresql
+        doas chmod a+w /var/www/var/run/postgresql
+        doas chmod +t /var/www/var/run/postgresql
 
 También tenga en cuenta que las diversas herramientas reciben como
 parámetro adicional `-h ruta`. Por ejemplo si ejecuta Apache con
 `chroot` en `/var/www/` puede tener configurado su directorio para
-zócalos en `/var/www/tmp`, en ese caso puede iniciar `psql` con la base
-`prueba` usando:
+zócalos en `/var/www/var/run/postgresql`, en ese caso puede iniciar 
+`psql` con la base `prueba` usando:
 
-        psql -h /var/www/tmp prueba
+        psql -h /var/www/var/run/postgresql prueba
 
 En paquetes anteriores al de adJ 4.1 el superusuario de la base
 coincidía con el usuario del sistema `_postgresql`, desde 4.1 el
@@ -386,16 +387,17 @@ También podrá renombrar cotejaciones que haya creado con
 ### Copias de respaldo {#respaldo-postgresql}
 
 Para sacar una copia de respaldo de todas las base de datos manejadas
-con PostgreSQL (y suponiendo que el zócalo está en `/var/www/tmp`):
+con PostgreSQL (y suponiendo que el zócalo está en 
+`/var/www/var/run/postgresql`):
 ingrese a la cuenta del administrador:
 
         doas su - _postgresql
-        pg_dumpall -U postgres -h /var/www/tmp/ \
+        pg_dumpall -U postgres -h /var/www/var/run/postgresql/ \
             --inserts --attribute-inserts > /respaldos/pgdump.sql
 
 Puede restablecer una copia con
 
-        psql -U postgres -h /var/www/tmp/ \
+        psql -U postgres -h /var/www/var/run/postgresql/ \
             -f /respaldos/pgdump.sql template1
 
 

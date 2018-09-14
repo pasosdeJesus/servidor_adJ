@@ -219,13 +219,51 @@ configuración mínimo que hace NAT, suponiendo que la interfaz interna es
         
         set skip on lo
         
-        match out on $ext_if from !($ext_if) to any nat-to ($ext_if:0)
+        match out on $ext_if from !($ext_if) nat-to ($ext_if:0)
+	pass out on $ext_if proto {icmp, tcp, udp} all keep state
         
         pass in quick on $int_if
 
 Esta configuración podría cargarse con:
 
         doas pfctl -f /etc/pf.conf.
+
+NAT es sigla de "Network Address Translation" (Traducción de direcciones de red)
+lo que hace es "traducir" las direcciones privadas de la red interna 
+a la dirección pública del cortafuegos 
+para que el cortafuegos haga la petición a su nombre y la respuesta que 
+reciba la vuelve a traducir a la dirección privadaen la red interna
+para enviarla al computador de la red interna que corresponde.
+
+Una vez realizada, un computador en la red interna debería poder ejecutar
+
+	ping 8.8.8.8 
+
+y recibir respuesta.
+
+Mientras se hace el ping en en computador de la red interna, si en el 
+cortafuegos se examinara el tráfico de la interfaz interna:
+	
+	doas tcpdump -i fxp0 -n host 8.8.8.8
+
+Se verían peticiones como
+
+	07:09:59.262358 192.168.44.93 > 8.8.8.8: icmp: echo request (DF)
+
+y al examinar en otra terminal el tráfico de la interfaz conectada a Internet 
+(`doas tcpdump -i nfe0 -n host 8.8.8.8`) se verían
+las mismas peticiones pero con la dirección traducida, por ejemplo:
+
+	07:09:59.262414 182.188.122.211 > 8.8.8.8: icmp: echo request (DF)
+
+Las respuestas en la interfaz externa se verían como:
+
+	07:09:59.359408 8.8.8.8 > 182.188.122.211: icmp: echo reply
+
+y en la interfaz interna se vería nuevamente traducidas como:
+
+	07:09:59.359474 8.8.8.8 > 192.168.44.93: icmp: echo reply
+
 
 ### Referencias y lecturas recomendadas {#referencias-nat}
 

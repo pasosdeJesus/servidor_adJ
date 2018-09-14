@@ -1,3 +1,8 @@
+Versión 6.4
+
+:   - Actualizada documentacion de PostgreSQL ([xref](#postgresql))
+    - Actualizada configuración de NAT ([xref](#nat))
+
 Versión 6.3
 
 :   - Actualizada documentacion de MariaDB ([xref](#mariadb))
