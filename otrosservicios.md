@@ -83,8 +83,8 @@ A continuación se dan detalles del proceso de instalación y uso de
 PostgreSQL en caso de que requiera instalar por su cuenta o aprender más
 sobre este motor de bases de datos.
 
-Para emplearlo por primera vez instale el paquete `` (también es
-recomendable `postgresql-docs`).
+Para emplearlo por primera vez instale el paquete `postgresql-server` (también 
+es recomendable `postgresql-docs`).
 
 Este paquete deja instrucciones específicas para inicializar la base de
 datos, permitir conexiones de red e inicializar la base de datos cada
@@ -135,8 +135,8 @@ escrito describe son:
 
             pkg_scripts="cron montaencres montaencpos postgresql httpd cupsd"
 
-Inicialmente el servidor queda configurado con un zócalo Unix (solo desde
-la misma máquina). Puede comprobar que está corriendo el servidor
+Inicialmente el servidor queda configurado con un zocalo (socket) Unix 
+(solo desde la misma máquina). Puede comprobar que está corriendo el servidor
 (postmaster) con:
 
         pgrep post
@@ -214,7 +214,7 @@ Otra posibilidad es cambiar la configuración después de haber
 inicializado sin autenticación. Para esto cambie la clave del
 administrador con[^aut.1]:
 
-        psql -U postgres template1 
+        psql -h /var/www/var/run/postgresql -U postgres template1 
         template1=# alter user postgres with password 'MiClave';
 
 Después edite `/var/postgresql/data/pg_hba.conf` y cambie en las lineas
@@ -265,8 +265,8 @@ Para crear la base de datos `prueba` puede usar el superusuario con la
 opción `-U postgres` o desde una cuenta que tenga permiso para crear
 bases de datos:
 
-        createdb prueba
-        psql prueba
+        createdb -h /var/www/var/run/postgresql -U postgres prueba
+        psql -h /var/www/var/run/postgresql -U postgres prueba
 
 Desde la interfaz `psql`, pueden darse ordenes SQL y otros específicos
 de PostgreSQL (ver [Uso de una base de datos](#uso-base)). En particular
@@ -283,7 +283,7 @@ crear un usuario que pueda crear bases de datos o `PASSWORD 'clave'`
 para crear un usuario con una clave (emplea autenticación configurada).
 Desde la línea de ordenes puede crearse un usuario con:
 
-        createuser usejemplo
+        createuser -h /var/www/var/run/postgresql -U postgres  usejemplo
 
 Para eliminar un usuario desde `psql` se usa:
 
@@ -291,12 +291,12 @@ Para eliminar un usuario desde `psql` se usa:
 
 y para eliminarlo desde línea de ordenes:
 
-        dropuser usejemplo
+        dropuser -h /var/www/var/run/postgresql -U postgres usejemplo
 
 Puede ejecutarse un script SQL (`crea.sql`) desde la línea de ordenes a
 un base de datos con
 
-        psql -d test -U ejusuario --password -f crea.sql
+        psql -h /var/www/var/run/postgresql -d test -U ejusuario --password -f crea.sql
 
 ### Uso de una base de datos {#uso-base}
 
@@ -304,7 +304,7 @@ Puede emplear `psql`, la interfaz texto que acepta ordenes SQL y que se
 distribuye con PostgreSQL. Para esto, entre a una base (digamos `b1908`)
 como un usuario (digamos `u1908`) con:
 
-        psql -U u1908 -d b1908
+        psql -h /var/www/var/run/postgresql  -U u1908 -d b1908
 
 En esta interfaz puede dar ordenes SQL y algunas ordenes internos que
 puede listar con `\h`. Algunos ejemplos de operaciones útiles son:
@@ -477,7 +477,7 @@ de la opción ```-days```):
         cd /var/postgresql/data
         openssl genrsa -des3 -out usuario.key 1024
         openssl rsa -in usuario.key -out usuario.key
-        openssl req -new -key usuario.key -out usuario.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=Pasos de Jesús/CN=usuario'
+        openssl req -new -key usuario.key -out usuario.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=Pasos de Jesus/CN=usuario'
         openssl x509 -req -days 3650 -in usuario.csr -CA root.crt -CAkey server.key -out usuario.crt -CAcreateserial
 
 A continuación copie el certificado generado (```usuario.crt```) y la 
@@ -734,8 +734,8 @@ Tenga en cuenta también que otros binarios de MariaDB también requerirán
 la opción `--socket=/var/www/var/run/mysql/mysql.sock` al ejecutarse por
 ejemplo:
 
-        mysqldump --socket=/var/www/var/run/mysql/mysql.sock  
-            \-p --all-databases
+        mysqldump --socket=/var/www/var/run/mysql/mysql.sock  \
+		-p --all-databases
         
 
 ### Lecturas recomendadas {#lecutras-mysql}
