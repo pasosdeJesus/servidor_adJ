@@ -14,7 +14,7 @@ TITLE="Dispositivos de interconexión"
 HREF="x233.htm"><LINK
 REL="NEXT"
 TITLE="Protocolos de soporte y de usuario"
-HREF="x935.htm"></HEAD
+HREF="x950.htm"></HEAD
 ><BODY
 CLASS="sect1"
 BGCOLOR="#FFFFFF"
@@ -56,7 +56,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="x935.htm"
+HREF="x950.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
@@ -544,7 +544,8 @@ CLASS="programlisting"
     
     set skip on lo
     
-    match out on $ext_if from !($ext_if) to any nat-to ($ext_if:0)
+    match out on $ext_if from !($ext_if) nat-to ($ext_if:0)
+pass out on $ext_if proto {icmp, tcp, udp} all keep state
     
     pass in quick on $int_if
 </PRE
@@ -554,6 +555,69 @@ CLASS="programlisting"
 ><PRE
 CLASS="programlisting"
 >&#13;    doas pfctl -f /etc/pf.conf.
+</PRE
+><P
+>&#13;      NAT es sigla de "Network Address Translation"
+      (Traducción de direcciones de red) lo que hace es
+      "traducir" las direcciones privadas de la red interna a
+      la dirección pública del cortafuegos para que el cortafuegos haga
+      la petición a su nombre y la respuesta que reciba la vuelve a
+      traducir a la dirección privadaen la red interna para enviarla al
+      computador de la red interna que corresponde.
+    </P
+><P
+>&#13;      Una vez realizada, un computador en la red interna debería poder
+      ejecutar
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;ping 8.8.8.8 
+</PRE
+><P
+>&#13;      y recibir respuesta.
+    </P
+><P
+>&#13;      Mientras se hace el ping en en computador de la red interna, si en
+      el cortafuegos se examinara el tráfico de la interfaz interna:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;doas tcpdump -i fxp0 -n host 8.8.8.8
+</PRE
+><P
+>&#13;      Se verían peticiones como
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;07:09:59.262358 192.168.44.93 &#62; 8.8.8.8: icmp: echo request (DF)
+</PRE
+><P
+>&#13;      y al examinar en otra terminal el tráfico de la interfaz conectada
+      a Internet
+      (<TT
+CLASS="literal"
+>doas tcpdump -i nfe0 -n host 8.8.8.8</TT
+>) se
+      verían las mismas peticiones pero con la dirección traducida, por
+      ejemplo:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;07:09:59.262414 182.188.122.211 &#62; 8.8.8.8: icmp: echo request (DF)
+</PRE
+><P
+>&#13;      Las respuestas en la interfaz externa se verían como:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;07:09:59.359408 8.8.8.8 &#62; 182.188.122.211: icmp: echo reply
+</PRE
+><P
+>&#13;      y en la interfaz interna se vería nuevamente traducidas como:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;07:09:59.359474 8.8.8.8 &#62; 192.168.44.93: icmp: echo reply
 </PRE
 ><DIV
 CLASS="sect3"
@@ -568,7 +632,7 @@ NAME="referencias-nat"
       </P
 ><P
 >&#13;        Guía del usuario de PF <A
-HREF="a3110.htm"
+HREF="a3137.htm"
 >PF</A
 >.
       </P
@@ -664,7 +728,7 @@ NAME="referencias-cortafuegos"
       </P
 ><P
 >&#13;        Guía del usuario de PF <A
-HREF="a3110.htm"
+HREF="a3137.htm"
 >PF</A
 >.
       </P
@@ -706,7 +770,7 @@ CLASS="programlisting"
     pass out proto tcp from $ext_ip to any port 21
 </PRE
 ><A
-NAME="AEN900"
+NAME="AEN915"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -769,7 +833,7 @@ NAME="referencias-ftpproxy"
       </P
 ><P
 >&#13;        Guía del usuario de PF <A
-HREF="a3110.htm"
+HREF="a3137.htm"
 >PF</A
 >.
       </P
@@ -875,7 +939,7 @@ NAME="referencias-ejemplopf"
 ></H3
 ><P
 >&#13;        Guía del usuario de PF <A
-HREF="a3110.htm"
+HREF="a3137.htm"
 >PF</A
 >.
       </P
@@ -941,7 +1005,7 @@ NAME="referencias-control-ancho-banda"
       </P
 ><P
 >&#13;        Guía del usuario de PF <A
-HREF="a3110.htm"
+HREF="a3137.htm"
 >PF</A
 >.
       </P
@@ -1018,7 +1082,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="x935.htm"
+HREF="x950.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD

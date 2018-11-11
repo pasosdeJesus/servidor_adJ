@@ -77,7 +77,8 @@
         aprender más sobre este motor de bases de datos.
       </p><p>
         Para emplearlo por primera vez instale el paquete
-        `<code class="literal">(también es recomendable</code>postgresql-docs`).
+        <code class="literal">postgresql-server</code> (también es recomendable
+        <code class="literal">postgresql-docs</code>).
       </p><p>
         Este paquete deja instrucciones específicas para inicializar la
         base de datos, permitir conexiones de red e inicializar la base
@@ -100,7 +101,7 @@
     doas mkdir -p /var/postgresql/data
     doas chown -R _postgresql:_postgresql /var/postgresql
     doas su - _postgresql
-    initdb -D /var/postgresql/data -Upostgres --encoding=ISO8859-1
+    initdb --auth=md5 -D /var/postgresql/data -U postgres --encoding=UTF8
 </pre><p>
             En adJ se emplea por defecto autenticación md5, que requiere
             suministrar clave cada vez que se carga la interfaz
@@ -134,15 +135,16 @@
           </p><pre class="programlisting">
     pkg_scripts="cron montaencres montaencpos postgresql httpd cupsd"
 </pre></li></ul></div><p>
-        Inicialmente el servidor queda configurado con un zócalo Unix
-        (solo desde la misma máquina). Puede comprobar que está
-        corriendo el servidor (postmaster) con:
+        Inicialmente el servidor queda configurado con un zocalo
+        (socket) Unix (solo desde la misma máquina). Puede comprobar que
+        está corriendo el servidor (postmaster) con:
       </p><pre class="programlisting">
     pgrep post
 </pre><p>
         y revisar el zócalo examinando la presencia del archivo
-        <code class="literal">/var/www/tmp/.s.PGSQL.5432</code> (otra ubicación
-        puede ser <code class="literal">/tmp/.s.PGSQL.5432</code>).
+        <code class="literal">/var/www/var/run/postgresql/.s.PGSQL.5432</code>
+        (otra ubicación más común pero fuera de la jaula chroot para
+        servidores web es <code class="literal">/tmp/.s.PGSQL.5432</code>).
       </p><p>
         Para emplear el protocolo TCP/IP para conexiones desde algunas
         máquinas de su elección, edite
@@ -163,26 +165,27 @@
         <code class="literal">chroot</code> en <code class="literal">/var/www</code>) no se
         permiten conexiones TCP/IP y se emplea una ruta para los zócalos
         diferente a la ruta por defecto (i.e <code class="literal">/tmp</code>),
-        se trata de <code class="literal">/var/www/tmp</code>, que se define en el
-        archivo de configuración de PostgreSQL con:
+        se trata de <code class="literal">/var/www/var/run/postgresql</code>, que
+        se define en el archivo de configuración de PostgreSQL con:
       </p><pre class="programlisting">
-    unix_socket_directory = '/var/www/tmp'
+    unix_socket_directories = '/var/www/var/run/postgresql'
 </pre><p>
         Antes de reiniciar PostgreSQL asegúrese de crear el directorio:
       </p><pre class="programlisting">
-    doas mkdir  /var/www/tmp
-    doas chmod a+w /var/www/tmp
-    doas chmod +t /var/www/tmp
+    doas mkdir  /var/www/var/run/postgresql
+    doas chmod a+w /var/www/var/run/postgresql
+    doas chmod +t /var/www/var/run/postgresql
 </pre><p>
         También tenga en cuenta que las diversas herramientas reciben
         como parámetro adicional <code class="literal">-h ruta</code>. Por ejemplo
         si ejecuta Apache con <code class="literal">chroot</code> en
         <code class="literal">/var/www/</code> puede tener configurado su
-        directorio para zócalos en <code class="literal">/var/www/tmp</code>, en
-        ese caso puede iniciar <code class="literal">psql</code> con la base
+        directorio para zócalos en
+        <code class="literal">/var/www/var/run/postgresql</code>, en ese caso
+        puede iniciar <code class="literal">psql</code> con la base
         <code class="literal">prueba</code> usando:
       </p><pre class="programlisting">
-    psql -h /var/www/tmp prueba
+    psql -h /var/www/var/run/postgresql prueba
 </pre><p>
         En paquetes anteriores al de adJ 4.1 el superusuario de la base
         coincidía con el usuario del sistema
@@ -219,9 +222,9 @@
       </p><p>
         Otra posibilidad es cambiar la configuración después de haber
         inicializado sin autenticación. Para esto cambie la clave del
-        administrador con<sup>[<a name="idp1428784424" href="#ftn.idp1428784424">29</a>]</sup>:
+        administrador con<sup>[<a name="idm2977006168" href="#ftn.idm2977006168">29</a>]</sup>:
       </p><pre class="programlisting">
-    psql -U postgres template1 
+    psql -h /var/www/var/run/postgresql -U postgres template1 
     template1=# alter user postgres with password 'MiClave';
 </pre><p>
         Después edite
@@ -274,8 +277,8 @@
         el superusuario con la opción <code class="literal">-U postgres</code> o
         desde una cuenta que tenga permiso para crear bases de datos:
       </p><pre class="programlisting">
-    createdb prueba
-    psql prueba
+    createdb -h /var/www/var/run/postgresql -U postgres prueba
+    psql -h /var/www/var/run/postgresql -U postgres prueba
 </pre><p>
         Desde la interfaz <code class="literal">psql</code>, pueden darse ordenes
         SQL y otros específicos de PostgreSQL (ver
@@ -297,7 +300,7 @@
         configurada). Desde la línea de ordenes puede crearse un usuario
         con:
       </p><pre class="programlisting">
-    createuser usejemplo
+    createuser -h /var/www/var/run/postgresql -U postgres  usejemplo
 </pre><p>
         Para eliminar un usuario desde <code class="literal">psql</code> se usa:
       </p><pre class="programlisting">
@@ -305,19 +308,19 @@
 </pre><p>
         y para eliminarlo desde línea de ordenes:
       </p><pre class="programlisting">
-    dropuser usejemplo
+    dropuser -h /var/www/var/run/postgresql -U postgres usejemplo
 </pre><p>
         Puede ejecutarse un script SQL (<code class="literal">crea.sql</code>)
         desde la línea de ordenes a un base de datos con
       </p><pre class="programlisting">
-    psql -d test -U ejusuario --password -f crea.sql
+    psql -h /var/www/var/run/postgresql -d test -U ejusuario --password -f crea.sql
 </pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="uso-base"></a>6.2.4. Uso de una base de datos</h4></div></div></div><p>
         Puede emplear <code class="literal">psql</code>, la interfaz texto que
         acepta ordenes SQL y que se distribuye con PostgreSQL. Para
         esto, entre a una base (digamos <code class="literal">b1908</code>) como
         un usuario (digamos <code class="literal">u1908</code>) con:
       </p><pre class="programlisting">
-    psql -U u1908 -d b1908
+    psql -h /var/www/var/run/postgresql  -U u1908 -d b1908
 </pre><p>
         En esta interfaz puede dar ordenes SQL y algunas ordenes
         internos que puede listar con <code class="literal">\h</code>. Algunos
@@ -405,16 +408,16 @@
       </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="respaldo-postgresql"></a>6.2.6. Copias de respaldo</h4></div></div></div><p>
         Para sacar una copia de respaldo de todas las base de datos
         manejadas con PostgreSQL (y suponiendo que el zócalo está en
-        <code class="literal">/var/www/tmp</code>): ingrese a la cuenta del
-        administrador:
+        <code class="literal">/var/www/var/run/postgresql</code>): ingrese a la
+        cuenta del administrador:
       </p><pre class="programlisting">
     doas su - _postgresql
-    pg_dumpall -U postgres -h /var/www/tmp/ \
+    pg_dumpall -U postgres -h /var/www/var/run/postgresql/ \
         --inserts --attribute-inserts &gt; /respaldos/pgdump.sql
 </pre><p>
         Puede restablecer una copia con
       </p><pre class="programlisting">
-    psql -U postgres -h /var/www/tmp/ \
+    psql -U postgres -h /var/www/var/run/postgresql/ \
         -f /respaldos/pgdump.sql template1
 </pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="base-postgresql-remota"></a>6.2.7. Base PostgreSQL remota</h4></div></div></div><p>
         PostgreSQL permite conexiones remotas y cifradas, así que la
@@ -496,7 +499,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
     cd /var/postgresql/data
     openssl genrsa -des3 -out usuario.key 1024
     openssl rsa -in usuario.key -out usuario.key
-    openssl req -new -key usuario.key -out usuario.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=Pasos de Jesús/CN=usuario'
+    openssl req -new -key usuario.key -out usuario.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=Pasos de Jesus/CN=usuario'
     openssl x509 -req -days 3650 -in usuario.csr -CA root.crt -CAkey server.key -out usuario.crt -CAcreateserial
 </pre><p>
           A continuación copie el certificado generado
@@ -747,8 +750,8 @@ donde usuario debe correponder al usuario en la base de datos y al 
         <code class="literal">--socket=/var/www/var/run/mysql/mysql.sock</code> al
         ejecutarse por ejemplo:
       </p><pre class="programlisting">
-    mysqldump --socket=/var/www/var/run/mysql/mysql.sock  
-        \-p --all-databases
+    mysqldump --socket=/var/www/var/run/mysql/mysql.sock  \
+    -p --all-databases
     
 </pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="lecutras-mysql"></a>6.3.5. Lecturas recomendadas</h4></div></div></div><p>
         Referencias:
@@ -777,7 +780,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
       3, <code class="literal">ldapd</code>. No incluye cliente para LDAP pero
       desde la línea de ordenes puede emplearse el paquete
       <code class="literal">openldap-client</code> o como interfaz web
-      <code class="literal">phpldapadmin</code><sup>[<a name="idp1183514408" href="#ftn.idp1183514408">30</a>]</sup>.
+      <code class="literal">phpldapadmin</code><sup>[<a name="idm1127746904" href="#ftn.idm1127746904">30</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-ldapd"></a>6.4.1. Instalación de ldapd</h4></div></div></div><p>
         No necesita instalar paquetes para la operación como servidor.
       </p><p>
@@ -1155,10 +1158,10 @@ donde usuario debe correponder al usuario en la base de datos y al 
           <code class="literal">/etc/ssl/cert.pem</code>
         </p></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias"></a>6.5.5. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
             <a href="https://www.howtoforge.com/postgresql-ssl-certificates" target="_top">https://www.howtoforge.com/postgresql-ssl-certificates</a>
-          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1428784424" href="#idp1428784424">29</a>] </sup>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2977006168" href="#idm2977006168">29</a>] </sup>
             Note que de esta forma puede cambiar la clave de otros
             usuarios de PostgreSQL.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1183514408" href="#idp1183514408">30</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1127746904" href="#idm1127746904">30</a>] </sup>
           Si emplea un adJ 5.2 y planea conectarse desde clientes
           digamos en Ubuntu reciente requerirá el parche descrito en
           <a xmlns="" href="http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html" target="_top">http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</a>
