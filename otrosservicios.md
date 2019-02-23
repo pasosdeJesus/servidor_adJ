@@ -59,7 +59,7 @@ vez que el sistema inicia agregue la siguiente línea al archivo
 Las siguientes páginas del manual de OpenBSD: quota 1, edquota 8,
 quotaon 8, quotaoff 8, quotacheck 8 y repquota 8. En el FAQ de OpenBSD
 hay una sección sobre quotas:
-[](http://www.openbsd.org/faq/faq10.html#Quotas)
+<http://www.openbsd.org/faq/faq10.html#Quotas>
 
 
 ## Motor de bases de datos PostgreSQL {#postgresql}
@@ -382,7 +382,7 @@ o cambiar las existentes:
 También podrá renombrar cotejaciones que haya creado con
 `ALTER COLLATION esp RENAME TO es_CO_ISO8859_1;`, así como borrarlas con
 `DROP COLLATION esp;`. Puede consultar más en
-[](http://www.postgresql.org/docs/9.1/static/collation.html).
+<http://www.postgresql.org/docs/9.1/static/collation.html>.
 
 ### Copias de respaldo {#respaldo-postgresql}
 
@@ -539,12 +539,12 @@ y al hacer operaciones que usen base de datos (rails dbconsole, iniciar unicorn,
 -   Documentación del paquete postgresql (README.OpenBSD, INSTALL).
 
 -   Documentación disponible en el paquete `postgresql-doc` (ver
-    postgresql-doc) y en [](http://www.postgresql.org/docs).
+    postgresql-doc) y en <http://www.postgresql.org/docs>.
 
 -   Páginas del manual de Unix: psql 1
 
 -   SSL Certificates For PostgreSQL :
-    [](https://www.howtoforge.com/postgresql-ssl-certificates)
+    <https://www.howtoforge.com/postgresql-ssl-certificates>
 
 [^aut.1]: Note que de esta forma puede cambiar la clave de otros 
     usuarios de PostgreSQL.
@@ -744,13 +744,13 @@ Referencias:
 
 -   Una explicación de algo de la instalación y el uso de MySQL en
     OpenBSD:
-    [](http://www.sancho2k.net/filemgmt_data/files/mysql_notes.html)
+    <http://www.sancho2k.net/filemgmt_data/files/mysql_notes.html>
 
 -   La documentación de MariaDB :
-    [](https://mariadb.com/kb/en/mariadb/documentation/)
+    <https://mariadb.com/kb/en/mariadb/documentation/>
 
 -   Ayuda para cambiar clave de root en sistemas Linux:
-    [](http://www.netadmintools.com/art90.html)
+    <http://www.netadmintools.com/art90.html>
 
 
 ## Servidor ldapd {#ldapd}
@@ -960,17 +960,17 @@ hace por defecto el instalador de adJ 5.5). Para esto verifique que en
 
 -   Las siguientes páginas man: ldapd 8. ldapctl 8. ldapd.conf 5.
 
--   [](http://dhobsd.pasosdejesus.org/index.php?id=ldapd).
+-   <http://dhobsd.pasosdejesus.org/index.php?id=ldapd>.
 
--   [](http://www.cyberciti.biz/faq/test-ssl-certificates-diagnosis-ssl-certificate/).
+-   <http://www.cyberciti.biz/faq/test-ssl-certificates-diagnosis-ssl-certificate/>.
 
--   [](http://www.tumfatig.net/20120817/monitoring-openbsds-ldap-daemon/).
+-   <http://www.tumfatig.net/20120817/monitoring-openbsds-ldap-daemon/>.
 
--   [](http://openbsd.7691.n7.nabble.com/dev-random-as-chrooted-named-s-entropy-source-current-td64344.html).
+-   <http://openbsd.7691.n7.nabble.com/dev-random-as-chrooted-named-s-entropy-source-current-td64344.html>.
 
 [^lda.1]: Si emplea un adJ 5.2 y planea conectarse desde clientes digamos en
     Ubuntu reciente requerirá el parche descrito en
-    [](http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html)
+    <http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html>
 
 
 ## Autoridad certificadora interna {#autoridad_certificadora}

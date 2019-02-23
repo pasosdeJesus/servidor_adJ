@@ -2,6 +2,7 @@ Versión 6.4
 
 :   - Actualizada documentacion de PostgreSQL ([xref](#postgresql))
     - Actualizada configuración de NAT ([xref](#nat))
+    - Se mejora formato
 
 Versión 6.3
 

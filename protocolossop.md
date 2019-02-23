@@ -368,7 +368,7 @@ inversa desde fuera de la organización, por ejemplo:
 -   Ayudas para configurar Bind incluido en OpenBSD.
 
 -   Puede consultar más sobre vistas y reflexión de consultas DNS en
-    [](http://www.bind9.net/manual/bind/9.3.1/Bv9ARM.ch06.html#view_statement_grammar).
+    <http://www.bind9.net/manual/bind/9.3.1/Bv9ARM.ch06.html#view_statement_grammar>.
 
 -   [openbsdDnsDhcp](#biblio).
 
@@ -413,9 +413,9 @@ sus copias anteriores comprimidas como `/var/log/authlog.0.gz`,
 Las siguientes páginas man: sshd 8.
 
 Separación de privilegios:
-[](http://www.counterpane.com/alert-openssh.html)
+<http://www.counterpane.com/alert-openssh.html>
 
-Página web: [](http://www.openssh.com)
+Página web: <http://www.openssh.com>
 
 
 ## Protocolo DHCP {#dhcp}
@@ -518,7 +518,7 @@ servidores de NTP disponibles mundialmente en `pool.ntp.org`.
 
 ### Referencias y lecturas recomendadas {#referencias-ntp}
 
-Documentación disponible en [](http://www.openntpd.org).
+Documentación disponible en <http://www.openntpd.org>.
 
 
 ## Servidor de correo electrónico {#servicios-correo}
@@ -750,7 +750,7 @@ Esto no lo activará como servicio y presentará errores en pantalla.
 
 -   `man smtpd`, `man smtpd.conf`, `man smtpctl`
 
--   [](http://www.opensmtpd.org/)
+-   <http://www.opensmtpd.org/>
 
 
 
@@ -991,9 +991,9 @@ Inicie un diálogo con `sendmail` con:
 Note que deben aparecer las líneas `STARTTLS` y `AUTH`. Para
 autenticarse debe dar una identificación y una clave válida en el
 sistema pero codificadas en base 64. Puede emplear la interfaz CGI
-disponible en [](http://www.motobit.com/util/base64-decoder-encoder.asp)
+disponible en <http://www.motobit.com/util/base64-decoder-encoder.asp>
 o eventualmente el programa disponible en
-[](http://www.sendmail.org/~ca/email/prgs/ed64.c) que puede compilar y
+<http://www.sendmail.org/~ca/email/prgs/ed64.c> que puede compilar y
 usar como root así:
 
         cd /root/tmp
@@ -1066,16 +1066,16 @@ el dominio (e.g &EUSUARIO;@&EDOMINIO;).
 
 -   `man starttls`
 
--   [](http://www.dorkzilla.org/~dlg/sendmail/)
+-   <http://www.dorkzilla.org/~dlg/sendmail/>
 
--   [](http://www.pingwales.co.uk/tutorials/openbsd-mail-server-config-2.html)
+-   <http://www.pingwales.co.uk/tutorials/openbsd-mail-server-config-2.html>
 
--   [](http://www.jonfullmer.com/smtpauth/)
+-   <http://www.jonfullmer.com/smtpauth/>
 
--   [](http://www.sendmail.org/~ca/email/auth.html) y
-    [](http://www.sendmail.org/~ca/email/authrealms.html)
+-   <http://www.sendmail.org/~ca/email/auth.html> y
+    <http://www.sendmail.org/~ca/email/authrealms.html>
 
--   [](http://www.bitstream.net/support/email/thunderbird/auth.html)
+-   <http://www.bitstream.net/support/email/thunderbird/auth.html>
 
 #### Cambiar puerto SMTP
 
@@ -1504,20 +1504,20 @@ replicarla en cuentas ya creadas:
 
 ##### Referencias y lecturas recomendadas {#referencias-courier}
 
-El protocolo POP3 se describe en el RFC 1939
-[](http://www.faqs.org/rfcs/rfc1939.html) Puede consultar más sobre la
+* El protocolo POP3 se describe en el RFC 1939
+<http://www.faqs.org/rfcs/rfc1939.html> 
+* Puede consultar más sobre la
 configuración de IMAP con Courier en
-[](http://dantams.sdf-eu.org/guides/obsd_courier_imap.html ) y
-[](http://es.tldp.org/Manuales-LuCAS/doc-tutorial-postfix-ldap-courier-spamassassin-amavis-squirrelmail)
-Más sobre `procmail` en [](http://pm-doc.sourceforge.net/pm-tips.html )
-y
-[](http://structio.sourceforge.net/guias/basico_OpenBSD/correo.html#procmail)
-Más sobre IMAP en [](http://www.linux-sec.net/Mail/SecurePop3/ ) y
-[](http://talk.trekweb.com/~jasonb/articles/exim_maildir_imap.shtml)
-POP3S e IMAPS en OpenBSD/LDAP/Sendmail
-[](http://dhobsd.pasosdeJesus.org/index.php?id=view/POP3S+e+IMAPS+en+OpenBSD%2FLDAP%2FSendmail)
-El uso de certificados existentes con courier se señala en
-[](http://milliwaysconsulting.net/support/systems/courier-ssl.html)
+<http://dantams.sdf-eu.org/guides/obsd_courier_imap.html > y
+<http://es.tldp.org/Manuales-LuCAS/doc-tutorial-postfix-ldap-courier-spamassassin-amavis-squirrelmail>
+* Más sobre `procmail` en <http://pm-doc.sourceforge.net/pm-tips.html >
+y <http://structio.sourceforge.net/guias/basico_OpenBSD/correo.html#procmail>
+* Más sobre IMAP en <http://www.linux-sec.net/Mail/SecurePop3/ > y
+<http://talk.trekweb.com/~jasonb/articles/exim_maildir_imap.shtml>
+* POP3S e IMAPS en OpenBSD/LDAP/Sendmail
+<http://dhobsd.pasosdeJesus.org/index.php?id=view/POP3S+e+IMAPS+en+OpenBSD%2FLDAP%2FSendmail>
+* El uso de certificados existentes con courier se señala en
+<http://milliwaysconsulting.net/support/systems/courier-ssl.html>
 
 ### Combatiendo correo no solicitado con SpamAssassin {#spam}
 
@@ -1623,7 +1623,7 @@ Requiere una base de datos para almacenar parte de la información, puede
 obtener correo de servidores IMAP e IMAPS.
 
 Basta instalar el paquete `roundcubemail` o descargar ls fuentes más
-recientes de [](http://sourceforge.net/projects/roundcubemail/) e
+recientes de <http://sourceforge.net/projects/roundcubemail/> e
 instalarlas en `/var/www/roundcubemail`, y seguir instrucciones del
 archivo INSTALL que resumimos a continuación junto con instrucciones de
 módulos, suponiendo que en el mismo servidor (`correo.&EDOMINIO;`) están
@@ -1653,7 +1653,7 @@ PostgreSQL:
             SSLCertificateKeyFile /etc/ssl/private/server.key
             </VirtualHost>                                  
 
-    > **Warning**
+    > **Advertencia**
     >
     > Es importante que en la configuración de Apache, como se presenta
     > en el ejemplo incluya
@@ -1793,7 +1793,7 @@ este webmail active el plugin password como se presenta a continuación:
             $rcmail_config['password_pop_port'] = 106;
 
 4.  Instale el paquete `openpoppassd` disponible en
-    [](ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/) (tiene una
+    <ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/> (tiene una
     falla corregida con respecto al paquete oficial por lo cual le
     sugerimos emplear ese) y configúrelo para que inicie durante el
     arranque por ejemplo agregando a `/etc/rc.local`:
@@ -1912,7 +1912,7 @@ Asignar password al sitio de mailman con
 
 ##### Lecturas recomendadas {#lecturas-mailman}
 
-`/usr/local/share/doc/mailman/README.OpenBSD`
+* `/usr/local/share/doc/mailman/README.OpenBSD`
 
 [^smtp.1]: De acuerdo al RFC 1123 los nombre MUA y MTA son propios del
     protocolo X.400.
@@ -2040,7 +2040,7 @@ bitácora a salida estándar con máximo nivel de verbosidad.
 La página del manual de `ftpd`.
 
 
-## Servidor Web {#sevidorweb}
+## Servidor web {#sevidorweb}
 
 adJ y OpenBSD incluyen en el sistema base dos servidores web: (1) una
 versión auditada de `nginx 1.6.0` y (2) su propio OpenBSD httpd. En este
@@ -2448,11 +2448,10 @@ función `phpinfo()`.
 
 ##### Lecturas recomendadas {#lecturas-php}
 
-Puede aprender sobre PHP en [](http://www.php.net)
-
-La configuración de PHP con PostgreSQL y Apache corriendo con chroot
+* Puede aprender sobre PHP en <http://www.php.net>
+* La configuración de PHP con PostgreSQL y Apache corriendo con chroot
 puede verse en
-[](http://www.bsdforen.org/foren/showtopic.php?threadid=773) o en la
+<http://www.bsdforen.org/foren/showtopic.php?threadid=773> o en la
 sección sobre PostgreSQL de estas guías (ver [xref](#postgresql)
 
 #### Server Side Include {#ssi}
@@ -2494,5 +2493,5 @@ Al abrirla debe presentar la fecha y hora del sistema.
 
 ##### Lecturas recomendadas {#lecturas-ssi}
 
-Hay información completa sobre SSI en el manual de Apache
-[](http://httpd.apache.org/docs/howto/ssi.html)
+* Hay información completa sobre SSI en el manual de Apache
+<http://httpd.apache.org/docs/howto/ssi.html>

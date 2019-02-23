@@ -346,7 +346,7 @@ esto:
         # En la sección de reglas de filtrado
         pass out proto tcp from $ext_ip to any port 21
 
-> **Warning**
+> **Advertencia**
 >
 > Para emplear ftp-proxy asegurese que entre las reglas de su
 > cortafuegos no esté:

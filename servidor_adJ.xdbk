@@ -61,16 +61,11 @@ escrito se dedica a Dios por su infinita sabiduría.</para>
 	    servidores seguros o cortafuegos conectados
       a Internet o en una Intranet.  Este escrito es complementario
       a <link linkend="biblio">basico_adJ</link> y a 
-      <link linkend="biblio">usuario_adJ</link>.  El primero es para
-      usuarios que emplean remotamente un sistema OpenBSD, en el segundo
-      se describe la instalación de OpenBSD así como su uso y la configuración 
-      de programas y características típicamente empleadas por usuarios 
-      finales.
+      <link linkend="biblio">usuario_adJ</link>,  el primero es para
+      usuarios remotos y el segundo describe la instalación, uso 
+      y configuración de programas y características típicas de 
+      usuarios de escritorio.
     </para>
-    <para>Las fuentes de este escrito están en DocBook (ver
-      <citation>DocBook</citation>) y siguen algunas
-      convenciones de la herramienta <literal>repasa</literal> (ver
-      <citation>repasa</citation>).</para>
   </sect1>
 
   &redes;

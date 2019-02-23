@@ -315,7 +315,7 @@ configurar como se explica en la sección de redes LAN Ethernet (ver
 [xref](#lan-ethernet).
 
 Puede ocurrir que su proveedor emplee un módem que requiera el protocolo
-`pppoe` (e.g con un Módems Marconi). En tal caso el proveedor puede
+`pppoe` (e.g con un Módem Marconi). En tal caso el proveedor puede
 brindar dos opciones para la configuración del módem:
 
 -   Enrutador (router): Se conecta a un HUB o a un computador y hace NAT
@@ -410,7 +410,7 @@ Megabits (millones de bits por segundo), y sus valores típicos son 10Mb,
 
 La inmensa mayoría de tarjetas Ethernet de 10MB, 100MB y 1000MB, así
 como algunas de 10G son soportadas por OpenBSD, la lista completa la
-puede consultar en: [](http://www.openbsd.org/amd64.html). Por su parte
+puede consultar en: <http://www.openbsd.org/amd64.html>. Por su parte
 las tarjetas populares que hemos identificado como no soportadas son:
 Encore ENL832-TX-RENT, Encore ENL832-TX-EN.
 
@@ -588,7 +588,7 @@ el escritorio Dispositivos-&gt;Red-&gt;Configurar Interfaces, que le
 permitirá editar cada uno de los archivos de cada interfaz de red
 detectada por ifconfig (excepto lo0, enc0, pflog0, tun).
 
-> **Warning**
+> **Advertencia**
 >
 > Es importante que la línea del archivo `/etc/hostname.re0` que
 > configura sus propiedades IPv4, termine con el caracter fin de línea,
@@ -791,7 +791,7 @@ y viceversa.
 [^lan.4]: Luces es traducción de *LED (Light emitting diode)*.
 
 
-##Red Local Inalámbrica: uso y configuración {#red-inalambrica}
+## Red Local Inalámbrica: uso y configuración {#red-inalambrica}
 
 Las redes inalámbrica emplean ondas electromagnéticas transmitidas por
 aire, por lo que no se requieren cables, aunque el rango de alcance es
@@ -810,13 +810,13 @@ computadores cliente que se conecten. Tal Punto de Acceso Inalámbrico
 puede ser un dispositivo dedicado o bien un computador con OpenBSD que
 cuente con una tarjeta de inalámbrica que soporte el modo `hostap`.
 
-###OpenBSD como cliente en una red inalámbrica {#cliente-inalambrico}
+### OpenBSD como cliente en una red inalámbrica {#cliente-inalambrico}
 
 Hay una amplia gama de tarjetas de red inalámbricas (tanto PCI, como
 USB) con controladores para OpenBSD, sin embargo varias tarjetas de red
 populares no son soportadas, por lo que antes de comprar examine el
 listado de tarjetas soportadas en:
-[](http://dhobsd.pasosdejesus.org/?id=CompatibilidadHardware). Una vez
+<http://dhobsd.pasosdejesus.org/?id=CompatibilidadHardware>. Una vez
 conecte su tarjeta de red inalámbrica, búsque la interfaz de red
 asociada con
 
@@ -915,7 +915,7 @@ El tráfico de red inalámbrico puede examinarse con el paquete `kismet`,
 el cual tiene un archivo de configuración (`/etc/kismet.conf`) en el que
 debe especificarse el controlador usado.
 
-###Dispositivo dedicado que obra como Punto de Acceso Inalámbrico {#dispositivo-AP}
+### Dispositivo dedicado que obra como Punto de Acceso Inalámbrico {#dispositivo-AP}
 
 Estos dispositivo cuentan con una antena (típicamente pequeña) para la
 red inalámbrica y un conector para cable Ethernet que se conecta a la
@@ -987,7 +987,7 @@ WEP y clave "uvwxy". Basta que en `/etc/hostname.ath0` configure:
 Tras esto desde los portatiles y computadores cercanos debe poder ver la
 red CASA y conectarse con WEP y la clave uvwxy.
 
-###Referencias {#referencias-wlan}
+### Referencias {#referencias-wlan}
 
 -   Páginas `man` de `ifconfig`, `wpi`
 

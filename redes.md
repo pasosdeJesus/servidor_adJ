@@ -53,9 +53,8 @@ ejemplo con IPv6 (y protocolo ICMP6) es:
 
         ping6 ::1
 
-protocolo
-Conjunto de reglas que determinan como se realiza la comunicación entre
-computadores conectados a una red.
+[//]: # "protocolo"
+[//]: # "Conjunto de reglas que determinan como se realiza la comunicación entre computadores conectados a una red."
 
 Internet es una red mundial de redes que están interconectadas vía
 satélite, por cables submarinos, fibra óptica y muchos otros medios de
@@ -109,7 +108,7 @@ IANA Internet Assigned Numbers Authority
     organizaciones. Es financiado por ICANN (*Internet Corporation for
     Assigned Names and Numbers*).
 
-LACNIC Registro de Direcciones de Internet para América Latina y CaribeRegistro de Direcciones de Internet para América Latina y Caribe
+LACNIC Registro de Direcciones de Internet para América Latina y Caribe
 
 :   Es responsable de la asignación y administración de los recursos de
     numeración de Internet (IPv4, IPv6), Números Autónomos y Resolución
@@ -160,10 +159,8 @@ sobre una red física Ethernet o sobre una conexión con modem:
 
 ### Capa física
 
-física
-Esta capa de red se refiere a conexiones eléctrica y mecánicas de la
-red. Por ejemplo codificiación/decodificación de información y
-arbitramento en caso de coliciones.
+[//]: # "física"
+[//]: # "Esta capa de red se refiere a conexiones eléctrica y mecánicas de la red. Por ejemplo codificiación/decodificación de información y arbitramento en caso de coliciones."
 
 Se refiere a las conexiones eléctricas y mecánicas de la red. Ejemplos
 de protocolos a este nivel son: Ethernet, Inalámbrico IEEE 802.11, Modem
@@ -184,36 +181,37 @@ para 10Mbps, 100Mbps, 1Gbps y 10Gbps, que se emplean en topología de
 estrella (i.e. todos los computadores conectados por cables de pares
 trenzados a un concentrador), puede configurarse como *Half-duplex* o
 como *Full-Duplex*. Describiremos el uso del esquema más popular y
-económico en este momento: 100Mbps, Full-duplex con cable de pares
+económico en este momento: 1000Mbps, Full-duplex con cable de pares
 trenzados [^red.6]. Cada tarjeta Ethernet tiene una dirección única (llamada
 dirección MAC), que en una transmisión permite indicar tarjeta fuente y
 tarjeta destino (la dirección MAC de ambos es transmitida también).
 
 ### Capa de enlace
 
-ARP
-En el caso de redes Ethernet e IPv4 la capa de enlace corresponde al
-protocolo ... Este protocolo permite traducir direcciones IPv4 a
-direcciones MAC.
+[//]: # "ARP"
+[//]: # "En el caso de redes Ethernet e IPv4 la capa de enlace corresponde al protocolo ... Este protocolo permite traducir direcciones IPv4 a direcciones MAC."
 
 Los protocolos de esta capa permiten interconectar la capa de internet
 (IP) con la red que se use.
 
-En el caso de una red Ethernet e IPv4 se trata del protocolo ARP[^red.7], y
+En el caso de una red Ethernet e IPv4 se trata del protocolo ARP[^red.7], 
 que se encarga de traducir direcciones IPv4 a direcciones MAC [^red.8].
 
 Cada vez que un computador de una LAN identifica una dirección IPv4 de
 otro computador conectado a la LAN y su correspondiente dirección ARP,
 almacena la información en una tabla (se borra automáticamente después
 de algunos minutos o manualmente por ejemplo con
-`doas arp -d 192.168.2.2`). La tabla puede consultarse con `arp -a`.
+`doas arp -d 192.168.2.2`).   Dicha tabla puede consultarse con 
+```sh
+	arp -a
+```
 
 Para monitorear una red Ethernet e IPv4 y detectar nuevos computadores
-que se conecten, puede emplearse el programa arpwatch (paquete
+que se conecten, puede emplearse el programa `arpwatch`  (paquete
 `arpwatch`) que cada vez que detecta cambios envía un correo a la cuenta
 root.
 
-En el caso de IPv6 y Ethernet se empa el portocolo NDP (Neighbor
+En el caso de IPv6 y Ethernet se emplea el portocolo NDP (Neighbor
 Discovery Protocol). Puede examinarse la tabla de vecinos con `ndp -a`
 
 En el caso de una conexión por modem el protocolo es PPP[^red.9], que se
@@ -225,10 +223,8 @@ modem.
 
 ### Capa de internet
 
-IP
-Este protocolo fragmenta y envia información empleando la capa física.
-Cada computador se identifica con un número de 4 bytes (en la versión 4
-de este protocolo).
+[//]: # "IP"
+[//]: # "Este protocolo fragmenta y envia información empleando la capa física.  En la versión 4 de este protocolo, cada computador se identifica con un número de 4 bytes."
 
 En esta capa la información es fragmentada y envíada empleando el
 protocolo de la capa física. Los protocolos de esta capa deben tener en
@@ -264,18 +260,17 @@ indicando la dirección de otra compuerta más apropiada para llegar a un
 dirección. Hay siempre una compuerta por defecto a la que se envían
 paquetes que IP no sepa como enrutar.
 
-route
-Con este programa puede modificarse la tabla de enrutamiento del
-protocolo IP.
+[//]: # "route"
+[//]: # "Con este programa puede modificarse la tabla de enrutamiento del protocolo IP."
 
 IP no es protocolo fiable, porque no asegura que un paquete llegue a su
 destino y no realiza retransmisiones. Aunque para informar algunas
 situaciones anomalas emplea el protocolo ICMP [^red.12].
 
-ICMP
-Este protocolo es empleado por IP para transmitir mensajes de error y
+[//]: # "ICMP"
+[//]: # "Este protocolo es empleado por IP para transmitir mensajes de error y
 para realizar algunas consultas para verificar el funcionamiento de una
-red o medir (e.g eco, estampilla de tiempo).
+red o medir (e.g eco, estampilla de tiempo)."
 
 OpenBSD cuenta con una excelente implementación de IPv4 con posibilidad
 de filtrar, redirigir, traducir direcciones, balancear carga y muchas
@@ -285,9 +280,8 @@ encriptada y IPcomp para comprimir.
 
 ### Capa de transporte
 
-TCP
-En Internet este protocolo está en la capa de enlace, se encarga de
-procurar una conexión continua, libre de errores.
+[//]: # "TCP"
+[//]: # "En Internet este protocolo está en la capa de enlace, se encarga de procurar una conexión continua, libre de errores."
 
 Los protocolos de esta capa asegura una conexión continua y posiblemente
 libre de errores entre emisor y receptor. Un protocolo de esta capa debe
@@ -303,11 +297,8 @@ puerto se identifica con un número entre 0 y 65536, los primeros 1024
 números sólo pueden ser usados por servidores iniciados desde la cuenta
 root, los demás pueden ser usados por todos los usuarios.
 
-/proc/net/tcp
-En este archivo pueden examinarse conexiones a puertos TCP.
-
-doas pfctl -sa
-Permite examinar entre otras, conexiones a puertos TCP y UDP.
+[//]: # "doas pcftl -sa"
+[//]: # "Permite examinar entre otras, conexiones a puertos TCP y UDP."
 
 Puede examinar información sobre conexiones a puertos TCP y UDP con
 `doas pfctl -sa`
@@ -387,7 +378,7 @@ SMMP
 
 [^red.2]: También suele llamárseles *daemons* pero como puede resultar
     ofensivo para cristian@s, procuramos no emplear ese término, ver
-    [](http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service).
+    <http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service>.
 
 [^red.3]: El programa que sigue este protocolo hace parte de la
     implementación de IPv4 en el kernel.
@@ -409,8 +400,8 @@ SMMP
 [^red.7]: ARP que se define en el RFC 826
 
 [^red.8]: Un computador envía un mensaje a todos los demás de la red
-    (*broadcast* que es posible en Ethernet), solicitando la dirección
-    MAC de una dirección IPv4, el dispositivo con esa MAC responde
+    (que es posible por ejemplo en Ethernet), solicitando la dirección 
+    MAC de una dirección IPv4, el dispositivo con esa MAC responde 
     enviando su dirección MAC al dispositivo que hizo la solicitud.
 
 [^red.9]: PPP se describe en el RFC 1661.
