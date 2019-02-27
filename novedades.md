@@ -59,12 +59,12 @@ Versión 5.4
 
 Versión 5.3
 
-:   -   Nueva [xref](#dovecot)
+:	-   Nueva [xref](#dovecot)
 
-    -   Actualizada sección [xref](#servicios-correo) para incluir
+	-   Actualizada sección [xref](#servicios-correo) para incluir
         OpenSMTPD.
 
-    -   Fuentes convertidas a UTF-8
+	-   Fuentes convertidas a UTF-8
 
 Versión 5.2
 
