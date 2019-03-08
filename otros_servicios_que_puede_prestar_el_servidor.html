@@ -222,7 +222,7 @@
       </p><p>
         Otra posibilidad es cambiar la configuración después de haber
         inicializado sin autenticación. Para esto cambie la clave del
-        administrador con<sup>[<a name="idm2977006168" href="#ftn.idm2977006168">29</a>]</sup>:
+        administrador con<sup>[<a name="idp315195688" href="#ftn.idp315195688">29</a>]</sup>:
       </p><pre class="programlisting">
     psql -h /var/www/var/run/postgresql -U postgres template1 
     template1=# alter user postgres with password 'MiClave';
@@ -354,7 +354,7 @@
     *:*:*:usuario:clave
 </pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="postgresql-cotejacion"></a>6.2.5. Cotejación en PostgreSQL</h4></div></div></div><p>
         Desde adJ 5.2 se incluye un porte de PostgreSQL (la versión
-        incluida en adJ 6.3 es postgresql-server-10.4) que
+        incluida en adJ 6.4 es postgresql-server-10.6p1) que
         soporta cotejaciones de acuerdo al locale, y por defecto se
         crean cotejaciones para todos los países de habla hispana, con
         nombres de la forma <code class="literal">es_CO_UTF_8</code>. Donde
@@ -579,8 +579,8 @@ donde usuario debe correponder al usuario en la base de datos y al 
       Oracle compró Sun y MySQL, pues consideraba que Oracle había hecho
       la compra para reducir competencia de sus bases de datos.
     </p><p>
-      Debe instalar los paquetes mariadb-client-10.0.34v1 y
-      mariadb-server-10.0.34v1. Aunque el nombre de los paquetes cambia
+      Debe instalar los paquetes mariadb-client-10.0.36v1 y
+      mariadb-server-10.0.36p0v1. Aunque el nombre de los paquetes cambia
       las ordenes para operarla siguen siendo los mismos. Tras instalar
       el servidor debe ejecutar <code class="literal">mysql_install_db</code>.
     </p><p>
@@ -780,7 +780,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
       3, <code class="literal">ldapd</code>. No incluye cliente para LDAP pero
       desde la línea de ordenes puede emplearse el paquete
       <code class="literal">openldap-client</code> o como interfaz web
-      <code class="literal">phpldapadmin</code><sup>[<a name="idm1127746904" href="#ftn.idm1127746904">30</a>]</sup>.
+      <code class="literal">phpldapadmin</code><sup>[<a name="idm2576746328" href="#ftn.idm2576746328">30</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-ldapd"></a>6.4.1. Instalación de ldapd</h4></div></div></div><p>
         No necesita instalar paquetes para la operación como servidor.
       </p><p>
@@ -1158,10 +1158,10 @@ donde usuario debe correponder al usuario en la base de datos y al 
           <code class="literal">/etc/ssl/cert.pem</code>
         </p></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias"></a>6.5.5. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
             <a href="https://www.howtoforge.com/postgresql-ssl-certificates" target="_top">https://www.howtoforge.com/postgresql-ssl-certificates</a>
-          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2977006168" href="#idm2977006168">29</a>] </sup>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp315195688" href="#idp315195688">29</a>] </sup>
             Note que de esta forma puede cambiar la clave de otros
             usuarios de PostgreSQL.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1127746904" href="#idm1127746904">30</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2576746328" href="#idm2576746328">30</a>] </sup>
           Si emplea un adJ 5.2 y planea conectarse desde clientes
           digamos en Ubuntu reciente requerirá el parche descrito en
           <a xmlns="" href="http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html" target="_top">http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</a>

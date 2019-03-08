@@ -447,7 +447,8 @@ dig @192.168.100.100 correo.miescuela.edu.co
         Separación de privilegios:
         <a href="http://www.counterpane.com/alert-openssh.html" target="_top">http://www.counterpane.com/alert-openssh.html</a>
       </p><p>
-        Página web: <a href="http://www.openssh.com" target="_top">http://www.openssh.com</a>
+        Página web:
+        <a href="http://www.openssh.com" target="_top">http://www.openssh.com</a>
       </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="dhcp"></a>5.3. Protocolo DHCP</h3></div></div></div><p>
       El protocolo DHCP se describen en el RFC 2131 (ver
       <a href="biblio.html" title="B. Bibliografia">rfc2131</a>), se trata de un modelo
@@ -460,7 +461,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
     </p><p>
       En su modo de operación dinámico el servidor le asigna una IP a un
       sólo cliente por cierto periodo de tiempo, al cabo del cual podría
-      asignarle otra IP<sup>[<a name="idm2833565784" href="#ftn.idm2833565784">25</a>]</sup>.
+      asignarle otra IP<sup>[<a name="idp676038824" href="#ftn.idp676038824">25</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="cliente-DHCP"></a>5.3.1. Configuración de un cliente DHCP</h4></div></div></div><p>
         La configuración de un computador para operar como cliente de
         DHCP depende del sistema operativo, en el caso de Windows en las
@@ -589,7 +590,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
             Que ambos usuarios tengan un programa con el que puedan leer
             y redactar correos, como por ejemplo mail, mutt,
             mozilla-thunderbird (a ese programa se le llamará MUA -
-            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idm9271000" href="#ftn.idm9271000">26</a>]</sup>).
+            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idm1907444056" href="#ftn.idm1907444056">26</a>]</sup>).
           </p></li></ul></div><p>
         Si tanto pablo como rodrigo emplean como MUA
         <code class="literal">mail</code>, y ambos computadores tiene como MTA
@@ -610,7 +611,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
         Enviar un mensaje significa crear una conexión TCP con el MTA
         destino o con otro MTA que actúe de intermediario, típicamente
         en el puerto TCP 25, y transmitir el mensaje siguiendo las
-        reglas del protocolo SMTP <sup>[<a name="idm87057752" href="#ftn.idm87057752">27</a>]</sup>. Para establecer el computador con el cual
+        reglas del protocolo SMTP <sup>[<a name="idm1930724056" href="#ftn.idm1930724056">27</a>]</sup>. Para establecer el computador con el cual
         conectarse sendmail revisa con el resolvedor DNS, registros MX
         asociados con el dominio de la dirección, si los hay intenta
         enviar a cada uno en orden de prioridad --los registros MX con
@@ -873,7 +874,7 @@ Connection closed by foreign host.
         </p><p>
           Aunque <code class="literal">sendmail</code> soporta tanto TLS como
           SMTP-AUTH, la configuración por defecto de OpenBSD
-          6.3 no los incluye. En el caso de TLS lo
+          6.4 no los incluye. En el caso de TLS lo
           incluido en el sistema base es suficiente y el procedimiento
           de configuración se documenta en
           <code class="literal">man starttls</code>.En cuanto a SMTP-AUTH se
@@ -951,7 +952,7 @@ Connection closed by foreign host.
     for i in `find . -name CVS`; do echo $i; 
         echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" &gt; $i/Root;
     done
-    cvs -z3 update -Pd -rOPENBSD_6.3-U
+    cvs -z3 update -Pd -rOPENBSD_6.4-U
 </pre><p>
             Después indique que desea recompilar
             <code class="literal">sendmail</code> con soporte para autenticación
@@ -1199,13 +1200,13 @@ Connection closed by foreign host.
         {#protocolos-revisar-correo}
       </p><p>
         Para extraer correos de un servidor pueden emplearse los
-        protocolos inseguros<sup>[<a name="idm3154834904" href="#ftn.idm3154834904">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
+        protocolos inseguros<sup>[<a name="idm1917257688" href="#ftn.idm1917257688">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
         POP3S e IMAPS En esta sección se describe la configuración
         extra-rápida pero insegura de POP3, y la configuración segura
         pero que requiere configuración más delicada de POP3S e IMAPS
         con las implementaciones de Courier.
       </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="dovecot"></a>5.5.4.1. Implementación Dovecot de IMAPS y POP3S</h5></div></div></div><p>
-          Instale el paquete dovecot-2.2.34p0 y asegurese de dejar
+          Instale el paquete dovecot-2.2.36p0 y asegurese de dejar
           <code class="literal">dovecot</code> en la variable
           <code class="literal">pkg_scripts</code> de
           <code class="literal">/etc/rc.conf.local</code> para que se inicie en
@@ -1574,27 +1575,31 @@ chown -R cuenta:cuenta /home/cuenta/{.forward,.procmailrc,.muttrc,Maildir}
 touch /var/mail/cuenta
 chown -R cuenta:cuenta /var/mail/cuenta
 chmod og-r /var/mail/cuenta
-</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="referencias-courier"></a>5.5.4.2.6. Referencias y lecturas recomendadas</h6></div></div></div><p>
-            El protocolo POP3 se describe en el RFC 1939
-            <a href="http://www.faqs.org/rfcs/rfc1939.html" target="_top">http://www.faqs.org/rfcs/rfc1939.html</a>
-            Puede consultar más sobre la configuración de IMAP con
-            Courier en
-            <a href="http://dantams.sdf-eu.org/guides/obsd_courier_imap.html" target="_top">http://dantams.sdf-eu.org/guides/obsd_courier_imap.html</a>
-            y
-            <a href="http://es.tldp.org/Manuales-LuCAS/doc-tutorial-postfix-ldap-courier-spamassassin-amavis-squirrelmail" target="_top">http://es.tldp.org/Manuales-LuCAS/doc-tutorial-postfix-ldap-courier-spamassassin-amavis-squirrelmail</a>
-            Más sobre <code class="literal">procmail</code> en
-            <a href="http://pm-doc.sourceforge.net/pm-tips.html" target="_top">http://pm-doc.sourceforge.net/pm-tips.html</a>
-            y
-            <a href="http://structio.sourceforge.net/guias/basico_OpenBSD/correo.html#procmail" target="_top">http://structio.sourceforge.net/guias/basico_OpenBSD/correo.html#procmail</a>
-            Más sobre IMAP en
-            <a href="http://www.linux-sec.net/Mail/SecurePop3/" target="_top">http://www.linux-sec.net/Mail/SecurePop3/</a>
-            y
-            <a href="http://talk.trekweb.com/~jasonb/articles/exim_maildir_imap.shtml" target="_top">http://talk.trekweb.com/~jasonb/articles/exim_maildir_imap.shtml</a>
-            POP3S e IMAPS en OpenBSD/LDAP/Sendmail
-            <a href="http://dhobsd.pasosdeJesus.org/index.php?id=view/POP3S+e+IMAPS+en+OpenBSD%2FLDAP%2FSendmail" target="_top">http://dhobsd.pasosdeJesus.org/index.php?id=view/POP3S+e+IMAPS+en+OpenBSD%2FLDAP%2FSendmail</a>
-            El uso de certificados existentes con courier se señala en
-            <a href="http://milliwaysconsulting.net/support/systems/courier-ssl.html" target="_top">http://milliwaysconsulting.net/support/systems/courier-ssl.html</a>
-          </p></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="spam"></a>5.5.5. Combatiendo correo no solicitado con SpamAssassin</h4></div></div></div><p>
+</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="referencias-courier"></a>5.5.4.2.6. Referencias y lecturas recomendadas</h6></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
+                El protocolo POP3 se describe en el RFC 1939
+                <a href="http://www.faqs.org/rfcs/rfc1939.html" target="_top">http://www.faqs.org/rfcs/rfc1939.html</a>
+              </p></li><li><p>
+                Puede consultar más sobre la configuración de IMAP con
+                Courier en
+                &lt;http://dantams.sdf-eu.org/guides/obsd_courier_imap.html
+                &gt; y
+                <a href="http://es.tldp.org/Manuales-LuCAS/doc-tutorial-postfix-ldap-courier-spamassassin-amavis-squirrelmail" target="_top">http://es.tldp.org/Manuales-LuCAS/doc-tutorial-postfix-ldap-courier-spamassassin-amavis-squirrelmail</a>
+              </p></li><li><p>
+                Más sobre <code class="literal">procmail</code> en
+                &lt;http://pm-doc.sourceforge.net/pm-tips.html &gt; y
+                <a href="http://structio.sourceforge.net/guias/basico_OpenBSD/correo.html#procmail" target="_top">http://structio.sourceforge.net/guias/basico_OpenBSD/correo.html#procmail</a>
+              </p></li><li><p>
+                Más sobre IMAP en
+                &lt;http://www.linux-sec.net/Mail/SecurePop3/ &gt; y
+                <a href="http://talk.trekweb.com/~jasonb/articles/exim_maildir_imap.shtml" target="_top">http://talk.trekweb.com/~jasonb/articles/exim_maildir_imap.shtml</a>
+              </p></li><li><p>
+                POP3S e IMAPS en OpenBSD/LDAP/Sendmail
+                <a href="http://dhobsd.pasosdeJesus.org/index.php?id=view/POP3S+e+IMAPS+en+OpenBSD%2FLDAP%2FSendmail" target="_top">http://dhobsd.pasosdeJesus.org/index.php?id=view/POP3S+e+IMAPS+en+OpenBSD%2FLDAP%2FSendmail</a>
+              </p></li><li><p>
+                El uso de certificados existentes con courier se señala
+                en
+                <a href="http://milliwaysconsulting.net/support/systems/courier-ssl.html" target="_top">http://milliwaysconsulting.net/support/systems/courier-ssl.html</a>
+              </p></li></ul></div></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="spam"></a>5.5.5. Combatiendo correo no solicitado con SpamAssassin</h4></div></div></div><p>
         OpenBSD incluye el programa <code class="literal">spamd</code> que maneja
         listas negras (o grises) de IPs de las cuales no recibe correo
         alguno. Tal aproximación es bastante radical y en ocasiones
@@ -1603,7 +1608,7 @@ chmod og-r /var/mail/cuenta
         envío como lo espera spamd. Tal comportamiento puede no resultar
         aceptable en algunas organizaciones.
       </p><p>
-        SpamAssassin (paquete p5-Mail-SpamAssassin-3.4.1p14) junto con
+        SpamAssassin (paquete p5-Mail-SpamAssassin-3.4.2p0) junto con
         procmail (paquete procmail-3.22p8) son una solución intermedia
         que permiten recibir todo correo pero intentan clasificar
         automáticamente (y con buena precisión) los que son no
@@ -1733,7 +1738,7 @@ chmod og-r /var/mail/cuenta
     SSLCertificateKeyFile /etc/ssl/private/server.key
     &lt;/VirtualHost&gt;                                  
 </pre><div class="blockquote"><blockquote class="blockquote"><p>
-                <span class="strong"><strong>Warning</strong></span>
+                <span class="strong"><strong>Advertencia</strong></span>
               </p><p>
                 Es importante que en la configuración de Apache, como se
                 presenta en el ejemplo incluya
@@ -2011,9 +2016,9 @@ chmod og-r /var/mail/cuenta
           Asignar password al sitio de mailman con
         </p><pre class="programlisting">
     /usr/local/lib/mailman/bin/mmsitepass
-</pre><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="lecturas-mailman"></a>5.5.7.1.1. Lecturas recomendadas</h6></div></div></div><p>
-            <code class="literal">/usr/local/share/doc/mailman/README.OpenBSD</code>
-          </p></div></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-ftp"></a>5.6. Servidor <code class="literal">ftp</code></h3></div></div></div><p>
+</pre><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="lecturas-mailman"></a>5.5.7.1.1. Lecturas recomendadas</h6></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
+                <code class="literal">/usr/local/share/doc/mailman/README.OpenBSD</code>
+              </p></li></ul></div></div></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-ftp"></a>5.6. Servidor <code class="literal">ftp</code></h3></div></div></div><p>
       Sólo recomendamos el servicio ftp para poner un servidor anónimo
       (con el usuario <code class="literal">anonymous</code> y una clave
       arbitraria). No para que transfiera datos de un usuario porque
@@ -2108,7 +2113,7 @@ chmod og-r /var/mail/cuenta
         nivel de verbosidad.
       </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-ftp"></a>5.6.2. Referencias y lecturas recomendadas</h4></div></div></div><p>
         La página del manual de <code class="literal">ftpd</code>.
-      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="sevidorweb"></a>5.7. Servidor Web</h3></div></div></div><p>
+      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="sevidorweb"></a>5.7. Servidor web</h3></div></div></div><p>
       adJ y OpenBSD incluyen en el sistema base dos servidores web: (1)
       una versión auditada de <code class="literal">nginx 1.6.0</code> y (2) su
       propio OpenBSD httpd. En este capítulo detallamos la configuración
@@ -2540,16 +2545,16 @@ chmod og-r /var/mail/cuenta
 </pre><p>
             Puede comprobar que esta extensión funciona revisando la
             salida de la función <code class="literal">phpinfo()</code>.
-          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="lecturas-php"></a>5.7.4.4.2. Lecturas recomendadas</h6></div></div></div><p>
-            Puede aprender sobre PHP en
-            <a href="http://www.php.net" target="_top">http://www.php.net</a>
-          </p><p>
-            La configuración de PHP con PostgreSQL y Apache corriendo
-            con chroot puede verse en
-            <a href="http://www.bsdforen.org/foren/showtopic.php?threadid=773" target="_top">http://www.bsdforen.org/foren/showtopic.php?threadid=773</a>
-            o en la sección sobre PostgreSQL de estas guías (ver
-            <a href="otros_servicios_que_puede_prestar_el_servidor.html#postgresql" title="6.2. Motor de bases de datos PostgreSQL">Sección 6.2, “Motor de bases de datos PostgreSQL”</a>
-          </p></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="ssi"></a>5.7.4.5. Server Side Include</h5></div></div></div><p>
+          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="lecturas-php"></a>5.7.4.4.2. Lecturas recomendadas</h6></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
+                Puede aprender sobre PHP en
+                <a href="http://www.php.net" target="_top">http://www.php.net</a>
+              </p></li><li><p>
+                La configuración de PHP con PostgreSQL y Apache
+                corriendo con chroot puede verse en
+                <a href="http://www.bsdforen.org/foren/showtopic.php?threadid=773" target="_top">http://www.bsdforen.org/foren/showtopic.php?threadid=773</a>
+                o en la sección sobre PostgreSQL de estas guías (ver
+                <a href="otros_servicios_que_puede_prestar_el_servidor.html#postgresql" title="6.2. Motor de bases de datos PostgreSQL">Sección 6.2, “Motor de bases de datos PostgreSQL”</a>
+              </p></li></ul></div></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="ssi"></a>5.7.4.5. Server Side Include</h5></div></div></div><p>
           El Apache incluido en OpenBSD tiene compilado como módulo
           estático <code class="literal">mod_include.c</code> (como puede
           comprobarse ejecutando <code class="literal">/usr/sbin/httpd -l</code>).
@@ -2589,10 +2594,11 @@ chmod og-r /var/mail/cuenta
         
 </pre><p>
           Al abrirla debe presentar la fecha y hora del sistema.
-        </p><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="lecturas-ssi"></a>5.7.4.5.1. Lecturas recomendadas</h6></div></div></div><p>
-            Hay información completa sobre SSI en el manual de Apache
-            <a href="http://httpd.apache.org/docs/howto/ssi.html" target="_top">http://httpd.apache.org/docs/howto/ssi.html</a>
-          </p></div></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2833565784" href="#idm2833565784">25</a>] </sup>
+        </p><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="lecturas-ssi"></a>5.7.4.5.1. Lecturas recomendadas</h6></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
+                Hay información completa sobre SSI en el manual de
+                Apache
+                <a href="http://httpd.apache.org/docs/howto/ssi.html" target="_top">http://httpd.apache.org/docs/howto/ssi.html</a>
+              </p></li></ul></div></div></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp676038824" href="#idp676038824">25</a>] </sup>
           Típicamente un cliente enviará un paquete DHCPDISCOVER a toda
           la red (opcionalmente con sugerencia de la IP que quiere), un
           servidor que reciba tal paquete le responderá con un DHCPOFFER
@@ -2600,10 +2606,10 @@ chmod og-r /var/mail/cuenta
           puede responder con DHCPREQUEST para confirmar los parámetros
           y el servidor responde con un DHCPACK para confirmar
           asignación.
-        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm9271000" href="#idm9271000">26</a>] </sup>
+        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1907444056" href="#idm1907444056">26</a>] </sup>
                 De acuerdo al RFC 1123 los nombre MUA y MTA son propios
                 del protocolo X.400.
-              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm87057752" href="#idm87057752">27</a>] </sup>
+              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1930724056" href="#idm1930724056">27</a>] </sup>
             De acuerdo al protocolo SMTP, sendmail de amor
             se conectaría por el puerto 25 a sendmail en
             respeto y enviaría los mensajes
@@ -2634,7 +2640,7 @@ chmod og-r /var/mail/cuenta
 </pre><p>
             (para emplear <code class="literal">-f</code> con sendmail debe ser
             usuario autorizado).
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3154834904" href="#idm3154834904">28</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1917257688" href="#idm1917257688">28</a>] </sup>
             Son inseguros porque transmiten claves y el contenido de los
             mensajes planos por la red
           </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="otros_servicios_que_puede_prestar_el_servidor.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">4. Direcciones, enrutamiento, transporte y cortafuegos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 6. Otros servicios que puede prestar el servidor</td></tr></table></div></body></html>
