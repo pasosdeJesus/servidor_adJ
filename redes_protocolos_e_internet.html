@@ -29,7 +29,7 @@
     LAN Este tipo de redes, es apropiada para conectar pocos
     computadores (menos de 100) en un espacio relativamente pequeño.
   </p><p>
-    Un protocolo <sup>[<a name="idp334294312" href="#ftn.idp334294312">1</a>]</sup> es una serie de reglas que indican como debe ocurrir una
+    Un protocolo <sup>[<a name="idp1302705192" href="#ftn.idp1302705192">1</a>]</sup> es una serie de reglas que indican como debe ocurrir una
     comunicación entre dos computadores de una red; las reglas de un
     protocolo son seguidas por programas que se ejecutan en los
     computadores interconectados. Su computador puede tener procesos
@@ -37,7 +37,7 @@
     iniciar protocolos (por ejemplo con <code class="literal">ps -ax</code> es
     posible que vea: <code class="literal">sshd</code>, <code class="literal">inetd</code>,
     <code class="literal">httpd</code>, <code class="literal">postgres</code>). A estos
-    programas, que esperan conexiones, se les llama servicios<sup>[<a name="idm2504318552" href="#ftn.idm2504318552">2</a>]</sup>. Usted puede iniciar un protocolo con otro computador
+    programas, que esperan conexiones, se les llama servicios<sup>[<a name="idp3665615400" href="#ftn.idp3665615400">2</a>]</sup>. Usted puede iniciar un protocolo con otro computador
     empleando el programa cliente adecuado, por ejemplo el cliente
     <code class="literal">ping</code> con:
   </p><pre class="programlisting">
@@ -47,7 +47,7 @@
     <code class="literal">ECHO_REQUEST</code>) con el computador con dirección IP
     127.0.0.1 (su propio computador), un programa de su computador
     estará pendiente de conexiones de este tipo y seguirá el
-    protocolo<sup>[<a name="idp334297384" href="#ftn.idp334297384">3</a>]</sup>.
+    protocolo<sup>[<a name="idp10470184" href="#ftn.idp10470184">3</a>]</sup>.
   </p><p>
     Dado que estamos en paso de IPv4 a IPv6 también mencionamos que el
     mismo ejemplo con IPv6 (y protocolo ICMP6) es:
@@ -125,7 +125,7 @@
       a cada computador un número único (dirección IP) que permite
       identificarlo y enviarle información.
     </p><p>
-      La asignación de direcciones IP<sup>[<a name="idp535079080" href="#ftn.idp535079080">4</a>]</sup> es manejada por IANA, que a su vez la ha delegado a
+      La asignación de direcciones IP<sup>[<a name="idp675671336" href="#ftn.idp675671336">4</a>]</sup> es manejada por IANA, que a su vez la ha delegado a
       registros en diversas regiones. La región de América Latina es
       manejada por el registro LACNIC, que recibe solicitudes para
       asignar bloques a proveedores de servicio a Internet (ISP) o
@@ -140,7 +140,7 @@
       basa en varios protocolos que siguen todos los computadores y
       enrutadores conectados. Algunos de estos protocolos dependen de
       otros, dando lugar a varias capas de protocolos: aplicación,
-      transporte, Internet, enlace<sup>[<a name="idm1328838360" href="#ftn.idm1328838360">5</a>]</sup>. El siguiente diagrama presenta algunos protocolos en
+      transporte, Internet, enlace<sup>[<a name="idp675671080" href="#ftn.idp675671080">5</a>]</sup>. El siguiente diagrama presenta algunos protocolos en
       las diversas capas de una red TCP/IP sobre una red física Ethernet
       o sobre una conexión con modem:
     </p><pre class="programlisting">
@@ -182,7 +182,7 @@ Capa física:           Ethernet     Modem
         configurarse como <span class="emphasis"><em>Half-duplex</em></span> o como
         <span class="emphasis"><em>Full-Duplex</em></span>. Describiremos el uso del
         esquema más popular y económico en este momento: 1000Mbps,
-        Full-duplex con cable de pares trenzados <sup>[<a name="idm630838616" href="#ftn.idm630838616">6</a>]</sup>. Cada tarjeta Ethernet tiene una dirección única
+        Full-duplex con cable de pares trenzados <sup>[<a name="idp1462156840" href="#ftn.idp1462156840">6</a>]</sup>. Cada tarjeta Ethernet tiene una dirección única
         (llamada dirección MAC), que en una transmisión permite indicar
         tarjeta fuente y tarjeta destino (la dirección MAC de ambos es
         transmitida también).
@@ -191,8 +191,8 @@ Capa física:           Ethernet     Modem
         internet (IP) con la red que se use.
       </p><p>
         En el caso de una red Ethernet e IPv4 se trata del protocolo
-        ARP<sup>[<a name="idm63520600" href="#ftn.idm63520600">7</a>]</sup>, que se encarga de traducir direcciones IPv4 a
-        direcciones MAC <sup>[<a name="idp112600744" href="#ftn.idp112600744">8</a>]</sup>.
+        ARP<sup>[<a name="idp1462156328" href="#ftn.idp1462156328">7</a>]</sup>, que se encarga de traducir direcciones IPv4 a
+        direcciones MAC <sup>[<a name="idp69201832" href="#ftn.idp69201832">8</a>]</sup>.
       </p><p>
         Cada vez que un computador de una LAN identifica una dirección
         IPv4 de otro computador conectado a la LAN y su correspondiente
@@ -214,7 +214,7 @@ Capa física:           Ethernet     Modem
         vecinos con <code class="literal">ndp -a</code>
       </p><p>
         En el caso de una conexión por modem el protocolo es
-        PPP<sup>[<a name="idp571154856" href="#ftn.idp571154856">9</a>]</sup>, que se encarga de establecer, terminar y verificar
+        PPP<sup>[<a name="idp1462156072" href="#ftn.idp1462156072">9</a>]</sup>, que se encarga de establecer, terminar y verificar
         la conexión. Durante la conexión autentica el computador que se
         conecta ante el servidor (bien con el protocolo PAP o con CHAP)
         y durante la operación prepara los paquetes enviados por otros
@@ -226,9 +226,9 @@ Capa física:           Ethernet     Modem
         de error al enviar y el verificar información recibida. En esta
         capa está el <span class="emphasis"><em>Internet Protocol</em></span> (IP) que es
         un protocolo diseñado para Internet y del cual hay dos
-        versiones: IPv4 e IPv6. Describiremos la versión 4 <sup>[<a name="idp571156264" href="#ftn.idp571156264">10</a>]</sup> (la versión 6 fue diseñada para soportar más
+        versiones: IPv4 e IPv6. Describiremos la versión 4 <sup>[<a name="idp2443427368" href="#ftn.idp2443427368">10</a>]</sup> (la versión 6 fue diseñada para soportar más
         computadores conectados a Internet y se espera que pronto se use
-        ampliamente <sup>[<a name="idp571154472" href="#ftn.idp571154472">11</a>]</sup>).
+        ampliamente <sup>[<a name="idp2443420712" href="#ftn.idp2443420712">11</a>]</sup>).
       </p><p>
         Este protocolo permite la transmisión de paquetes (llamados
         datagramas) en redes donde cada computador interconectado se
@@ -262,7 +262,7 @@ Capa física:           Ethernet     Modem
         IP no es protocolo fiable, porque no asegura que un paquete
         llegue a su destino y no realiza retransmisiones. Aunque para
         informar algunas situaciones anomalas emplea el protocolo ICMP
-        <sup>[<a name="idm1689862744" href="#ftn.idm1689862744">12</a>]</sup>.
+        <sup>[<a name="idp2443425704" href="#ftn.idp2443425704">12</a>]</sup>.
       </p><p>
         OpenBSD cuenta con una excelente implementación de IPv4 con
         posibilidad de filtrar, redirigir, traducir direcciones,
@@ -277,10 +277,10 @@ Capa física:           Ethernet     Modem
         paquetes en orden y asegurar que están completos. Esto se
         requiere porque el nivel de red puede enrutar diversos paquetes
         de forma diferente. En esta capa hay dos protocolos:
-        TCP<sup>[<a name="idm200551000" href="#ftn.idm200551000">13</a>]</sup> y UDP<sup>[<a name="idm200549976" href="#ftn.idm200549976">14</a>]</sup>. El primero es fiable, asegura que la transmisión
+        TCP<sup>[<a name="idp2443430184" href="#ftn.idp2443430184">13</a>]</sup> y UDP<sup>[<a name="idp2443424424" href="#ftn.idp2443424424">14</a>]</sup>. El primero es fiable, asegura que la transmisión
         enviada sea recibida, UDP por su parte no busca confirmar que la
         información llegue a su destino (aunque permite hacer
-        difusión<sup>[<a name="idp553897384" href="#ftn.idp553897384">15</a>]</sup> y multidifusión<sup>[<a name="idm200552536" href="#ftn.idm200552536">16</a>]</sup> mientras que TCP no). Ambos protocolos emplean
+        difusión<sup>[<a name="idp3548513960" href="#ftn.idp3548513960">15</a>]</sup> y multidifusión<sup>[<a name="idp2443429672" href="#ftn.idp2443429672">16</a>]</sup> mientras que TCP no). Ambos protocolos emplean
         puertos para permitir más de una conexión con uno o más
         computadores, un puerto se identifica con un número entre 0 y
         65536, los primeros 1024 números sólo pueden ser usados por
@@ -360,26 +360,26 @@ Capa física:           Ethernet     Modem
           <a href="biblio.html" title="B. Bibliografia">rfces</a>
         </p></li><li><p>
           Páginas del manual netintro4, ip4, inet4, ip4
-        </p></li></ul></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp334294312" href="#idp334294312">1</a>] </sup>
+        </p></li></ul></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1302705192" href="#idp1302705192">1</a>] </sup>
         Para ampliar el significado de los términos técnicos
         introducidos en estas guías (como
         <span xmlns="" class="emphasis"><em>protocol</em></span>), se sugiere consultar el
         diccionario FOLDOC
         <a xmlns="" href="http://foldoc.doc.ic.ac.uk/foldoc" target="_top">http://foldoc.doc.ic.ac.uk/foldoc</a>
-      </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2504318552" href="#idm2504318552">2</a>] </sup>
+      </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp3665615400" href="#idp3665615400">2</a>] </sup>
         También suele llamárseles <span xmlns="" class="emphasis"><em>daemons</em></span> pero como
         puede resultar ofensivo para cristian@s, procuramos no emplear
         ese término, ver
         <a xmlns="" href="http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service" target="_top">http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service</a>.
-      </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp334297384" href="#idp334297384">3</a>] </sup>
+      </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp10470184" href="#idp10470184">3</a>] </sup>
         El programa que sigue este protocolo hace parte de la
         implementación de IPv4 en el kernel.
-      </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp535079080" href="#idp535079080">4</a>] </sup>
+      </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp675671336" href="#idp675671336">4</a>] </sup>
           Puede verse más sobre asignación de IPs en el RFC 2050 y sobre
           asignación de direcciones in redes IP privadas en RFC 1918.
-        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1328838360" href="#idm1328838360">5</a>] </sup>
+        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp675671080" href="#idp675671080">5</a>] </sup>
           El RFC 1122 presenta las capas de una red TCP/IP
-        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm630838616" href="#idm630838616">6</a>] </sup>
+        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1462156840" href="#idp1462156840">6</a>] </sup>
             El estándar que define este esquema es IEEE 802.3, que se
             basa en el uso de un sólo medio de transmisión compartido
             por todos los dispositivos en el que sólo trasmite un sólo
@@ -389,34 +389,34 @@ Capa física:           Ethernet     Modem
             línea está libre transmite parte de la información si
             detecta colisión da oportunidad de transmisión a otros un
             intervalo aleatorio de tiempo.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm63520600" href="#idm63520600">7</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1462156328" href="#idp1462156328">7</a>] </sup>
             ARP que se define en el RFC 826
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp112600744" href="#idp112600744">8</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp69201832" href="#idp69201832">8</a>] </sup>
             Un computador envía un mensaje a todos los demás de la red
             (que es posible por ejemplo en Ethernet), solicitando la
             dirección MAC de una dirección IPv4, el dispositivo con esa
             MAC responde enviando su dirección MAC al dispositivo que
             hizo la solicitud.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp571154856" href="#idp571154856">9</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1462156072" href="#idp1462156072">9</a>] </sup>
             PPP se describe en el RFC 1661.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp571156264" href="#idp571156264">10</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2443427368" href="#idp2443427368">10</a>] </sup>
             El protocolo IPv4 está descrito en el RFC 791, aunque puede
             verse una descripción en conjunto con otros protocolos en el
             RFC 1122
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp571154472" href="#idp571154472">11</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2443420712" href="#idp2443420712">11</a>] </sup>
             OpenBSD tiene soporte para IPv6
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1689862744" href="#idm1689862744">12</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2443425704" href="#idp2443425704">12</a>] </sup>
             ICMP Internet Control Message Protocol, se describe en el
             RFC792, permite enviar mensajes de error (e.g dirección
             inalcanzable, tiempo excedido) y algunos mensajes para hacer
             consultas (e.g eco, estampilla de tiempo).
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm200551000" href="#idm200551000">13</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2443430184" href="#idp2443430184">13</a>] </sup>
             TCP se describe en el RFC 793 y se complementa y corrige en
             el RFC 1122
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm200549976" href="#idm200549976">14</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2443424424" href="#idp2443424424">14</a>] </sup>
             UDP está descrito en el RFC 768 y corregido en el RFC 1122
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp553897384" href="#idp553897384">15</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp3548513960" href="#idp3548513960">15</a>] </sup>
             Del inglés <span xmlns="" class="emphasis"><em>broadcast</em></span>
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm200552536" href="#idm200552536">16</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2443429672" href="#idp2443429672">16</a>] </sup>
             Del inglés <span xmlns="" class="emphasis"><em>multicast</em></span>
           </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="dispositivos_de_interconexion.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">La distribución Aprendiendo de Jesús como servidor y cortafuegos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 3. Dispositivos de interconexión</td></tr></table></div></body></html>
