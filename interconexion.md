@@ -50,7 +50,7 @@ los demás.
 Aunque en el comercio es posible comprar un módem nulo, también es
 relativamente fácil ensamblar uno, una vez tenga conectores, cable y
 cautín. Si hace su propio módem nulo puede probar que la conexión haya
-quedado bien empleando un ohmiometro.
+quedado bien empleando un óhmetro.
 
 Una vez se conecte un módem nulo puede probarlo enviando mensajes por el
 puerto serial del uno y viendo lo que recibe en el otro. Por ejemplo si
@@ -116,7 +116,7 @@ con una velocidad diferente puede especificarla por ejemplo con
 por defecto está configurado para representar el primer puerto serial).
 Le permitirá ver la información que el servidor envíe, enviar
 información al servidor y hacer algunas operaciones especiales
-comenzando con el carácter '\~'. Por ejemplo terminar la sesión con
+comenzando con el caracter '\~'. Por ejemplo terminar la sesión con
 '\~.', enviar un archivo con '\~p' o recibir un archivo con '\~g'.
 
 Dado que puede haber inconvenientes enviando o recibiendo archivos de 8
@@ -648,10 +648,6 @@ diseñar el mapa:
 -   La longitud máxima de cada cable (para unir concentrador y
     computador) es de 100 m.
 
-    100
-    Longitud máxima de un cable entre un computador y un concentrador en
-    una red Ethernet.
-
 -   Busque que los cables/canaletas vayan por las paredes del recinto y
     estén resguardadas (para evitar que alguien se tropiece).
 
@@ -805,7 +801,7 @@ Para redes locales los protocolos más utilizados son IEEE 802.11a,
 y dan tasas de transferencia entre 11Mbps y 54Mbps.
 
 Una red local inalámbrica requiere un Punto de Acceso Inalámbrico (en
-inglés *Acces Point*) que atienda peticiones y de respuestas a todos los
+inglés *Acces Point*) que atienda peticiones y dé respuestas a todos los
 computadores cliente que se conecten. Tal Punto de Acceso Inalámbrico
 puede ser un dispositivo dedicado o bien un computador con OpenBSD que
 cuente con una tarjeta de inalámbrica que soporte el modo `hostap`.
@@ -817,7 +813,7 @@ USB) con controladores para OpenBSD, sin embargo varias tarjetas de red
 populares no son soportadas, por lo que antes de comprar examine el
 listado de tarjetas soportadas en:
 <http://dhobsd.pasosdejesus.org/?id=CompatibilidadHardware>. Una vez
-conecte su tarjeta de red inalámbrica, búsque la interfaz de red
+conecte su tarjeta de red inalámbrica, busque la interfaz de red
 asociada con
 
         ifconfig
@@ -851,18 +847,18 @@ cercanas con
 
 remplazando `rum0` por la interfaz de su tarjeta. Verá un listado de
 redes próximas con identificación, calidad de la señal, velocidad y tipo
-de encripción.
+de encriptación.
 
 Para conectarse a una red basta configurar la tarjeta con la
-identificación, tipo de encripción y clave apropiadas y posteriormente
+identificación, tipo de encriptación y clave apropiadas y posteriormente
 asignar una IP en la red inalámbrica, bien manualmente o bien por DHCP
 si el Access Point lo soporta (como ocurre típicamente). Para configurar
 a una red de nombre MIRED que no emplea encripción:
 
         doas ifconfig rum0 nwid MIRED 
 
-Si la red emplea encripción WEP (un mecanismo de encripción débil),
-puede especificar la llave de encripción en hexadecimal:
+Si la red emplea encriptación WEP (un mecanismo de encripción débil),
+puede especificar la llave de encriptación en hexadecimal:
 
         doas ifconfig rum0 nwid MIRED nwkey 0x123498a2d2
 
@@ -870,7 +866,7 @@ o en ASCII:
 
         doas ifconfig rum0 nwid MIRED nwkey "clave"
 
-Si la red emplea encripción WAP (un mecanismo de encripción más fuerte):
+Si la red emplea encritapción WAP (un mecanismo de encriptación más fuerte):
 
         doas ifconfig rum0 nwid MIRED wpakey MICLAVE
 
@@ -984,7 +980,7 @@ WEP y clave "uvwxy". Basta que en `/etc/hostname.ath0` configure:
         inet 192.168.3.1 255.255.255.0 NONE media autoselect \
         mediaopt hostap nwid CASA chan 11 nwkey "uvwxy"
 
-Tras esto desde los portatiles y computadores cercanos debe poder ver la
+Tras esto desde los portátiles y computadores cercanos debe poder ver la
 red CASA y conectarse con WEP y la clave uvwxy.
 
 ### Referencias {#referencias-wlan}

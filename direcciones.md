@@ -89,7 +89,7 @@ Puede ver la tabla de enrutamiento estático en con `route -n show` o con
 destino, puerta de enlace, banderas, uso, MTU, interfaz por la cual
 enviar/recibir paquetes con ese destino,
 
-Hay un destino por defecto (`default`) al que se envia todo paquete que
+Hay un destino por defecto (`default`) al que se envía todo paquete que
 no tiene un destino en la tabla de enrutamiento. Este destino por
 defecto o puerta de enlace se configura en el archivo `/etc/mygate`. En
 una red local conectada a Internet, el servidor debe emplear como puerta
@@ -348,7 +348,7 @@ esto:
 
 > **Advertencia**
 >
-> Para emplear ftp-proxy asegurese que entre las reglas de su
+> Para emplear ftp-proxy asegúrese que entre las reglas de su
 > cortafuegos no esté:
 >
 >         set skip $int_if
@@ -458,7 +458,7 @@ Guía del usuario de PF [PF](#biblio).
 
 ## Control de ancho de banda
 
-El siguiente ejemplo presenta como puede configurarse un servidor NAT
+El siguiente ejemplo presenta cómo puede configurarse un servidor NAT
 para controlar ancho de banda de diversos computadores de la red
 interna. La conexión de la red interna es a 100MB, mientras que la
 conexión a Internet es de 300KB. De todos los computadores de la red
