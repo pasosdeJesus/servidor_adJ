@@ -847,18 +847,18 @@ cercanas con
 
 remplazando `rum0` por la interfaz de su tarjeta. Verá un listado de
 redes próximas con identificación, calidad de la señal, velocidad y tipo
-de encriptación.
+de cifrado.
 
 Para conectarse a una red basta configurar la tarjeta con la
-identificación, tipo de encriptación y clave apropiadas y posteriormente
+identificación, tipo de cifrado y clave apropiadas y posteriormente
 asignar una IP en la red inalámbrica, bien manualmente o bien por DHCP
 si el Access Point lo soporta (como ocurre típicamente). Para configurar
-a una red de nombre MIRED que no emplea encripción:
+a una red de nombre MIRED que no emplea cifrado:
 
         doas ifconfig rum0 nwid MIRED 
 
-Si la red emplea encriptación WEP (un mecanismo de encripción débil),
-puede especificar la llave de encriptación en hexadecimal:
+Si la red emplea cifrad oWEP (un mecanismo de cifrado débil),
+puede especificar la llave de cifrado en hexadecimal:
 
         doas ifconfig rum0 nwid MIRED nwkey 0x123498a2d2
 
@@ -866,7 +866,7 @@ o en ASCII:
 
         doas ifconfig rum0 nwid MIRED nwkey "clave"
 
-Si la red emplea encritapción WAP (un mecanismo de encriptación más fuerte):
+Si la red emplea cifrado WAP (un mecanismo de cifrado más fuerte):
 
         doas ifconfig rum0 nwid MIRED wpakey MICLAVE
 
@@ -974,7 +974,7 @@ Acceso Inalámbrico, continuando las instrucciones de la sección [OpenBSD
 como cliente en una red inalámbrica](#cliente-inalambrico).
 
 Supongamos que su tarjeta esta asociada a la interfaz `ath0`, que desea
-emplear el segmento 192.168.3/24, llamar a la red CASA con encripción
+emplear el segmento 192.168.3/24, llamar a la red CASA con cifrado
 WEP y clave "uvwxy". Basta que en `/etc/hostname.ath0` configure:
 
         inet 192.168.3.1 255.255.255.0 NONE media autoselect \

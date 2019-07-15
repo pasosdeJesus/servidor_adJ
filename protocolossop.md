@@ -822,7 +822,7 @@ es:
 #### SMTP-AUTH y TLS {#smtp-auth-tls}
 
 El protocolo estándar para enviar correo a un servidor es SMTP, que no
-ofrece posibilidades de autenticación ni encripción. Una extensión a
+ofrece posibilidades de autenticación ni cifrado. Una extensión a
 este protocolo es SMTP-AUTH (descrita en el RFCs 2554), la cual se basa
 en SASL (Simple Authentication and Security Layer, RFC 2222) y que
 permite autenticar antes de aceptar un correo por enviar.
@@ -951,9 +951,9 @@ Verifique también que estén las siguientes líneas:
         DAEMON_OPTIONS(`Family=inet6, Address=::, Name=MTA6, M=s')dnl
         DAEMON_OPTIONS(`Family=inet6, Address=::, Port=465, Name=MTA6, M=s')dnl
 
-Para habilitar la orden `STARTTLS` (que inicia encripción) en el
+Para habilitar la orden `STARTTLS` (que inicia cifrado) en el
 servidor estándar del puerto 25 y otro servidor que sólo acepta
-conexiones encriptadas en el puerto 465.
+conexiones cifradas en el puerto 465.
 
 Finalmente emplee el nuevo archivo de configuración y reinicie
 `sendmail`:
@@ -1727,7 +1727,7 @@ PostgreSQL:
             $rcmail_config['db_dsn'] = 'pgsql://roundcube:nueva_clave@127.0.0.1/roundcubemail';
 
 4.  Edite el archivo de configuración de Apache `/var/www/conf/php.ini`
-    para deshabilitar encripción de sesiones y establecer zona horaria
+    para deshabilitar cifrado de sesiones y establecer zona horaria
     en la líneas:
 
             suhosin.session.encrypt = Off
@@ -1952,7 +1952,7 @@ Asignar password al sitio de mailman con
 Sólo recomendamos el servicio ftp para poner un servidor anónimo (con el
 usuario `anonymous` y una clave arbitraria). No para que transfiera
 datos de un usuario porque este servicio transmite claves planas por la
-red, y así mismo transmite archivos sin encripción alguna. Para
+red, y así mismo transmite archivos sin cifrado alguno. Para
 transferir información de usuarios emplee un protocolo seguro como
 `scp`.
 

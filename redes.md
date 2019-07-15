@@ -272,7 +272,7 @@ OpenBSD cuenta con una excelente implementación de IPv4 con posibilidad
 de filtrar, redirigir, traducir direcciones, balancear carga y muchas
 otras opciones que se configuran de forma sencilla con PF. Además
 implementa características no estándar como IPsec para transmisión
-encriptada y IPcomp para comprimir.
+cifrada y IPcomp para comprimir.
 
 ### Capa de transporte
 
