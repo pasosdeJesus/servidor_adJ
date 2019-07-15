@@ -26,11 +26,7 @@ principales usos de una red LAN son:
 -   Conformar una Intranet con servicios como correo, *web*, ftp,
     *news*.
 
-LAN
-Este tipo de redes, es apropiada para conectar pocos computadores (menos
-de 100) en un espacio relativamente pequeño.
-
-Un protocolo [^red.1] es una serie de reglas que indican como debe ocurrir
+Un protocolo [^red.1] es una serie de reglas que indican cómo debe ocurrir
 una comunicación entre dos computadores de una red; las reglas de un
 protocolo son seguidas por programas que se ejecutan en los computadores
 interconectados. Su computador puede tener procesos activos que esperan
@@ -141,18 +137,18 @@ sobre una red física Ethernet o sobre una conexión con modem:
 
     Capa de aplicación:
          Protocolos de usuario             FTP Telnet ssh   http   SMTP ...
-                                            |     |     |      |    | 
-         Protocolos de soporte    DNS       |     |     |      |    | 
+                                            |     |     |      |    |
+         Protocolos de soporte    DNS       |     |     |      |    |
                                  |   \      |     |     |      |    |
     Capa de transporte           UDP   TCP --------------------------
                                   \  /
-    Capa de Internet (red):      IP -  ICMP                  
+    Capa de Internet (red):      IP -  ICMP
                                  ___|___
                                 /       \
     Capa de enlace:           ARP        PPP
                                |          |
     Capa física:           Ethernet     Modem
-                            |              | 
+                            |              |
                          Par trenzado    Línea telef.
 
 ## Capas de una red TCP/IP sobre algunos medios físicos
@@ -160,7 +156,7 @@ sobre una red física Ethernet o sobre una conexión con modem:
 ### Capa física
 
 [//]: # "física"
-[//]: # "Esta capa de red se refiere a conexiones eléctrica y mecánicas de la red. Por ejemplo codificiación/decodificación de información y arbitramento en caso de coliciones."
+[//]: # "Esta capa de red se refiere a conexiones eléctrica y mecánicas de la red. Por ejemplo codificiación/decodificación de información y arbitramento en caso de colisiones."
 
 Se refiere a las conexiones eléctricas y mecánicas de la red. Ejemplos
 de protocolos a este nivel son: Ethernet, Inalámbrico IEEE 802.11, Modem
@@ -243,7 +239,7 @@ varias redes, identificar los computadores que pertenecen a una red
 computador corresponde a la dirección de la red) y facilitar el
 enrutamiento. Si el medio de transmisión lo requiere, el protocolo IP se
 encarga de la división de los datagramas en paquetes más pequeños para
-su tranmisión y de la posterior reagrupación (fragmentación), el tamaño
+su transmisión y de la posterior reagrupación (fragmentación), el tamaño
 máximo que un paquete puede tener para un protocolo de nivel físico se
 llama MTU (*Maximal Transfer Unit*), en el caso de Ethernet es 1500
 bytes.
@@ -256,7 +252,7 @@ envía el datagrama empleando el nível físico a la dirección de la
 compuerta que mantenga en su tabla de enrutamiento. La tabla de
 enrutamiento puede ser modificada manualmente (con `route show`) o puede
 ser modificada automáticamente cuando una compuerta envía un mensaje
-indicando la dirección de otra compuerta más apropiada para llegar a un
+indicando la dirección de otra compuerta más apropiada para llegar a una
 dirección. Hay siempre una compuerta por defecto a la que se envían
 paquetes que IP no sepa como enrutar.
 
@@ -265,7 +261,7 @@ paquetes que IP no sepa como enrutar.
 
 IP no es protocolo fiable, porque no asegura que un paquete llegue a su
 destino y no realiza retransmisiones. Aunque para informar algunas
-situaciones anomalas emplea el protocolo ICMP [^red.12].
+situaciones anómalas emplea el protocolo ICMP [^red.12].
 
 [//]: # "ICMP"
 [//]: # "Este protocolo es empleado por IP para transmitir mensajes de error y
@@ -318,7 +314,7 @@ Telnet
 
 :   Telnet está definido en el RFC 854 y complementado en el RFC 1123.
     Permite la operación remota de otro computador de forma insegura
-    pues las claves se transmiten planas (ssh es un remplazo seguro, ver
+    pues las claves se transmiten planas (ssh es un reemplazo seguro, ver
     [xref](#servidor-ssh)), además puede usarse para interactuar con
     otros protocolos (por ejemplo puede interactuar con el protocolo de
     correo SMTP de su propio computador ---puerto 25--- con
@@ -340,7 +336,7 @@ TFPT
 SMTP
 
 :   SMTP se definió en el RFC 822 y se complementó en el RFC 1123
-    (*Simple Mail Transfer Protocol*) que especifica como se realiza la
+    (*Simple Mail Transfer Protocol*) que especifica cómo se realiza la
     transmisión de correo electrónico (ver [xref](#servicios-correo)).
 
 #### Protocolos de soporte

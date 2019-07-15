@@ -4,7 +4,7 @@
 
 ### Resolución de nombres {#resolucion-de-nombres}
 
-Para resolver nombres OpenBSD emplea rutinas propias de resolución
+Para resolver nombres, OpenBSD emplea rutinas propias de resolución
 incluidas en la librería de C, se configuran en `/etc/resolv.conf`. Este
 archivo puede incluir, dominio (`domain`), lista de servidores
 (`nameserver`), orden de fuentes donde buscar (`lookup`), lista de
@@ -27,11 +27,11 @@ uno o más de los siguientes argumentos separados por espacio:
 
 ### Servidor recursivo unbound {#unbound}
 
-Un servidor recursivo recibe consultas de dominios y las reenvia a otros
+Un servidor recursivo recibe consultas de dominios y las reenvía a otros
 servidores –comenzando por los servidores raiz– o si tiene respuesta a
 las consultas en su repositorio temporal fresco (cache) lo usa para
 responder. Es útil para responder consultas de una red local
-rapidamente, y en tal caso debe responder consultas que se hagan desde
+rápidamente, y en tal caso debe responder consultas que se hagan desde
 la red interna pero no desde Internet --como posiblemente ocurre con la
 vista recursiva del archivo `/var/named/etc/named.conf` si tiene uno.
 
@@ -42,7 +42,7 @@ En `/etc/rc.conf.local` agregue
 
         unbound_flags="-c /var/unbound/etc/unbound.conf"
 
-Y a la varialbe `pkg_scripts` agreguele `unbound` Configurelo en
+Y a la varialbe `pkg_scripts` agréguele `unbound` Configúrelo en
 `/var/unbound/etc/unbound.conf`, cambiando al menos:
 
 1.  Si su cortafuegos tiene en la red interna la IP 192.168.100.100
@@ -71,7 +71,7 @@ Inicie el servicio con
 
         sudo sh  /etc/rc.d/unbound start
 
-Revise posibles errores en las bitacoras `/var/log/messages` y
+Revise posibles errores en las bitácoras `/var/log/messages` y
 `/var/log/servicio`
 
 Pruebe que responde con:
@@ -113,7 +113,7 @@ Para que responda hacía Internet en un cortafuegos con IP pública
 En el directorio `/var/nsd/zones` debe dejar un archivo de zona por cada
 zona que configure. Afortunadamente NSD reconoce la misma sintaxis de
 archivos de zona que `bind`, así que basta que copie los de las zonas
-autoritarías (que tipicamente se ubican en `/var/named/master/`).
+autoritarias (que típicamente se ubican en `/var/named/master/`).
 
 Un ejemplo de un archivo de zona `/var/nsd/zones/miescuela.edu.co` es:
 
@@ -149,7 +149,7 @@ Inicie el servicio con
 
         doas sh  /etc/rc.d/nsd start
 
-(o reinicielo con `restart` en lugar de `start`).
+(o reinícielo con `restart` en lugar de `start`).
 
 Revise posibles errores en las bitacoras `/var/log/messages` y
 `/var/log/servicio`
@@ -422,7 +422,7 @@ Página web: <http://www.openssh.com>
 
 El protocolo DHCP se describen en el RFC 2131 (ver [rfc2131](#biblio)), se
 trata de un modelo cliente-servidor en el que el servidor DHCP localiza
-direcciones IP libres en una red y envia parámetros de configuración a
+direcciones IP libres en una red y envía parámetros de configuración a
 computadores cliente que se configuran dinámicamente. Entre los
 parámetros de configuración que un servidor puede enviar están: IP por
 asignar al computador, IP de la puerta de enlace, IPs de servidores de
@@ -471,7 +471,7 @@ puerta de enlace y la IP del servidor de nombres, se hace en el archivo
                 }
         }
 
-También asegurese de iniciar el servicio DHCP editando
+También asegúrese de iniciar el servicio DHCP editando
 `/etc/rc.conf.local` para agregar:
 
         dhcpd_flags=""
@@ -513,7 +513,7 @@ defecto especifica:
 
         servers pool.ntp.org
 
-con lo cual actua como cliente empleando aleatoriamente alguno de los
+con lo cual actúa como cliente empleando aleatoriamente alguno de los
 servidores de NTP disponibles mundialmente en `pool.ntp.org`.
 
 ### Referencias y lecturas recomendadas {#referencias-ntp}
@@ -656,7 +656,7 @@ sean:
         newaliases      /usr/libexec/smtpd/makemap
 
 Una vez en operación pueden examinarse diversos aspectos (como
-bitacoras, examinar cola de correos, estadísticas) con `smtpctl`.
+bitácoras, examinar cola de correos, estadísticas) con `smtpctl`.
 
 La configuración se define en el archivo `/etc/mail/smtpd.conf`. La
 configuración más simple que sólo aceptará correo local y lo dejará en
@@ -739,7 +739,7 @@ La tabla de alias debe generarse a partir de un archivo plano
 
 #### Depuración de OpenSMTP {#smtpd-depura}
 
-OpenSMTP envia mensajes de error a la bitácora `/var/log/maillog`. Puede
+OpenSMTP envía mensajes de error a la bitácora `/var/log/maillog`. Puede
 ejecutarse en modo de depuración para determinar problemas con:
 
         smtpd -d
@@ -1090,7 +1090,7 @@ Busque y modifique la línea:
         DAEMON_OPTIONS(`Family=inet, Address=0.0.0.0,  Name=MTA')dnl
         DAEMON_OPTIONS(`Family=inet6, Address=::,  Name=MTA6, M=O')dnl
 
-agregandoles un puerto no estándar:
+agregándoles un puerto no estándar:
 
         DAEMON_OPTIONS(`Family=inet, Address=0.0.0.0, Port=2000,  Name=MTA')dnl
         DAEMON_OPTIONS(`Family=inet6, Address=::, Port=2000,  Name=MTA6, M=O')dnl
@@ -1110,7 +1110,7 @@ nuevamente archivos de configuración:
 Si un mismo servidor atiende diversos dominios DNS, puede lograr que se
 acepte correo para cada dominio. Para esto:
 
--   Asegurese de tener un registro MX para el dominio que indique que su
+-   Asegúrese de tener un registro MX para el dominio que indique que su
     servidor es el servidor de correo del dominio. i.e en el archivo
     maestro del dominio (digamos `/var/named/master/&EDOMINIO;`) algo
     como:
@@ -1175,7 +1175,7 @@ Inicie el servicio con
 
         /etc/rc.d/dovecot start
 
-y pruebelo en los puertos 143 (IAMP sin cifrar), 993 (IMAP sobre SSL),
+y pruébelo en los puertos 143 (IAMP sin cifrar), 993 (IMAP sobre SSL),
 110 (POP3 sin cifrar) y 995 (POP3 sobre SSL). Por defecto dovecot
 intentará recuperar correos en formato maildir de la carpeta `Maildir`
 de cada usuario.
