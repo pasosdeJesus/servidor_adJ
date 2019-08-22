@@ -1,5 +1,5 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>5. Protocolos de soporte y de usuario</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="direcciones_enrutamiento_transporte_y_cortafuegos.html" title="4. Direcciones, enrutamiento, transporte y cortafuegos"><link rel="next" href="otros_servicios_que_puede_prestar_el_servidor.html" title="6. Otros servicios que puede prestar el servidor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5. Protocolos de soporte y de usuario</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="otros_servicios_que_puede_prestar_el_servidor.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="protocolos_de_soporte_y_de_usuario"></a>5. Protocolos de soporte y de usuario</h2></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-dns"></a>5.1. Servicio DNS</h3></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="resolucion-de-nombres"></a>5.1.1. Resolución de nombres</h4></div></div></div><p>
-        Para resolver nombres OpenBSD emplea rutinas propias de
+        Para resolver nombres, OpenBSD emplea rutinas propias de
         resolución incluidas en la librería de C, se configuran en
         <code class="literal">/etc/resolv.conf</code>. Este archivo puede incluir,
         dominio (<code class="literal">domain</code>), lista de servidores
@@ -27,11 +27,11 @@
             <code class="literal">yp</code> que indica emplear el sistema YP si
             <code class="literal">ypbind</code> está corriendo.
           </p></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="unbound"></a>5.1.2. Servidor recursivo unbound</h4></div></div></div><p>
-        Un servidor recursivo recibe consultas de dominios y las reenvia
+        Un servidor recursivo recibe consultas de dominios y las reenvía
         a otros servidores –comenzando por los servidores raiz– o si
         tiene respuesta a las consultas en su repositorio temporal
         fresco (cache) lo usa para responder. Es útil para responder
-        consultas de una red local rapidamente, y en tal caso debe
+        consultas de una red local rápidamente, y en tal caso debe
         responder consultas que se hagan desde la red interna pero no
         desde Internet --como posiblemente ocurre con la vista recursiva
         del archivo <code class="literal">/var/named/etc/named.conf</code> si
@@ -45,8 +45,8 @@
       </p><pre class="programlisting">
     unbound_flags="-c /var/unbound/etc/unbound.conf"
 </pre><p>
-        Y a la varialbe <code class="literal">pkg_scripts</code> agreguele
-        <code class="literal">unbound</code> Configurelo en
+        Y a la varialbe <code class="literal">pkg_scripts</code> agréguele
+        <code class="literal">unbound</code> Configúrelo en
         <code class="literal">/var/unbound/etc/unbound.conf</code>, cambiando al
         menos:
       </p><div class="orderedlist"><ol type="1"><li><p>
@@ -77,7 +77,7 @@ access-control: 192.168.100.0/24 allow
       </p><pre class="programlisting">
     sudo sh  /etc/rc.d/unbound start
 </pre><p>
-        Revise posibles errores en las bitacoras
+        Revise posibles errores en las bitácoras
         <code class="literal">/var/log/messages</code> y
         <code class="literal">/var/log/servicio</code>
       </p><p>
@@ -124,7 +124,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
         archivo de zona por cada zona que configure. Afortunadamente NSD
         reconoce la misma sintaxis de archivos de zona que
         <code class="literal">bind</code>, así que basta que copie los de las
-        zonas autoritarías (que tipicamente se ubican en
+        zonas autoritarias (que típicamente se ubican en
         <code class="literal">/var/named/master/</code>).
       </p><p>
         Un ejemplo de un archivo de zona
@@ -162,7 +162,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
       </p><pre class="programlisting">
     doas sh  /etc/rc.d/nsd start
 </pre><p>
-        (o reinicielo con <code class="literal">restart</code> en lugar de
+        (o reinícielo con <code class="literal">restart</code> en lugar de
         <code class="literal">start</code>).
       </p><p>
         Revise posibles errores en las bitacoras
@@ -453,7 +453,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
       El protocolo DHCP se describen en el RFC 2131 (ver
       <a href="biblio.html" title="B. Bibliografia">rfc2131</a>), se trata de un modelo
       cliente-servidor en el que el servidor DHCP localiza direcciones
-      IP libres en una red y envia parámetros de configuración a
+      IP libres en una red y envía parámetros de configuración a
       computadores cliente que se configuran dinámicamente. Entre los
       parámetros de configuración que un servidor puede enviar están: IP
       por asignar al computador, IP de la puerta de enlace, IPs de
@@ -461,7 +461,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
     </p><p>
       En su modo de operación dinámico el servidor le asigna una IP a un
       sólo cliente por cierto periodo de tiempo, al cabo del cual podría
-      asignarle otra IP<sup>[<a name="idp3652091176" href="#ftn.idp3652091176">25</a>]</sup>.
+      asignarle otra IP<sup>[<a name="idp1026007800" href="#ftn.idp1026007800">25</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="cliente-DHCP"></a>5.3.1. Configuración de un cliente DHCP</h4></div></div></div><p>
         La configuración de un computador para operar como cliente de
         DHCP depende del sistema operativo, en el caso de Windows en las
@@ -502,7 +502,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
             }
     }
 </pre><p>
-        También asegurese de iniciar el servicio DHCP editando
+        También asegúrese de iniciar el servicio DHCP editando
         <code class="literal">/etc/rc.conf.local</code> para agregar:
       </p><pre class="programlisting">
     dhcpd_flags=""
@@ -533,7 +533,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
     </p><pre class="programlisting">
     servers pool.ntp.org
 </pre><p>
-      con lo cual actua como cliente empleando aleatoriamente alguno de
+      con lo cual actúa como cliente empleando aleatoriamente alguno de
       los servidores de NTP disponibles mundialmente en
       <code class="literal">pool.ntp.org</code>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-ntp"></a>5.4.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
@@ -590,7 +590,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
             Que ambos usuarios tengan un programa con el que puedan leer
             y redactar correos, como por ejemplo mail, mutt,
             mozilla-thunderbird (a ese programa se le llamará MUA -
-            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idp3871240616" href="#ftn.idp3871240616">26</a>]</sup>).
+            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idp1302360568" href="#ftn.idp1302360568">26</a>]</sup>).
           </p></li></ul></div><p>
         Si tanto pablo como rodrigo emplean como MUA
         <code class="literal">mail</code>, y ambos computadores tiene como MTA
@@ -611,7 +611,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
         Enviar un mensaje significa crear una conexión TCP con el MTA
         destino o con otro MTA que actúe de intermediario, típicamente
         en el puerto TCP 25, y transmitir el mensaje siguiendo las
-        reglas del protocolo SMTP <sup>[<a name="idp3871239976" href="#ftn.idp3871239976">27</a>]</sup>. Para establecer el computador con el cual
+        reglas del protocolo SMTP <sup>[<a name="idm1669770760" href="#ftn.idm1669770760">27</a>]</sup>. Para establecer el computador con el cual
         conectarse sendmail revisa con el resolvedor DNS, registros MX
         asociados con el dominio de la dirección, si los hay intenta
         enviar a cada uno en orden de prioridad --los registros MX con
@@ -685,7 +685,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
     newaliases      /usr/libexec/smtpd/makemap
 </pre><p>
         Una vez en operación pueden examinarse diversos aspectos (como
-        bitacoras, examinar cola de correos, estadísticas) con
+        bitácoras, examinar cola de correos, estadísticas) con
         <code class="literal">smtpctl</code>.
       </p><p>
         La configuración se define en el archivo
@@ -779,7 +779,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
     makemap hash aliasesejemplo &lt; aliasesejemplo
     chmod a+r aliasesejemplo
 </pre><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="smtpd-depura"></a>5.5.2.1. Depuración de OpenSMTP</h5></div></div></div><p>
-          OpenSMTP envia mensajes de error a la bitácora
+          OpenSMTP envía mensajes de error a la bitácora
           <code class="literal">/var/log/maillog</code>. Puede ejecutarse en modo
           de depuración para determinar problemas con:
         </p><pre class="programlisting">
@@ -860,11 +860,11 @@ Connection closed by foreign host.
     192.168.1  # Acepta de todos las IPs de la forma 192.168.1.x
 </pre></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="smtp-auth-tls"></a>5.5.3.2. SMTP-AUTH y TLS</h5></div></div></div><p>
           El protocolo estándar para enviar correo a un servidor es
-          SMTP, que no ofrece posibilidades de autenticación ni
-          encripción. Una extensión a este protocolo es SMTP-AUTH
-          (descrita en el RFCs 2554), la cual se basa en SASL (Simple
-          Authentication and Security Layer, RFC 2222) y que permite
-          autenticar antes de aceptar un correo por enviar.
+          SMTP, que no ofrece posibilidades de autenticación ni cifrado.
+          Una extensión a este protocolo es SMTP-AUTH (descrita en el
+          RFCs 2554), la cual se basa en SASL (Simple Authentication and
+          Security Layer, RFC 2222) y que permite autenticar antes de
+          aceptar un correo por enviar.
         </p><p>
           LOGIN y PLAIN son dos de los diversos métodos que SMTP-AUTH
           puede emplear para recibir información de autenticación, como
@@ -874,7 +874,7 @@ Connection closed by foreign host.
         </p><p>
           Aunque <code class="literal">sendmail</code> soporta tanto TLS como
           SMTP-AUTH, la configuración por defecto de OpenBSD
-          6.4 no los incluye. En el caso de TLS lo
+          6.5 no los incluye. En el caso de TLS lo
           incluido en el sistema base es suficiente y el procedimiento
           de configuración se documenta en
           <code class="literal">man starttls</code>.En cuanto a SMTP-AUTH se
@@ -952,7 +952,7 @@ Connection closed by foreign host.
     for i in `find . -name CVS`; do echo $i; 
         echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" &gt; $i/Root;
     done
-    cvs -z3 update -Pd -rOPENBSD_6.4-U
+    cvs -z3 update -Pd -rOPENBSD_6.5-U
 </pre><p>
             Después indique que desea recompilar
             <code class="literal">sendmail</code> con soporte para autenticación
@@ -1007,9 +1007,9 @@ Connection closed by foreign host.
     DAEMON_OPTIONS(`Family=inet6, Address=::, Port=465, Name=MTA6, M=s')dnl
 </pre><p>
             Para habilitar la orden <code class="literal">STARTTLS</code> (que
-            inicia encripción) en el servidor estándar del puerto 25 y
-            otro servidor que sólo acepta conexiones encriptadas en el
-            puerto 465.
+            inicia cifrado) en el servidor estándar del puerto 25 y otro
+            servidor que sólo acepta conexiones cifradas en el puerto
+            465.
           </p><p>
             Finalmente emplee el nuevo archivo de configuración y
             reinicie <code class="literal">sendmail</code>:
@@ -1146,7 +1146,7 @@ Connection closed by foreign host.
     DAEMON_OPTIONS(`Family=inet, Address=0.0.0.0,  Name=MTA')dnl
     DAEMON_OPTIONS(`Family=inet6, Address=::,  Name=MTA6, M=O')dnl
 </pre><p>
-          agregandoles un puerto no estándar:
+          agregándoles un puerto no estándar:
         </p><pre class="programlisting">
     DAEMON_OPTIONS(`Family=inet, Address=0.0.0.0, Port=2000,  Name=MTA')dnl
     DAEMON_OPTIONS(`Family=inet6, Address=::, Port=2000,  Name=MTA6, M=O')dnl
@@ -1165,7 +1165,7 @@ Connection closed by foreign host.
         Si un mismo servidor atiende diversos dominios DNS, puede lograr
         que se acepte correo para cada dominio. Para esto:
       </p><div class="itemizedlist"><ul type="disc"><li><p>
-            Asegurese de tener un registro MX para el dominio que
+            Asegúrese de tener un registro MX para el dominio que
             indique que su servidor es el servidor de correo del
             dominio. i.e en el archivo maestro del dominio (digamos
             <code class="literal">/var/named/master/miong.org</code>) algo
@@ -1200,13 +1200,13 @@ Connection closed by foreign host.
         {#protocolos-revisar-correo}
       </p><p>
         Para extraer correos de un servidor pueden emplearse los
-        protocolos inseguros<sup>[<a name="idp1400643880" href="#ftn.idp1400643880">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
+        protocolos inseguros<sup>[<a name="idp1081740536" href="#ftn.idp1081740536">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
         POP3S e IMAPS En esta sección se describe la configuración
         extra-rápida pero insegura de POP3, y la configuración segura
         pero que requiere configuración más delicada de POP3S e IMAPS
         con las implementaciones de Courier.
       </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="dovecot"></a>5.5.4.1. Implementación Dovecot de IMAPS y POP3S</h5></div></div></div><p>
-          Instale el paquete dovecot-2.2.36p0 y asegurese de dejar
+          Instale el paquete dovecot-2.3.5.1 y asegurese de dejar
           <code class="literal">dovecot</code> en la variable
           <code class="literal">pkg_scripts</code> de
           <code class="literal">/etc/rc.conf.local</code> para que se inicie en
@@ -1237,7 +1237,7 @@ Connection closed by foreign host.
         </p><pre class="programlisting">
     /etc/rc.d/dovecot start
 </pre><p>
-          y pruebelo en los puertos 143 (IAMP sin cifrar), 993 (IMAP
+          y pruébelo en los puertos 143 (IAMP sin cifrar), 993 (IMAP
           sobre SSL), 110 (POP3 sin cifrar) y 995 (POP3 sobre SSL). Por
           defecto dovecot intentará recuperar correos en formato maildir
           de la carpeta <code class="literal">Maildir</code> de cada usuario.
@@ -1608,7 +1608,7 @@ chmod og-r /var/mail/cuenta
         envío como lo espera spamd. Tal comportamiento puede no resultar
         aceptable en algunas organizaciones.
       </p><p>
-        SpamAssassin (paquete p5-Mail-SpamAssassin-3.4.2p0) junto con
+        SpamAssassin (paquete p5-Mail-SpamAssassin-3.4.2p1) junto con
         procmail (paquete procmail-3.22p8) son una solución intermedia
         que permiten recibir todo correo pero intentan clasificar
         automáticamente (y con buena precisión) los que son no
@@ -1821,7 +1821,7 @@ chmod og-r /var/mail/cuenta
 </pre></li><li><p>
               Edite el archivo de configuración de Apache
               <code class="literal">/var/www/conf/php.ini</code> para deshabilitar
-              encripción de sesiones y establecer zona horaria en la
+              cifrado de sesiones y establecer zona horaria en la
               líneas:
             </p><pre class="programlisting">
     suhosin.session.encrypt = Off
@@ -2023,8 +2023,8 @@ chmod og-r /var/mail/cuenta
       (con el usuario <code class="literal">anonymous</code> y una clave
       arbitraria). No para que transfiera datos de un usuario porque
       este servicio transmite claves planas por la red, y así mismo
-      transmite archivos sin encripción alguna. Para transferir
-      información de usuarios emplee un protocolo seguro como
+      transmite archivos sin cifrado alguno. Para transferir información
+      de usuarios emplee un protocolo seguro como
       <code class="literal">scp</code>.
     </p><p>
       OpenBSD incluye un servidor de ftp auditado, para que los usuarios
@@ -2598,7 +2598,7 @@ chmod og-r /var/mail/cuenta
                 Hay información completa sobre SSI en el manual de
                 Apache
                 <a href="http://httpd.apache.org/docs/howto/ssi.html" target="_top">http://httpd.apache.org/docs/howto/ssi.html</a>
-              </p></li></ul></div></div></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp3652091176" href="#idp3652091176">25</a>] </sup>
+              </p></li></ul></div></div></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1026007800" href="#idp1026007800">25</a>] </sup>
           Típicamente un cliente enviará un paquete DHCPDISCOVER a toda
           la red (opcionalmente con sugerencia de la IP que quiere), un
           servidor que reciba tal paquete le responderá con un DHCPOFFER
@@ -2606,10 +2606,10 @@ chmod og-r /var/mail/cuenta
           puede responder con DHCPREQUEST para confirmar los parámetros
           y el servidor responde con un DHCPACK para confirmar
           asignación.
-        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp3871240616" href="#idp3871240616">26</a>] </sup>
+        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1302360568" href="#idp1302360568">26</a>] </sup>
                 De acuerdo al RFC 1123 los nombre MUA y MTA son propios
                 del protocolo X.400.
-              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp3871239976" href="#idp3871239976">27</a>] </sup>
+              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1669770760" href="#idm1669770760">27</a>] </sup>
             De acuerdo al protocolo SMTP, sendmail de amor
             se conectaría por el puerto 25 a sendmail en
             respeto y enviaría los mensajes
@@ -2640,7 +2640,7 @@ chmod og-r /var/mail/cuenta
 </pre><p>
             (para emplear <code class="literal">-f</code> con sendmail debe ser
             usuario autorizado).
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1400643880" href="#idp1400643880">28</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1081740536" href="#idp1081740536">28</a>] </sup>
             Son inseguros porque transmiten claves y el contenido de los
             mensajes planos por la red
           </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="otros_servicios_que_puede_prestar_el_servidor.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">4. Direcciones, enrutamiento, transporte y cortafuegos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 6. Otros servicios que puede prestar el servidor</td></tr></table></div></body></html>

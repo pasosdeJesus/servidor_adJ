@@ -90,7 +90,7 @@
         destino,
       </p><p>
         Hay un destino por defecto (<code class="literal">default</code>) al que
-        se envia todo paquete que no tiene un destino en la tabla de
+        se envía todo paquete que no tiene un destino en la tabla de
         enrutamiento. Este destino por defecto o puerta de enlace se
         configura en el archivo <code class="literal">/etc/mygate</code>. En una
         red local conectada a Internet, el servidor debe emplear como
@@ -166,7 +166,7 @@ doas tcpdump -i re0 -n -ttt
           </span></dt><dd><p>
               Que permite controlar el tráfico de paquetes en el kernel
               y por tanto controlar la funcionalidad de
-              cortafuegos<sup>[<a name="idp2395213608" href="#ftn.idp2395213608">24</a>]</sup>. Se configura de manera permanente en el
+              cortafuegos<sup>[<a name="idp281959672" href="#ftn.idp281959672">24</a>]</sup>. Se configura de manera permanente en el
               archivo <code class="literal">/etc/pf.conf</code> (o el archivo
               especificado en la variable <code class="literal">pf_rules</code> de
               <code class="literal">rc.conf.local</code> o
@@ -351,7 +351,7 @@ doas tcpdump -i fxp0 -n host 8.8.8.8
 </pre><div class="blockquote"><blockquote class="blockquote"><p>
         <span class="strong"><strong>Advertencia</strong></span>
       </p><p>
-        Para emplear ftp-proxy asegurese que entre las reglas de su
+        Para emplear ftp-proxy asegúrese que entre las reglas de su
         cortafuegos no esté:
       </p><pre class="programlisting">
     set skip $int_if
@@ -453,7 +453,7 @@ doas tcpdump -i fxp0 -n host 8.8.8.8
 </pre><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-ejemplopf"></a>4.5.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Guía del usuario de PF <a href="biblio.html" title="B. Bibliografia">PF</a>.
       </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="control-de-ancho-de-banda"></a>4.6. Control de ancho de banda</h3></div></div></div><p>
-      El siguiente ejemplo presenta como puede configurarse un servidor
+      El siguiente ejemplo presenta cómo puede configurarse un servidor
       NAT para controlar ancho de banda de diversos computadores de la
       red interna. La conexión de la red interna es a 100MB, mientras
       que la conexión a Internet es de 300KB. De todos los computadores
@@ -492,6 +492,6 @@ doas tcpdump -i fxp0 -n host 8.8.8.8
         Las siguientes páginas man: pf 4, pfctl 4.
       </p><p>
         Guía del usuario de PF <a href="biblio.html" title="B. Bibliografia">PF</a>.
-      </p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2395213608" href="#idp2395213608">24</a>] </sup>
+      </p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp281959672" href="#idp281959672">24</a>] </sup>
                   Cortafuego del inglés <span xmlns="" class="emphasis"><em>firewall</em></span>
                 </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dispositivos_de_interconexion.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="protocolos_de_soporte_y_de_usuario.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">3. Dispositivos de interconexión </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 5. Protocolos de soporte y de usuario</td></tr></table></div></body></html>
