@@ -30,13 +30,15 @@
     </author>
 
     <legalnotice><para>
-Este documento y sus fuentes se ceden al dominio
-público desde 2004.  Esta es la versión &PRY-VERSION; de este documento, 
-actualizada por última vez en &FECHA-ACT; para que corresponda a 
-la distribución adJ de OpenBSD &VER-OPENBSD;.  
-No se ofrece garantía alguna, por el contrario se aprecia
-que se envíen correcciones y sugerencias al autor.  Este
-escrito se dedica a Dios por su infinita sabiduría.</para>
+		    Este documento y sus fuentes se ceden al dominio
+		    público desde 2004.  Esta es la versión &PRY-VERSION; de este documento, 
+		    actualizada por última vez en &FECHA-ACT; para que corresponda a 
+		    la distribución adJ de OpenBSD &VER-OPENBSD;.  
+		    No se ofrece garantía alguna, por el contrario se aprecia
+		    que se envíen correcciones y sugerencias al autor.  Este
+		    escrito se dedica a Dios por su infinita sabiduría.</para>
+	    <para>
+		    Agradecemos las correcciones de Luis Alejandro Cruz</para>
       <para>
 	La versión publicada más reciente está tanto
 	<ulink url="&URLSITE;">en línea</ulink>  como

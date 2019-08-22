@@ -1,3 +1,6 @@
+Versión 6.5
+:   - Se introducen BGP y OSPF en [xref](#redes_protocolos_e_internet)
+
 Versión 6.4
 
 :   - Actualizada documentacion de PostgreSQL ([xref](#postgresql))

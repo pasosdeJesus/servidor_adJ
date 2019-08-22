@@ -26,6 +26,9 @@ principales usos de una red LAN son:
 -   Conformar una Intranet con servicios como correo, *web*, ftp,
     *news*.
 
+[//]: # "LAN" 
+[//]: # "Este tipo de red, es apropiada para conectar pocos computadores (menos de 100) en un espacio relativamente pequeño."
+
 Un protocolo [^red.1] es una serie de reglas que indican cómo debe ocurrir
 una comunicación entre dos computadores de una red; las reglas de un
 protocolo son seguidas por programas que se ejecutan en los computadores
@@ -136,17 +139,17 @@ presenta algunos protocolos en las diversas capas de una red TCP/IP
 sobre una red física Ethernet o sobre una conexión con modem:
 
     Capa de aplicación:
-         Protocolos de usuario             FTP Telnet ssh   http   SMTP ...
-                                            |     |     |      |    |
-         Protocolos de soporte    DNS       |     |     |      |    |
-                                 |   \      |     |     |      |    |
-    Capa de transporte           UDP   TCP --------------------------
-                                  \  /
-    Capa de Internet (red):      IP -  ICMP
-                                 ___|___
-                                /       \
-    Capa de enlace:           ARP        PPP
-                               |          |
+         Protocolos de usuario                FTP Telnet  ssh   http   SMTP ...
+                                               |     |     |      |    |
+         Protocolos de soporte      DNS  BGP   |     |     |      |    |
+                                   |   \  |    |     |     |      |    |
+    Capa de transporte             UDP   TCP --------------------------
+                                    \  /
+    Capa de Internet (red):        IP -  ICMP
+                                   ___|___
+                                  /       \
+    Capa de enlace:             ARP        PPP         OSPF
+                                 |          |
     Capa física:           Ethernet     Modem
                             |              |
                          Par trenzado    Línea telef.
@@ -216,6 +219,9 @@ conexión autentica el computador que se conecta ante el servidor (bien
 con el protocolo PAP o con CHAP) y durante la operación prepara los
 paquetes enviados por otros protocolos (como IP) para transmitirlos por
 modem.
+
+Cuando al interior de una organización (o sistema autonomo) hay diversas LANs
+que requieren decisiones de enrutamiento puede emplearse OSPF.
 
 ### Capa de internet
 
@@ -358,6 +364,15 @@ SMMP
 
 :   Empleado para monitorear uso de una red.
 
+BGP
+
+:   Determina enrutamiento de paquetes en Internet a partir de información 
+    de Sistemas Autonomos.  Cómo se describe en el RFC 4271, un Sistema 
+    Autonomo (AS) es un conjunto de enrutadores bajo una única administración 
+    técnica que a la vista de otros AS tiene un plan de enrutamiento 
+    interior coherente y que presenta una imagen consistene de los destinos
+    a los que se pueden llegar mediante el mismo.
+
 ## Lecturas recomendadas {#lecturas-redes-protocolos-internet}
 
 -   Puede consultar más sobre el IETF y otras organizaciones que
@@ -368,13 +383,17 @@ SMMP
 
 -   Páginas del manual netintro4, ip4, inet4, ip4
 
+-   https://en.wikipedia.org/wiki/Internet_protocol_suitehttps://en.wikipedia.org/wiki/Internet_protocol_suite
+
+-   BGP y OSPF: https://www.openbsd.org/papers/linuxtag06-network/mgp00003.html
+
 [^red.1]: Para ampliar el significado de los términos técnicos introducidos
     en estas guías (como *protocol*), se sugiere consultar el
     diccionario FOLDOC <http://foldoc.doc.ic.ac.uk/foldoc>
 
 [^red.2]: También suele llamárseles *daemons* pero como puede resultar
     ofensivo para cristian@s, procuramos no emplear ese término, ver
-    <http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service>.
+    <http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Servicio>.
 
 [^red.3]: El programa que sigue este protocolo hace parte de la
     implementación de IPv4 en el kernel.
