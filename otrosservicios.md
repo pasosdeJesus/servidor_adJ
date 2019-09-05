@@ -1066,7 +1066,7 @@ De una clave temporal y borrela con
 
 Cree la solicitud de certificado con:
 
-        openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=CINEP/CN=apbd2.miong.org.co'
+        openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=MIONG/CN=apbd2.miong.org.co'
 
 Copie la solicitud `apbd2.miong.org.co.csr` al servidor 
 apbd1.miong.org.co y dejela en el directorio `/var/postgresql/data`
