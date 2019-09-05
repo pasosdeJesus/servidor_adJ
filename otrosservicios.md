@@ -830,7 +830,7 @@ verificarlo con:
 Para iniciar el servidor LDAP en modo de depuración para ver posibles
 errores:
 
-        doas ldadpd -dv
+        doas ldapd -dv
 
 Tras verificar el funcionamiento, para que en cada arranque se inicie el
 servidor puede agregar a `/etc/rc.conf.local`:
@@ -839,7 +839,7 @@ servidor puede agregar a `/etc/rc.conf.local`:
         pkg_scripts = "ldapd"
 
 E iniciar el servicio con `/etc/rc.d/ldapd start` y detenerlo con
-`/etc/rc.d/ldadp stop`
+`/etc/rc.d/ldapd stop`
 
 Es muy recomendable que agregue el esquema LDAP de Courier, de esta
 forma tomada de {3}:
@@ -1113,7 +1113,7 @@ Configure la aplicación para que en cada arranque o uso establezca:
 
 #### Caso LDAPD
 
-Ubique el ceritifcado y llave en `/etc/ldad/certs/` del servidor 
+Ubique el ceritifcado y llave en `/etc/ldap/certs/` del servidor 
 donde corre ldapd:
 
         doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
