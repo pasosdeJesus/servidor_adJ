@@ -1,4 +1,5 @@
 Versión 6.5
+:   - Reescrita sección sobre correo electrónico [xref](#servicios-correo)
 :   - Se introducen BGP y OSPF en [xref](#redes_protocolos_e_internet)
 
 Versión 6.4

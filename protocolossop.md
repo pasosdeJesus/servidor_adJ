@@ -540,7 +540,7 @@ partición también cifrada. Antes de emplearlos ejecute:
 y a continuación edite el archivo recién copiado para adaptarlo a su
 entorno.
 
-### Protocolo SMTP {#smtp}
+### Protocolo SMTP para enviar y recibir correo {#smtp}
 
 SMTP
 Nombre del protocolo para transmisión de correo electrónico en Internet.
@@ -617,7 +617,7 @@ IMAPS. También es posible configurar un cliente de correo web (webmail)
 para examinar correos desde el web. Otro servicio asociado al correo son
 las listas de correo que facilitan el envío de correo masivo.
 
-### MTA OpenSMTPD {#opensmtpd}
+#### MTA OpenSMTPD {#opensmtpd}
 
 Se trata de un MTA desarrollado principalmente para OpenBSD por
 desarrolladores de OpenBSD. Aunque aún se considera experimental hemos
@@ -659,85 +659,81 @@ Una vez en operación pueden examinarse diversos aspectos (como
 bitácoras, examinar cola de correos, estadísticas) con `smtpctl`.
 
 La configuración se define en el archivo `/etc/mail/smtpd.conf`. La
-configuración más simple que sólo aceptará correo local y lo dejará en
+configuración más simple que sólo aceptará correo local con aliases
+definidos en `/etc/mail/aliases` y lo dejará en
 formato mbox en `/var/mail` o hará relevo es:
 
         listen on lo0
 
-        table aliases db:/etc/mail/aliases.db
+        table aliases file:/etc/mail/aliases
 
-        accept for local alias <aliases> deliver to mbox
-        accept for all relay
+	action "local" mbox alias <aliases>
+	action "relay" relay
+
+	match for local action "local"
+	match for any action "relay"
 
 Para que permita enviar y recibir de otros computadores debe cambiarse
-la interfaz donde escucha y a nombre de quien acepta correos, por
+la interfaz donde escucha y el nombre de quien acepta correos, por
 ejemplo:
 
         listen on all
 
+        table aliases file:/etc/mail/aliases
+
+	action "local" mbox alias <aliases>
+	action "relay" relay
+
+	match from any for domain "&EDOMINIO;" action "local"
+	match for local action "local"
+	match for any action "relay"
+
+Si prefiere recibir en formato maildir (por defecto en `~/Maildir` de 
+cada usuario) y tener opción de procesar usuario a usuario con procmail 
+via el archivo `~/.forward` es mejor cambiar 
+`action "local" mbox alias <aliases>` por:
+
+	action "local" maildir alias <aliases>
+
+La tabla de alias que usa esta configuración es el archivo plano
+`/etc/mail/aliases`. Si prefiere usar base de datos DB en lugar de
+archivo plano genere la base a partir del archivo plano con:
+
+        doas newaliases
+
+Y en el archivo de configuración cambie 
+`table aliases file:/etc/mail/aliases` por:
+
         table aliases db:/etc/mail/aliases.db
-        accept from any for domain "&EDOMINIO;" alias <aliases> deliver to mbox
-        accept for all relay
-
-Si prefiere que los correos sean recibidos por procmail puede cambiar
-`deliver to mbox` por `deliver to mda "procmail -f -"`. Sin embargo para
-recibir en formato maildir (por defecto en `~/Maildir` de cada usuario)
-y tener opción de procesar usuario a usuario con procmail via el archivo
-`~/.forward` es mejor:
-
-        accept from any for domain "&EDOMINIO;" alias <aliases> deliver to maildir
-
-Al igual que con sendmail la tabla de alias que usa esta configuración
-es `/etc/mail/aliases.db`, la cual se generá después de hacer cambios a
-`/etc/mail/aliases` con:
-
-        cd /etc/mail
-        doas make
 
 Para asegurar el relevo de correos provenientes de &EDOMINIO; o de la IP
 192.168.1.2, basta agregar al mismo archivo de configuración:
 
-        accept from &EDOMINIO; for any relay
-        accept from 192.168.1.2 for any relay
+        match for &EDOMINIO; action "relay"
+        match for 192.168.1.2 action "relay"
 
-Para agregar autenticación y TLS , no es necesario cyrus-sasl basta
-generar certificado SSL (ver [xref](#smtp-auth-tls)) y dejar
-`&EDOMINIO;.crt` en `/etc/ssl/` y `&EDOMINIO;.key` en `/etc/ssl/private` y
+Para agregar autenticación y TLS basta generar certificado SSL 
+y dejar `&EDOMINIO;.crt` en `/etc/ssl/` 
+y `&EDOMINIO;.key` en `/etc/ssl/private` para
 después cambiar en el archivo de configuración la línea con `listen`
 por:
 
-        pki &EDOMINIO; certificate "/etc/ssl/&EDOMINIO;.crt" \
-            key /etc/ssl/private/&EDOMINIO;.key"
-        listen on all port 25 tls pki &EDOMINIO; auth-optional
+	pki &EDOMINIO; cert "/etc/ssl/&EDOMINIO;.crt"
+	pki &EDOMINIO; key "/etc/ssl/private/&EDOMINIO;.key"
 
-Puede ser más estricto con `tls-require` en lugar de `tls` y con `auth`
-en lugar de `auth-optional`.
+	listen on all port 465 smtps pki &EDOMINIO; auth-optional
+	listen on all port 587 tls pki &EDOMINIO; auth
+	listen on all port 25 tls pki &EDOMINIO; auth-optional
 
-Para escuchar también en el puerto 465 (u otro puerto) cifrado por
-defecto puede agregar:
+Así quedará:
 
-        listen on all port 465 smtps pki &EDOMINIO; auth-optional
+* Escuchando conexiones cifradas (SMTPS) por el puerto 465
+* Escuchando conexiones planas con autenticación opcional y la 
+  posibilidad de cambiar a conexión cifradas (con STARTTLS) por puerto 25 y
+* Escuchando conexiones planas que requieren paso a cifradas (con STARTTLS)
+  y que exigen autenticación por el puerto 587.
 
-y TLS estricto en el puerto 587:
-
-        listen on all port 587 tls pki &EDOMINIO; auth
-
-Para atender diversos dominios DNS, además de configurar el registro MX
-de cada dominio (ver [xref](#dominios-virtuales-correo)), agregar una
-tabla de alias y una línea `accept` por cada dominio, por ejemplo:
-
-        table aliasesejemplo db:/etc/mail/aliasesejemplo.db
-        ...
-        accept from any for domain "ejemplo.org" alias <aliasesejemplo> deliver to maildir
-
-La tabla de alias debe generarse a partir de un archivo plano
-`/etc/mail/aliasesjemplo` con:
-
-        cd /etc/mail
-        makemap hash aliasesejemplo < aliasesejemplo
-        chmod a+r aliasesejemplo
-
-#### Depuración de OpenSMTP {#smtpd-depura}
+##### Depuración de OpenSMTP {#smtpd-depura}
 
 OpenSMTP envía mensajes de error a la bitácora `/var/log/maillog`. Puede
 ejecutarse en modo de depuración para determinar problemas con:
@@ -746,250 +742,58 @@ ejecutarse en modo de depuración para determinar problemas con:
 
 Esto no lo activará como servicio y presentará errores en pantalla.
 
-#### Referencias {#referencias-opensmtpd}
+#### Pruebas
 
--   `man smtpd`, `man smtpd.conf`, `man smtpctl`
+Desde el mismo computador inicie un diálogo con:
 
--   <http://www.opensmtpd.org/>
+	$ telnet localhost 25
+
+O desde otro computador con:
+
+        $ telnet correo.&EDOMINIO; 25
+	Trying 1.2.3.4
+	Connected to correo.&EDOMINIO;
+	Escape character is '^]'
+        220 correo.&EDOMINIO; ESMTP OpenSMTPD
+
+Inicie dialogo con:
+
+        EHLO [200.21.23.4]
+
+remplazando 200.21.23.4 por la IP desde la que inicia la conexión.
+
+Verá algo como:
+
+	250-correo.&EDOMINIO; Hello [200.21.23.4] [200.21.23.4], pleased to meet you
+	250-8BITMIME
+	250-ENHANCEDSTATUSCODES
+	250-DSN
+	250-STARTTLS
+	250 HELP
+
+Note que debe aparecer la línea `STARTTLS`.
+
+Para probar la autenticación es mejor emplear el puerto 465 y openssl:
+
+        openssl s_client -connect correo.&EDOMINIO;:465
+	...
+   	    Start Time: 1578243911
+	    Timeout   : 7200 (sec)
+	    Verify return code: 0 (ok)
+	---
+	220 correo.&EDOMINIO; ESMTP OpenSMTPD
+        EHLO [200.21.23.4]
+	250-kadosh.pasosdeJesus.org Hello [200.21.23.4] [200.21.23.4], pleased to meet you
+	250-8BITMIME
+	250-ENHANCEDSTATUSCODES
+	250-SIZE 134217728
+	250-DSN
+	250-AUTH PLAIN LOGIN
+	250 HELP
 
 
-
-### MTA `sendmail` {#sendmail}
-
-Para usarlo con una configuración por defecto que permite enviar y
-recibir correos a otras máquinas, agregue la siguiente línea a
-`/etc/rc.conf.local`:
-
-        sendmail_flags="-L sm-mta -C/etc/mail/sendmail.cf -bd -q30m"
-
-Con esta configuración sendmail funcionará como MTA y esperará
-conexiones SMTP en el puerto 25 y en el puerto 587 (el segundo se espera
-que sea empleado por usuarios locales y que esté bloqueado al exterior,
-mientras que el primero por usuarios que deseen reenviar correo desde
-otros computadores).
-
-La bitácora queda en `/var/log/mailman`, registra cada envío y recepción
-de correo. Aunque puede aumentarse el nivel de detalle en la depuración
-cambiando las opciones de arranque por:
-
-        sendmail_flags="-L sm-mta -C/etc/mail/sendmail.cf -bd -q30m -D /var/log/maildeb -X/var/log/maildeb2 -O LogLevel=10"
-
-que enviará el máximo de detalle de cada transmisión al archivo
-`/var/log/maildeb2`
-
-A continuación se presenta una prueba a este servicio:
-
-        $ telnet localhost 25
-        Trying ::1...
-        Connected to localhost.
-        Escape character is '^]'.
-        220 amor.&EDOMINIO; ESMTP Sendmail 8.13.8/8.13.3; Mon, 16 Oct 2006 12:42:41 -0500 (COT)
-        HELO localhost
-        250 amor.&EDOMINIO; Hello &EUSUARIO;@localhost [IPv6:::1], pleased to meet you
-        MAIL FROM: <&EUSUARIO;@localhost>
-        250 2.1.0 <&EUSUARIO;@localhost>... Sender ok
-        RCPT TO: <&EUSUARIO;@localhost>
-        250 2.1.5 <&EUSUARIO;@localhost>... Recipient ok
-        DATA
-        354 Enter mail, end with "." on a line by itself
-        1 2 3
-        probando
-        .
-        250 2.0.0 k9GHgf1q019958 Message accepted for delivery
-        quit
-        221 2.0.0 amor.&EDOMINIO; closing connection
-    Connection closed by foreign host.
-
-Para facilitar reiniciar el servicio en caso de inconvenientes se
-sugiere agregar el servicio `sendmail` en la variable `pkg_scripts` de
-`/etc/rc.conf.local` Cuando necesite asegurar que el servicio opera
-basta que ejecute:
-
-        doas sh /etc/rc.local
-
-#### Relevo de Correo
-
-Como se explica en el FAQ de OpenBSD, si planea emplear su servidor para
-hacer relevo de correo (relay), basta que agregue los dominios o IPs de
-las cuales recibir correo para reenviar en el archivo
-`/etc/mail/relay-domains` (o el que la siguiente instrucción indique:
-`grep relay-domains /etc/mail/sendmail.cf` ) Un ejemplo de tal archivo
-es:
-
-        &EDOMINIO;  # Acepta de todos los computadores del dominio
-        192.168.1  # Acepta de todos las IPs de la forma 192.168.1.x
-
-#### SMTP-AUTH y TLS {#smtp-auth-tls}
-
-El protocolo estándar para enviar correo a un servidor es SMTP, que no
-ofrece posibilidades de autenticación ni cifrado. Una extensión a
-este protocolo es SMTP-AUTH (descrita en el RFCs 2554), la cual se basa
-en SASL (Simple Authentication and Security Layer, RFC 2222) y que
-permite autenticar antes de aceptar un correo por enviar.
-
-LOGIN y PLAIN son dos de los diversos métodos que SMTP-AUTH puede
-emplear para recibir información de autenticación, como estos métodos
-transmiten identificaciones y claves en forma prácticamente plana, es
-necesario emplear bien una conexión sobre SSL o bien TLS que es otra
-extensión a SMTP.
-
-Aunque `sendmail` soporta tanto TLS como SMTP-AUTH, la configuración por
-defecto de OpenBSD &VER-OPENBSD; no los incluye. En el caso de TLS lo
-incluido en el sistema base es suficiente y el procedimiento de
-configuración se documenta en `man starttls`.En cuanto a SMTP-AUTH se
-requiere una implementación de SASL, pero no hay ninguna incluida en el
-sistema base por lo que es necesario emplear el paquete `cyrus-sasl`.
-
-##### SASL
-
-Para contar con el servicio SASL en su servidor (que puede ser usado por
-diversos programas entre los que está `sendmail`), instale el paquete
-`cyrus-sasl` y cree el archivo `/usr/local/lib/sasl2/Sendmail.conf` para
-que contenga:
-
-        pwcheck_method: saslauthd
-
-con lo que indica que desde `sendmail`, Cyrus-SASL debe emplear el
-servidor `saslauthd`. Para realizar la autenticación, Cyrus-SASL puede
-configurarse con diversas fuentes de información (e.g LDAP, bases de
-datos), puede iniciarlo indicando que desea emplear las funciones
-estándar de autenticación de OpenBSD con:
-
-        doas mkdir /var/sasl2
-        doas /usr/local/sbin/saslauthd -a getpwent
-
-Para que este servicio se inicie en cada arranque agregue `saslauthd` a
-la variable `pkg_scripts` de `/etc/rc.local` y además agregue:.
-
-        saslauthd_flags="-a getpwent"
-
-Si lo requiere puede iniciar este servicio en modo de depuración (en
-primer plano y enviando a salida estándar bastante información) con:
-
-        doas /usr/local/sbin/saslauthd -a getpwent -d
-
-Una vez este funcionado este servicio (al examinarlo con `ps` se ve que
-inicia varios procesos) puede probar que esté autenticado usuarios con
-
-        doas testsaslauthd -u usuario -p clave
-
-##### ESMTP
-
-Al agregar a SMTP protocolos como TLS y AUTH-SMTP el nuevo protocolo
-toma el nombre ESMTP. Para extenderlo en OpenBSD debe recompilar
-`sendmail` y debe emplear su propio archivo de configuración.
-
-Dado que TLS requiere un certificado SSL, si tiene uno ya firmado por
-una autoridad certificadora déjelo en `/etc/mail/certs` o genere uno
-autofirmado (como se explica en `man starttls`):
-
-        doas mkdir /etc/mail/certs
-    # openssl dsaparam 1024 -out dsa1024.pem
-    # openssl req -x509 -nodes -days 3650 -newkey dsa:dsa1024.pem \
-    -out /etc/mail/certs/mycert.pem -keyout /etc/mail/certs/mykey.pem
-    # ln -s /etc/mail/certs/mycert.pem /etc/mail/certs/CAcert.pem
-    # rm dsa1024.pem
-    # chmod -R go-rwx /etc/mail/certs
-
-Para recompilar `sendmail`, si aún no lo ha hecho, debe descargar y
-actualizar a las fuentes más recientes, por ejemplo como usuario root:
-
-        cd /root/tmp
-        ftp $PKG_PATH/../../src.tar.gz
-        cd /usr
-        doas mkdir src
-        cd src
-        tar xvfz /root/tmp/src.tar.gz
-        for i in `find . -name CVS`; do echo $i; 
-            echo "anoncvs@anoncvs1.ca.openbsd.org:/cvs" > $i/Root;
-        done
-        cvs -z3 update -Pd -rOPENBSD_&VER-OPENBSD;-U
-
-Después indique que desea recompilar `sendmail` con soporte para
-autenticación creando o editando el archivo `/etc/mk.conf` para que
-incluya:
-
-        WANT_SMTPAUTH = yes
-
-Recompile e instale `sendmail` con:
-
-        cd /usr/src/gnu/usr.sbin/sendmail
-        doas make clean
-        doas make
-        doas make install
-
-Finalmente cree un nuevo archivo de configuración a partir del estándar:
-
-        cd /usr/src/gnu/usr.sbin/sendmail/cf/cf
-        doas cp openbsd-proto.mc openbsd-proto-local.mc
-
-En el nuevo `openbsd-proto-local.mc` después de la línea
-`OSTYPE(openbsd)dnl` agregue:
-
-        define(`CERT_DIR',        `MAIL_SETTINGS_DIR`'certs')
-        define(`confCACERT_PATH', `CERT_DIR')
-        define(`confCACERT',      `CERT_DIR/CAcert.pem')
-        define(`confSERVER_CERT', `CERT_DIR/mycert.pem')
-        define(`confSERVER_KEY',  `CERT_DIR/mykey.pem')
-        define(`confCLIENT_CERT', `CERT_DIR/mycert.pem')
-        define(`confCLIENT_KEY',  `CERT_DIR/mykey.pem')
-
-y después de la línea `` FEATURE(`no_default_msa')dnl ``:
-
-        define(`confAUTH_MECHANISMS',`PLAIN LOGIN CRAM-MD5 DIGEST-MD5')dnl
-        TRUST_AUTH_MECH(`PLAIN LOGIN CRAM-MD5 DIGEST-MD5')dnl
-        define(`confAUTH_OPTIONS',`p,y')dnl
-        define(`confPRIVACY_FLAGS',`authwarnings,goaway')
-
-Para realizar pruebas con los métodos PLAIN y LOGIN sin cifrar puede
-comentar la línea `confAUTH_OPTIONS` poniendo antes `dnl`).
-
-Verifique también que estén las siguientes líneas:
-
-        DAEMON_OPTIONS(`Family=inet, Address=0.0.0.0, Name=MTA')dnl
-        DAEMON_OPTIONS(`Family=inet, Address=0.0.0.0, Port=465, Name=SSLMTA, M=s')dnl 
-        DAEMON_OPTIONS(`Family=inet6, Address=::, Name=MTA6, M=s')dnl
-        DAEMON_OPTIONS(`Family=inet6, Address=::, Port=465, Name=MTA6, M=s')dnl
-
-Para habilitar la orden `STARTTLS` (que inicia cifrado) en el
-servidor estándar del puerto 25 y otro servidor que sólo acepta
-conexiones cifradas en el puerto 465.
-
-Finalmente emplee el nuevo archivo de configuración y reinicie
-`sendmail`:
-
-        doas make openbsd-proto-local.cf
-        doas install -c -o root -g wheel -m 644 openbsd-proto-local.cf /etc/mail/sendmail.cf
-        doas pkill sendmail
-        . /etc/rc.conf
-        doas sendmail $sendmail_flags
-
-Dependiendo de su configuración para compilar fuentes la segunda línea
-podría ser:
-
-        doas install -c -o root -g wheel -m 644 obj/openbsd-proto-local.cf /etc/mail/sendmail.cf
-
-##### Pruebas
-
-Inicie un diálogo con `sendmail` con:
-
-        doas sendmail -O LogLevel=20 -bs -Am
-        220 correo.&EDOMINIO; ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
-        EHLO LOCALHOST
-        250-correo.&EDOMINIO; Hello root@localhost, pleased to meet you
-        250-ENHANCEDSTATUSCODES
-        250-PIPELINING
-        250-8BITMIME
-        250-SIZE
-        250-DSN
-        250-ETRN
-        250-AUTH PLAIN LOGIN CRAM-MD5 DIGEST-MD5
-        250-STARTTLS
-        250-DELIVERBY
-        250 HELP
-
-Note que deben aparecer las líneas `STARTTLS` y `AUTH`. Para
-autenticarse debe dar una identificación y una clave válida en el
+Note que ya está disponible autenticación `AUTH` con métodos PLAIN y 
+LOGIN. Para autenticarse debe dar una identificación y una clave válida en el
 sistema pero codificadas en base 64. Puede emplear la interfaz CGI
 disponible en <http://www.motobit.com/util/base64-decoder-encoder.asp>
 o eventualmente el programa disponible en
@@ -1005,14 +809,14 @@ usar como root así:
         MiClave
         TWlDbGF2ZQ==
 
-Retomando la sesion con `sendmail` y usando estos datos:
+Retomando la sesion y usando estos datos:
 
         AUTH LOGIN
         334 VXNlcm5hbWU6
         TWlVc3Vhcmlv
         334 UGFzc3dvcmQ6
         TWlDbGF2ZQ==
-        235 2.0.0 OK Authenticated
+	235 2.0.0: Authentication succeeded
 
 puede intentar el envío de un correo por ejemplo con:
 
@@ -1030,15 +834,7 @@ puede intentar el envío de un correo por ejemplo con:
         250 OK id=1GZXFP-000540-7J                                                      
         QUIT
 
-De requerirlo puede rastrear problemas en `/var/log/maillog` y/o
-intentar el protocolo descrito de forma remota (o también local) con:
-
-        telnet correo.&EDOMINIO; 25
-        220 correo.&EDOMINIO; ESMTP Sendmail 8.13.8/8.13.4; Wed, 13 Jul 2005 15:16:26 -0500 (COT)
-        EHLO [200.21.23.4]
-
-y remplazando 200.21.23.4 por la IP desde la que inicia la conexión.
-
+De requerirlo puede rastrear problemas en `/var/log/maillog`.
 Si desea probar el método PLAIN, con ed64 emplee:
 
         MiUsuario\0MiUsuario@pasosdeJesus.org\0MiClave
@@ -1051,7 +847,14 @@ y al dialogar en SMTP:
 También puede probar el servicio del puerto 465 con la misma secuencia,
 pero iniciando con:
 
-        openssl s_client -connect localhost:465
+
+
+#### Referencias {#referencias-opensmtpd}
+
+-   `man smtpd`, `man smtpd.conf`, `man smtpctl`
+
+-   <http://www.opensmtpd.org/>
+
 
 ##### Configuración del cliente de correo (MUA) {#conf-mua}
 
@@ -1077,34 +880,6 @@ el dominio (e.g &EUSUARIO;@&EDOMINIO;).
 
 -   <http://www.bitstream.net/support/email/thunderbird/auth.html>
 
-#### Cambiar puerto SMTP
-
-Si desea cambiar el puerto en el que sendmail espera conexiones SMTP,
-emplee las fuentes del sistema:
-
-        cd /usr/share/sendmail/cf
-        doas vi openbsd-proto.mc
-
-Busque y modifique la línea:
-
-        DAEMON_OPTIONS(`Family=inet, Address=0.0.0.0,  Name=MTA')dnl
-        DAEMON_OPTIONS(`Family=inet6, Address=::,  Name=MTA6, M=O')dnl
-
-agregándoles un puerto no estándar:
-
-        DAEMON_OPTIONS(`Family=inet, Address=0.0.0.0, Port=2000,  Name=MTA')dnl
-        DAEMON_OPTIONS(`Family=inet6, Address=::, Port=2000,  Name=MTA6, M=O')dnl
-
-Después genere el archivo de configuración `/etc/mail/sendmail.cf` con:
-
-        doas make
-        doas make distribution
-
-finalmente reinicie `sendmail` o envíele una señal para que lea
-nuevamente archivos de configuración:
-
-        doas pkill -HUP sendmail
-
 ### Dominios virtuales {#dominios-virtuales-correo}
 
 Si un mismo servidor atiende diversos dominios DNS, puede lograr que se
@@ -1120,23 +895,28 @@ acepte correo para cada dominio. Para esto:
 
     ¡No omita el punto que va a continuación del nombre del servidor MX!
 
--   Agregue el dominio (e.g &EDOMINIO;) a los archivos
-    `/etc/local-host-names` y `/etc/mail/relay-domains`
+-   En el archivo `/etc/mail/smtpd.conf` agregue una tabla de alias, una 
+    línea `action` y una línea `match` por cada dominio, por ejemplo:
 
--   Reinicie `sendmail` con:
+        table aliasesejemplo db:/etc/mail/aliasesejemplo.db
+        ...
+	action "ejemplo" maildir alias &lt;aliasesejemplo>
+	...
+	match from any for domain "ejemplo.org" action "ejemplo"
 
-            pkill -HUP sendmail
+-  La tabla de alias debe generarse a partir de un archivo plano
+   `/etc/mail/aliasesjemplo` con:
 
-Con esta configuración todo correo a una dirección de la forma
-`&EUSUARIO;@&EDOMINIO;` será enviado a la cola de correos del usuario local
-&EUSUARIO;. Si lo requiere es posible agregar direcciones que se envíen a
-otro usuario local, agregando entradas al archivo
-`/etc/mail/virtusertable`, por ejemplo:
+        cd /etc/mail
+        makemap hash aliasesejemplo < aliasesejemplo
+        chmod a+r aliasesejemplo
 
-        pablofelipe@&EDOMINIO;  &EUSUARIO;
 
-reenviará todo correo dirigido a `pablofelipe@&EDOMINIO;` al usuario local
-``.
+-   Reinicie `smtpd` por ejemplo con:
+
+            doas rcctl -d restart smtpd
+
+
 ### Protocolos para revisar correo {#protocolos-revisar-correo}
 
 Para extraer correos de un servidor pueden emplearse los protocolos

@@ -653,7 +653,7 @@ cambiarla entrando a la cuenta de administrador:
 
             # mysql
             mysql> USE mysql
-            mysql> UPDATE USER SET PASSWORD=password('miclave') WHERE user='root';
+            mysql> UPDATE user SET PASSWORD=password('miclave') WHERE user='root';
             mysql> FLUSH PRIVILEGES;
             mysql> EXIT
 

@@ -201,7 +201,7 @@ otro computador conectado a la LAN y su correspondiente dirección ARP,
 almacena la información en una tabla (se borra automáticamente después
 de algunos minutos o manualmente por ejemplo con
 `doas arp -d 192.168.2.2`).   Dicha tabla puede consultarse con 
-```sh
+```
 	arp -a
 ```
 
