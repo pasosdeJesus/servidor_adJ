@@ -1,0 +1,786 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="NEXT"
+TITLE="Introducción"
+HREF="c15.htm"></HEAD
+><BODY
+CLASS="book"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="BOOK"
+><A
+NAME="AEN1"
+></A
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="title"
+><A
+NAME="AEN3"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</A
+></H1
+><H3
+CLASS="author"
+><A
+NAME="AEN5"
+></A
+>Vladimir Támara Patiño
+		(vtamara@pasosdeJesus.org)</H3
+><DIV
+CLASS="legalnotice"
+><P
+></P
+><A
+NAME="AEN8"
+></A
+><P
+>&#13;Este documento y sus fuentes se ceden al dominio
+público desde 2004.  Esta es la versión 5.9 de este documento, 
+actualizada por última vez en 14/09/2016 para que corresponda a 
+la distribución adJ de OpenBSD 5.9.  
+No se ofrece garantía alguna, por el contrario se aprecia
+que se envíen correcciones y sugerencias al autor.  Este
+escrito se dedica a Dios por su infinita sabiduría.</P
+><P
+>&#13;	La versión publicada más reciente está tanto
+	<A
+HREF="http://pasosdejesus.github.io/servidor_adJ/"
+TARGET="_top"
+>en línea</A
+>  como
+	<A
+HREF="servidor_adJ-5.9_html.tar.gz"
+TARGET="_top"
+>en archivo comprimido</A
+> 
+	y como <A
+HREF="http://adJ.pasosdeJesus.org/pub/AprendiendoDeJesus/5.9/paquetes/servidor_adJ-5.9.tar.gz"
+TARGET="_top"
+>paquete para adJ/OpenBSD</A
+>.
+	
+	Sus fuentes en DocBook están disponibles en 
+	<A
+HREF="https://github.com/pasosdeJesus/servidor_adJ/"
+TARGET="_top"
+>https://github.com/pasosdeJesus/servidor_adJ/</A
+>.
+      </P
+><P
+></P
+></DIV
+><HR></DIV
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Tabla de contenidos</B
+></DT
+><DT
+>1. <A
+HREF="c15.htm"
+>Introducción</A
+></DT
+><DT
+>2. <A
+HREF="c24.htm"
+>Redes, protocolos e Internet</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c24.htm#Internet"
+>Internet</A
+></DT
+><DT
+><A
+HREF="x138.htm"
+>Capas de una red <ACRONYM
+CLASS="acronym"
+>TCP/IP</ACRONYM
+> sobre
+    algunos medios físicos</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x138.htm#AEN141"
+>Capa física</A
+></DT
+><DT
+><A
+HREF="x138.htm#AEN156"
+>Capa de enlace</A
+></DT
+><DT
+><A
+HREF="x138.htm#AEN196"
+>Capa de internet</A
+></DT
+><DT
+><A
+HREF="x138.htm#AEN236"
+>Capa de transporte</A
+></DT
+><DT
+><A
+HREF="x138.htm#AEN274"
+>Capa de aplicación</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x335.htm"
+>Lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+>3. <A
+HREF="c362.htm"
+>Dispositivos de interconexión</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c362.htm#modem-nulo"
+>Conexión con un módem nulo</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c362.htm#modem-nulo-hardware"
+>Módem Nulo</A
+></DT
+><DT
+><A
+HREF="c362.htm#servidor"
+>Servidor</A
+></DT
+><DT
+><A
+HREF="c362.htm#Terminal"
+>Terminal</A
+></DT
+><DT
+><A
+HREF="c362.htm#ppp-sobre-modem-nulo"
+>PPP sobre Módem Nulo</A
+></DT
+><DT
+><A
+HREF="c362.htm#referencias-modem-nulo"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x494.htm"
+>Conexión a Internet con un módem o módem ISDN</A
+></DT
+><DT
+><A
+HREF="x511.htm"
+>Conexión a Internet ADSL con pppoe</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x511.htm#referencias-pppoe"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x539.htm"
+>Uso y configuración en una red LAN Ethernet</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x539.htm#tarjetas-ethernet"
+>Tarjetas Ethernet</A
+></DT
+><DT
+><A
+HREF="x539.htm#configuracion-interfaz"
+>Configuración de una interfaz de red</A
+></DT
+><DT
+><A
+HREF="x539.htm#protocolo-arp"
+>Protocolo ARP</A
+></DT
+><DT
+><A
+HREF="x539.htm#cableado"
+>Cableado de una red local</A
+></DT
+><DT
+><A
+HREF="x539.htm#referencias-lan"
+>Referencias</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x776.htm"
+>Red Local Inalámbrica: uso y configuración</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x776.htm#cliente-inalambrico"
+>OpenBSD como cliente en una red inalámbrica</A
+></DT
+><DT
+><A
+HREF="x776.htm#dispositivo-AP"
+>Dispositivo dedicado que obra como Punto de Acceso Inalámbrico</A
+></DT
+><DT
+><A
+HREF="x776.htm#PAI"
+>OpenBSD como Punto de Acceso Inalámbrico</A
+></DT
+><DT
+><A
+HREF="x776.htm#referencias-wlan"
+>Referencias</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>4. <A
+HREF="c855.htm"
+>Direcciones, enrutamiento, transporte y cortafuegos</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c855.htm#ipv4"
+>Introducción a TCP/IPv4</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c855.htm#tabla-enrutamiento"
+>Tabla de Enrutamiento</A
+></DT
+><DT
+><A
+HREF="c855.htm#configuracion-OpenBSD"
+>Otros aspectos de configuración de redes en OpenBSD</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x991.htm"
+>NAT (Network Address Translation)</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x991.htm#referencias-nat"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x1020.htm"
+>Cortafuegos: filtrado y túneles</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x1020.htm#referencias-cortafuegos"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x1043.htm"
+>ftp-proxy: para usar ftp desde la red interna</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x1043.htm#referencias-ftpproxy"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x1074.htm"
+>Ejemplo del uso de PF en una DMZ</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x1074.htm#referencias-ejemplopf"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x1084.htm"
+>Control de ancho de banda</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x1084.htm#referencias-control-ancho-banda"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>5. <A
+HREF="c1100.htm"
+>Protocolos de soporte y de usuario</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1100.htm#servidor-dns"
+>Servicio DNS</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c1100.htm#resolucion-de-nombres"
+>Resolución de nombres</A
+></DT
+><DT
+><A
+HREF="c1100.htm#unbound"
+>Servidor recursivo <TT
+CLASS="literal"
+>unbound</TT
+></A
+></DT
+><DT
+><A
+HREF="c1100.htm#nsd"
+>Servidor autoritario con NSD</A
+></DT
+><DT
+><A
+HREF="c1100.htm#named"
+>named</A
+></DT
+><DT
+><A
+HREF="c1100.htm#referencias-dns"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x1297.htm"
+>Servidor <B
+CLASS="command"
+>ssh</B
+></A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x1297.htm#referencias-sshd"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x1322.htm"
+>Protocolo <B
+CLASS="command"
+>DHCP</B
+></A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x1322.htm#cliente-DHCP"
+>Configuración de un cliente DHCP</A
+></DT
+><DT
+><A
+HREF="x1322.htm#servidor-DHCP"
+>Configuración de un servidor DHCP</A
+></DT
+><DT
+><A
+HREF="x1322.htm#referencias-dhcpd"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x1366.htm"
+>Servidor <B
+CLASS="command"
+>ntp</B
+></A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x1366.htm#referencias-ntp"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x1381.htm"
+>Servidor de correo electrónico</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x1381.htm#smtp"
+>Protocolo SMTP</A
+></DT
+><DT
+><A
+HREF="x1381.htm#opensmtpd"
+>MTA <TT
+CLASS="literal"
+>OpenSMTPD</TT
+></A
+></DT
+><DT
+><A
+HREF="x1381.htm#sendmail"
+>MTA <TT
+CLASS="literal"
+>sendmail</TT
+></A
+></DT
+><DT
+><A
+HREF="x1381.htm#protocolos-revisar-correo"
+>Protocolos para revisar correo</A
+></DT
+><DT
+><A
+HREF="x1381.htm#spam"
+>Combatiendo correo no solicitado con SpamAssassin</A
+></DT
+><DT
+><A
+HREF="x1381.htm#correo-web"
+>Correo desde el web (webmail)</A
+></DT
+><DT
+><A
+HREF="x1381.htm#listas-correo"
+>Listas de correo</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x2105.htm"
+>Servidor <TT
+CLASS="literal"
+>ftp</TT
+></A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x2105.htm#ftpdmz"
+>Servicio FTP en una DMZ</A
+></DT
+><DT
+><A
+HREF="x2105.htm#referencias-ftp"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x2153.htm"
+>Servidor Web</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x2153.htm#openbsd-httpd"
+>OpenBSD httpd</A
+></DT
+><DT
+><A
+HREF="x2153.htm#letsencrypt"
+>Certificados SSL gratuitos con Let's Encrypt</A
+></DT
+><DT
+><A
+HREF="x2153.htm#nginx"
+>Nginx</A
+></DT
+><DT
+><A
+HREF="x2153.htm#apache"
+>Apache</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>6. <A
+HREF="c2412.htm"
+>Otros servicios que puede prestar el servidor</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c2412.htm#cuotas"
+>Cuotas</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="c2412.htm#referencias-quota"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x2458.htm"
+>Motor de bases de datos PostgreSQL</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x2458.htm#primera-instalacion"
+>Primera instalación del servidor</A
+></DT
+><DT
+><A
+HREF="x2458.htm#autenticacion"
+>Habilitando autenticación</A
+></DT
+><DT
+><A
+HREF="x2458.htm#creacion-base"
+>Creación de una base de datos</A
+></DT
+><DT
+><A
+HREF="x2458.htm#uso-base"
+>Uso de una base de datos</A
+></DT
+><DT
+><A
+HREF="x2458.htm#postgresql-cotejacion"
+>Cotejación en PostgreSQL</A
+></DT
+><DT
+><A
+HREF="x2458.htm#respaldo-postgresql"
+>Copias de respaldo</A
+></DT
+><DT
+><A
+HREF="x2458.htm#referencias-postgresql"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x2654.htm"
+>MariaDB</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x2654.htm#uso-mariadb"
+>Uso básico</A
+></DT
+><DT
+><A
+HREF="x2654.htm#clave-mysql"
+>Cambio de la clave de administrador</A
+></DT
+><DT
+><A
+HREF="x2654.htm#recuperacion-backups"
+>Recuperación y backups</A
+></DT
+><DT
+><A
+HREF="x2654.htm#chroot-mysql"
+>MariaDB y servidor web con chroot</A
+></DT
+><DT
+><A
+HREF="x2654.htm#lecutras-mysql"
+>Lecturas recomendadas</A
+></DT
+></DL
+></DD
+><DT
+><A
+HREF="x2754.htm"
+>Servidor ldapd</A
+></DT
+><DD
+><DL
+><DT
+><A
+HREF="x2754.htm#instalacion-ldapd"
+>Instalación de ldapd</A
+></DT
+><DT
+><A
+HREF="x2754.htm#pruebas-openldap"
+>Pruebas Iniciales con openldap-client</A
+></DT
+><DT
+><A
+HREF="x2754.htm#datos-iniciales-ldapd"
+>Adición de datos iniciales</A
+></DT
+><DT
+><A
+HREF="x2754.htm#phpldapadmin"
+>Instalación y configuración de <TT
+CLASS="literal"
+>phpldapadmin</TT
+></A
+></DT
+><DT
+><A
+HREF="x2754.htm#referencias-ldapd"
+>Referencias y lecturas recomendadas</A
+></DT
+></DL
+></DD
+></DL
+></DD
+><DT
+>A. <A
+HREF="a2859.htm"
+>Novedades</A
+></DT
+><DT
+><A
+HREF="b3073.htm"
+>Bibliografía</A
+></DT
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="c15.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Introducción</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

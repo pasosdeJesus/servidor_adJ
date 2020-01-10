@@ -1,0 +1,185 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>3. MariaDB</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="otros-servicios-de-un-servidor.html" title="Capítulo 6. Otros servicios que puede prestar el servidor"><link rel="prev" href="postgresql.html" title="2. Motor de bases de datos PostgreSQL"><link rel="next" href="servidor-ldapd.html" title="4. Servidor ldapd"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3. MariaDB</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="postgresql.html">Anterior</a> </td><th width="60%" align="center">Capítulo 6. Otros servicios que puede prestar el servidor</th><td width="20%" align="right"> <a accesskey="n" href="servidor-ldapd.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mariadb"></a>3. MariaDB</h2></div></div></div><p>A partir de OpenBSD/adJ 5.7 MariaDB remplaza a MySQL.  Según 
+		<a href="https://es.wikipedia.org/wiki/MariaDB" target="_top">https://es.wikipedia.org/wiki/MariaDB</a> MariaDB fue
+		iniciada por el fundador de MySQL después de que Oracle 
+		compró Sun y MySQL, pues consideraba que Oracle había
+		hecho la compra para reducir competencia de sus bases 
+		de datos.</p><p>Debe instalar los paquetes mariadb-client-10.0.25v1 y
+	  mariadb-server-10.0.25v1. Aunque el nombre de los paquetes cambia
+	  los comandos para operarla siguen siendo los mismos.
+	  Tras instalar el servidor debe
+      ejecutar <span><strong class="command">mysql_install_db</strong></span>.  
+  </p><p>
+      Inicialice el directorio donde estarán las bases de datos con
+</p><pre class="screen">
+	doas /usr/local/bin/mysql_install_db
+</pre><p>
+</p><p>
+	  Para aumentar el límite de archivos que el usuario 
+	  <code class="literal">_mysql</code> de clase <code class="literal">mysql</code> puede abrir
+	  agregue a <code class="filename">/etc/login.conf</code>:
+</p><pre class="screen">
+	mysql:\
+		:openfiles-cur=2048:\
+		:openfiles-max=4096:\
+		:tc=daemon:
+</pre><p>
+tenga en cuenta no dejar espacios al 
+final de cada línea y que desde la segunda línea cada una comiencen con el caracter
+tabulador. A continuación regenere el archivo binario  
+<code class="filename">/etc/login.conf.db</code> con
+</p><pre class="screen">
+	cd /etc
+	doas cap_mkdb /etc/login.conf 
+</pre><p>
+Después agregue <code class="literal">mysqld</code> a 
+<code class="literal">pkg_scripts</code> en <code class="filename">/etc/rc.conf.local</code>.
+A continuación lance el servidor con:
+</p><pre class="screen">
+	doas sh /etc/rc.d/mysqld start
+</pre><p>
+Los errores quedarán en <code class="filename">/var/mysql/<em class="replaceable"><code>host</code></em>.err</code>.
+</p><p>
+    Después puede establecer una clave para el usuario
+    <code class="literal">root</code> de MariaDB cuando ingresa desde
+    <code class="literal">localhost</code> con:
+</p><pre class="screen">
+	/usr/local/bin/mysqladmin -u root  password 'nueva-clave' 
+	/usr/local/bin/mysqladmin -u root -pnueva-clave -h Jesus.miong.org password 'nueva-clave'
+    </pre><p>
+    Después puede iniciar una sesión, crear bases de datos, crear usuarios
+    y otorgarles privilegios.
+    </p><p>Para apagar el servidor mysql:
+</p><pre class="screen">
+	mysqladmin -u root -p shutdown
+    </pre><p>
+  </p><p>Si desea usar <span class="application">mysql</span> con
+    <span class="application">php</span>, instale además de los paquetes
+    básicos de php
+    (<code class="filename">php-core-<em class="replaceable"><code>v</code></em></code> y
+    <code class="filename">php-mysql-<em class="replaceable"><code>v</code></em></code>)
+  </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="uso-mariadb"></a>3.1. Uso básico</h3></div></div></div><p>
+</p><pre class="screen">
+	mysql -u root -p 
+</pre><p>
+    puede crear la base de datos <code class="literal">datos</code>, y un
+    usuario <code class="literal">erfurt</code> que la pueda administrar (i.e
+		    con todos los privilegios excepto GRANT) y con clave
+    <code class="literal">vsewf</code> usando:
+</p><pre class="screen">
+	CREATE DATABASE datos;
+	GRANT ALL PRIVILEGES ON datos.* TO erfurt@localhost IDENTIFIED BY 'vsewf';
+</pre><p>
+    </p><p>
+    Algunas operaciones usuales del administrador son:
+</p><pre class="screen">
+	SHOW DATABASES;
+</pre><p>
+que muestra todas las bases disponibles.
+</p><pre class="screen">
+	USE base1;
+</pre><p>
+    que permite usar la base base1.
+</p><pre class="screen">
+	SHOW TABLES;
+</pre><p>
+    que muestra todas las tablas de la base activa.
+</p><pre class="screen">
+	DESCRIBE tabla;
+	SHOW CREATE TABLE tabla;
+</pre><p>
+    que presentan estructura de la tabla.
+
+    </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="clave-mysql"></a>3.2. Cambio de la clave de administrador</h3></div></div></div><p>Si olvida la clave de root después de haberla establecido 
+    puede cambiarla entrando a la cuenta de administrador:
+    </p><div class="itemizedlist"><ul type="disc"><li><p>Detenga el servidor.</p></li><li><p>Inicie el servidor con 
+		<span><strong class="command">/usr/local/libexec/mysqld --user=root --skip-grant-tables</strong></span></p></li><li><p>Ejecute:
+</p><pre class="screen">
+	# mysql
+	mysql&gt; USE mysql
+	mysql&gt; UPDATE USER SET PASSWORD=password('miclave') WHERE user='root';
+	mysql&gt; FLUSH PRIVILEGES;
+	mysql&gt; EXIT
+</pre></li><li><p>Vuelva a apagar el servidor y reinicielo con:
+	  <span><strong class="command">/usr/local/bin/mysqld_safe &amp;</strong></span>
+	</p></li></ul></div><p>
+  </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="recuperacion-backups"></a>3.3. Recuperación y backups</h3></div></div></div><p>
+	  MariaDB mantiene bases de datos en directorios y las tablas 
+	  en archivos.  No es recomendable que modifique tales archivos,
+	  al menos no, mientras el servidor esté activo.  
+  </p><p>
+	  Para sacar una copia de respaldo de todas las bases de datos con:
+</p><pre class="screen">
+	mysqldump --force -p --all-databases &gt; /respaldomysql/dump-1nov2007.sql
+</pre><p>
+	  y posteriormente restaurarla con:
+</p><pre class="screen">
+	mysql &lt; /respaldomysql/dump-1nov2007.sql
+</pre><p>
+  </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="chroot-mysql"></a>3.4. MariaDB y servidor web con chroot</h3></div></div></div><p>Puede emplear aplicaciones para Apache en modo
+		  <code class="literal">chroot</code> que usen bases de datos 
+		  MariaDB de tres formas:
+		  (1) Conectándose a un puerto TCP/IP donde responda
+		  MariaDB, (2) poniendo el socket de MariaDB en un directorio
+		  dentro de la jaula del servidor web o (3) Corriendo MariaDB 
+		  dentro de la jaula
+		  <code class="literal">chroot</code> (ver <a href="http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot" target="_top">http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot</a>).  </p><p>
+		  Para correro MariaDB dentro de
+		  A continuación documentamos como 
+		  ubicar el socket de MariaDB dentro de la jaula
+		  del servidor web (/var/www/).
+	  </p><p>
+			  Una vez instale <code class="literal">maria-server</code> 
+			  cree el directorio en el cual ubicará
+			  el socket, digamos:
+</p><pre class="screen">
+	mkdir -p /var/www/var/run/mysql/
+	chown _mysql:_mysql /var/www/var/run/mysql/
+	chmod a+w /var/www/var/run/mysql/
+	chmod +t /var/www/var/run/mysql/
+</pre><p>
+			  y después inicie MariaDB indicando la ruta del
+			  socket con la opción <code class="literal">--socket</code>,
+			  por ejemplo para que el cambio se efectúe en
+			  cada inicio, edite 
+			  <code class="filename">/etc/rc.conf.local</code> para
+			  agregar:
+</p><pre class="screen">
+	mysqld_flags="--socket=/var/www/var/run/mysql/mysql.sock"
+</pre><p>
+e inicie desde <code class="filename">/etc/rc.local</code>
+con:
+</p><pre class="screen">
+	pgrep mysqld &gt; /dev/null
+	if [ "$?" != 0  -a X"${mysqld_flags}" != X"NO" -a \
+		-x /usr/local/bin/mysqld_safe ]; then
+		echo -n ' mysqld ' 
+		/usr/local/bin/mysqld_safe ${mysqld_flags} &amp;
+	fi
+</pre><p>
+
+Sus aplicaciones PHP pueden entonces conectarse con:
+</p><pre class="screen">
+	$dbhost  = "localhost";
+	$dbuname = "miusuario";
+	$dbpass  = "miclave";
+	mysql_connect($dbhost, $dbuname, $dbpass);
+</pre><p>
+</p><p>Tenga en cuenta también que otros binarios de MariaDB también requerirán
+	la opción <code class="literal">--socket=/var/www/var/run/mysql/mysql.sock</code>
+	al ejecutarse por ejemplo:
+</p><pre class="screen">
+	mysqldump --socket=/var/www/var/run/mysql/mysql.sock  
+		\-p --all-databases
+	</pre><p>
+		  </p></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="lecutras-mysql"></a>3.5. Lecturas recomendadas</h3></div></div></div><p>
+    Referencias:
+    </p><div class="itemizedlist"><ul type="disc"><li><p>Una explicación de algo de la instalación y el uso de 
+	  MySQL en OpenBSD: 
+	  <a href="http://www.sancho2k.net/filemgmt_data/files/mysql_notes.html" target="_top">http://www.sancho2k.net/filemgmt_data/files/mysql_notes.html</a>
+	</p></li><li><p>La documentación de MariaDB : 
+	  <a href="https://mariadb.com/kb/en/mariadb/documentation/" target="_top">https://mariadb.com/kb/en/mariadb/documentation/</a>
+	</p></li><li><p>Ayuda para cambiar clave de root en sistemas Linux:
+	  <a href="http://www.netadmintools.com/art90.html" target="_top">http://www.netadmintools.com/art90.html</a>
+	</p></li></ul></div><p>
+
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="postgresql.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="otros-servicios-de-un-servidor.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="servidor-ldapd.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">2. Motor de bases de datos PostgreSQL </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 4. Servidor ldapd</td></tr></table></div></body></html>

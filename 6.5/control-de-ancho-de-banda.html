@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>6. Control de ancho de banda</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="direcciones-enrutamiento-transporte.html" title="Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos"><link rel="prev" href="ejemplopf.html" title="5. Ejemplo del uso de PF en una DMZ"><link rel="next" href="protocolos-soporte-usuario.html" title="Capítulo 5. Protocolos de soporte y de usuario"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6. Control de ancho de banda</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ejemplopf.html">Anterior</a> </td><th width="60%" align="center">Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos</th><td width="20%" align="right"> <a accesskey="n" href="protocolos-soporte-usuario.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="control-de-ancho-de-banda"></a>6. Control de ancho de banda</h2></div></div></div><p>El siguiente ejemplo presenta como puede configurarse un servidor
+    NAT para controlar ancho de banda de diversos computadores de 
+    la red interna.    La conexión de la red interna es a 100MB, mientras
+    que la conexión a Internet es de 300KB.  De todos los computadores de la
+    red interna el ancho de banda se limita sólo a 4 computadores, cada uno
+    máximo 30KB.  Los demás comparten el resto del ancho de banda.
+    </p><pre class="screen">
+	table &lt;interna&gt; {192.168.2.2, 192.168.2.1, 192.168.1.1, 192.168.1.8, 192.168.1.21, 192.168.1.23, 192.168.1.30, 192.168.1.31, 192.168.1.37, 192.168.1.40, 192.168.1.41, 192.168.1.42, 192.168.1.43, 192.168.1.95, 192.168.1.70}
+	
+	set loginterface $int_if
+	set fingerprints "/etc/pf.os"
+	
+	altq on $int_if bandwidth 100Mb cbq queue { dflt_in, uext1_in, uext2_in, uext3_in, uext4_in}
+	altq on $ext_if bandwidth 300Kb cbq queue { dflt_out }
+	
+	queue dflt_in cbq(default) bandwidth 80%
+	queue dflt_out cbq(default)
+	
+	queue uext1_in bandwidth 30Kb
+	queue uext2_in bandwidth 30Kb
+	queue uext3_in bandwidth 30Kb
+	queue uext4_in bandwidth 30Kb
+	
+	uext1="192.168.1.70" 
+	uext2="192.168.1.23" 
+	uext3="192.168.1.95"
+	uext4="192.168.1.30"
+	
+	match out on $ext_if from &lt;interna&gt; to any nat-to ($ext_if)
+	
+	pass  out on $int_if from any to $uext1 queue uext1_in
+	pass  out on $int_if from any to $uext2 queue uext2_in
+	pass  out on $int_if from any to $uext3 queue uext3_in
+	pass  out on $int_if from any to $uext4 queue uext4_in
+</pre><p>
+</p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-control-ancho-banda"></a>6.1. Referencias y lecturas recomendadas</h3></div></div></div><p>
+	Las siguientes páginas man:
+	<a href=""><span class="citerefentry"><span class="refentrytitle">pf</span>(4)</span></a>,
+	<a href=""><span class="citerefentry"><span class="refentrytitle">pfctl</span>(4)</span></a>.
+	</p><p>
+	Guía del usuario de PF [<span class="citation"><a href="bi01.html#PF">PF</a></span>].
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ejemplopf.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="direcciones-enrutamiento-transporte.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="protocolos-soporte-usuario.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">5. Ejemplo del uso de PF en una DMZ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> Capítulo 5. Protocolos de soporte y de usuario</td></tr></table></div></body></html>

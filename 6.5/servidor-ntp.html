@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>4. Servidor ntp</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="protocolos-soporte-usuario.html" title="Capítulo 5. Protocolos de soporte y de usuario"><link rel="prev" href="dhcp.html" title="3. Protocolo DHCP"><link rel="next" href="servicios-correo.html" title="5. Servidor de correo electrónico"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4. Servidor <span><strong class="command">ntp</strong></span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="dhcp.html">Anterior</a> </td><th width="60%" align="center">Capítulo 5. Protocolos de soporte y de usuario</th><td width="20%" align="right"> <a accesskey="n" href="servicios-correo.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="servidor-ntp"></a>4. Servidor <span><strong class="command">ntp</strong></span></h2></div></div></div><p>El protocolo NTP permite mantener sincronizado el reloj de
+    un computador con otro donde corra un servidor NTP. </p><p>Hay varios servidores en Internet que proveen este servicio
+    públicamente, algunos están conectados a relojes de alta precisión</p><p>OpenBSD (dese la versión 3.6) incluye una implementación del 
+	  cliente y servidor de este protocolo llamada OpenNTPD.
+	  Para configurar un cliente basta editar 
+	  <code class="filename">/etc/rc.conf.local</code> para agregar:
+</p><pre class="screen">
+	ntpd_flags=""
+</pre><p>
+lo cual empleará el archivo de configuración <code class="filename">/etc/ntpd.conf</code>
+que por defecto especifica:
+</p><pre class="screen">
+	servers pool.ntp.org
+</pre><p>
+con lo cual actua como cliente empleando aleatoriamente alguno de los
+servidores de NTP disponibles mundialmente en <code class="literal">pool.ntp.org</code>.
+   </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-ntp"></a>4.1. Referencias y lecturas recomendadas</h3></div></div></div><p>
+      Documentación disponible en <a href="http://www.openntpd.org" target="_top">http://www.openntpd.org</a>.
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dhcp.html">Anterior</a> </td><td width="20%" align="center"><a accesskey="u" href="protocolos-soporte-usuario.html">Subir</a></td><td width="40%" align="right"> <a accesskey="n" href="servicios-correo.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">3. Protocolo <span><strong class="command">DHCP</strong></span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 5. Servidor de correo electrónico</td></tr></table></div></body></html>

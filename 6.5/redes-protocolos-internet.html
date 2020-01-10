@@ -1,0 +1,167 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Capítulo 2. Redes, protocolos e Internet</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="introduccion.html" title="Capítulo 1. Introducción"><link rel="next" href="ch02s02.html" title="2. Capas de una red TCP/IP sobre
+    algunos medios físicos"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Capítulo 2. Redes, protocolos e Internet</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="introduccion.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch02s02.html">Siguiente</a></td></tr></table><hr></div><div class="chapter" lang="es"><div class="titlepage"><div><div><h2 class="title"><a name="redes-protocolos-internet"></a>Capítulo 2. Redes, protocolos e Internet</h2></div></div></div><div class="toc"><p><b>Tabla de contenidos</b></p><dl><dt><span class="sect1"><a href="redes-protocolos-internet.html#Internet">1. Internet</a></span></dt><dt><span class="sect1"><a href="ch02s02.html">2. Capas de una red <span class="acronym">TCP/IP</span> sobre
+    algunos medios físicos</a></span></dt><dd><dl><dt><span class="sect2"><a href="ch02s02.html#idp1908955664">2.1. Capa física</a></span></dt><dt><span class="sect2"><a href="ch02s02.html#idm347332208">2.2. Capa de enlace</a></span></dt><dt><span class="sect2"><a href="ch02s02.html#idp1516301968">2.3. Capa de internet</a></span></dt><dt><span class="sect2"><a href="ch02s02.html#idp2033787792">2.4. Capa de transporte</a></span></dt><dt><span class="sect2"><a href="ch02s02.html#idp2105422096">2.5. Capa de aplicación</a></span></dt><dd><dl><dt><span class="sect3"><a href="ch02s02.html#idp2506824848">2.5.1. Protocolos de usuario</a></span></dt><dt><span class="sect3"><a href="ch02s02.html#idp1439861136">2.5.2. Protocolos de soporte</a></span></dt></dl></dd></dl></dd><dt><span class="sect1"><a href="lecturas-redes-protocolos-internet.html">3. Lecturas recomendadas</a></span></dt></dl></div><p>
+     Las redes de computadores constan de medios de transmisión (e.g
+     cables), dispositivos (e.g tarjetas de red) y programas (e.g
+     pila <span class="acronym">TCP/IP</span> del kernel) que permiten
+     transmitir información entre computadores. Pueden clasificarse de
+     acuerdo al tamaño (<span class="acronym">WAN</span> de cobertura amplia
+     como un país, <span class="acronym">MAN</span> de cobertura metropolitana o
+     <span class="acronym">LAN</span> para edificios o salones) o de acuerdo a
+     la estructura de sus protocolos (e.g el módelo
+     <span class="acronym">OSI</span> que consta de 7 capas de
+     protocolos: física, enlace, red, transporte, sesión, presentación
+     y aplicación), o de acuerdo a la distribución física de los
+     medios de transmisión y dispositivos (e.g estrella, bus).</p><p><span class="acronym">LAN</span> es acrónimo de <span class="foreignphrase"><em class="foreignphrase">Local Area
+      Network</em></span>, con este término se hace referencia a
+     redes pequeñas (comúnmente menos de 100 computadores) cuyos
+     computadores están generalmente en un mismo espacio físico. Los
+     principales usos de una red LAN son:
+     </p><div class="itemizedlist"><ul type="disc"><li><p>
+	Compartir información distribuida en los discos duros o medios de
+	almacenamiento de cada computador.
+       </p></li><li><p>
+	Emplear recursos de un computador desde otro, o recursos 
+	conectados en red (por ejemplo una impresora).
+       </p></li><li><p> Compartir una conexión a Internet.  
+       </p></li><li><p>
+	Conformar una Intranet con servicios como correo,
+	<span class="foreignphrase"><em class="foreignphrase">web</em></span>, <span class="acronym">ftp</span>,
+	<span class="foreignphrase"><em class="foreignphrase">news</em></span>.
+       </p></li></ul></div><p> 
+   </p><a class="indexterm" name="idp2575437968"></a><p>
+	Un protocolo <sup>[<a name="idm646556656" href="#ftn.idm646556656">1</a>]</sup>
+        es una serie de reglas que indican como debe ocurrir una
+	comunicación entre dos computadores de una red; las reglas de un
+	protocolo son seguidas por programas que se ejecutan en los
+	computadores interconectados. Su computador puede tener procesos
+	activos que esperan conexiones de otros computadores o procesos 
+	para iniciar protocolos (por ejemplo con <span><strong class="command">ps -ax</strong></span> 
+	es posible que vea: <code class="literal">sshd</code>, 
+	<code class="literal">inetd</code>, <code class="literal">httpd</code>, 
+	<code class="literal">postgres</code>).
+	A estos programas, que esperan conexiones, se les llama 
+	servicios<sup>[<a name="idm646556912" href="#ftn.idm646556912">2</a>]</sup>.  
+	Usted puede iniciar un protocolo con otro computador empleando el 
+	programa cliente adecuado, por ejemplo el cliente 
+	<span><strong class="command">ping</strong></span> con:
+</p><pre class="screen">
+	ping 127.0.0.1
+</pre><p>
+	iniciará el protocolo de ping (<code class="literal">ICMP</code>, 
+	<code class="literal">ECHO_REQUEST</code>) con el computador con dirección 
+	IP 127.0.0.1 (su propio computador),  un programa de su computador
+	estará pendiente de conexiones de este tipo y seguirá el
+	protocolo<sup>[<a name="idp933157392" href="#ftn.idp933157392">3</a>]</sup>.
+    </p><p>Dado que estamos en paso de IPv4 a IPv6 también mencionamos que el 
+	    mismo ejemplo con IPv6 (y protocolo ICMP6) es:
+</p><pre class="screen">
+	ping6 ::1
+</pre><p>
+    </p><a class="indexterm" name="idm646554352"></a><p>Internet es una red mundial de redes que están
+     interconectadas vía satélite, por cables submarinos, fibra óptica
+     y muchos otros medios de transmisión financiados por estados y
+     organizaciones.  Las heterogeneidad de las redes que interconecta
+     (e.g una <span class="acronym">LAN</span> de un colegio con Linux, una
+     <span class="acronym">LAN</span> de una ONG con OpenBSD, una
+     <span class="acronym">WAN</span> de un banco con X.25) es superada con los
+     protocolos <span class="acronym">TCP/IP</span>.  Para facilitar la conexión 
+     de una <span class="acronym">LAN</span> a
+     Internet, en esta sección se presenta una introducción a los
+     aspectos de redes de Internet; los temas introducidos serán
+     tratados en detalle en otras secciones aplicándolos especialmente
+     al caso de redes Ethernet (ver <a href="dispositivos-interconexion.html" title="Capítulo 3. Dispositivos de interconexión"> Dispositivos
+     para interconexión</a>, <a href="direcciones-enrutamiento-transporte.html" title="Capítulo 4. Direcciones, enrutamiento, transporte y cortafuegos">Direcciones,
+     enrutamiento y transporte</a> y <a href="protocolos-soporte-usuario.html" title="Capítulo 5. Protocolos de soporte y de usuario">Protocolos de
+     soporte y de usuario</a>).
+    </p><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="Internet"></a>1. Internet</h2></div></div></div><p>Hay muchas personas que aportan su trabajo (muchos de forma
+      voluntaria) para mantener Internet en funcionamiento, para
+      solucionar problemas que ocurren y para planear su futuro.
+      Quienes dirigen el rumbo de Internet están organizados en
+      comités encargados de diversas actividades:
+      </p><div class="variablelist"><dl><dt><span class="term">IETF Internet Engineering Task Force</span></dt><dd><p>
+	  Compuesta enteramente de voluntarios autoorganizados que
+	  colaboran en la ingeniería requerida para la evolución de
+	  Internet, es decir identifican problemas y proponen
+	  soluciones.  Quien lo desee puede participar, asistir a las
+	  reuniones, ayudar a dar forma o proponer estándares.  La
+	  <span class="acronym">IETF</span> recibe borradores
+	  (<span class="foreignphrase"><em class="foreignphrase">Internet Draft</em></span>) de autores
+	  que renuncian al control del protocolo que proponen. Tras
+	  refinamiento estos borradores pueden llegar a ser 
+	  <span class="acronym">RFC</span>
+	  (<span class="foreignphrase"><em class="foreignphrase">Request for Comment</em></span>) de uno
+	  de estos tipos: estándar propuesto, protocolo
+	  experimental, documento informativo o estándar
+	  histórico.  Un estándar propuesto puede después
+	  convertirse en borrador de estándar y en casos muy
+	  contados en estándar de Internet. 
+	 </p></dd><dt><span class="term">ISOC Internet Society</span></dt><dd><p>Organización sin ánimo de lucro, da soporte legal y
+	  financiero a otros grupos.
+	 </p></dd><dt><span class="term">IESG Internet Engineering Steering Group</span></dt><dd><p>Ratifica o corrige estándares propuestos por la
+	 <span class="acronym">IETF</span>.
+	 </p></dd><dt><span class="term">IAB Internet Architecture Board</span></dt><dd><p>Planeación a largo plazo y coordinación entre las
+	  diversas áreas.
+	 </p></dd><dt><span class="term">IANA Internet Assigned Numbers Authority</span></dt><dd><p>Mantienen registros de diversos nombres y números
+	  asignados a organizaciones. Es financiado por
+	  <span class="acronym">ICANN</span> (<span class="foreignphrase"><em class="foreignphrase">Internet
+	  Corporation for Assigned Names and Numbers</em></span>).
+	 </p></dd><dt><span class="term">LACNIC Registro de Direcciones de Internet para América Latina y CaribeRegistro de Direcciones de Internet para América Latina y Caribe</span></dt><dd><p>Es responsable de la asignación y administración de los recursos de numeración de Internet (IPv4, IPv6), Números Autónomos y Resolución Inversa, entre otros recursos para la región de América Latina y el Caribe. Es uno de los 5 Registros Regionales de Internet en el mundo.
+	 </p></dd></dl></div><p>
+     </p><p>La interconexión de las redes conectadas a Internet y su
+      mantenimiento se basa en el protocolo <span class="acronym">IP</span>, que asigna a cada red y a cada
+      computador un número único (dirección <span class="acronym">IP</span>) que permite identificarlo y
+      enviarle información.
+    </p><p>La asignación de direcciones IP<sup>[<a name="idp1698756112" href="#ftn.idp1698756112">4</a>]</sup>
+      es manejada por <span class="acronym">IANA</span>, que a su vez la ha
+      delegado a registros en diversas regiones.  La región de
+      América Latina es manejada por el registro
+      <span class="acronym">LACNIC</span>, que recibe solicitudes para
+      asignar bloques a proveedores de servicio a Internet
+      (<span class="acronym">ISP</span>) o usuarios, estos proveedores deben contar con la
+      infraestructura para conectar sus computadores a Internet (e.g
+      con cables submarinos, vía satélite) y a su vez ofrecen bloques
+      de direcciones y conexión a otros proveedores o a
+      usuarios.</p><p>Dada que la comunicación de dos computadores es un proceso
+      complejo (aún más dada la variedad de redes conectadas a
+      Internet), además de una basta infraestructura física, Internet
+      se basa en varios protocolos que siguen todos los computadores y
+      enrutadores conectados.  Algunos de estos protocolos dependen de
+      otros, dando lugar a varias capas de protocolos: aplicación,
+      transporte, Internet, enlace<sup>[<a name="idm347332080" href="#ftn.idm347332080">5</a>]</sup>.  El siguiente
+      diagrama presenta algunos protocolos en las diversas capas de
+      una red <span class="acronym">TCP/IP</span> sobre una red física Ethernet
+      o sobre una conexión con modem:</p><pre class="screen">
+Capa de aplicación:
+     Protocolos de usuario             FTP Telnet ssh   http   SMTP ...
+                                        |     |     |      |    | 
+     Protocolos de soporte    DNS       |     |     |      |    | 
+                             |   \      |     |     |      |    |
+Capa de transporte           UDP   TCP --------------------------
+                              \  /
+Capa de Internet (red):      IP -  ICMP                  
+                             ___|___
+                            /       \
+Capa de enlace:	          ARP        PPP
+                           |          |
+Capa física:	       Ethernet     Modem
+                        |              | 
+                     Par trenzado    Línea telef.
+</pre></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm646556656" href="#idm646556656">1</a>] </sup>Para ampliar el significado de los 
+       términos técnicos introducidos en estas guías (como
+      <span xmlns="" class="foreignphrase"><em class="foreignphrase">protocol</em></span>), se sugiere consultar el
+      diccionario FOLDOC 
+      <a xmlns="" href="http://foldoc.doc.ic.ac.uk/foldoc" target="_top">http://foldoc.doc.ic.ac.uk/foldoc</a> </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm646556912" href="#idm646556912">2</a>] </sup>También suele llamárseles 
+			<span xmlns="" class="foreignphrase"><em class="foreignphrase">daemons</em></span> pero 
+			como puede resultar ofensivo
+			para cristian@s, procuramos no 
+			emplear ese término, ver <a xmlns="" href="http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service" target="_top">http://aprendiendo.pasosdejesus.org/?id=Renombrando+Daemon+por+Service</a>.</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp933157392" href="#idp933157392">3</a>] </sup>El programa que sigue este protocolo hace 
+	    parte de la implementación de IPv4 en el kernel.</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1698756112" href="#idp1698756112">4</a>] </sup> Puede verse
+	más sobre asignación de IPs en el <span xmlns="" class="acronym">RFC</span> 2050
+	y sobre asignación de direcciones in redes
+	<span xmlns="" class="acronym">IP</span> privadas en 
+	<span xmlns="" class="acronym">RFC</span> 1918.
+	</p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm347332080" href="#idm347332080">5</a>] </sup>El
+      <span xmlns="" class="acronym">RFC</span> 1122 presenta las capas de una red
+      <span xmlns="" class="acronym">TCP/IP</span></p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="introduccion.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch02s02.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">Capítulo 1. Introducción </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 2. Capas de una red <span class="acronym">TCP/IP</span> sobre
+    algunos medios físicos</td></tr></table></div></body></html>

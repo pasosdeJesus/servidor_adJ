@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Conexión a Internet con un módem o módem ISDN</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
+HREF="book1.htm"><LINK
+REL="UP"
+TITLE="Dispositivos de interconexión"
+HREF="c362.htm"><LINK
+REL="PREVIOUS"
+TITLE="Dispositivos de interconexión"
+HREF="c362.htm"><LINK
+REL="NEXT"
+TITLE="Conexión a Internet ADSL con pppoe"
+HREF="x511.htm"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="c362.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Capítulo 3. Dispositivos de interconexión</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x511.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="modem-isdn"
+>Conexión a Internet con un módem o módem ISDN</A
+></H1
+><P
+>Es posible conectar un sistema OpenBSD a Internet empleando
+	  un módem o un módem ISDN.  Para esto el módem que se emplea debe 
+	  estar soportado y debe
+	  configurarse <TT
+CLASS="literal"
+>ppp</TT
+> para realizar la conexión.
+  </P
+><P
+>Hay diversos tipos de módems (tarjetas ISA, PCI, módems
+    externos USB o seriales), los módems 
+    externos que se conectan a puerto serial son los más fáciles de 
+    configurar, algunos módems USB también son soportados (los 
+    que tengan comandos y datos multiplexados --como indica la página
+    del manual del controlador <TT
+CLASS="literal"
+>umodem</TT
+>) y eventualmente
+    es posible hacer funcionar tarjetas ISDN ISA o PCI (<A
+HREF="http://people.freebsd.org/~hm/i4b-home/"
+TARGET="_top"
+>http://people.freebsd.org/~hm/i4b-home/</A
+>).
+  </P
+><P
+>&#13;	  Los módems y los módems ISDN reciben comandos AT y se configuran 
+	  empleando <B
+CLASS="command"
+>ppp</B
+>.  
+    Por ejemplo el archivo <TT
+CLASS="filename"
+>/etc/ppp/ppp.conf</TT
+> podría
+    incluir porciones como las siguientes (remplazando el número de
+    teléfono, el nombre de la cuenta y  la clave por los correctos):
+<PRE
+CLASS="screen"
+>&#13;	default:
+	  set log Phase Chat LCP IPCP CCP tun command
+	  set device /dev/cua01
+	  set speed 115200
+	  set dial "ABORT BUSY ABORT NO\\sCARRIER TIMEOUT 5 \"\" AT \
+	    OK-AT-OK ATE1Q0 OK \\dATDT\\T TIMEOUT 40 CONNECT"
+	
+	
+	PAP:
+	 set phone 019478909891 
+	 set authname micuenta@miproveedor.com
+	 set authkey laclaveusada
+	 set timeout 120
+	 add default HISADDR
+	 enable dns
+</PRE
+>
+    Para conectarse ejecute <B
+CLASS="command"
+>/usr/sbin/ppp -ddial PAP</B
+>
+    desde una cuenta que pertenezca al grupo <TT
+CLASS="literal"
+>network</TT
+>.
+    Cuando se establezca la conexión quedará asociada una dirección IP a una
+    interfaz <TT
+CLASS="literal"
+>tun</TT
+> (e.g a <TT
+CLASS="literal"
+>tun0</TT
+>).  Puede
+    también emplear el siguiente script para realizar la conexión:
+<PRE
+CLASS="screen"
+>&#13;	#!/bin/sh
+	# Dominio público. 2004.
+	
+	# Usa configuracion de /etc/ppp/ppp.conf regla PAP
+	
+	netw=`groups | sed -e "s/.*network.*/1/g"`;
+	if (test "$netw" != "1") then {
+		echo "Para usar PPP debe ser del grupo network";
+		exit 1;
+	} fi;
+	
+	IP=`/sbin/ifconfig tun0 | tail -n 1 | sed -e "s/.*inet \([.0-9]*\) .*/\1/g"`;
+	esta=`echo $IP | sed -e "s/^[0-9][.0-9]*$/SI/g"`
+	if (test "$esta" = "SI") then {
+		echo "Ya está conectado, IP es $IP";
+		exit 0;
+	} fi;
+	/usr/sbin/ppp -ddial PAP
+	while (test "$esta" != "SI") ; do
+		sleep 1;
+		IP=`/sbin/ifconfig tun0 | tail -n 1 | sed -e "s/.*inet \([.0-9]*\) .*/\1/g"`;
+		esta=`echo $IP | sed -e "s/^[0-9][.0-9]*$/SI/g"`
+	done
+	
+	echo "Conectado. La IP es $IP";
+</PRE
+>
+    Y el siguiente que facilita la desconexión:
+<PRE
+CLASS="screen"
+>&#13;	pid=`ps ax | grep "[p]pp" | sed -e "s/^[ ]*\([0-9]*\) .*$/\1/g"`;
+	espid=`echo $pid | sed -e "s/^[0-9][0-9]*$/SI/g"`;
+	if (test "$espid" != "SI") then {
+	  echo "No está conectado";
+	  exit 1;
+	} fi;
+	kill -HUP $pid
+	echo "Desconectado";
+</PRE
+>
+  </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="c362.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x511.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Dispositivos de interconexión</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="c362.htm"
+ACCESSKEY="U"
+>Subir</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Conexión a Internet ADSL con pppoe</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

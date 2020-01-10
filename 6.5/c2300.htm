@@ -1,0 +1,323 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Otros servicios que puede prestar el servidor</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Servidor Web"
+HREF="x2050.htm"><LINK
+REL="NEXT"
+TITLE="Motor de bases de datos PostgreSQL"
+HREF="x2346.htm"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x2050.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x2346.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="otros-servicios-de-un-servidor"
+></A
+>Capítulo 6. Otros servicios que puede prestar el servidor</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Tabla de contenidos</B
+></DT
+><DT
+><A
+HREF="c2300.htm#cuotas"
+>Cuotas</A
+></DT
+><DT
+><A
+HREF="x2346.htm"
+>Motor de bases de datos PostgreSQL</A
+></DT
+><DT
+><A
+HREF="x2542.htm"
+>MariaDB</A
+></DT
+><DT
+><A
+HREF="x2642.htm"
+>Servidor ldapd</A
+></DT
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="cuotas"
+>Cuotas</A
+></H1
+><P
+>Pueden emplearse cuotas para limitar el espacio en disco 
+    y la cantidad de archivos que un usuario o un grupo puede
+    tener.</P
+><P
+>Para usarlo debe: (1) especificar sistemas de archivos en
+    los que se usará cuota (2) especificar cuota por usuario o grupo y
+    (3) activar chequeo de cuota durante el arranque.
+  </P
+><P
+>&#13;    Indique los sistemas de archivos en los que usará cuota,
+    en <TT
+CLASS="filename"
+>/etc/fstab</TT
+> agregando como opción del sistema
+    de archivos: <TT
+CLASS="literal"
+>userquota</TT
+> y/o <TT
+CLASS="literal"
+>groupquota</TT
+>.
+    Por ejemplo:<PRE
+CLASS="screen"
+>&#13;/dev/wd0d /home ffs rw,nodev,nosuid,userquota 1 2
+    </PRE
+>
+    Después active el sistema de cuotas con:<PRE
+CLASS="screen"
+>&#13;# quotaon -a
+    </PRE
+>
+  </P
+><P
+>&#13;    Para especificar la cuota por usuario o por grupo emplee
+    <TT
+CLASS="literal"
+>edquota</TT
+>, por ejemplo:<PRE
+CLASS="screen"
+>&#13;# edquota pabram
+    </PRE
+>
+    que lo dejará en un editor en el que podrá cambiar las especificaciones
+    de la cuota en cada sistema de archivos con cuotas:
+    <PRE
+CLASS="screen"
+>&#13;Quotas for user pabram:
+/home: blocks in use: 1292980, limits (soft = 1000000, hard = 2000000)
+       inodes in use: 142318, limits (soft = 0, hard = 0)
+     </PRE
+>
+     el límite blando podrá extenderse para cada usuario por un periodo de 
+     tiempo (en este ejemplo), tras el cual se convertirá en un límite duro. 
+     Límites en 0 indican que no hay restricción.
+   </P
+><P
+>&#13;    Puede replicar la configuración de cuotas en otros usuarios con:
+    <PRE
+CLASS="screen"
+>&#13;# edquota -p pabram pedgar juamar margo
+    </PRE
+>
+    Después de especificar las cuotas de los usuarios puede verificar
+    la política de cuotas con:<PRE
+CLASS="screen"
+>&#13;# repquota -a
+    </PRE
+>
+    o chequear que se cumplan todas las cuotas con:<PRE
+CLASS="screen"
+>&#13;quotacheck -a
+    </PRE
+>
+  </P
+><P
+>Para activar sistema de cuotas y que las cuotas sean verificadas 
+    cada vez que el sistema inicia agregue la siguiente línea al 
+    archivo <TT
+CLASS="filename"
+>/etc/rc.conf.local</TT
+>:<PRE
+CLASS="screen"
+>&#13;check_quotas=YES
+    </PRE
+>
+  </P
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="referencias-quota"
+>Referencias y lecturas recomendadas</A
+></H2
+><P
+>&#13;      Las siguientes páginas del manual de OpenBSD:
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>quota</SPAN
+>(1)</SPAN
+>,
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>edquota</SPAN
+>(8)</SPAN
+>,
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>quotaon</SPAN
+>(8)</SPAN
+>,
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>quotaoff</SPAN
+>(8)</SPAN
+>,
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>quotacheck</SPAN
+>(8)</SPAN
+> y
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>repquota</SPAN
+>(8)</SPAN
+>.
+	En el FAQ de OpenBSD hay una sección sobre quotas:
+<A
+HREF="http://www.openbsd.org/faq/faq10.html#Quotas"
+TARGET="_top"
+>http://www.openbsd.org/faq/faq10.html#Quotas</A
+>
+    </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x2050.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x2346.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Servidor Web</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Motor de bases de datos PostgreSQL</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

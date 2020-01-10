@@ -1,0 +1,1095 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Protocolos de soporte y de usuario</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
+HREF="book1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Control de ancho de banda"
+HREF="x1084.htm"><LINK
+REL="NEXT"
+TITLE="Servidor ssh"
+HREF="x1297.htm"></HEAD
+><BODY
+CLASS="chapter"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x1084.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1297.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="chapter"
+><H1
+><A
+NAME="protocolos-soporte-usuario"
+></A
+>Capítulo 5. Protocolos de soporte y de usuario</H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Tabla de contenidos</B
+></DT
+><DT
+><A
+HREF="c1100.htm#servidor-dns"
+>Servicio DNS</A
+></DT
+><DT
+><A
+HREF="x1297.htm"
+>Servidor <B
+CLASS="command"
+>ssh</B
+></A
+></DT
+><DT
+><A
+HREF="x1322.htm"
+>Protocolo <B
+CLASS="command"
+>DHCP</B
+></A
+></DT
+><DT
+><A
+HREF="x1366.htm"
+>Servidor <B
+CLASS="command"
+>ntp</B
+></A
+></DT
+><DT
+><A
+HREF="x1381.htm"
+>Servidor de correo electrónico</A
+></DT
+><DT
+><A
+HREF="x2105.htm"
+>Servidor <TT
+CLASS="literal"
+>ftp</TT
+></A
+></DT
+><DT
+><A
+HREF="x2153.htm"
+>Servidor Web</A
+></DT
+></DL
+></DIV
+><P
+></P
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="servidor-dns"
+>Servicio DNS</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="resolucion-de-nombres"
+>Resolución de nombres</A
+></H2
+><P
+>Para resolver nombres OpenBSD emplea rutinas propias
+      de resolución incluidas en la librería de C, se configuran
+      en <TT
+CLASS="filename"
+>/etc/resolv.conf</TT
+>.  Este archivo
+      puede incluir, dominio (<TT
+CLASS="literal"
+>domain</TT
+>),
+      lista de servidores (<TT
+CLASS="literal"
+>nameserver</TT
+>),  orden de fuentes 
+      donde buscar (<TT
+CLASS="literal"
+>lookup</TT
+>), lista de dominios en los
+      cuales buscar (<TT
+CLASS="literal"
+>search</TT
+>), 
+      retornar direcciones IP en orden (<TT
+CLASS="literal"
+>sortlist</TT
+>),
+      opciones (<TT
+CLASS="literal"
+>options</TT
+>).   Un ejemplo del
+      archivo <TT
+CLASS="filename"
+>/etc/resolv.conf</TT
+> es:
+<PRE
+CLASS="screen"
+>&#13;	search miong.org
+	nameserver 192.168.16.1
+	lookup file bind
+</PRE
+>
+      <TT
+CLASS="literal"
+>lookup</TT
+> permite especificar un orden para
+      hacer resolución de acuerdo a uno o más de los siguientes 
+      argumentos separados por espacio:
+      <P
+></P
+><UL
+><LI
+><P
+><TT
+CLASS="literal"
+>bind</TT
+> que indica usar servidor de nombres
+	    (<TT
+CLASS="literal"
+>named</TT
+>)</P
+></LI
+><LI
+><P
+><TT
+CLASS="literal"
+>file</TT
+> que indica buscar en
+	    <TT
+CLASS="filename"
+>/etc/hosts</TT
+></P
+></LI
+><LI
+><P
+><TT
+CLASS="literal"
+>yp</TT
+> que indica emplear el sistema YP si
+	    <B
+CLASS="command"
+>ypbind</B
+> está corriendo.</P
+></LI
+></UL
+>
+    </P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="unbound"
+>Servidor recursivo <TT
+CLASS="literal"
+>unbound</TT
+></A
+></H2
+><P
+>&#13;Un servidor recursivo recibe consultas de dominios y las reenvia a otros 
+servidores –comenzando por los servidores raiz– o si tiene respuesta a 
+las consultas en su repositorio temporal fresco (cache) lo usa para responder. 
+Es útil para responder consultas de una red local rapidamente, y en tal caso 
+debe responder consultas que se hagan desde la red interna pero no desde 
+Internet --como posiblemente ocurre con la vista recursiva del archivo 
+<TT
+CLASS="filename"
+>/var/named/etc/named.conf</TT
+> si tiene uno.
+</P
+><P
+>&#13;A continuación explicamos como configurar unbound (que hace 
+parte del sistema base desde OpenBSD y adJ 5.7) como servidor recursivo.
+	  </P
+><P
+>&#13;En <TT
+CLASS="literal"
+>/etc/rc.conf.local</TT
+> agregue
+<PRE
+CLASS="screen"
+>&#13;	unbound_flags="-c /var/unbound/etc/unbound.conf"
+</PRE
+>
+
+Y a la varialbe <TT
+CLASS="literal"
+>pkg_scripts</TT
+> agreguele <TT
+CLASS="literal"
+>unbound</TT
+>
+
+Configurelo en <TT
+CLASS="literal"
+>/var/unbound/etc/unbound.conf</TT
+>, cambiando al menos:
+
+<P
+></P
+><OL
+TYPE="1"
+><LI
+><P
+>&#13;Si su cortafuegos tiene en la red interna la IP 192.168.100.100 
+responda sólo a esa interfaz:
+<PRE
+CLASS="screen"
+>&#13;interface: 192.168.100.100
+</PRE
+>
+		</P
+></LI
+><LI
+><P
+>&#13;Permita consultas desde la red interna, añadiendo:
+<PRE
+CLASS="screen"
+>&#13;access-control: 192.168.100.0/24 allow
+</PRE
+>
+		</P
+></LI
+><LI
+><P
+>&#13;Las zonas autoritarias que <TT
+CLASS="literal"
+>nsd</TT
+> esté sirviendo también 
+debe responderlas de manera autoritaria con unbound pero dirigiendo a la 
+red interna, por ejemplo respecto al ejemplo de la sección anterior, 
+suponiendo que en la red Interna el servidor que responde correo es 
+192.168.100.101:
+<PRE
+CLASS="screen"
+>&#13;	local-zone: "miescuela.edu.co." static
+	local-data: "correo.miescuela.edu.co. IN A 192.168.100.101"
+	local-data: "ns1.miescuela.edu.co. IN A 192.168.100.100"
+	local-zone: "100.168.192.in-addr.arpa." static
+	local-data-ptr: "192.168.100.101 correo.miescuela.edu.co."
+	local-data-ptr: "192.168.100.100 ns1.miescuela.edu.co."
+</PRE
+>
+		</P
+></LI
+></OL
+>
+
+Inicie el servicio con
+<PRE
+CLASS="screen"
+>&#13;	sudo sh  /etc/rc.d/unbound start
+</PRE
+>
+
+Revise posibles errores en las bitacoras <TT
+CLASS="literal"
+>/var/log/messages</TT
+> 
+y <TT
+CLASS="literal"
+>/var/log/servicio</TT
+>
+</P
+><P
+>&#13;Pruebe que responde con:
+<PRE
+CLASS="screen"
+>&#13;dig @192.168.100.100 correo.miescuela.edu.co
+</PRE
+>
+que debería dar la IP privada.
+</P
+><P
+>&#13;Si prefiere examinar con más detalle puede iniciarlo para depurar con:
+<PRE
+CLASS="screen"
+>&#13;	unbound -c /var/unbound/etc/unbound.conf -vvvv -d
+</PRE
+>
+</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="nsd"
+>Servidor autoritario con NSD</A
+></H2
+><P
+>&#13;Desde adJ y OpenBSD 5.7 hace parte del sistema base junto con unbound 
+(que vinieron a replazar named). Usa una configuración basada en la de 
+named por lo que es sencilla la migración.
+    </P
+><P
+>&#13;Agregue a  <TT
+CLASS="literal"
+>/etc/rc.conf.local</TT
+> la línea:
+<PRE
+CLASS="screen"
+>&#13;	nsd_flags="-c /var/nsd/etc/nsd.conf"
+</PRE
+>
+e incluya <TT
+CLASS="literal"
+>nsd</TT
+> en la variable <TT
+CLASS="literal"
+>pkg_scripts</TT
+>
+	</P
+><P
+>&#13;
+El archivo de configuración principal ubíquelo en 
+<TT
+CLASS="literal"
+>/var/nsd/etc/nsd.conf</TT
+>,
+por cada zona maestra que maneje de manera autoritaria (es decir cada zona 
+master en la vista <TT
+CLASS="literal"
+>view "authoritative</TT
+> de 
+<TT
+CLASS="filename"
+>/var/named/etc/named.conf</TT
+>) 
+incluya líneas de la forma:
+<PRE
+CLASS="screen"
+>&#13;	zone:
+		name: "miescuela.edu.co"
+		zonefile: "miescuela.edu.co"
+</PRE
+>
+Para que responda hacía Internet en un cortafuegos con IP pública 
+(digamos 200.201.202.203) en el mismo archivo asegurese de dejar:
+<PRE
+CLASS="screen"
+>&#13;	ip-address: 200.201.202.203
+</PRE
+>
+	</P
+><P
+>&#13;En el directorio <TT
+CLASS="literal"
+>/var/nsd/zones</TT
+> debe dejar un archivo de zona por cada 
+zona que configure.  Afortunadamente NSD reconoce la misma sintaxis de 
+archivos de zona que <TT
+CLASS="literal"
+>bind</TT
+>, así que basta que copie los de las zonas 
+autoritarías (que tipicamente se ubican en <TT
+CLASS="literal"
+>/var/named/master/</TT
+>).  
+	</P
+><P
+>&#13;Un ejemplo de un archivo de zona <TT
+CLASS="literal"
+>/var/nsd/zones/miescuela.edu.co</TT
+> es:
+
+
+<PRE
+CLASS="screen"
+>&#13;	$ORIGIN miescuela.edu.co.
+	$TTL 6h
+	
+	@ IN SOA ns1.miescuela.edu.co. root.localhost. (
+		2 ; Serial
+		1d ; Refresco secundario
+		6h ; Reintento secundario
+		2d ; Expiracion secndaria
+		1d ) ; Cache 
+	
+		     NS	ns1
+		     A	200.201.202.203
+	       MX 5  correo.miescuela.edu.co.
+	correo A  200.201.202.203
+	ns1	   A  200.201.202.203
+	*	     A  200.201.202.203
+</PRE
+>
+
+	</P
+><P
+>&#13;Si tiene zonas secundarias (esclavas) puede crear el directorio 
+<TT
+CLASS="literal"
+>/var/nsd/zones/secundaria/</TT
+>, copiar allí las zonas de
+<TT
+CLASS="literal"
+>/var/named/slave/</TT
+> y en el archivo de configuración de NSD
+agregar secciones del siguiente estilo:
+<PRE
+CLASS="screen"
+>&#13;	zone:
+	        name: "miotrozona.org"
+	        zonefile: "secundaria/miotrazona.org"
+	        allow-notify: 193.98.157.148 NOKEY
+	        request-xfr: 193.98.157.148 NOKEY             
+</PRE
+>
+	</P
+><P
+>&#13;Inicie el servicio con
+<PRE
+CLASS="screen"
+>&#13;	doas sh  /etc/rc.d/nsd start
+</PRE
+>
+(o reinicielo con <TT
+CLASS="literal"
+>restart</TT
+> en lugar de <TT
+CLASS="literal"
+>start</TT
+>).
+	</P
+><P
+>&#13;Revise posibles errores en las bitacoras <TT
+CLASS="literal"
+>/var/log/messages</TT
+> 
+y <TT
+CLASS="literal"
+>/var/log/servicio</TT
+>
+	</P
+><P
+>&#13;Pruebe que responde desde Internet con:
+<PRE
+CLASS="screen"
+>&#13;	dig @200.201.202.203 correo.miescuela.edu.co
+</PRE
+>
+que debería dar la IP pública.
+	</P
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="named"
+>named</A
+></H2
+><P
+>OpenBSD aún incluye como paquete el servidor
+      BIND 9, bajo el nombre <TT
+CLASS="literal"
+>named</TT
+>, que por defecto corre
+      con <B
+CLASS="command"
+>chroot</B
+> en el directorio
+      <TT
+CLASS="filename"
+>/var/named</TT
+> y que puede hacer las labores de unbound 
+      y nsd.  
+    </P
+><P
+>Puede configurarse y probarse antes de iniciarlo en cada
+      arranque.  Para configurarlo por primera vez pueden seguirse primero 
+      los pasos de <TT
+CLASS="filename"
+>/etc/rc</TT
+>.
+      El archivo de configuración es
+      <TT
+CLASS="filename"
+>/var/named/etc/named.conf</TT
+>.  Se sugiere
+      que se agregue información de zonas de las cuales es maestro en
+      en archivos del directorio
+      <TT
+CLASS="filename"
+>/var/named/master</TT
+>.
+      Pueden configurarse archivos como dice en [<SPAN
+CLASS="citation"
+><A
+HREF="b3073.htm#AA_Linux"
+>AA_Linux</A
+></SPAN
+>]
+      por ejemplo los datos un servidor DNS primario del dominio miong.org 
+      pueden quedar en el archivo 
+      <TT
+CLASS="filename"
+>/var/named/master/miong.org</TT
+>:
+<PRE
+CLASS="screen"
+>&#13;	$TTL 1D
+	@ IN  SOA  @  root.localhost. (
+		03091025 ; Serial
+		1D   ; Refresco secundario
+		6H   ; Reintento secundario
+		2D   ; Expiración secundaria
+		1D ) ; Cache de registro de recursos
+	
+		NS  @
+	
+		A       65.8.9.234
+	
+		MX      5      correo.miong.org.
+	
+	correo	IN      A       201.2.3.74
+	ns1     IN      A       201.2.3.74
+	www     IN      A       201.2.3.74
+</PRE
+>
+
+Note que se declara el mismo dominio como servidor de nombre autoritario,
+se relaciona con la IP (65.8.9.234), el nombre
+<TT
+CLASS="literal"
+>correo.miong.org</TT
+> identificara la misma máquina
+y es el nombre que se usará para intercambiar correos; el nombre
+<TT
+CLASS="literal"
+>www.miong.org</TT
+> será un alias para el mismo servidor.
+Note que todo nombre que no termine con punto (.), será completado por
+<B
+CLASS="command"
+>bind</B
+> con el dominio (i.e <TT
+CLASS="literal"
+>www</TT
+> será 
+completado a
+<TT
+CLASS="literal"
+>www.miong.org</TT
+>, si se olvida el punto después
+de <TT
+CLASS="literal"
+>correo.miong.org</TT
+>, <B
+CLASS="command"
+>bind</B
+> lo 
+completará a
+<TT
+CLASS="literal"
+>correo.miong.org.miong.org</TT
+>).
+Recuerde aumentar el número serial cada vez que haga algún cambio, para que
+la información pueda ser actualizada en los servidores secundarios.
+Puede probar cada archivo de zonas que haga con:
+<PRE
+CLASS="screen"
+>&#13;	named-checkzone miong.org /var/named/master/miong.org
+</PRE
+>
+Agregue una referencia al archivo de zonas maestro en
+<TT
+CLASS="filename"
+>/var/named/etc/named.conf</TT
+>, en la sección para
+zonas maestras algo de la forma:
+<PRE
+CLASS="screen"
+>&#13;	zone "miong.org" {
+	  type master;
+	  file "master/miong.org";
+	}
+</PRE
+>
+</P
+><P
+>&#13;Si desea que un servidor sea secundario de algún servidor primario,
+agregue en <TT
+CLASS="filename"
+>/var/named/etc/named.conf</TT
+> en la sección
+para zonas esclavas algo como:
+<PRE
+CLASS="screen"
+>&#13;	zone "miong.org" {
+	  type slave;
+	  file "slave/miong.org";
+	  masters { 65.8.9.234; };
+	}
+</PRE
+>
+
+Cuando <B
+CLASS="command"
+>named</B
+> lea de nuevo sus archivos de configuración 
+traerá la información del servidor primario y la dejará en el archivo
+<TT
+CLASS="filename"
+>/var/named/slave/miong.org</TT
+>.
+</P
+><P
+>&#13;      El servidor se inicia con
+<PRE
+CLASS="screen"
+>&#13;	doas sh /etc/rc.d/named start
+</PRE
+>
+      Los errores que se produzcan antes de hacer <B
+CLASS="command"
+>chroot</B
+>
+      son enviados a <TT
+CLASS="filename"
+>/var/log/servicio</TT
+>.
+      Para probar el funcionamiento antes de modificar
+      <TT
+CLASS="filename"
+>/etc/resolv.conf</TT
+> puede usar:
+<PRE
+CLASS="screen"
+>&#13;	dig @localhost miong.org
+</PRE
+>
+      Si requiere volver a leer los archivos de configuración 
+      (por ejemplo después de cambiar los archivos de zonas) puede
+      enviar la señal <TT
+CLASS="literal"
+>SIGHUP</TT
+> al proceso con:
+<PRE
+CLASS="screen"
+>&#13;	pkill -HUP named
+</PRE
+>
+      o con
+<PRE
+CLASS="screen"
+>&#13;	rndc reload
+</PRE
+>
+    </P
+><P
+>&#13;      Una vez compruebe que su servidor DNS está operando correctamente puede
+      indicar que se inicie en cada arranque agregando a
+      <TT
+CLASS="filename"
+>/etc/rc.conf.local</TT
+>:
+<PRE
+CLASS="screen"
+>&#13;	named_flags="" 
+</PRE
+>
+y en el mismo archivo en la definición de <TT
+CLASS="literal"
+>pkg_scripts</TT
+>
+      agregando <TT
+CLASS="literal"
+>named</TT
+>.
+    </P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="vistas"
+>Vistas para resolver nombres interna y externamente</A
+></H3
+><P
+>Si cuenta con una LAN conectada a Internet por medio
+		    de un cortafuegos con OpenBSD que maneja el DNS
+		   	de su organización  y si además cuenta
+		    con una DMZ tal que las peticiones a algunos puertos
+		    del cortafuegos son redirigidas a uno o más servidores,
+		    seguramente tendrá inconvenientes al resolver
+		    nombres de su dominio en la LAN, pues el nombre de 
+		    su organización
+		    (digamos miong.org) será resulto a la dirección externa,
+		    la cual conectará al cortafuegos por el puerto
+		    pedido y tratará de redirigir la conexión al
+		    servidor en la DMZ (i.e se reflejará).   Por este motivo
+		    desde su LAN en general no resolverá nombres de su dominio.
+	    </P
+><P
+>Una solución 
+            (ver <TT
+CLASS="filename"
+>/var/named/etc/named-dual.conf</TT
+>)  es 
+            configurar 
+		    <SPAN
+CLASS="application"
+>bind</SPAN
+> para que tenga dos
+		    vistas, una para computadores fuera de la LAN y otra
+		    para computadores dentro de la LAN.  Un posible
+		    archivo de configuración (basado en los distribuidos
+		    con OpenBSD) es:
+<PRE
+CLASS="screen"
+>&#13;	acl clients {
+		localnets;
+		::1;
+	};
+	options {
+		version "";     
+		listen-on    { any; };
+		listen-on-v6 { any; };
+		allow-recursion { clients; };
+	};
+	logging {
+		category lame-servers { null; };
+	};
+	
+	view "internal" {  // Para la red interna
+	    match-clients { clients; };
+	    match-recursive-only yes;
+	    recursion yes;
+	
+	    zone "." {
+	    	type hint;
+	    	file "standard/root.hint";
+	    };
+	    zone "localhost" {
+	    	type master;
+		file "standard/localhost";
+		allow-transfer { localhost; };
+	    }
+	    zone "127.in-addr.arpa" {
+	    	type master;
+	    	file "standard/loopback";
+	    	allow-transfer { localhost; };
+	    };
+	    zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
+	    	type master;
+	    	file "standard/loopback6.arpa";
+	    	allow-transfer { localhost; };
+	    };
+	    zone "com" {
+	    	type delegation-only;
+	    };
+	    zone "net" {
+	    	type delegation-only;
+	    };
+	
+	    zone "miong.org" {
+	        type master;
+	        file "refleja/miong.org.org";
+	    };
+	};
+	view "external" { // Para Internet
+	    recursion no;
+	    additional-from-auth no;
+	    additional-from-cache no;
+	    zone "miong.org" {
+	        type master;
+		file "master/miong.org";
+	    };
+	    zone "168.74.245.200.IN-ADDR.ARPA" { // Para resolución inversa
+	        type master;
+		file "master/db.168.74.245.200";
+	    };
+	};
+</PRE
+>
+El archivo <TT
+CLASS="filename"
+>master/miong.org</TT
+> sería el típico
+para resolver externamente, mientras que en 
+<TT
+CLASS="filename"
+>refleja/miong.org</TT
+> tendría los mismo nombres del
+anterior pero con las direcciones de la red local. 
+<TT
+CLASS="filename"
+>master/db.167.74.245.200</TT
+> tendría datos para resolución
+de nombres inversa desde fuera de la organización, por ejemplo:
+<PRE
+CLASS="screen"
+>&#13;	$TTL 1D
+	@ IN  SOA  @  root.localhost. (
+	  49   ; Serial de Zona
+	  1D   ; Refesco secundario
+	  6H   ; Retintento secundario
+	  2D   ; Expiración secundaria
+	  1D ) ; Cache de registros de recurso
+	
+	@       IN      NS      cortafuegos.miong.org.
+		IN      PTR     www.miong.org.
+		IN      PTR     correo.miong.org
+		IN      PTR     ns1.miong.org
+</PRE
+>
+	</P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="referencias-dns"
+>Referencias y lecturas recomendadas</A
+></H2
+><P
+>&#13;	    <P
+></P
+><UL
+><LI
+><P
+>&#13;Sección sobre DNS de las guías Aprendiendo a aprender Linux.
+[<SPAN
+CLASS="citation"
+><A
+HREF="b3073.htm#AA_Linux"
+>AA_Linux</A
+></SPAN
+>]
+		    </P
+></LI
+><LI
+><P
+>&#13;Referencia para administradores de BIND 9
+[<SPAN
+CLASS="citation"
+><A
+HREF="b3073.htm#bind9arm"
+>bind9arm</A
+></SPAN
+>].
+		    </P
+></LI
+><LI
+><P
+>&#13;Ayudas para configurar Bind incluido en OpenBSD.
+		    </P
+></LI
+><LI
+><P
+>&#13;      Puede consultar más sobre vistas y reflexión de consultas DNS
+      en <A
+HREF="http://www.bind9.net/manual/bind/9.3.1/Bv9ARM.ch06.html#view_statement_grammar"
+TARGET="_top"
+>http://www.bind9.net/manual/bind/9.3.1/Bv9ARM.ch06.html#view_statement_grammar</A
+>.
+		    </P
+></LI
+><LI
+><P
+>&#13;      [<SPAN
+CLASS="citation"
+><A
+HREF="b3073.htm#openbsdDnsDhcp"
+>openbsdDnsDhcp</A
+></SPAN
+>].
+		    </P
+></LI
+><LI
+><P
+>&#13;Las siguientes páginas man:
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>named</SPAN
+>(8)</SPAN
+>.
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>dig</SPAN
+>(8)</SPAN
+>.
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>unbound</SPAN
+>(8)</SPAN
+>.
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>nsd</SPAN
+>(8)</SPAN
+>.
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>unbound.conf</SPAN
+>(5)</SPAN
+>.
+      <SPAN
+CLASS="citerefentry"
+><SPAN
+CLASS="refentrytitle"
+>named.conf</SPAN
+>(5)</SPAN
+>.
+		    </P
+></LI
+><LI
+><P
+>&#13;https://calomel.org/nsd_dns.html
+		    </P
+></LI
+><LI
+><P
+>&#13;http://eradman.com/posts/run-your-own-server.html
+		    </P
+></LI
+><LI
+><P
+>&#13;https://calomel.org/unbound_dns.html
+		    </P
+></LI
+></UL
+>
+
+    </P
+></DIV
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x1084.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="book1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1297.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Control de ancho de banda</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Servidor <B
+CLASS="command"
+>ssh</B
+></TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
