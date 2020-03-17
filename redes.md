@@ -5,7 +5,7 @@ dispositivos (e.g tarjetas de red) y programas (e.g pila TCP/IP del
 kernel) que permiten transmitir información entre computadores. Pueden
 clasificarse de acuerdo al tamaño (WAN de cobertura amplia como un país,
 MAN de cobertura metropolitana o LAN para edificios o salones) o de
-acuerdo a la estructura de sus protocolos (e.g el módelo OSI que consta
+acuerdo a la estructura de sus protocolos (e.g el modelo OSI que consta
 de 7 capas de protocolos: física, enlace, red, transporte, sesión,
 presentación y aplicación), o de acuerdo a la distribución física de los
 medios de transmisión y dispositivos (e.g estrella, bus).
@@ -136,7 +136,7 @@ siguen todos los computadores y enrutadores conectados. Algunos de estos
 protocolos dependen de otros, dando lugar a varias capas de protocolos:
 aplicación, transporte, Internet, enlace[^red.5]. El siguiente diagrama
 presenta algunos protocolos en las diversas capas de una red TCP/IP
-sobre una red física Ethernet o sobre una conexión con modem:
+sobre una red física Ethernet o sobre una conexión con módem:
 
     Capa de aplicación:
          Protocolos de usuario                FTP Telnet  ssh   http   SMTP ...
@@ -164,7 +164,7 @@ sobre una red física Ethernet o sobre una conexión con modem:
 Se refiere a las conexiones eléctricas y mecánicas de la red. Ejemplos
 de protocolos a este nivel son: Ethernet, Inalámbrico IEEE 802.11, Modem
 y fibra óptica. La información por transmitir se codifica en últimas
-como una señal electríca que debe transmitirse por cables o como una
+como una señal eléctrica que debe transmitirse por cables o como una
 señal electromagnética (luz, ondas). En medios de transmisión
 compartidos por más computadores (Ethernet, fibra óptica, aire), el
 protocolo de este nivel debe tener en cuenta:
@@ -210,7 +210,7 @@ que se conecten, puede emplearse el programa `arpwatch`  (paquete
 `arpwatch`) que cada vez que detecta cambios envía un correo a la cuenta
 root.
 
-En el caso de IPv6 y Ethernet se emplea el portocolo NDP (Neighbor
+En el caso de IPv6 y Ethernet se emplea el protocolo NDP (Neighbor
 Discovery Protocol). Puede examinarse la tabla de vecinos con `ndp -a`
 
 En el caso de una conexión por modem el protocolo es PPP[^red.9], que se
@@ -228,7 +228,7 @@ que requieren decisiones de enrutamiento puede emplearse OSPF.
 [//]: # "IP"
 [//]: # "Este protocolo fragmenta y envia información empleando la capa física.  En la versión 4 de este protocolo, cada computador se identifica con un número de 4 bytes."
 
-En esta capa la información es fragmentada y envíada empleando el
+En esta capa la información es fragmentada y enviada empleando el
 protocolo de la capa física. Los protocolos de esta capa deben tener en
 cuenta la retransmisión de la información en caso de error al enviar y
 el verificar información recibida. En esta capa está el *Internet
@@ -254,7 +254,7 @@ Cada datagrama por transmitir es pasado a la capa de IP por otro
 protocolo de una capa superior (e.g TCP) junto con dirección destino, IP
 mantiene una tabla de enrutamiento que asocia direcciones destino con
 compuertas (computadores intermediarios en inglés *gateways*). Así que
-envía el datagrama empleando el nível físico a la dirección de la
+envía el datagrama empleando el nivel físico a la dirección de la
 compuerta que mantenga en su tabla de enrutamiento. La tabla de
 enrutamiento puede ser modificada manualmente (con `route show`) o puede
 ser modificada automáticamente cuando una compuerta envía un mensaje
@@ -367,10 +367,10 @@ SMMP
 BGP
 
 :   Determina enrutamiento de paquetes en Internet a partir de información 
-    de Sistemas Autonomos.  Cómo se describe en el RFC 4271, un Sistema 
-    Autonomo (AS) es un conjunto de enrutadores bajo una única administración 
+    de Sistemas Autónomos.  Cómo se describe en el RFC 4271, un Sistema 
+    Autónomo (AS) es un conjunto de enrutadores bajo una única administración 
     técnica que a la vista de otros AS tiene un plan de enrutamiento 
-    interior coherente y que presenta una imagen consistene de los destinos
+    interior coherente y que presenta una imagen consistente de los destinos
     a los que se pueden llegar mediante el mismo.
 
 ## Lecturas recomendadas {#lecturas-redes-protocolos-internet}
@@ -388,7 +388,7 @@ BGP
 -   BGP y OSPF: https://www.openbsd.org/papers/linuxtag06-network/mgp00003.html
 
 [^red.1]: Para ampliar el significado de los términos técnicos introducidos
-    en estas guías (como *protocol*), se sugiere consultar el
+    en estas guías (como *protocolo*), se sugiere consultar el
     diccionario FOLDOC <http://foldoc.doc.ic.ac.uk/foldoc>
 
 [^red.2]: También suele llamárseles *daemons* pero como puede resultar

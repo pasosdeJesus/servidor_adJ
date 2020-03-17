@@ -289,7 +289,7 @@ check "ED" "" "test -x \$ED" `which ed 2> /dev/null`
 check "FIG2DEV" "optional" "test -x \$FIG2DEV" `which fig2dev 2> /dev/null`
 check "FIND" "" "test -x \$FIND" `which find 2> /dev/null`
 check "GZIP" "" "test -x \$GZIP" `which gzip 2> /dev/null`
-check "ISPELL" "optional" "test -x \$ISPELL" `which ispell 2> /dev/null`
+check "ASPELL" "optional" "test -x \$ASPELL" `which aspell 2> /dev/null`
 check "MAKE" "" "test -x \$MAKE" `which make 2> /dev/null`
 check "MV" "" "test -x \$MV" `which mv 2> /dev/null`
 check "MKDIR" "" "test -x \$MKDIR" `which mkdir 2> /dev/null`

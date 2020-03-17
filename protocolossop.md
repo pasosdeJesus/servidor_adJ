@@ -28,7 +28,7 @@ uno o más de los siguientes argumentos separados por espacio:
 ### Servidor recursivo unbound {#unbound}
 
 Un servidor recursivo recibe consultas de dominios y las reenvía a otros
-servidores –comenzando por los servidores raiz– o si tiene respuesta a
+servidores –comenzando por los servidores raíz– o si tiene respuesta a
 las consultas en su repositorio temporal fresco (cache) lo usa para
 responder. Es útil para responder consultas de una red local
 rápidamente, y en tal caso debe responder consultas que se hagan desde
@@ -42,7 +42,7 @@ En `/etc/rc.conf.local` agregue
 
         unbound_flags="-c /var/unbound/etc/unbound.conf"
 
-Y a la varialbe `pkg_scripts` agréguele `unbound` Configúrelo en
+Y a la variable `pkg_scripts` agréguele `unbound` Configúrelo en
 `/var/unbound/etc/unbound.conf`, cambiando al menos:
 
 1.  Si su cortafuegos tiene en la red interna la IP 192.168.100.100
@@ -86,8 +86,8 @@ Si prefiere examinar con más detalle puede iniciarlo para depurar con:
 
 ### Servidor autoritario con NSD {#nsd}
 
-Desde adJ y OpenBSD 5.7 hace parte del sistema base junto con unbound
-(que vinieron a replazar named). Usa una configuración basada en la de
+Desde adJ y OpenBSD 5.7 hace parte del sistema base junto con `unbound`
+(que vinieron a remplazar `named`). Usa una configuración basada en la de
 named por lo que es sencilla la migración.
 
 Agregue a `/etc/rc.conf.local` la línea:
@@ -106,7 +106,7 @@ de `/var/named/etc/named.conf`) incluya líneas de la forma:
             zonefile: "miescuela.edu.co"
 
 Para que responda hacía Internet en un cortafuegos con IP pública
-(digamos 200.201.202.203) en el mismo archivo asegurese de dejar:
+(digamos 200.201.202.203) en el mismo archivo asegúrese de dejar:
 
         ip-address: 200.201.202.203
 
@@ -124,7 +124,7 @@ Un ejemplo de un archivo de zona `/var/nsd/zones/miescuela.edu.co` es:
             2 ; Serial
             1d ; Refresco secundario
             6h ; Reintento secundario
-            2d ; Expiracion secndaria
+            2d ; Expiración secundaria
             1d ) ; Cache 
         
                  NS ns1
@@ -151,7 +151,7 @@ Inicie el servicio con
 
 (o reinícielo con `restart` en lugar de `start`).
 
-Revise posibles errores en las bitacoras `/var/log/messages` y
+Revise posibles errores en las bitácoras `/var/log/messages` y
 `/var/log/servicio`
 
 Pruebe que responde desde Internet con:
@@ -348,8 +348,8 @@ inversa desde fuera de la organización, por ejemplo:
         $TTL 1D
         @ IN  SOA  @  root.localhost. (
           49   ; Serial de Zona
-          1D   ; Refesco secundario
-          6H   ; Retintento secundario
+          1D   ; Refresco secundario
+          6H   ; Reintento secundario
           2D   ; Expiración secundaria
           1D ) ; Cache de registros de recurso
         
@@ -641,7 +641,7 @@ y se detiene con:
         doas /etc/rc.d/smtpd stop
 
 Para que inicie en cada arranque y se reinicie fácil ejecutando
-`/etc/rc.local` agrege `smtpd` a la variable `pkg_scripts` de
+`/etc/rc.local` agregue `smtpd` a la variable `pkg_scripts` de
 `/etc/rc.conf.local` y en ese mismo archivo agregue:
 
         smtdp_flags=""
@@ -690,7 +690,7 @@ ejemplo:
 
 Si prefiere recibir en formato maildir (por defecto en `~/Maildir` de 
 cada usuario) y tener opción de procesar usuario a usuario con procmail 
-via el archivo `~/.forward` es mejor cambiar 
+vía el archivo `~/.forward` es mejor cambiar 
 `action "local" mbox alias <aliases>` por:
 
 	action "local" maildir alias <aliases>
@@ -809,7 +809,7 @@ usar como root así:
         MiClave
         TWlDbGF2ZQ==
 
-Retomando la sesion y usando estos datos:
+Retomando la sesión y usando estos datos:
 
         AUTH LOGIN
         334 VXNlcm5hbWU6
@@ -928,7 +928,7 @@ Courier.
 
 #### Implementación Dovecot de IMAPS y POP3S {#dovecot}
 
-Instale el paquete &p-dovecot; y asegurese de dejar `dovecot` en la
+Instale el paquete &p-dovecot; y asegúrese de dejar `dovecot` en la
 variable `pkg_scripts` de `/etc/rc.conf.local` para que se inicie en
 cada arranque.
 
@@ -972,7 +972,7 @@ se describe a continuación.
 
 ##### Autenticación Courier {#autenticacion-courier}
 
-Insatale `courier-authlib`, paquete que se encarga de la autenticación.
+Instale `courier-authlib`, paquete que se encarga de la autenticación.
 Para iniciarlo en cada arranque agregue `courier_authdaemond` a la
 variable `pkg_scripts` de `/etc/rc.conf.local`.
 
@@ -1029,10 +1029,10 @@ análogos a los siguientes (suponemos que se trata del usuario ``):
               
 
 De esta forma cada vez que sendmail reciba un correo para el usuario
-local `` en vez de almacenar en `/var/mail/&EUSUARIO;` ejecutará la línea
+local `` en vez de almacenar en `/var/mail/&EUSUARIO;`  ejecutará la línea
 del archivo `/home/&EUSUARIO;/.forward`, la cual a su vez ejecutará
 procmail para procesar el correo que llega por entrada estándar.
-`procmail` empleará la configuración de `/home/&EUSUARIO;/.procmailrc` que
+`procmail`  empleará la configuración de `/home/&EUSUARIO;/.procmailrc` que
 le indica guardar todo correo que llegue a la cuenta en
 `/home/&EUSUARIO;/Maildir/` (como se trata de un directorio y termina con
 '/', `procmail` identifica que debe salvar en formato `Maildir`, si
@@ -1165,7 +1165,7 @@ del directorio `Maildir/cur`
 ##### IMAP-SSL con Courier {#imap-ssl-courier}
 
 IMAP es un protocolo que permite a un MUA examinar y administrar correos
-que llegan a un servidor, tipicamente sin sacar los correos del servidor
+que llegan a un servidor, típicamente sin sacar los correos del servidor
 (a diferencia de POP) y con la posibilidad de manejar
 directorios/carpetas.
 
@@ -1219,7 +1219,7 @@ podrá detener los servicios con:
         doas /usr/local/libexec/imapd-ssl.rc stop
         rm /var/run/courier/imapd-ssl.pid
 
-Si tiene cortafuegos activo asegurese también de abrir el puerto 993
+Si tiene cortafuegos activo asegúrese también de abrir el puerto 993
 agregando a `/etc/pf.conf` algo como:
 
         pass in on $ext_if proto tcp to ($ext_if) port 993 keep state
@@ -1317,7 +1317,7 @@ que configure el servicio.
 SpamAssassin incluye el servicio `/usr/local/bin/spamd` que espera
 conexiones del cliente `spamc` para aplicar una secuencia de reglas a un
 correo y darle un puntaje. Tal puntaje debe agregarse al encabezado del
-correo y ser tratado como spam enviandolo por ejemplo a la carpeta Junk
+correo y ser tratado como spam envíandolo por ejemplo a la carpeta Junk
 (que es el nombre estándar empleado por diversos clientes de correo).
 
 #### Configuración de spamd {#configuracion-spamd}
@@ -1369,7 +1369,7 @@ correo en formato `maildir` (para permitir consulta con IMAPS --ver
         * ^X-Spam-Level: \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
         /home/pablo/Maildir/.Spam/
         
-        # Todo correo marcado como spam (eg. con puntaje mayor que el umbral puesto)
+        # Todo correo marcado como spam (e.g. con puntaje mayor que el umbral puesto)
         # se mueve a "PosibleSpam".
         :0:
         * ^X-Spam-Status: Yes
@@ -1445,7 +1445,7 @@ PostgreSQL:
     > para que se tomen las opciones de configuración del archivo
     > `.htaccess` especialmente del directorio `logs` donde se almacenan
     > bitácoras y en particular si se activa puede mantenerse la
-    > bitacora `imap` donde quedan claves planas.
+    > bitácora `imap` donde quedan claves planas.
 
 2.  Para configurar una base de datos en PostgreSQL con socket en
     `/var/www/var/run/postgresql` (ver [???](#postgresql)) ejecutar:
@@ -1487,7 +1487,7 @@ PostgreSQL:
             cp /var/www/roundcubemail/config/db.inc.php.dist \
                 /var/www/roundcubemail/config/db.inc.php
 
-    Editelos para que se adapten a su caso. Por ejemplo en
+    Edítelos para que se adapten a su caso. Por ejemplo en
     `config/main.inc.php` basta modificar las líneas:
 
             $rcmail_config['force_https'] = TRUE;
@@ -1710,7 +1710,7 @@ Asignar password al sitio de mailman con
             To: &EUSUARIO2;@&ECLIENTE2;
             Subject: Saludo
 
-            Un cortisimo saludo para bendición de nuestro Creador.
+            Un cortísimo saludo para bendición de nuestro Creador.
             .  
 
     Si lo desea puede experimentar con este protocolo, empleando telnet
@@ -1786,7 +1786,7 @@ como subdirectorios se espera:
     555). En este directorio se ponen los archivos por compartir.
 
 Si desea mantener una bitácora de las descargas que se realicen (en
-`/var/log/ftpd`), asegurese de agregar entre los flags en
+`/var/log/ftpd`), asegúrese de agregar entre los flags en
 `/etc/rc.conf.local`, las opciones `-S -l` y ejecutar:
 
         touch /var/log/ftpd
@@ -1902,7 +1902,7 @@ sección server.
 #### Dominios virtuales {#httpd-dom}
 
 Si la misma IP debe servir diversos dominios, cree una sección `server`
-por cada dominio con el nombre del dominio y emplee la misma opcion
+por cada dominio con el nombre del dominio y emplee la misma opción
 `listen` para todos y si es el caso directorios raices diferentes.
 
 Si se configuraran los dominios www.miescuela.edu.co y
@@ -1962,7 +1962,7 @@ agregando
 
 #### Otros detalles de uso {#httpd-otros}
 
-Si requiere volve a leer archivo de configuración, en lugar de reiniciar
+Si requiere volver a leer archivo de configuración, en lugar de reiniciar
 httpd puede ejecutar:
 
                             pkill -HUP httpd
@@ -1986,7 +1986,7 @@ Por ejemplo para un dominio &EDOMINIO; sólo certificado para el web:
         doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO; 
 
 Si además de los dominios web necesita cubrir con el mismo certificado
-el servidor de correo: correo.&EDOMINIO; que tiene una raiz diferente:
+el servidor de correo: correo.&EDOMINIO; que tiene una raíz diferente:
 
         doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO;  -w /var/www/roundcubemail -d correo.&EDOMINIO;
 
@@ -1994,7 +1994,7 @@ el servidor de correo: correo.&EDOMINIO; que tiene una raiz diferente:
 ### Nginx
 
 OpenBSD y adJ incluyen nginx también entre los componentes básicos. Su
-archivo de configuración es `/etc/nginx/nginx.conf`. Por defecto correra
+archivo de configuración es `/etc/nginx/nginx.conf`. Por defecto correrá
 en una jaula en `/var/www`, puede iniciarlo manualmente con:
 
         doas /etc/rc.d/nginx start
@@ -2019,7 +2019,7 @@ socket `/var/www/run/php-fpm.sock` con
 
         listen = /var/www/run/php-fpm.sock
 
-Inicielo con
+Inícielo con
 
         doas sh /etc/rc.d/php56-fpm start
 

@@ -235,12 +235,12 @@ debe configurarse `ppp` para realizar la conexión.
 Hay diversos tipos de módems (tarjetas ISA, PCI, módems externos USB o
 seriales), los módems externos que se conectan a puerto serial son los
 más fáciles de configurar, algunos módems USB también son soportados
-(los que tengan ordens y datos multiplexados --como indica la página
+(los que tengan ordenes multiplexadas y datos --como indica la página
 del manual del controlador `umodem`) y eventualmente es posible hacer
 funcionar tarjetas ISDN ISA o PCI
 ([http://people.freebsd.org/~hm/i4b-home/](http://people.freebsd.org/~hm/i4b-home/)).
 
-Los módems y los módems ISDN reciben ordens AT y se configuran
+Los módems y los módems ISDN reciben ordenes AT y se configuran
 empleando `ppp`. Por ejemplo el archivo `/etc/ppp/ppp.conf` podría
 incluir porciones como las siguientes (remplazando el número de
 teléfono, el nombre de la cuenta y la clave por los correctos):
@@ -269,7 +269,7 @@ también emplear el siguiente script para realizar la conexión:
         #!/bin/sh
         # Dominio público. 2004.
         
-        # Usa configuracion de /etc/ppp/ppp.conf regla PAP
+        # Usa configuración de /etc/ppp/ppp.conf regla PAP
         
         netw=`groups | sed -e "s/.*network.*/1/g"`;
         if (test "$netw" != "1") then {
@@ -402,7 +402,7 @@ computadores con tarjetas Ethernet interconectados por uno o más[^lan.1]
 concentradores (también llamado *hub* o *switch*) y cables UTP directos
 de cada computador a algún concentrador. La velocidad de la red depende
 de la velocidad de las tarjetas de red, la velocidad de los
-concentradores y la categoria de los cables. Esta velocidad se mide en
+concentradores y la categoría de los cables. Esta velocidad se mide en
 Megabits (millones de bits por segundo), y sus valores típicos son 10Mb,
 100Mb, 1000Mb o 1Gb y recientemente 10Gb.
 
@@ -613,7 +613,7 @@ reiniciar el sistema de redes con:
 aunque en algunos casos es necesario reiniciar el computador.
 
 Note que si ha cambiado una tarjeta de red es posible que antes de
-reinicar debe reconfigurar el cortafuegos en el archivo `/etc/pf.conf`
+reiniciar debe reconfigurar el cortafuegos en el archivo `/etc/pf.conf`
 
 ### Protocolo ARP
 
@@ -631,7 +631,7 @@ opciones `-s` y `-d` respectivamente.
 
 Necesitará un concentrador preferiblemente de 1Gb con suficientes
 puertos para todos los computadores que tenga o varios interconectados
-en cascada, cable UTP categoria 5e o 6 con conectores RJ-45 y en cada
+en cascada, cable UTP categoría 5e o 6 con conectores RJ-45 y en cada
 computador deberá tener una tarjeta Ethernet (preferiblemente de 1GB)
 con un puerto para un conector RJ-45 (ver [Configuración de una interfaz
 de red](#configuracion-interfaz)).
@@ -736,7 +736,7 @@ de las cuales la más común es la TIA/EIA-568-B:
     8 - blanco/azul.
 
 Empareje los 8 cablecitos antes de intentar ponerlos en el conector
-RJ-45. Pongalos en el orden antes indicado para cables directos.
+RJ-45. Póngalos en el orden antes indicado para cables directos.
 
 El conector RJ45 tiene varios canales, por cada uno de esos canales debe
 pasar un cablecito de color. Empuje bien los cablecitos hasta el fondo
@@ -801,7 +801,7 @@ Para redes locales los protocolos más utilizados son IEEE 802.11a,
 y dan tasas de transferencia entre 11Mbps y 54Mbps.
 
 Una red local inalámbrica requiere un Punto de Acceso Inalámbrico (en
-inglés *Acces Point*) que atienda peticiones y dé respuestas a todos los
+inglés *Access Point*) que atienda peticiones y dé respuestas a todos los
 computadores cliente que se conecten. Tal Punto de Acceso Inalámbrico
 puede ser un dispositivo dedicado o bien un computador con OpenBSD que
 cuente con una tarjeta de inalámbrica que soporte el modo `hostap`.
@@ -918,7 +918,7 @@ red inalámbrica y un conector para cable Ethernet que se conecta a la
 red cableada, la cual típicamente va a Internet.
 
 Normalmente los dispositivos que obran como Punto de Acceso Inalámbrico
-(Acces Point) cuentan con un servicio de configuración que opera sobre
+(Access Point) cuentan con un servicio de configuración que opera sobre
 HTTP por lo que pueden conectarse a un computador y emplear un navegador
 web.
 
@@ -955,7 +955,7 @@ algunas direcciones de la misma red cableada. Esto tiene la ventaja de
 dejar tanto la red inalámbrica como la cableada en el mismo segmento de
 red.
 
-Las particularidades de configuración de cada Punto de Accesso
+Las particularidades de configuración de cada Punto de Acceso
 Inalámbrico varían de un modelo a otro, pero normalmente debe
 especificar:
 

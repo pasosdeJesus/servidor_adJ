@@ -73,7 +73,7 @@ sistema adJ.
 ### Primera instalación del servidor {#primera-instalacion}
 
 Este motor de bases de datos se instala con el archivo de ordenes
-`/inst-adJ.sh` que en instalaciones tipicas de adJ basta ejecutar y
+`/inst-adJ.sh` que en instalaciones típicas de adJ basta ejecutar y
 volver a ejecutar para actualizar o para volver a inicializar PostgreSQL
 u otro paquete de esta distribución. En caso de actualizar este archivo
 sacará respaldo de la información de la base de 2 formas (copiando
@@ -101,7 +101,7 @@ escrito describe son:
             doas passwd _postgresql
 
 -   A diferencia de versiones anteriores, este paquete ya no inicializa
-    la base. Inicialicela con:
+    la base. Inicialícela con:
 
             doas mkdir -p /var/postgresql/data
             doas chown -R _postgresql:_postgresql /var/postgresql
@@ -135,7 +135,7 @@ escrito describe son:
 
             pkg_scripts="cron montaencres montaencpos postgresql httpd cupsd"
 
-Inicialmente el servidor queda configurado con un zocalo (socket) Unix 
+Inicialmente el servidor queda configurado con un zócalo (socket) Unix 
 (solo desde la misma máquina). Puede comprobar que está corriendo el servidor
 (postmaster) con:
 
@@ -224,7 +224,7 @@ de acceso la palabra `trusted` por `md5`, por ejemplo:
         host    all         all         127.0.0.1/32          md5
         host    all         all         ::1/128               md5
 
-Detenga el servidor y vuelvalo a iniciar, notará que todo intento de
+Detenga el servidor y vuélvalo a iniciar, notará que todo intento de
 ingreso exige la clave.
 
 El listado de bases de datos puede consultarse con:
@@ -469,8 +469,8 @@ al CN del certificado.
 
 Desde el servidor puede generar y firmar certificado para cliente por
 10 años (cambie ```usuario``` por el usuario PostgreSQL dueño de la 
-bae de datos y que usara desde los clientes para conectarse, si
-prefiere un lapsode tiemo diferente especifiquelo en días después
+base de datos y que usara desde los clientes para conectarse, si
+prefiere un lapso de tiempo diferente especifíquelo en días después
 de la opción ```-days```):
 
         doas su - 
@@ -486,7 +486,7 @@ llave privada (```usuario.key```) al computador cliente donde se usará:
         scp usuario.key usuario.crt mius@192.168.100.11:~/.postgresql/
 
 En el servidor edite el archivo ```/var/postgresql/data/pg_hba.conf``` 
-y asegurese de agregar una línea para el usuario y el computador cliente:
+y asegúrese de agregar una línea para el usuario y el computador cliente:
 
         hostssl all usuario 192.168.100.11/32 cert clientcert=1
 
@@ -528,7 +528,7 @@ En ```config/database.yml``` debe verse algo como:
         host: 192.168.100.21
         sslmode: "require"
 
-y al hacer operaciones que usen base de datos (rails dbconsole, iniciar unicorn, etc) asegurese de ejecutarlas en un ambiente donde se definan bien las variables PGSSLCERT y PGSSLKEY, por ejemplo:
+y al hacer operaciones que usen base de datos (rails dbconsole, iniciar unicorn, etc) asegúrese de ejecutarlas en un ambiente donde se definan bien las variables PGSSLCERT y PGSSLKEY, por ejemplo:
 
         PGSSLCERT=/home/usis/.postgresql/usuario.crt \
         PGSSLKEY=/home/usis/.postgresql/usuario.key \
@@ -819,7 +819,7 @@ La configuración por defecto emplea `/var/db/ldap` como directorio para
 mantener las bases de datos y mantiene una por cada espacio de nombres
 (namespace). Las conexiones no cifradas por defecto operan en el puerto
 389 y deben autenticarse con SASL (a menos que tengan la opción `secure`
-para permitir autenticación plana) y las que empleen certificado iran
+para permitir autenticación plana) y las que empleen certificado irán
 cifradas en el puerto 636.
 
 Cada vez que modifique el archivo de configuración del servidor, puede
@@ -844,7 +844,7 @@ E iniciar el servicio con `/etc/rc.d/ldapd start` y detenerlo con
 Es muy recomendable que agregue el esquema LDAP de Courier, de esta
 forma tomada de {3}:
 
--   Descarguelo y renombrelo:
+-   Descárguelo y renómbrelo:
 
             doas ftp -o /etc/ldap/courier.schema \
             http://courier.cvs.sourceforge.net/viewvc/courier/libs/authlib/authldap.schema
@@ -896,7 +896,7 @@ Además de modificar `/etc/ldap/ldap.conf` para agregar
 Una vez esté corriendo `ldapd` deberá iniciar un directorio para su
 organización y los usuarios que se autenticarán. Puede agregar estos
 datos con el programa `ldapadd` que hace parte de openldap-client.
-Programa que recibe datos en formato ldif, por ejemplo leidos de un
+Programa que recibe datos en formato ldif, por ejemplo leídos de un
 archivo. Un primer archivo con datos de la organización puede ser
 `org.ldif` y contener:
 
@@ -985,7 +985,7 @@ Cada vez los programas, librerías y lenguajes están verificando con más
 insistencia que los certificados sean efectivamente firmados por 
 autoridades certificadoras.  
 
-En genral las autoridades certificadoras cobran por emitir firmas para 
+En general las autoridades certificadoras cobran por emitir firmas para 
 certificados.  Sin embargo <http://letsencrypt.org> es una autoridad 
 certificadora que expide certificados gratuitos para sitios públicos 
 pero no para sitios en redes internas por cuanto el proceso de 
@@ -1060,7 +1060,7 @@ En el computador que hará la conexión (en este ejemplo
         openssl genrsa -des3 -out apbd2.miong.org.co.key 1024
         openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
 
-De una clave temporal y borrela con
+De una clave temporal y bórrela con
 
         openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
 
@@ -1069,7 +1069,7 @@ Cree la solicitud de certificado con:
         openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=MIONG/CN=apbd2.miong.org.co'
 
 Copie la solicitud `apbd2.miong.org.co.csr` al servidor 
-apbd1.miong.org.co y dejela en el directorio `/var/postgresql/data`
+apbd1.miong.org.co y déjela en el directorio `/var/postgresql/data`
 
 Y allí ejecute:
 
@@ -1087,7 +1087,7 @@ A continuación copie el certificado generado
 #### Caso PostgreSQL
 
 En el servidor edite el archivo `/var/postgresql/data/pg_hba.conf` y 
-asegurese de agregar una línea para el usuario y el computador 
+asegúrese de agregar una línea para el usuario y el computador 
 cliente:
         hostssl all usuario 192.168.100.11/32 cert clientcert=1
 
@@ -1113,7 +1113,7 @@ Configure la aplicación para que en cada arranque o uso establezca:
 
 #### Caso LDAPD
 
-Ubique el ceritifcado y llave en `/etc/ldap/certs/` del servidor 
+Ubique el certificado y llave en `/etc/ldap/certs/` del servidor 
 donde corre ldapd:
 
         doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
@@ -1122,7 +1122,7 @@ Configure `/etc/ldapd.conf`
 
         listen on $if1 tls certificate apbd2.miong.org.co
 
-En los computadores que realicen conexiones al LDAP asegurese de 
+En los computadores que realicen conexiones al LDAP asegúrese de 
 agregar la llave de la entidad certificadora 
 `/var/postgresql/data/root.crt`, es decir en el servidor apbd1 ejecute:
 

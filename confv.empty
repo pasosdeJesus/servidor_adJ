@@ -203,6 +203,10 @@ ISPELL=""
 # Corrector ortográfico internacional.
 # http://fmg-www.cs.ucla.edu/fmg-members/geoff/ispell.html
 
+ASPELL=""
+# Corrector ortográfico.
+# 
+
 PANDOC=""
 # Pasa de markdown a docbook
 # http://pandoc.org/

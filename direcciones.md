@@ -210,7 +210,7 @@ para conectarlo a la red interna (con IP de la red interna) y otra para
 conectarlo a Internet (con IP pública). En el archivo `/etc/pf.conf`
 configure las variables `ext_if` e `int_if` con los nombres de las
 interfaces externa (conectada a Internet) e interna respectivamente
-(verifiquelas antes con `ifconfig`). Por ejemplo un archivo de
+(verifíquelas antes con `ifconfig`). Por ejemplo un archivo de
 configuración mínimo que hace NAT, suponiendo que la interfaz interna es
 `fxp0` y la externa es `nfe0` es:
 
@@ -232,7 +232,7 @@ NAT es sigla de "Network Address Translation" (Traducción de direcciones de red
 lo que hace es "traducir" las direcciones privadas de la red interna 
 a la dirección pública del cortafuegos 
 para que el cortafuegos haga la petición a su nombre y la respuesta que 
-reciba la vuelve a traducir a la dirección privadaen la red interna
+reciba la vuelve a traducir a la dirección privada en la red interna
 para enviarla al computador de la red interna que corresponde.
 
 Una vez realizada, un computador en la red interna debería poder ejecutar
