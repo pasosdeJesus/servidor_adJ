@@ -531,7 +531,7 @@ CLASS="literal"
 >/var/named/master</TT
 >. Pueden configurarse
         archivos como dice en <A
-HREF="a3069.htm"
+HREF="a3068.htm"
 >AA_Linux</A
 > por
         ejemplo los datos un servidor DNS primario del dominio
@@ -869,7 +869,7 @@ NAME="referencias-dns"
 ><P
 >&#13;            Sección sobre DNS de las guías Aprendiendo a aprender Linux.
             <A
-HREF="a3069.htm"
+HREF="a3068.htm"
 >AA_Linux</A
 >
           </P
@@ -878,7 +878,7 @@ HREF="a3069.htm"
 ><P
 >&#13;            Referencia para administradores de BIND 9
             <A
-HREF="a3069.htm"
+HREF="a3068.htm"
 >bind9arm</A
 >.
           </P
@@ -902,7 +902,7 @@ TARGET="_top"
 ><LI
 ><P
 >&#13;            <A
-HREF="a3069.htm"
+HREF="a3068.htm"
 >openbsdDnsDhcp</A
 >.
           </P
@@ -1036,7 +1036,7 @@ NAME="dhcp"
 ><P
 >&#13;      El protocolo DHCP se describen en el RFC 2131 (ver
       <A
-HREF="a3069.htm"
+HREF="a3068.htm"
 >rfc2131</A
 >), se trata de un modelo
       cliente-servidor en el que el servidor DHCP localiza direcciones
@@ -1168,7 +1168,7 @@ NAME="referencias-dhcpd"
       </P
 ><P
 >&#13;        El RFC 2131 (ver <A
-HREF="a3069.htm"
+HREF="a3068.htm"
 >rfc2131</A
 >).
       </P
@@ -4232,7 +4232,7 @@ COMPACT="COMPACT"
       compleja sea la generación de páginas al lado del servidor.
     </P
 ><P
->&#13;      Ambos peuden emplear certificados SSL tanto comprados como los
+>&#13;      Ambos pueden emplear certificados SSL tanto comprados como los
       gratuitos de Let's Encrypt.
     </P
 ><DIV
@@ -4557,9 +4557,10 @@ CLASS="literal"
 >/etc/hosts</TT
 > con una línea de la forma
           </P
-><P
->&#13;            192.168.10.2 www.midominio.org
-          </P
+><PRE
+CLASS="programlisting"
+>&#13;192.168.10.2 www.midominio.org
+</PRE
 ><P
 >&#13;            Siempre y cuando en <TT
 CLASS="literal"
@@ -4670,10 +4671,11 @@ CLASS="literal"
 > que son 2 servidores DNS
             populares se harían con líneas de la forma:
           </P
-><P
->&#13;            midominio.org. A 125.125.121.1; www.midominio.org. A
-            125.125.121.1;
-          </P
+><PRE
+CLASS="programlisting"
+>&#13;midominio.org.  A   125.125.121.1;
+www.midominio.org.  A   125.125.121.1;
+</PRE
 ></DIV
 ></DIV
 ><DIV

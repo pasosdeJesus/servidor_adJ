@@ -462,7 +462,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
     </p><p>
       En su modo de operación dinámico el servidor le asigna una IP a un
       sólo cliente por cierto periodo de tiempo, al cabo del cual podría
-      asignarle otra IP<sup>[<a name="idm506008968" href="#ftn.idm506008968">25</a>]</sup>.
+      asignarle otra IP<sup>[<a name="idp516665592" href="#ftn.idp516665592">25</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="cliente-DHCP"></a>5.3.1. Configuración de un cliente DHCP</h4></div></div></div><p>
         La configuración de un computador para operar como cliente de
         DHCP depende del sistema operativo, en el caso de Windows en las
@@ -591,7 +591,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
             Que ambos usuarios tengan un programa con el que puedan leer
             y redactar correos, como por ejemplo mail, mutt,
             mozilla-thunderbird (a ese programa se le llamará MUA -
-            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idp33061112" href="#ftn.idp33061112">26</a>]</sup>).
+            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idp1821034744" href="#ftn.idp1821034744">26</a>]</sup>).
           </p></li></ul></div><p>
         Si tanto pablo como rodrigo emplean como MUA
         <code class="literal">mail</code>, y ambos computadores tiene como MTA
@@ -612,7 +612,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
         Enviar un mensaje significa crear una conexión TCP con el MTA
         destino o con otro MTA que actúe de intermediario, típicamente
         en el puerto TCP 25, y transmitir el mensaje siguiendo las
-        reglas del protocolo SMTP <sup>[<a name="idm2333953160" href="#ftn.idm2333953160">27</a>]</sup>. Para establecer el computador con el cual
+        reglas del protocolo SMTP <sup>[<a name="idp1131489144" href="#ftn.idp1131489144">27</a>]</sup>. Para establecer el computador con el cual
         conectarse sendmail revisa con el resolvedor DNS, registros MX
         asociados con el dominio de la dirección, si los hay intenta
         enviar a cada uno en orden de prioridad --los registros MX con
@@ -961,7 +961,7 @@ chmod a+r aliasesejemplo
     doas rcctl -d restart smtpd
 </pre></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="protocolos-revisar-correo"></a>5.5.3. Protocolos para revisar correo</h4></div></div></div><p>
         Para extraer correos de un servidor pueden emplearse los
-        protocolos inseguros<sup>[<a name="idp999156088" href="#ftn.idp999156088">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
+        protocolos inseguros<sup>[<a name="idp3622685048" href="#ftn.idp3622685048">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
         POP3S e IMAPS En esta sección se describe la configuración
         extra-rápida pero insegura de POP3, y la configuración segura
         pero que requiere configuración más delicada de POP3S e IMAPS
@@ -1879,7 +1879,7 @@ Las peticiones pudieron pasar antes por el cortafuegos si lo hay o d
       El siguiente diagrama presenta más detalles de los elementos
       involucrados en servir páginas web generadas por una aplicación
       Ruby on Rails.
-    </p><div class="figure"><a name="idm1568093064"></a><p class="title"><b>Figura 1. Diagrama de peticion y respuesta web</b></p><div class="mediaobject"><img src="img/diagrama-web.png" alt="Diagrama de peticion y respuesta
+    </p><div class="figure"><a name="idp2440022392"></a><p class="title"><b>Figura 1. Diagrama de peticion y respuesta web</b></p><div class="mediaobject"><img src="img/diagrama-web.png" alt="Diagrama de peticion y respuesta
         web"></div></div><p>
       Así que la configuración de un servidor web debe tener en cuenta
       por lo menos:
@@ -1902,7 +1902,7 @@ Las peticiones pudieron pasar antes por el cortafuegos si lo hay o d
       emplearse también el paquete nginx, especialmente entre más
       compleja sea la generación de páginas al lado del servidor.
     </p><p>
-      Ambos peuden emplear certificados SSL tanto comprados como los
+      Ambos pueden emplear certificados SSL tanto comprados como los
       gratuitos de Let's Encrypt.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="nginx"></a>5.7.1. nginx</h4></div></div></div><p>
         nginx es un servidor web que en el caso de adJ está incluido
@@ -2043,9 +2043,9 @@ http {
           </p><p>
             Eso lo puede hacer en el archivo
             <code class="literal">/etc/hosts</code> con una línea de la forma
-          </p><p>
-            192.168.10.2 www.midominio.org
-          </p><p>
+          </p><pre class="programlisting">
+192.168.10.2 www.midominio.org
+</pre><p>
             Siempre y cuando en <code class="literal">/etc/resolv.conf</code>
             tenga <code class="literal">lookup file</code>
           </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="pruebas-en-una-red-cambiando-resoluci%C3%B3n-local-para-la-red"></a>5.7.1.2.2. Pruebas en una red cambiando resolución local para la
@@ -2093,10 +2093,10 @@ doas rcctl -d restart unbound
             pública de su servidor. Tanto con <code class="literal">bind</code>
             como con <code class="literal">nsd</code> que son 2 servidores DNS
             populares se harían con líneas de la forma:
-          </p><p>
-            midominio.org. A 125.125.121.1; www.midominio.org. A
-            125.125.121.1;
-          </p></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="configuraci%C3%B3n-de-nginx-de-acuerdo-a-como-se-almacenan-o-generan-p%C3%A1ginas-en-el-servidor"></a>5.7.1.3. Configuración de nginx de acuerdo a como se almacenan o
+          </p><pre class="programlisting">
+midominio.org.  A   125.125.121.1;
+www.midominio.org.  A   125.125.121.1;
+</pre></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="configuraci%C3%B3n-de-nginx-de-acuerdo-a-como-se-almacenan-o-generan-p%C3%A1ginas-en-el-servidor"></a>5.7.1.3. Configuración de nginx de acuerdo a como se almacenan o
         generan páginas en el servidor</h5></div></div></div><p>
           Hay varias posibilidades:
         </p><div class="itemizedlist"><ul type="disc"><li><p>
@@ -2400,7 +2400,7 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
 </pre><p>
           El formato de las bitácoras por defecto es similar al de
           <code class="literal">nginx</code>
-        </p></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm506008968" href="#idm506008968">25</a>] </sup>
+        </p></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp516665592" href="#idp516665592">25</a>] </sup>
           Típicamente un cliente enviará un paquete DHCPDISCOVER a toda
           la red (opcionalmente con sugerencia de la IP que quiere), un
           servidor que reciba tal paquete le responderá con un DHCPOFFER
@@ -2408,10 +2408,10 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
           puede responder con DHCPREQUEST para confirmar los parámetros
           y el servidor responde con un DHCPACK para confirmar
           asignación.
-        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp33061112" href="#idp33061112">26</a>] </sup>
+        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1821034744" href="#idp1821034744">26</a>] </sup>
                 De acuerdo al RFC 1123 los nombre MUA y MTA son propios
                 del protocolo X.400.
-              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2333953160" href="#idm2333953160">27</a>] </sup>
+              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1131489144" href="#idp1131489144">27</a>] </sup>
             De acuerdo al protocolo SMTP, sendmail de amor
             se conectaría por el puerto 25 a sendmail en
             respeto y enviaría los mensajes
@@ -2442,7 +2442,7 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
 </pre><p>
             (para emplear <code class="literal">-f</code> con sendmail debe ser
             usuario autorizado).
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp999156088" href="#idp999156088">28</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp3622685048" href="#idp3622685048">28</a>] </sup>
             Son inseguros porque transmiten claves y el contenido de los
             mensajes planos por la red
           </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="otros_servicios_que_puede_prestar_el_servidor.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">4. Direcciones, enrutamiento, transporte y cortafuegos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 6. Otros servicios que puede prestar el servidor</td></tr></table></div></body></html>
