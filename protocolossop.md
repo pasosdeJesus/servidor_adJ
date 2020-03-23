@@ -1851,7 +1851,7 @@ OpenBSD httpd.  Es eficiente aunque mínimo, por lo que puede emplearse
 también el paquete nginx, especialmente entre más compleja sea la generación
 de páginas al lado del servidor.
 
-Ambos peuden emplear certificados SSL tanto comprados como los gratuitos
+Ambos pueden emplear certificados SSL tanto comprados como los gratuitos
 de Let's Encrypt.
 
 ### nginx
@@ -1984,7 +1984,7 @@ la resolución local para asociar www.midominio.org a la IP 192.168.10.2.
 
 Eso lo puede hacer en el archivo `/etc/hosts` con una línea de la forma
 
-192.168.10.2 www.midominio.org
+	192.168.10.2 www.midominio.org
 
 Siempre y cuando en  `/etc/resolv.conf` tenga `lookup file`
 
@@ -2030,8 +2030,8 @@ y al y al subdominio `www.midominio.org` se dirigen a la IP pública de
 su servidor.  Tanto con `bind` como con `nsd` que son 2 servidores DNS
 populares se harían con líneas de la forma:
 
-midominio.org.	A	125.125.121.1;
-www.midominio.org.	A	125.125.121.1;
+	midominio.org.	A	125.125.121.1;
+	www.midominio.org.	A	125.125.121.1;
 
 #### Configuración de nginx de acuerdo a como se almacenan o generan páginas en el servidor
 
@@ -2099,13 +2099,13 @@ Para esto una vez instalado el paquete &p-php; configure:
 
 1. Que en cada arranque se inicie el servicio `php73_fpm` por ejemplo con:
 
-	doas rcctl enable php73_fpm
+    doas rcctl enable php73_fpm
 
 2. Que `php73_fpm` use el socket en la ubicación correcta, para esto cambie 
 el archivo `/etc/php-fpm.ini` para que en lugar de la línea con comentario 
 `;listen =` tenga:
 
-	listen = /var/www/var/run/php-fpm.sock
+    listen = /var/www/var/run/php-fpm.sock
 
 En un servidor los archivos de PHP suelen mezclarse con archivos HTML así 
 que la configuración del caso anterior servirá, pero además debe añadir 

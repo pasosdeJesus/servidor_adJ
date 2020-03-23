@@ -81,7 +81,7 @@ Versión 5.2
 
 Versión 5.0
 
-:   -   Actualizada instalación de PHP [xref](#php).
+:   -   Actualizada instalación de PHP 
 
     -   Cubre Aprendiendo de Jesús 5.0.
 

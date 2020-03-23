@@ -13,7 +13,7 @@ FUENTESDB=redes.xdbk interconexion.xdbk direcciones.xdbk protocolossop.xdbk otro
 SOURCES=$(PROYECTO).xdbk $(FUENTESDB)
 # Listado de fuentes XML. Preferiblmente en el orden de inclusión.
 
-IMAGES= img/home.png img/prev.png img/toc-minus.png img/blank.png img/important.png img/toc-plus.png img/caution.png img/next.png img/tip.png img/up.png img/draft.png img/note.png img/toc-blank.png img/warning.png
+IMAGES= img/home.png img/prev.png img/toc-minus.png img/blank.png img/important.png img/toc-plus.png img/caution.png img/next.png img/tip.png img/up.png img/draft.png img/note.png img/toc-blank.png img/warning.png img/diagrama-web.png
 # Listado de imagenes, preferiblemente en formato PNG
 
 HTML_DIR=html
