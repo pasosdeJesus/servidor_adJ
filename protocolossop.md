@@ -1820,13 +1820,362 @@ bitácora a salida estándar con máximo nivel de verbosidad.
 La página del manual de `ftpd`.
 
 
-## Servidor web {#sevidorweb}
+## Servidor web {#servidor-web}
 
-adJ y OpenBSD incluyen en el sistema base dos servidores web: (1) una
-versión auditada de `nginx 1.6.0` y (2) su propio OpenBSD httpd. En este
-capítulo detallamos la configuración y uso de cada uno, así como del
-paquete apache-httpd-openbsd que es el Apache 1.3.29 incluido hasta
-OpenBSD 5.5.
+Un servidor web recibe peticiones acordes al protocolo HTTP, las procesa, 
+recolecta la información que va retornar y la retorna típicamente en 
+HTML/CSS/Javascipt también mediante el protocolo HTTP.     
+Las peticiones pudieron pasar antes por el cortafuegos si lo hay o de otro 
+servidor que actue como proxy.
+
+El siguiente diagrama presenta más detalles de los elementos involucrados
+en servir páginas web generadas por una aplicación Ruby on Rails.
+
+![Diagrama de peticion y respuesta web](img/diagrama-web.png)
+
+
+Así que la configuración de un servidor web debe tener en cuenta por lo 
+menos:
+
+* Al lado del usuario, la forma de los URL que se espera que emplee. 
+  Por ejemplo es más simple de configurar, pero menos usable, si el 
+  usuario emplea directamente la dirección IP en lugar de un nombre de servidor.
+* La lado del servidor, de donde provienen el HTML el CSS y el Javascript.
+  Por ejemplo es más simple servir páginas HTML, CSS y Javascript alojadas en 
+  el sistema de archivos, que páginas generadas con PHP o que páginas 
+  generadas con Ruby.
+* Al lado del usuario y del servidor si la conexión será cifrada o no.
+
+adJ y OpenBSD incluyen en el sistema base su propio servidor 
+OpenBSD httpd.  Es eficiente aunque mínimo, por lo que puede emplearse
+también el paquete nginx, especialmente entre más compleja sea la generación
+de páginas al lado del servidor.
+
+Ambos peuden emplear certificados SSL tanto comprados como los gratuitos
+de Let's Encrypt.
+
+### nginx
+
+nginx es un servidor web que en el caso de adJ está incluido entre
+los paquetes que se insalan por omisión.
+Su binario queda ubica en `/usr/local/sbin/nginx` y puede consultar la versión 
+ejecutando `nginx -v`
+
+Cuando corre en OpenBSD lee el archivo de configuración `/etc/nginx/nginx.conf`
+y después cambia el directorio raíz  con `chroot` a  `/var/www` para correr en 
+esa jaula. Esta es una medida de seguridad para evitar que un atacante que 
+desde el web logre acceso al sistema de archivos pueda ver o escribir en 
+archivos de configuración (como los de `/etc`) o binarios o el kernel mismo, 
+un atacante vería como raíz lo que este en `/var/www`.
+
+Puede iniciarlo manualmente con:
+
+        doas /etc/rc.d/nginx start
+
+y detenerlo con
+
+        doas /etc/rc.d/nginx stop
+
+Para que inicie automáticamente en cada arranque basta agregar en
+`/etc/rc.conf.local`:
+
+       nginx_flags=""
+
+y que añada `nginx` en `pkg_scripts`.
+
+
+#### Generalidades del archivo de configuración de nginx
+
+El archivo de configuración consta de directivas que le indican a nginx 
+como responder a solicitudes http.
+
+Algunas de las directivas del archivo de configuracioń tienen bloques que a su 
+vez tienen directivas. Cada bloque se inicia con `{` y se cierra con `}`.  
+Las directivas que no tienen bloque deben terminarse con `;`
+
+Pueden ponerse comentarios a la derecha del símbolo `#` en cualquier línea (el 
+resto de la línea después del `#` es comentario).
+
+El siguiente es un archivo de configuración mínimo para que nginx sirva
+páginas estáticas HTML, CSS y Javascript alojadas en el sistema de 
+archivos en `/var/www/htdocs/`, iniciando por omisión con `index.html`
+requiriendo que el usuario final acceda desde el mismo servidor con un 
+navegador empleando una dirección de la forma <http://127.0.0.1>
+
+	http {
+	  include mime.types;
+	  default_type application/octet-stream;
+	  index index.html;
+	  server {
+	    server_name 127.0.0.1;
+	    listen 80:
+	    root htdocs;
+	  }
+	}
+
+Dentro del bloque de la directiva `http` debe ponerse una directiva 
+`server` por cada sitio web que sea servido por nginx. 
+
+La directiva `server` tiene un bloque dentro del cual deben ponerse,
+entre otras, las directivas `server_name` (con nombre de servidor) y 
+`listen` (con puerto) acordes a los URLs que se esperan sean usados 
+por los usuarios y otras directivas de acuerdo al contenido que se
+desea servir.
+
+En el ejemplo anterior la directiva `root` indica que se servirán
+contenido alojado en el sistema de archivos en la ruta `/var/www/htdocs`
+(como nginx correo en la jaula `/var/www` basta indicar la ruta
+dentro de esa).  La directiva `index index.html` indica que si
+el usuario no especifica una ruta particular en el URL se servirá
+el archivo `/var/www/htdocs/index.html` que si desea probar puede 
+iniciar con el contenido:
+
+	<h1>Bienvenido a servir contenido web con nginx</h1>
+
+
+#### Configuración de `server_name` y `listen` de acuerdo a URLs que se esperan del usuario
+
+Los URLs que usen que incluyen el protocolo (`http` sin cifrar o
+`https` con cifrado) el nombre del servidor (o dirección IP si no tiene 
+dominos DNS configurados) y el puerto (si el usuario no emplea un puerto 
+y el URL comienza con `http` se usa el puerto 80, o si comienza con 
+`https` se emplea por omisión el puerto 443).
+
+Otro caso sencillo de configurar es servir contenido estático HTML, CSS
+y Javascript a usuarios ubicados en computadores en una red local en
+la que el servidor tiene una IP estática asignada (digamos
+192.168.20.20) o si ha contratado una IP pública con su proveedor de 
+Internet digamos 125.125.123.1
+
+	http {
+	  include mime.types;
+	  default_type application/octet-stream;
+	  index index.html;
+	  server {
+	    server_name 125.125.123.1;
+	    listen 80:
+	    root htdocs;
+	  }
+	}
+
+
+Si prefiere usar un nombre en lugar de una IP (digamos &EDOMINIO;) 
+deberá tramitar el registro del dominio ante un registrador y pagar la 
+anualidad.  En tal caso la sección `server` para el puerto 80 sería 
+(cambiando `www` por el registro que hay configurado en su dominio y 
+`minombre.org` por el dominio que haya contratado): 
+
+	  server {
+	    server_name www.minombre.org;
+	    listen 80:
+	    root htdocs;
+	  }
+
+Claro que es posible configurar a manera de prueba resolución local en un 
+computador para que el nombre se asocie a la IP esperada o incluso si tiene 
+control de un resolvedor de una red local para que en la red local el 
+nombre resuelva al servidor donde corre el nginx.
+
+##### Pruebas cambiando resolución local en un computador
+
+Si en su red local el servidor nginx corre en la dirección 192.168.10.2, 
+en otro computador con adJ (digamos con IP 192.168.10.15) podría configurar 
+la resolución local para asociar www.midominio.org a la IP 192.168.10.2.
+
+Eso lo puede hacer en el archivo `/etc/hosts` con una línea de la forma
+
+192.168.10.2 www.midominio.org
+
+Siempre y cuando en  `/etc/resolv.conf` tenga `lookup file`
+
+##### Pruebas en una red cambiando resolución local para la red
+
+Para cambiar la resolución de nombres en una red local podría emplear un 
+servidor de nombres completo como `nsd`, pero basta con un resolvedor 
+como `unbound`.
+
+Por ejemplo si `unbound` corre en el servidor 192.168.10.1 para su 
+dominio `midominio.org`, puede configurarlo para que dirija a 192.168.10.2 
+cuando desde la red local soliciten `www.mindominio.org`, modificando
+el archivo `/var/unbound/etc/unbound.conf` para que incluya:
+
+	interface: 127.0.0.1
+	interface: 192.168.10.2
+
+	access-control: 192.168.10.0/24 allow
+
+	local-zone: "midominio.org" static
+	local-data: "midominio.org IN A 192.168.10.2"
+	local-data: "www.midominio.org IN A 192.168.10.2"
+
+
+Cada vez que haga modificaciones al archivo de configuracion de unbound 
+debe reiniciar por ejemplo con:
+
+	doas rcctl -d restart unbound
+
+Y en cada computador de la red local debe configura que el servidor DNS sea 192.168.10.1.
+
+
+##### Pruebas cambiando configuración de servidor DNS
+
+Si está pagand a su proveedor de Internet una IP (digamos 125.125.121.1) 
+y si pagó el registro de un dominio (digamos www.midominio.org) ante un 
+registrador de dominios, debe editar la configuración del servidor DNS
+que haya configurado con el registrador (muchos registradores ofrecen
+servidores DNS editables desde el web). 
+
+Debe agregar un registro que indique que las peticiones a su dominio
+y al y al subdominio `www.midominio.org` se dirigen a la IP pública de 
+su servidor.  Tanto con `bind` como con `nsd` que son 2 servidores DNS
+populares se harían con líneas de la forma:
+
+midominio.org.	A	125.125.121.1;
+www.midominio.org.	A	125.125.121.1;
+
+#### Configuración de nginx de acuerdo a como se almacenan o generan páginas en el servidor
+
+Hay varias posibilidades:
+
+- Servir archivos HTML del sistema de archivos, para lo que bastan
+  las directivas `root`  e `index` antes introducidas.
+
+- Generar automáticamente páginas HTML para permitir ver directorios y 
+  archivos y descargar archivos, para lo que basta que agregue
+  la directiva `autoindex on;`
+
+- Redirigir la petición a un proceso que corre en el mismo servidor mediante 
+  un socket, por ejemplo para servir páginas con un programa en PHP o para
+  servir páginas generadas con una aplicacińo sobre Ruby on Rails.
+
+- Redirigir la petición a otro computador donde corra un servidor web 
+  operando así como un proxy
+
+##### Caso: Servir archivos HTML ubicados en el sistema de archivos
+
+Este es el caso de uso original, se espera que organice los contenidos HTML 
+(junto con gráficas, documentos que referencien, hojas de éstilo CSS, fuentes 
+Javascript, etc) en un directorio (tal vez con subidrectorios).  Como debe 
+ser servidor por nginx debe estar dentro de `/var/www` y el lugar por omisión 
+y recomendado es dentro de `/var/www/htdocs`.  El archivo inicial suele 
+llamarse `index.html`.
+
+Por ejemplo:
+
+	doas mkdir /var/www/htdocs/miproyecto1
+	doas chown $USER:$USER /var/www/htdocs/miproyecto1
+	cat > /var/www/htdocs/miproyecto1/index.html << EOF
+	A Dios sea la gloria
+	EOF
+
+Después debe editar el archivo de configuración de nginx para agregar una 
+sección para su nuevo servicio.   Suponiendo que los usuarios usarán la 
+IP 192.168.10.50 y el puerto 8080 (i.e con una URL de la forma 
+<http://192.168.10.50:8080>:
+
+	server { 
+	  listen 8080;
+	  server_name 192.168.10.50;
+	  root /var/www/htdocs/miproyecto1;
+	  index index.html;
+
+	  error_log logs/miproyecto1-error.log;
+	  access_log logs/miproyecto1-access.log ;
+	} 
+
+Note que  se agregan las directivas `error_log` y `acces_log` que
+indican que las bitácoras de errores y de acceso quedarán
+en `/var/www/logs/miproyecto1-error.log` y
+`/var/www/logs/miproyecto1-access.log`
+
+
+##### Caso: Servir páginas generadas por un programa en PHP {#nginx-php}
+
+En el caso de adJ, se recomienda emplear php con nginx mediante Fast-CGI
+comunicandose con un zócalo (socket) ubicado en 
+`/var/www/var/run/php-fpm.sock`
+
+Para esto una vez instalado el paquete &p-php; configure:
+
+1. Que en cada arranque se inicie el servicio `php73_fpm` por ejemplo con:
+
+	doas rcctl enable php73_fpm
+
+2. Que `php73_fpm` use el socket en la ubicación correcta, para esto cambie 
+el archivo `/etc/php-fpm.ini` para que en lugar de la línea con comentario 
+`;listen =` tenga:
+
+	listen = /var/www/var/run/php-fpm.sock
+
+En un servidor los archivos de PHP suelen mezclarse con archivos HTML así 
+que la configuración del caso anterior servirá, pero además debe añadir 
+dentro de la misma sección server una directiva `location` que le indique a 
+nginx que debe tratar de manera especial los archivos que terminen con la 
+extensión php, esos archivos debe servirlos con el protocolo FastCGI usando 
+el servicio que respone en el socket apropiado (recordando quitar el 
+`/var/www` de la ruta por lo que nginx corre dentro de la jaula `/var/www`):
+
+	location ~ ^(.+\.php)$ {
+	  try_files $uri =404;
+	  fastcgi_intercept_errors on;
+	  include fastcgi_params;
+	  fastcgi_param SERVER_NAME $host;
+	  fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+	  fastcgi_index index.php;
+	  fastcgi_pass unix:/var/run/php-fpm.sock;
+	}
+
+Si además prefiere que el archivo de inicio por omisión sea
+`index.php` en lugar de `index.html` cambie la directiva `index` para
+que primero intente con `index.php` y si este falta intente con 
+`index.html`:
+	
+	index index.php index.html;	
+ 
+#### Soportar cifrado entre cliente y servidor
+
+El cifrado con TLS requiere en el servidor un certificado firmado por una
+autoridad certificadora que consta de un archivo público y uno privado.   
+Típicamente usted debe generar ambos archivos y enviar el público a una
+autoridad certificadora, que por un pago, lo devolverá firmado.
+
+Otra posibilidad es que emplee los certificados gratuitos generados por
+Let's Encrypt como se describe más adelante.
+
+Supongamos que tiene un certificado con parte pública en 
+`/etc/ssl/midominio.org.crt` y para privada en 
+`/etc/ssl/private/midominio.org.key`.
+
+Como se ha mencionado el bloque de la directiva `server` posiblemente 
+tendrá `listen 443;` (si escucha en puerto estándar), el mismo bloque debe 
+tener:
+
+	  ssl on;
+	  ssl_certificate /etc/ssl/midominio.org.crt;
+	  ssl_certificate_key /etc/ssl/private/midominio.org.key;
+
+
+### Certificados SSL gratuitos con Let's Encrypt {#letsencrypt}
+
+Hasta hace un tiempo era impensable contar con un certificado SSL válido
+para los diversos navegadores (candadito verde) y que fuese gratuito.
+Sin embargo algunas empresas empezaron a ofrecerlos (e.g Gandi da
+certificado gratuito por un año para un dominio por la compra de un
+dominio), y finalmente de diversos intentos por parte de organizaciones
+sin ánimo de lucro, letsencrypt.org es reconocida por los navegadores
+principales y ofrece todo tipo de certificados validos por 3 meses de
+manera gratuita (cada 3 meses debe renovarse con el mismo letsencrypt).
+
+Por ejemplo para un dominio &EDOMINIO; sólo certificado para el web:
+
+        doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO; 
+
+Si además de los dominios web necesita cubrir con el mismo certificado
+el servidor de correo: correo.&EDOMINIO; que tiene una raíz diferente:
+
+        doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO;  -w /var/www/roundcubemail -d correo.&EDOMINIO;
+
+
 
 
 ### OpenBSD httpd
@@ -1970,308 +2319,4 @@ httpd puede ejecutar:
 El formato de las bitácoras por defecto es similar al de `nginx`
 
 
-### Certificados SSL gratuitos con Let's Encrypt {#letsencrypt}
 
-Hasta hace un tiempo era impensable contar con un certificado SSL válido
-para los diversos navegadores (candadito verde) y que fuese gratuito.
-Sin embargo algunas empresas empezaron a ofrecerlos (e.g Gandi da
-certificado gratuito por un año para un dominio por la compra de un
-dominio), y finalmente de diversos intentos por parte de organizaciones
-sin ánimo de lucro, letsencrypt.org es reconocida por los navegadores
-principales y ofrece todo tipo de certificados validos por 3 meses de
-manera gratuita (cada 3 meses debe renovarse con el mismo letsencrypt).
-
-Por ejemplo para un dominio &EDOMINIO; sólo certificado para el web:
-
-        doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO; 
-
-Si además de los dominios web necesita cubrir con el mismo certificado
-el servidor de correo: correo.&EDOMINIO; que tiene una raíz diferente:
-
-        doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO;  -w /var/www/roundcubemail -d correo.&EDOMINIO;
-
-
-### Nginx
-
-OpenBSD y adJ incluyen nginx también entre los componentes básicos. Su
-archivo de configuración es `/etc/nginx/nginx.conf`. Por defecto correrá
-en una jaula en `/var/www`, puede iniciarlo manualmente con:
-
-        doas /etc/rc.d/nginx start
-
-y detenerlo con
-
-        doas /etc/rc.d/nginx stop
-
-Para que inicie automáticamente en cada arranque basta agregar en
-`/etc/rc.conf.local`:
-
-        nginx_flags=""
-
-y que añada `nginx` en `pkg_scripts`.
-
-#### Uso de PHP con nginx {#nginx-php}
-
-No hay un módulo para PHP pero puede ejecutarse como Fast-CGI. Esto
-puede lograrse por ejemplo con php-fpm, incluido en el paquete `` y
-configurable en `/etc/php-fpm.conf` por ejemplo para escuchar en el
-socket `/var/www/run/php-fpm.sock` con
-
-        listen = /var/www/run/php-fpm.sock
-
-Inícielo con
-
-        doas sh /etc/rc.d/php56-fpm start
-
-o de manera permanente en cada arranque agregue `php56-fpm` en
-`pkg_scripts` en `/etc/rc.conf.local`. En el archivo de configuración de
-nginx agregue en la sección `server` donde servirá Apache:
-
-1.  En `index` agregue `index.php`
-
-2.  Adicione:
-
-            location ~ \.php$ {
-                fastcgi_pass   unix:run/php-fpm.sock;
-                fastcgi_index  index.php;
-                fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-                include        fastcgi_params;
-            }
-
-### Apache
-
-adJ y OpenBSD cuentan con el porte de transición `apache-httpd-openbsd`
-con el Apache 1.3.29 modificado que había en adJ/OpenBSD 5.5. Este porte
-será descontinuado por lo que es importante usarlo como porte de
-transito bien a OpenBSD httpd o a nginx o a Apache2.
-
-Instale el paquete:
-
-        doas pkg_add apache-httpd-openbsd
-
-En el archivo `etc/rc.conf.local` haga los siguientes cambios
-(parcialmente explicados en {2}): \# Renombre `httpd_flags` por
-`apache_flags` \# En la variable `pkg_scripts` remplace `httpd` por
-`apache` (y de requerirse saque `nginx`).
-
-Modifique el archivo de configuración `/var/www/conf/httpd.conf`, el
-cambio evidente es modificar la ruta de los módulos activos para que
-sean cargados de `/usr/local/lib/apache/` en lugar de `/usr/lib/apache`
-
-Puede probar reiniciar el servidor completo para asegurar que el Apache
-1.3.29 arranca también, o bien iniciar sólo el servicio con:
-
-        doas sh /etc/rc.d/apache start
-
-Este porte corre por defecto y para mayor seguridad con `chroot` en
-`/var/www`. Es decir que desde el punto de vista de Apache la raíz del
-sistema es lo que hay en `/var/www`. Diversos portes o sus aplicaciones
-pueden requerir que Apache tenga acceso a otras partes del sistema,
-aunque no lo recomendamos puede lograrlo iniciando con el flag:
-
-        apache_flags="-u" 
-
-Para detener el servidor una vez esté corriendo puede emplear:
-
-        doas /etc/rc.d/apache stop
-
-Para iniciarlo o reiniciarlo con las opciones que haya configurado en
-`/etc/rc.conf.local`:
-
-        doas /etc/rc.d/apache restart
-        
-
-#### Directorios para usuarios {#directorios-usuarios}
-
-El archivo de configuración por defecto (`/var/www/conf/httpd.conf`) no
-incluye directorios para usuarios. A partir de OpenBSD 3.4 se recomienda
-que estos directorios se creen en `/var/www/users`, los activa
-estableciendo en el archivo de configuración:
-
-        UserDir /users 
-
-o bien
-
-        UserDir /var/www/users 
-
-el primer en caso de que corra Apache chroot y el segundo si no. En
-ambos casos se sugiere la siguiente secuencia para crear un directorio
-de publicación para el usuario &EUSUARIO;:
-
-        cd /home/&EUSUARIO;
-        doas mkdir /var/www/users/&EUSUARIO;
-        doas ln -s /var/www/users/&EUSUARIO; public_html
-        doas chown &EUSUARIO;:&EUSUARIO; /var/www/users/&EUSUARIO;
-        
-
-Así el usuario podrá publicar sus archivos en su subdirectorio
-`public_html` (como ocurre clásicamente) y desde un navegador local
-podrán verse con el URL: `http://localhost/~&EUSUARIO;/` o remotamente con
-`http://www.&EDOMINIO;/~&EUSUARIO;/`
-
-#### Dominios virtuales
-
-Empleado dominios virtuales (del inglés *Virtual Hosting*) es posible
-manejar con un mismo servidor diversas direcciones DNS. Para activarlo:
-
-1.  En `/var/www/conf/httpd.conf` no emplee un alias para el directorio
-    `/`
-
-2.  Si ejecuta Apache con `chroot` copie
-    `/usr/local/lib/apache/modules/mod_vhost_alias.so` en
-    `/var/www/usr/local/lib/apache/modules/`
-
-3.  Agregue en `/var/www/conf/httpd.conf` una línea del estilo:
-
-            NameVirtualHost 65.167.3.4
-                
-
-    remplazando la IP por la de su servidor
-
-    Agregue un dominio virtual por cada dominio que maneje, por ejemplo:
-
-            <VirtualHost 65.167.63.234>
-                ServerAdmin &EUSUARIO;@&EDOMINIO;
-                DocumentRoot /var/www/htdocs
-                ServerName www.&EDOMINIO;
-                ServerAlias &EDOMINIO;
-                ErrorLog logs/&EDOMINIO;-error_log
-                Options ExecCgi Includes MultiViews Indexes FollowSymlinks 
-                SymLinksIfOwnerMatch
-                CustomLog logs/&EDOMINIO;-access_log common
-            </VirtualHost>
-                
-
-#### SSL
-
-Para emplear SSL con Apache pueden seguirse las instrucciones del FAQ de
-OpenBSD que se retoman a continuación. Debe generar un certificado que
-pueda ser firmado por una Autoridad Certificadora o por usted mismo.
-
-        doas openssl genrsa -out /etc/ssl/private/server.key 1024
-        doas openssl req -new -key /etc/ssl/private/server.key \
-               -out /etc/ssl/private/server.csr
-
-Tras el segundo paso debe ingresar el código del país (co para
-Colombia), el departamento en el que está, la organización, la unidad
-dentro de la organización y el nombre común (e.g la dirección web).
-
-Después puede enviar el archivo `/etc/ssl/private/server.csr` a una
-entidad certificadora, la entidad certificadora la devolverá su
-certificado firmado (digamos `sudominio.pem`) el cual debe ubicar en
-`/etc/ssl/server.crt`. Si prefiere firmar usted mismo su certificado
-emplee:
-
-        doas openssl x509 -req -days 3650 -in /etc/ssl/private/server.csr \
-            -signkey /etc/ssl/private/server.key -out /etc/ssl/server.crt
-
-A continuación puede
-
--   agregar entre las opciones de Apache `-DSSL` en `/etc/rc.conf.local`
-
--   modificar `/var/www/conf/httpd.conf` para que al usar SSL se
-    redireccione al directorio apropiado (digamos
-    `/var/www/users/sivel/`), i.e. remplazando algunas líneas de la
-    sección `<VirtualHost _default_:443>`:
-
-            DocumentRoot /var/www/users/sivel
-            ServerName miServidor
-            ServerAdmin micorreo@midominio.org
-            ErrorLog logs/error_log
-            TransferLog logs/access_log
-
--   Reiniciar el servidor con las opciones apropiadas, por ejemplo:
-
-            doas /etc/rc.d/apache restart
-
-Finalmente puede probar abriendo desde un navegador `https://ESERV`
-
-#### PHP
-
-Instale el paquete ``. Después cree un enlace para activarlo en servidor
-web:
-
-        doas ln -s /var/www/conf/modules.sample/php-5.4.conf \
-            /var/www/conf/modules/php.conf
-          
-
-y asegúrese de que las siguientes líneas estén en
-`/var/www/conf/httpd.conf`:
-
-        LoadModule php5_module /usr/local/lib/apache/modules/libphp5.so
-
-        AddType application/x-httpd-php .php
-
-        DirectoryIndex index.html index.php
-          
-
-Reinicie Apache y pruebe la instalación de PHP por ejemplo cargando
-desde un navegador un archivo `prueba.php` el cual debe tener el
-siguiente contenido:
-
-        <?php
-          phpinfo();
-        ?>
-          
-
-##### Soporte para PostgreSQL en PHP {#php-postgresql}
-
-Para activar el soporte para PostgreSQL (ver [xref](#postgresql)en PHP
-instale el paquete `` y ejecute:
-
-        doas ln -fs /etc/php-5.4.sample/pgsql.ini \
-            /etc/php-5.4/pgsql.ini
-        
-
-Puede comprobar que esta extensión funciona revisando la salida de la
-función `phpinfo()`.
-
-##### Lecturas recomendadas {#lecturas-php}
-
-* Puede aprender sobre PHP en <http://www.php.net>
-* La configuración de PHP con PostgreSQL y Apache corriendo con chroot
-puede verse en
-<http://www.bsdforen.org/foren/showtopic.php?threadid=773> o en la
-sección sobre PostgreSQL de estas guías (ver [xref](#postgresql)
-
-#### Server Side Include {#ssi}
-
-El Apache incluido en OpenBSD tiene compilado como módulo estático
-`mod_include.c` (como puede comprobarse ejecutando
-`/usr/sbin/httpd -l`). Por esto para activar SSI basta quitar los
-comentarios de las siguientes líneas en `/var/www/conf/httpd.conf`:
-
-        AddType text/html .shtml
-        AddHandler server-parsed .shtml
-            
-
-y en el directorio o directorios desde los que se quieren usar páginas
-con SSI (extensión `.shtml`), agregar entre las opciones:
-
-        Option Includes
-            
-
-Si se desea que las páginas con extensión `.html` sean reconocidas por
-el servidor, de forma que puedan incluir directivas SSI, deles permiso
-de ejecución y agregué después del `AddHandler` antes mencionado:
-
-        XBitHack on
-            
-
-Tras reiniciar apache puede probar creando una página `prueba.shtml` por
-ejemplo con:
-
-        <html>
-            <head><title></title></head>
-            <body>
-                <!--#echo var="DATE_LOCAL" -->
-            </body>
-        </html> 
-            
-
-Al abrirla debe presentar la fecha y hora del sistema.
-
-##### Lecturas recomendadas {#lecturas-ssi}
-
-* Hay información completa sobre SSI en el manual de Apache
-<http://httpd.apache.org/docs/howto/ssi.html>
