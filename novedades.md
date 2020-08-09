@@ -1,3 +1,24 @@
+Versión 6.6
+:   - Reescrita sección sobre servidores web con bastantes casos de uso de nginx [xref](#servidor-web)
+
+Versión 6.5
+:   - Reescrita sección sobre correo electrónico [xref](#servicios-correo)
+    - Se introducen BGP y OSPF en [xref](#redes_protocolos_e_internet)
+
+Versión 6.4
+
+:   - Actualizada documentación de PostgreSQL ([xref](#postgresql))
+    - Actualizada configuración de NAT ([xref](#nat))
+    - Se mejora formato
+
+Versión 6.3
+
+:   - Actualizada documentación de MariaDB ([xref](#mariadb))
+
+Versión 6.2
+
+:   - Nueva sección  ([xref](#base-postgresql-remota))
+
 Versión 6.1
 
 :   - Nueva sección  ([xref](#autoridad_certificadora))
@@ -37,7 +58,7 @@ Versión 5.5
 
     -   Actualizada [xref](#mariadb).
 
-    -   Nueva [xref](#servidor-ldapd) en capítulo 6.
+    -   Nueva [xref](#ldapd) en capítulo 6.
 
 Versión 5.4
 
@@ -45,12 +66,12 @@ Versión 5.4
 
 Versión 5.3
 
-:   -   Nueva [xref](#dovecot)
+:	-   Nueva [xref](#dovecot)
 
-    -   Actualizada sección [xref](#servicios-correo) para incluir
+	-   Actualizada sección [xref](#servicios-correo) para incluir
         OpenSMTPD.
 
-    -   Fuentes convertidas a UTF-8
+	-   Fuentes convertidas a UTF-8
 
 Versión 5.2
 
@@ -60,7 +81,7 @@ Versión 5.2
 
 Versión 5.0
 
-:   -   Actualizada instalación de PHP [xref](#php).
+:   -   Actualizada instalación de PHP 
 
     -   Cubre Aprendiendo de Jesús 5.0.
 

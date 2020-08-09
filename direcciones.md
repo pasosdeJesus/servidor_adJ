@@ -89,7 +89,7 @@ Puede ver la tabla de enrutamiento estático en con `route -n show` o con
 destino, puerta de enlace, banderas, uso, MTU, interfaz por la cual
 enviar/recibir paquetes con ese destino,
 
-Hay un destino por defecto (`default`) al que se envia todo paquete que
+Hay un destino por defecto (`default`) al que se envía todo paquete que
 no tiene un destino en la tabla de enrutamiento. Este destino por
 defecto o puerta de enlace se configura en el archivo `/etc/mygate`. En
 una red local conectada a Internet, el servidor debe emplear como puerta
@@ -152,7 +152,7 @@ nivel de kernel se puede controlar con:
     algunos computadores, por ejemplo:
 
         127.0.0.1       localhost
-        192.168.1.1    ESERV ENOMSERV
+        192.168.1.1    &ESERV; &ENOMSERV;
                  
 
 `sysctl`
@@ -210,7 +210,7 @@ para conectarlo a la red interna (con IP de la red interna) y otra para
 conectarlo a Internet (con IP pública). En el archivo `/etc/pf.conf`
 configure las variables `ext_if` e `int_if` con los nombres de las
 interfaces externa (conectada a Internet) e interna respectivamente
-(verifiquelas antes con `ifconfig`). Por ejemplo un archivo de
+(verifíquelas antes con `ifconfig`). Por ejemplo un archivo de
 configuración mínimo que hace NAT, suponiendo que la interfaz interna es
 `fxp0` y la externa es `nfe0` es:
 
@@ -219,13 +219,51 @@ configuración mínimo que hace NAT, suponiendo que la interfaz interna es
         
         set skip on lo
         
-        match out on $ext_if from !($ext_if) to any nat-to ($ext_if:0)
+        match out on $ext_if from !($ext_if) nat-to ($ext_if:0)
+	pass out on $ext_if proto {icmp, tcp, udp} all keep state
         
         pass in quick on $int_if
 
 Esta configuración podría cargarse con:
 
         doas pfctl -f /etc/pf.conf.
+
+NAT es sigla de "Network Address Translation" (Traducción de direcciones de red)
+lo que hace es "traducir" las direcciones privadas de la red interna 
+a la dirección pública del cortafuegos 
+para que el cortafuegos haga la petición a su nombre y la respuesta que 
+reciba la vuelve a traducir a la dirección privada en la red interna
+para enviarla al computador de la red interna que corresponde.
+
+Una vez realizada, un computador en la red interna debería poder ejecutar
+
+	ping 8.8.8.8 
+
+y recibir respuesta.
+
+Mientras se hace el ping en en computador de la red interna, si en el 
+cortafuegos se examinara el tráfico de la interfaz interna:
+	
+	doas tcpdump -i fxp0 -n host 8.8.8.8
+
+Se verían peticiones como
+
+	07:09:59.262358 192.168.44.93 > 8.8.8.8: icmp: echo request (DF)
+
+y al examinar en otra terminal el tráfico de la interfaz conectada a Internet 
+(`doas tcpdump -i nfe0 -n host 8.8.8.8`) se verían
+las mismas peticiones pero con la dirección traducida, por ejemplo:
+
+	07:09:59.262414 182.188.122.211 > 8.8.8.8: icmp: echo request (DF)
+
+Las respuestas en la interfaz externa se verían como:
+
+	07:09:59.359408 8.8.8.8 > 182.188.122.211: icmp: echo reply
+
+y en la interfaz interna se vería nuevamente traducidas como:
+
+	07:09:59.359474 8.8.8.8 > 192.168.44.93: icmp: echo reply
+
 
 ### Referencias y lecturas recomendadas {#referencias-nat}
 
@@ -308,9 +346,9 @@ esto:
         # En la sección de reglas de filtrado
         pass out proto tcp from $ext_ip to any port 21
 
-> **Warning**
+> **Advertencia**
 >
-> Para emplear ftp-proxy asegurese que entre las reglas de su
+> Para emplear ftp-proxy asegúrese que entre las reglas de su
 > cortafuegos no esté:
 >
 >         set skip $int_if
@@ -420,7 +458,7 @@ Guía del usuario de PF [PF](#biblio).
 
 ## Control de ancho de banda
 
-El siguiente ejemplo presenta como puede configurarse un servidor NAT
+El siguiente ejemplo presenta cómo puede configurarse un servidor NAT
 para controlar ancho de banda de diversos computadores de la red
 interna. La conexión de la red interna es a 100MB, mientras que la
 conexión a Internet es de 300KB. De todos los computadores de la red

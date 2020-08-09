@@ -30,13 +30,15 @@
     </author>
 
     <legalnotice><para>
-Este documento y sus fuentes se ceden al dominio
-público desde 2004.  Esta es la versión &PRY-VERSION; de este documento, 
-actualizada por última vez en &FECHA-ACT; para que corresponda a 
-la distribución adJ de OpenBSD &VER-OPENBSD;.  
-No se ofrece garantía alguna, por el contrario se aprecia
-que se envíen correcciones y sugerencias al autor.  Este
-escrito se dedica a Dios por su infinita sabiduría.</para>
+		    Este documento y sus fuentes se ceden al dominio
+		    público desde 2004.  Esta es la versión &PRY-VERSION; de este documento, 
+		    actualizada por última vez en &FECHA-ACT; para que corresponda a 
+		    la distribución adJ de OpenBSD &VER-OPENBSD;.  
+		    No se ofrece garantía alguna, por el contrario se aprecia
+		    que se envíen correcciones y sugerencias al autor.  Este
+		    escrito se dedica a Dios por su infinita sabiduría.</para>
+	    <para>
+		    Agradecemos las correcciones de Luis Alejandro Cruz</para>
       <para>
 	La versión publicada más reciente está tanto
 	<ulink url="&URLSITE;">en línea</ulink>  como
@@ -61,16 +63,11 @@ escrito se dedica a Dios por su infinita sabiduría.</para>
 	    servidores seguros o cortafuegos conectados
       a Internet o en una Intranet.  Este escrito es complementario
       a <link linkend="biblio">basico_adJ</link> y a 
-      <link linkend="biblio">usuario_adJ</link>.  El primero es para
-      usuarios que emplean remotamente un sistema OpenBSD, en el segundo
-      se describe la instalación de OpenBSD así como su uso y la configuración 
-      de programas y características típicamente empleadas por usuarios 
-      finales.
+      <link linkend="biblio">usuario_adJ</link>,  el primero es para
+      usuarios remotos y el segundo describe la instalación, uso 
+      y configuración de programas y características típicas de 
+      usuarios de escritorio.
     </para>
-    <para>Las fuentes de este escrito están en DocBook (ver
-      <citation>DocBook</citation>) y siguen algunas
-      convenciones de la herramienta <literal>repasa</literal> (ver
-      <citation>repasa</citation>).</para>
   </sect1>
 
   &redes;
@@ -85,7 +82,7 @@ escrito se dedica a Dios por su infinita sabiduría.</para>
   </appendix>  
  
    <appendix id="biblio">
-	   <title>Bibliografia</title>
+	   <title>Bibliografía</title>
 	   &biblio;
    </appendix>  
 

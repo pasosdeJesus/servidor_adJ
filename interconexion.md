@@ -50,7 +50,7 @@ los demás.
 Aunque en el comercio es posible comprar un módem nulo, también es
 relativamente fácil ensamblar uno, una vez tenga conectores, cable y
 cautín. Si hace su propio módem nulo puede probar que la conexión haya
-quedado bien empleando un ohmiometro.
+quedado bien empleando un óhmetro.
 
 Una vez se conecte un módem nulo puede probarlo enviando mensajes por el
 puerto serial del uno y viendo lo que recibe en el otro. Por ejemplo si
@@ -85,7 +85,7 @@ Después puede reiniciar el sistema o reiniciar `init` con:
 
 En la línea modificada a `/etc/ttys`, `tty00` se refiere a `/dev/tty00`
 (i.e el dispositivo del primer puerto serial);
-`/usr/libexec/getty std.9600` es el comando por ejecutar al arranque
+`/usr/libexec/getty std.9600` es la orden por ejecutar al arranque
 para manejar ese dispositivo[^dis.1]; `vt220` indica el tipo de terminal que
 se conectará; `on` y `secure` son banderas[^dis.2] para `init`, el primero
 indica que se esperan conexiones por esa línea tty y el segundo indica
@@ -116,7 +116,7 @@ con una velocidad diferente puede especificarla por ejemplo con
 por defecto está configurado para representar el primer puerto serial).
 Le permitirá ver la información que el servidor envíe, enviar
 información al servidor y hacer algunas operaciones especiales
-comenzando con el carácter '\~'. Por ejemplo terminar la sesión con
+comenzando con el caracter '\~'. Por ejemplo terminar la sesión con
 '\~.', enviar un archivo con '\~p' o recibir un archivo con '\~g'.
 
 Dado que puede haber inconvenientes enviando o recibiendo archivos de 8
@@ -235,12 +235,12 @@ debe configurarse `ppp` para realizar la conexión.
 Hay diversos tipos de módems (tarjetas ISA, PCI, módems externos USB o
 seriales), los módems externos que se conectan a puerto serial son los
 más fáciles de configurar, algunos módems USB también son soportados
-(los que tengan comandos y datos multiplexados --como indica la página
+(los que tengan ordenes multiplexadas y datos --como indica la página
 del manual del controlador `umodem`) y eventualmente es posible hacer
 funcionar tarjetas ISDN ISA o PCI
 ([http://people.freebsd.org/~hm/i4b-home/](http://people.freebsd.org/~hm/i4b-home/)).
 
-Los módems y los módems ISDN reciben comandos AT y se configuran
+Los módems y los módems ISDN reciben ordenes AT y se configuran
 empleando `ppp`. Por ejemplo el archivo `/etc/ppp/ppp.conf` podría
 incluir porciones como las siguientes (remplazando el número de
 teléfono, el nombre de la cuenta y la clave por los correctos):
@@ -269,7 +269,7 @@ también emplear el siguiente script para realizar la conexión:
         #!/bin/sh
         # Dominio público. 2004.
         
-        # Usa configuracion de /etc/ppp/ppp.conf regla PAP
+        # Usa configuración de /etc/ppp/ppp.conf regla PAP
         
         netw=`groups | sed -e "s/.*network.*/1/g"`;
         if (test "$netw" != "1") then {
@@ -315,7 +315,7 @@ configurar como se explica en la sección de redes LAN Ethernet (ver
 [xref](#lan-ethernet).
 
 Puede ocurrir que su proveedor emplee un módem que requiera el protocolo
-`pppoe` (e.g con un Módems Marconi). En tal caso el proveedor puede
+`pppoe` (e.g con un Módem Marconi). En tal caso el proveedor puede
 brindar dos opciones para la configuración del módem:
 
 -   Enrutador (router): Se conecta a un HUB o a un computador y hace NAT
@@ -402,7 +402,7 @@ computadores con tarjetas Ethernet interconectados por uno o más[^lan.1]
 concentradores (también llamado *hub* o *switch*) y cables UTP directos
 de cada computador a algún concentrador. La velocidad de la red depende
 de la velocidad de las tarjetas de red, la velocidad de los
-concentradores y la categoria de los cables. Esta velocidad se mide en
+concentradores y la categoría de los cables. Esta velocidad se mide en
 Megabits (millones de bits por segundo), y sus valores típicos son 10Mb,
 100Mb, 1000Mb o 1Gb y recientemente 10Gb.
 
@@ -410,7 +410,7 @@ Megabits (millones de bits por segundo), y sus valores típicos son 10Mb,
 
 La inmensa mayoría de tarjetas Ethernet de 10MB, 100MB y 1000MB, así
 como algunas de 10G son soportadas por OpenBSD, la lista completa la
-puede consultar en: [](http://www.openbsd.org/amd64.html). Por su parte
+puede consultar en: <http://www.openbsd.org/amd64.html>. Por su parte
 las tarjetas populares que hemos identificado como no soportadas son:
 Encore ENL832-TX-RENT, Encore ENL832-TX-EN.
 
@@ -421,7 +421,7 @@ demanda como en el caso de `tun0`). Estas interfaces se administran con
 
         ifconfig -a
 
-A continuación se presenta un ejemplo de la salida de este comando:
+A continuación se presenta un ejemplo de la salida de esta orden:
 
         lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 33160
             priority: 0
@@ -588,7 +588,7 @@ el escritorio Dispositivos-&gt;Red-&gt;Configurar Interfaces, que le
 permitirá editar cada uno de los archivos de cada interfaz de red
 detectada por ifconfig (excepto lo0, enc0, pflog0, tun).
 
-> **Warning**
+> **Advertencia**
 >
 > Es importante que la línea del archivo `/etc/hostname.re0` que
 > configura sus propiedades IPv4, termine con el caracter fin de línea,
@@ -613,7 +613,7 @@ reiniciar el sistema de redes con:
 aunque en algunos casos es necesario reiniciar el computador.
 
 Note que si ha cambiado una tarjeta de red es posible que antes de
-reinicar debe reconfigurar el cortafuegos en el archivo `/etc/pf.conf`
+reiniciar debe reconfigurar el cortafuegos en el archivo `/etc/pf.conf`
 
 ### Protocolo ARP
 
@@ -631,7 +631,7 @@ opciones `-s` y `-d` respectivamente.
 
 Necesitará un concentrador preferiblemente de 1Gb con suficientes
 puertos para todos los computadores que tenga o varios interconectados
-en cascada, cable UTP categoria 5e o 6 con conectores RJ-45 y en cada
+en cascada, cable UTP categoría 5e o 6 con conectores RJ-45 y en cada
 computador deberá tener una tarjeta Ethernet (preferiblemente de 1GB)
 con un puerto para un conector RJ-45 (ver [Configuración de una interfaz
 de red](#configuracion-interfaz)).
@@ -647,10 +647,6 @@ diseñar el mapa:
 
 -   La longitud máxima de cada cable (para unir concentrador y
     computador) es de 100 m.
-
-    100
-    Longitud máxima de un cable entre un computador y un concentrador en
-    una red Ethernet.
 
 -   Busque que los cables/canaletas vayan por las paredes del recinto y
     estén resguardadas (para evitar que alguien se tropiece).
@@ -740,7 +736,7 @@ de las cuales la más común es la TIA/EIA-568-B:
     8 - blanco/azul.
 
 Empareje los 8 cablecitos antes de intentar ponerlos en el conector
-RJ-45. Pongalos en el orden antes indicado para cables directos.
+RJ-45. Póngalos en el orden antes indicado para cables directos.
 
 El conector RJ45 tiene varios canales, por cada uno de esos canales debe
 pasar un cablecito de color. Empuje bien los cablecitos hasta el fondo
@@ -791,7 +787,7 @@ y viceversa.
 [^lan.4]: Luces es traducción de *LED (Light emitting diode)*.
 
 
-##Red Local Inalámbrica: uso y configuración {#red-inalambrica}
+## Red Local Inalámbrica: uso y configuración {#red-inalambrica}
 
 Las redes inalámbrica emplean ondas electromagnéticas transmitidas por
 aire, por lo que no se requieren cables, aunque el rango de alcance es
@@ -805,19 +801,19 @@ Para redes locales los protocolos más utilizados son IEEE 802.11a,
 y dan tasas de transferencia entre 11Mbps y 54Mbps.
 
 Una red local inalámbrica requiere un Punto de Acceso Inalámbrico (en
-inglés *Acces Point*) que atienda peticiones y de respuestas a todos los
+inglés *Access Point*) que atienda peticiones y dé respuestas a todos los
 computadores cliente que se conecten. Tal Punto de Acceso Inalámbrico
 puede ser un dispositivo dedicado o bien un computador con OpenBSD que
 cuente con una tarjeta de inalámbrica que soporte el modo `hostap`.
 
-###OpenBSD como cliente en una red inalámbrica {#cliente-inalambrico}
+### OpenBSD como cliente en una red inalámbrica {#cliente-inalambrico}
 
 Hay una amplia gama de tarjetas de red inalámbricas (tanto PCI, como
 USB) con controladores para OpenBSD, sin embargo varias tarjetas de red
 populares no son soportadas, por lo que antes de comprar examine el
 listado de tarjetas soportadas en:
-[](http://dhobsd.pasosdejesus.org/?id=CompatibilidadHardware). Una vez
-conecte su tarjeta de red inalámbrica, búsque la interfaz de red
+<http://dhobsd.pasosdejesus.org/?id=CompatibilidadHardware>. Una vez
+conecte su tarjeta de red inalámbrica, busque la interfaz de red
 asociada con
 
         ifconfig
@@ -851,18 +847,18 @@ cercanas con
 
 remplazando `rum0` por la interfaz de su tarjeta. Verá un listado de
 redes próximas con identificación, calidad de la señal, velocidad y tipo
-de encripción.
+de cifrado.
 
 Para conectarse a una red basta configurar la tarjeta con la
-identificación, tipo de encripción y clave apropiadas y posteriormente
+identificación, tipo de cifrado y clave apropiadas y posteriormente
 asignar una IP en la red inalámbrica, bien manualmente o bien por DHCP
 si el Access Point lo soporta (como ocurre típicamente). Para configurar
-a una red de nombre MIRED que no emplea encripción:
+a una red de nombre MIRED que no emplea cifrado:
 
         doas ifconfig rum0 nwid MIRED 
 
-Si la red emplea encripción WEP (un mecanismo de encripción débil),
-puede especificar la llave de encripción en hexadecimal:
+Si la red emplea cifrad oWEP (un mecanismo de cifrado débil),
+puede especificar la llave de cifrado en hexadecimal:
 
         doas ifconfig rum0 nwid MIRED nwkey 0x123498a2d2
 
@@ -870,7 +866,7 @@ o en ASCII:
 
         doas ifconfig rum0 nwid MIRED nwkey "clave"
 
-Si la red emplea encripción WAP (un mecanismo de encripción más fuerte):
+Si la red emplea cifrado WAP (un mecanismo de cifrado más fuerte):
 
         doas ifconfig rum0 nwid MIRED wpakey MICLAVE
 
@@ -915,14 +911,14 @@ El tráfico de red inalámbrico puede examinarse con el paquete `kismet`,
 el cual tiene un archivo de configuración (`/etc/kismet.conf`) en el que
 debe especificarse el controlador usado.
 
-###Dispositivo dedicado que obra como Punto de Acceso Inalámbrico {#dispositivo-AP}
+### Dispositivo dedicado que obra como Punto de Acceso Inalámbrico {#dispositivo-AP}
 
 Estos dispositivo cuentan con una antena (típicamente pequeña) para la
 red inalámbrica y un conector para cable Ethernet que se conecta a la
 red cableada, la cual típicamente va a Internet.
 
 Normalmente los dispositivos que obran como Punto de Acceso Inalámbrico
-(Acces Point) cuentan con un servicio de configuración que opera sobre
+(Access Point) cuentan con un servicio de configuración que opera sobre
 HTTP por lo que pueden conectarse a un computador y emplear un navegador
 web.
 
@@ -959,7 +955,7 @@ algunas direcciones de la misma red cableada. Esto tiene la ventaja de
 dejar tanto la red inalámbrica como la cableada en el mismo segmento de
 red.
 
-Las particularidades de configuración de cada Punto de Accesso
+Las particularidades de configuración de cada Punto de Acceso
 Inalámbrico varían de un modelo a otro, pero normalmente debe
 especificar:
 
@@ -978,16 +974,16 @@ Acceso Inalámbrico, continuando las instrucciones de la sección [OpenBSD
 como cliente en una red inalámbrica](#cliente-inalambrico).
 
 Supongamos que su tarjeta esta asociada a la interfaz `ath0`, que desea
-emplear el segmento 192.168.3/24, llamar a la red CASA con encripción
+emplear el segmento 192.168.3/24, llamar a la red CASA con cifrado
 WEP y clave "uvwxy". Basta que en `/etc/hostname.ath0` configure:
 
         inet 192.168.3.1 255.255.255.0 NONE media autoselect \
         mediaopt hostap nwid CASA chan 11 nwkey "uvwxy"
 
-Tras esto desde los portatiles y computadores cercanos debe poder ver la
+Tras esto desde los portátiles y computadores cercanos debe poder ver la
 red CASA y conectarse con WEP y la clave uvwxy.
 
-###Referencias {#referencias-wlan}
+### Referencias {#referencias-wlan}
 
 -   Páginas `man` de `ifconfig`, `wpi`
 

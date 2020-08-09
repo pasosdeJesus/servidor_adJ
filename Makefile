@@ -13,7 +13,7 @@ FUENTESDB=redes.xdbk interconexion.xdbk direcciones.xdbk protocolossop.xdbk otro
 SOURCES=$(PROYECTO).xdbk $(FUENTESDB)
 # Listado de fuentes XML. Preferiblmente en el orden de inclusión.
 
-IMAGES= img/home.png img/prev.png img/toc-minus.png img/blank.png img/important.png img/toc-plus.png img/caution.png img/next.png img/tip.png img/up.png img/draft.png img/note.png img/toc-blank.png img/warning.png
+IMAGES= img/home.png img/prev.png img/toc-minus.png img/blank.png img/important.png img/toc-plus.png img/caution.png img/next.png img/tip.png img/up.png img/draft.png img/note.png img/toc-blank.png img/warning.png img/diagrama-web.png
 # Listado de imagenes, preferiblemente en formato PNG
 
 HTML_DIR=html
@@ -74,13 +74,13 @@ ghtodo: distgh
 
 
 repasa:
-	DEF=$(PROYECTO).def CLA=$(PROYECTO).cla SEC=$(PROYECTO).sec DESC="Información extraida de $(PROYECTO) $(PRY_VERSION)" FECHA="$(FECHA_ACT)" BIBLIO="$(URLSITE)" TIPO_DERECHOS="Dominio Público" TIEMPO_DERECHOS="$(MES_ACT)" DERECHOS="Información cedida al dominio público de acuerdo a la legislación colombiana. Sin garantías" AUTORES="Vladimir Támara Patiño" IDSIGNIFICADO="adJ_servidor" $(AWK) -f herram/db2rep $(SOURCES)
+	DEF=$(PROYECTO).def CLA=$(PROYECTO).cla SEC=$(PROYECTO).sec DESC="Información extraida de $(PROYECTO) $(PRY_VERSION)" FECHA="$(FECHA_ACT)" BIBLIO="$(URLSITE)" TIPO_DERECHOS="Dominio Público" TIEMPO_DERECHOS="$(MES_ACT)" DERECHOS="Información cedida al dominio público de acuerdo a la legislación colombiana. Sin garantías" AUTORES="Vladimir Támara Patiño" IDSIGNIFICADO="adJ_servidor" $(AWK) -f herram_confsh/db2rep $(SOURCES)
 
 # Para usar DocBook
-include herram/comdocbook.mak
+include herram_confsh/comdocbook.mak
 
 # Para crear distribución de fuentes y publicar en Internet
-include herram/comdist.mak
+include herram_confsh/comdist.mak
 
 # Elimina hasta configuración
 limpiadist: limpiamas
@@ -120,12 +120,13 @@ infoversion.ent:
 
 Derechos.txt: $(PROYECTO).$(EXT_DOCBOOK)
 	make html/index.html
-	$(W3M) $(W3M_OPT) -dump html/index.html | awk -f herram/conthtmldoc.awk > Derechos.txt
+	$(W3M) $(W3M_OPT) -dump html/index.html | awk -f herram_confsh/conthtmldoc.awk | awk '/Expresamos/ { e = 1; } /.*/ { if (e != 1) { print $0; }}' | fmt > Derechos.txt
+
 
 instala:
 	mkdir -p $(DESTDIR)$(INSDOC)/img/
 	install html/*html $(DESTDIR)$(INSDOC)
-	install img/*png $(DESTDIR)$(INSDOC)/img/
+	install html/img/*png $(DESTDIR)$(INSDOC)/img/
 	if (test -f $(PRINT_DIR)/$(PROYECTO).ps) then { \
 		install imp/*ps $(DESTDIR)$(INSDOC);\
 	} fi;

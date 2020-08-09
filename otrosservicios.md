@@ -59,7 +59,7 @@ vez que el sistema inicia agregue la siguiente línea al archivo
 Las siguientes páginas del manual de OpenBSD: quota 1, edquota 8,
 quotaon 8, quotaoff 8, quotacheck 8 y repquota 8. En el FAQ de OpenBSD
 hay una sección sobre quotas:
-[](http://www.openbsd.org/faq/faq10.html#Quotas)
+<http://www.openbsd.org/faq/faq10.html#Quotas>
 
 
 ## Motor de bases de datos PostgreSQL {#postgresql}
@@ -73,7 +73,7 @@ sistema adJ.
 ### Primera instalación del servidor {#primera-instalacion}
 
 Este motor de bases de datos se instala con el archivo de ordenes
-`/inst-adJ.sh` que en instalaciones tipicas de adJ basta ejecutar y
+`/inst-adJ.sh` que en instalaciones típicas de adJ basta ejecutar y
 volver a ejecutar para actualizar o para volver a inicializar PostgreSQL
 u otro paquete de esta distribución. En caso de actualizar este archivo
 sacará respaldo de la información de la base de 2 formas (copiando
@@ -83,8 +83,8 @@ A continuación se dan detalles del proceso de instalación y uso de
 PostgreSQL en caso de que requiera instalar por su cuenta o aprender más
 sobre este motor de bases de datos.
 
-Para emplearlo por primera vez instale el paquete `` (también es
-recomendable `postgresql-docs`).
+Para emplearlo por primera vez instale el paquete `postgresql-server` (también 
+es recomendable `postgresql-docs`).
 
 Este paquete deja instrucciones específicas para inicializar la base de
 datos, permitir conexiones de red e inicializar la base de datos cada
@@ -101,12 +101,12 @@ escrito describe son:
             doas passwd _postgresql
 
 -   A diferencia de versiones anteriores, este paquete ya no inicializa
-    la base. Inicialicela con:
+    la base. Inicialícela con:
 
             doas mkdir -p /var/postgresql/data
             doas chown -R _postgresql:_postgresql /var/postgresql
             doas su - _postgresql
-            initdb -D /var/postgresql/data -Upostgres --encoding=ISO8859-1
+            initdb --auth=md5 -D /var/postgresql/data -U postgres --encoding=UTF8
 
     En adJ se emplea por defecto autenticación md5, que requiere
     suministrar clave cada vez que se carga la interfaz `psql` o abre
@@ -135,14 +135,15 @@ escrito describe son:
 
             pkg_scripts="cron montaencres montaencpos postgresql httpd cupsd"
 
-Inicialmente el servidor queda configurado con sockets Unix (solo desde
-la misma máquina). Puede comprobar que está corriendo el servidor
+Inicialmente el servidor queda configurado con un zócalo (socket) Unix 
+(solo desde la misma máquina). Puede comprobar que está corriendo el servidor
 (postmaster) con:
 
         pgrep post
 
-y revisar el socket examinando la presencia del archivo
-`/var/www/tmp/.s.PGSQL.5432` (otra ubicación puede ser
+y revisar el zócalo examinando la presencia del archivo
+`/var/www/var/run/postgresql/.s.PGSQL.5432` (otra ubicación más
+común pero fuera de la jaula chroot para servidores web es
 `/tmp/.s.PGSQL.5432`).
 
 Para emplear el protocolo TCP/IP para conexiones desde algunas máquinas
@@ -160,25 +161,25 @@ conexiones simultáneamente, consulte primero
 
 En adJ por seguridad (e.g cuando ejecuta Apache con `chroot` en
 `/var/www`) no se permiten conexiones TCP/IP y se emplea una ruta para
-los sockets diferente a la ruta por defecto (i.e `/tmp`), se trata de
-`/var/www/tmp`, que se define en el archivo de configuración de
+los zócalos diferente a la ruta por defecto (i.e `/tmp`), se trata de
+`/var/www/var/run/postgresql`, que se define en el archivo de configuración de
 PostgreSQL con:
 
-        unix_socket_directory = '/var/www/tmp'
+        unix_socket_directories = '/var/www/var/run/postgresql'
 
 Antes de reiniciar PostgreSQL asegúrese de crear el directorio:
 
-        doas mkdir  /var/www/tmp
-        doas chmod a+w /var/www/tmp
-        doas chmod +t /var/www/tmp
+        doas mkdir  /var/www/var/run/postgresql
+        doas chmod a+w /var/www/var/run/postgresql
+        doas chmod +t /var/www/var/run/postgresql
 
 También tenga en cuenta que las diversas herramientas reciben como
 parámetro adicional `-h ruta`. Por ejemplo si ejecuta Apache con
 `chroot` en `/var/www/` puede tener configurado su directorio para
-sockets en `/var/www/tmp`, en ese caso puede iniciar `psql` con la base
-`prueba` usando:
+zócalos en `/var/www/var/run/postgresql`, en ese caso puede iniciar 
+`psql` con la base `prueba` usando:
 
-        psql -h /var/www/tmp prueba
+        psql -h /var/www/var/run/postgresql prueba
 
 En paquetes anteriores al de adJ 4.1 el superusuario de la base
 coincidía con el usuario del sistema `_postgresql`, desde 4.1 el
@@ -213,7 +214,7 @@ Otra posibilidad es cambiar la configuración después de haber
 inicializado sin autenticación. Para esto cambie la clave del
 administrador con[^aut.1]:
 
-        psql -U postgres template1 
+        psql -h /var/www/var/run/postgresql -U postgres template1 
         template1=# alter user postgres with password 'MiClave';
 
 Después edite `/var/postgresql/data/pg_hba.conf` y cambie en las lineas
@@ -223,7 +224,7 @@ de acceso la palabra `trusted` por `md5`, por ejemplo:
         host    all         all         127.0.0.1/32          md5
         host    all         all         ::1/128               md5
 
-Detenga el servidor y vuelvalo a iniciar, notará que todo intento de
+Detenga el servidor y vuélvalo a iniciar, notará que todo intento de
 ingreso exige la clave.
 
 El listado de bases de datos puede consultarse con:
@@ -264,10 +265,10 @@ Para crear la base de datos `prueba` puede usar el superusuario con la
 opción `-U postgres` o desde una cuenta que tenga permiso para crear
 bases de datos:
 
-        createdb prueba
-        psql prueba
+        createdb -h /var/www/var/run/postgresql -U postgres prueba
+        psql -h /var/www/var/run/postgresql -U postgres prueba
 
-Desde la interfaz `psql`, pueden darse comandos SQL y otros específicos
+Desde la interfaz `psql`, pueden darse ordenes SQL y otros específicos
 de PostgreSQL (ver [Uso de una base de datos](#uso-base)). En particular
 el usuario `postgres` y desde cuentas con permiso para crear usuarios,
 puede crear otros usuarios (globales para todas las bases de datos
@@ -276,36 +277,36 @@ clave, desde `psql` ingresar:
 
         CREATE USER usejemplo
 
-El comando `CREATE USER` presentado puede ir seguido de `CREATEUSER`
+La orden `CREATE USER` presentado puede ir seguido de `CREATEUSER`
 para crear un superusuario (sin restricción alguna), o `CREATEDB` para
 crear un usuario que pueda crear bases de datos o `PASSWORD 'clave'`
 para crear un usuario con una clave (emplea autenticación configurada).
-Desde la línea de comandos puede crearse un usuario con:
+Desde la línea de ordenes puede crearse un usuario con:
 
-        createuser usejemplo
+        createuser -h /var/www/var/run/postgresql -U postgres  usejemplo
 
 Para eliminar un usuario desde `psql` se usa:
 
         DROP USER usejemplo;
 
-y para eliminarlo desde línea de comandos:
+y para eliminarlo desde línea de ordenes:
 
-        dropuser usejemplo
+        dropuser -h /var/www/var/run/postgresql -U postgres usejemplo
 
-Puede ejecutarse un script SQL (`crea.sql`) desde la línea de comandos a
+Puede ejecutarse un script SQL (`crea.sql`) desde la línea de ordenes a
 un base de datos con
 
-        psql -d test -U ejusuario --password -f crea.sql
+        psql -h /var/www/var/run/postgresql -d test -U ejusuario --password -f crea.sql
 
 ### Uso de una base de datos {#uso-base}
 
-Puede emplear `psql`, la interfaz texto que acepta comandos SQL y que se
+Puede emplear `psql`, la interfaz texto que acepta ordenes SQL y que se
 distribuye con PostgreSQL. Para esto, entre a una base (digamos `b1908`)
 como un usuario (digamos `u1908`) con:
 
-        psql -U u1908 -d b1908
+        psql -h /var/www/var/run/postgresql  -U u1908 -d b1908
 
-En esta interfaz puede dar comandos SQL y algunos comandos internos que
+En esta interfaz puede dar ordenes SQL y algunas ordenes internos que
 puede listar con `\h`. Algunos ejemplos de operaciones útiles son:
 
 `\dt`
@@ -323,7 +324,7 @@ puede listar con `\h`. Algunos ejemplos de operaciones útiles son:
 
 `\h update`
 
-:   Da ayuda sobre el comando `update` (que permite actualizar registros
+:   Da ayuda sobre la orden `update` (que permite actualizar registros
     de una tabla.)
 
 Es recomendable que los usuarios del sistema que también son usuarios de
@@ -381,37 +382,175 @@ o cambiar las existentes:
 También podrá renombrar cotejaciones que haya creado con
 `ALTER COLLATION esp RENAME TO es_CO_ISO8859_1;`, así como borrarlas con
 `DROP COLLATION esp;`. Puede consultar más en
-[](http://www.postgresql.org/docs/9.1/static/collation.html).
+<http://www.postgresql.org/docs/9.1/static/collation.html>.
 
 ### Copias de respaldo {#respaldo-postgresql}
 
 Para sacar una copia de respaldo de todas las base de datos manejadas
-con PostgreSQL (y suponiendo que el socket está en `/var/www/tmp`):
+con PostgreSQL (y suponiendo que el zócalo está en 
+`/var/www/var/run/postgresql`):
 ingrese a la cuenta del administrador:
 
         doas su - _postgresql
-        pg_dumpall -U postgres -h /var/www/tmp/ \
+        pg_dumpall -U postgres -h /var/www/var/run/postgresql/ \
             --inserts --attribute-inserts > /respaldos/pgdump.sql
 
 Puede restablecer una copia con
 
-        psql -U postgres -h /var/www/tmp/ \
+        psql -U postgres -h /var/www/var/run/postgresql/ \
             -f /respaldos/pgdump.sql template1
+
+
+### Base PostgreSQL remota {#base-postgresql-remota}
+
+PostgreSQL permite conexiones remotas y cifradas, así que la aplicación 
+puede estar en un servidor y la base de datos en otra.
+
+Para la operación cifrada se requiere un certificado para el servidor y un 
+certificado para cada usuario de la base de datos que se emplee en
+conexiones remotas.  Los certificados para los clientes deben tener el CN
+con el nombre del usuario que hará la conexión.   
+Por lo mismo en lugar de comprar certificados para esto es más práctico 
+tener una autoridad certificadora que pueda firmarlos.
+
+#### Autoridad certificadora SSL
+
+Las operaciones con SSL depende en cliente y en servidor de la librería 
+LibreSSL (en otros sistemas OpenSSL). Esta incluye el programa
+```openssl``` para hacer varias operaciones, incluyendo operaciones
+de una autoridad certificadora. 
+
+Un certificado SSL siempre va con una llave privada (el certificado es la 
+llave pública).   
+
+El proceso para crear un certificado es:
+
+1. Crear la llave privada para el certificado (extensión .key)
+2. Generar el certificado (llave pública) pero sin firma (extensión .csr)
+3. Firmar el certificado con una autoridad certificadora y generar el certificado 
+4. Usar el certificado firmado junto con la llave privada para realizar conexiones (el certificado firmado se compartirá, mientras que la llave privada no)
+
+Los archivos intermedios pueden examinarse así:
+
+* Solicitudes: ```openssl req -noout -text -in client.csr```
+* Llaves: ```openssl rsa -check -in client.key ```
+* Certificados: ```openssl x509 -noout -text -in client.crt```
+
+La autoridad certificadora no es más que un certificado autofirmado que 
+se configura y usa consistentemente como autoridad certificadora.
+
+#### Configuración de servidor
+
+En el servidor deben quedar certificados del servidor en ```/var/postgresql/data```:
+
+* root.crt Autoridad certificadora (igual a server.crt)
+* root.crl Lista de revocación
+* server.crt Certificado del servidor
+* server.key Llave privada del servidor
+
+Por cada cliente que se va a conectar debe configurarse en 
+```/var/postgresql/data/pg_hba.conf``` el/los usuarios que
+se conectarán.  Contrario a lo especificado en la documentación de 
+PostgreSQL en casos de SSL en ese archivo sólo nos han funcionado 
+líneas de la forma: 
+
+        hostssl all usuario 192.168.100.11/32 cert clientcert=1
+
+Es decir conexión SSL exigiendo certificado al cliente y que la autenticación 
+sea por certificado. Lo cual también exige que el certificado del cliente
+tenga el CN igual al usuario.
+
+#### configuración de cada cliente
+
+Para cada usuario debe hacerse un certificado que se ubica en 
+cada comptuador cliente en ```~/.postgresql/{usuario.crt, usuario.key}```  
+donde usuario debe correponder al usuario en la base de datos y 
+al CN del certificado.
+
+Desde el servidor puede generar y firmar certificado para cliente por
+10 años (cambie ```usuario``` por el usuario PostgreSQL dueño de la 
+base de datos y que usara desde los clientes para conectarse, si
+prefiere un lapso de tiempo diferente especifíquelo en días después
+de la opción ```-days```):
+
+        doas su - 
+        cd /var/postgresql/data
+        openssl genrsa -des3 -out usuario.key 1024
+        openssl rsa -in usuario.key -out usuario.key
+        openssl req -new -key usuario.key -out usuario.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=Pasos de Jesus/CN=usuario'
+        openssl x509 -req -days 3650 -in usuario.csr -CA root.crt -CAkey server.key -out usuario.crt -CAcreateserial
+
+A continuación copie el certificado generado (```usuario.crt```) y la 
+llave privada (```usuario.key```) al computador cliente donde se usará:
+
+        scp usuario.key usuario.crt mius@192.168.100.11:~/.postgresql/
+
+En el servidor edite el archivo ```/var/postgresql/data/pg_hba.conf``` 
+y asegúrese de agregar una línea para el usuario y el computador cliente:
+
+        hostssl all usuario 192.168.100.11/32 cert clientcert=1
+
+Reinicie PostgreSQL.
+
+        doas sh /etc/rc.d/postgresql -d restart
+
+Desde el cliente ejecute:
+
+        doas chmod 0600 /home/usis/.postgresql/usuario.key
+
+y pruebe la conexión asegurando que se usa el certificado 
+del usuario respectivo:
+
+        PGSSLCERT=/home/usis/.postgresql/usuario.crt \
+        PGSSLKEY=/home/usis/.postgresql/usuario.key  \
+        psql -h192.168.100.21 -Uusuario usuario
+
+Configure la aplicación para que en cada arranque o uso establezca:
+
+        PGSSLCERT=/home/usis/.postgresql/usuario.crt 
+        PGSSLKEY=/home/usis/.postgresql/usuario.key
+
+##### Clientes en PHP
+
+Copie las llaves dentro de la jaula chroot, haga que el dueño sea
+www:www e incluya en alguna fuente
+usada antes de las conexiones a base de datos (por ejemplo intente en
+index.php):
+
+        putenv('PGSSLCERT=/ojs/certs/ojs.crt');
+        putenv('PGSSLKEY=/ojs/certs/ojs.key');
+
+##### Clientes en Ruby on Rails
+
+En ```config/database.yml``` debe verse algo como:
+
+        username: usuario
+        host: 192.168.100.21
+        sslmode: "require"
+
+y al hacer operaciones que usen base de datos (rails dbconsole, iniciar unicorn, etc) asegúrese de ejecutarlas en un ambiente donde se definan bien las variables PGSSLCERT y PGSSLKEY, por ejemplo:
+
+        PGSSLCERT=/home/usis/.postgresql/usuario.crt \
+        PGSSLKEY=/home/usis/.postgresql/usuario.key \
+        rails dbconsole
 
 ### Referencias y lecturas recomendadas {#referencias-postgresql}
 
 -   Documentación del paquete postgresql (README.OpenBSD, INSTALL).
 
 -   Documentación disponible en el paquete `postgresql-doc` (ver
-    postgresql-doc) y en [](http://www.postgresql.org/docs).
+    postgresql-doc) y en <http://www.postgresql.org/docs>.
 
 -   Páginas del manual de Unix: psql 1
+
+-   SSL Certificates For PostgreSQL :
+    <https://www.howtoforge.com/postgresql-ssl-certificates>
 
 [^aut.1]: Note que de esta forma puede cambiar la clave de otros 
     usuarios de PostgreSQL.
 
 
-## MariaDB
+## MariaDB {#mariadb}
 
 A partir de OpenBSD/adJ 5.7 MariaDB remplaza a MySQL. Según
 <https://es.wikipedia.org/wiki/MariaDB> MariaDB fue iniciada por el
@@ -420,7 +559,7 @@ consideraba que Oracle había hecho la compra para reducir competencia de
 sus bases de datos.
 
 Debe instalar los paquetes &p-mariadb-client; y &p-mariadb-server;. Aunque
-el nombre de los paquetes cambia los comandos para operarla siguen
+el nombre de los paquetes cambia las ordenes para operarla siguen
 siendo los mismos. Tras instalar el servidor debe ejecutar
 `mysql_install_db`.
 
@@ -434,7 +573,7 @@ Para aumentar el límite de archivos que el usuario `_mysql` de clase
         mysql:\
             :openfiles-cur=2048:\
             :openfiles-max=4096:\
-            :tc=daemon:
+            :tc=servicio:
 
 tenga en cuenta no dejar espacios al final de cada línea y que desde la
 segunda línea cada una comiencen con el caracter tabulador. A
@@ -443,8 +582,10 @@ continuación regenere el archivo binario `/etc/login.conf.db` con
         cd /etc
         doas cap_mkdb /etc/login.conf 
 
-Después agregue `mysqld` a `pkg_scripts` en `/etc/rc.conf.local`. A
-continuación lance el servidor con:
+Después agregue `mysqld` a `pkg_scripts` en `/etc/rc.conf.local` por ejemplo con:
+	doas rcctl enable mysqld
+
+A continuación lance el servidor con:
 
         doas sh /etc/rc.d/mysqld start
 
@@ -454,7 +595,7 @@ Después puede establecer una clave para el usuario `root` de MariaDB
 cuando ingresa desde `localhost` con:
 
         /usr/local/bin/mysqladmin -u root  password 'nueva-clave' 
-        /usr/local/bin/mysqladmin -u root -pnueva-clave -h ESERV password 'nueva-clave'
+        /usr/local/bin/mysqladmin -u root -pnueva-clave -h &ESERV; password 'nueva-clave'
         
 
 Después puede iniciar una sesión, crear bases de datos, crear usuarios y
@@ -512,7 +653,7 @@ cambiarla entrando a la cuenta de administrador:
 
             # mysql
             mysql> USE mysql
-            mysql> UPDATE USER SET PASSWORD=password('miclave') WHERE user='root';
+            mysql> UPDATE user SET PASSWORD=password('miclave') WHERE user='root';
             mysql> FLUSH PRIVILEGES;
             mysql> EXIT
 
@@ -535,53 +676,66 @@ y posteriormente restaurarla con:
 
 ### MariaDB y servidor web con chroot {#chroot-mysql}
 
-Puede emplear aplicaciones para nginx o Apache en modo `chroot` que usen bases
-de datos MariaDB de tres formas: (1) Conectándose a un puerto TCP/IP
-donde responda MariaDB, (2) poniendo el socket de MariaDB en un
-directorio dentro de la jaula del servidor web o (3) Corriendo MariaDB
-dentro de la jaula `chroot` (ver
+Puede emplear aplicaciones para nginx o Apache en modo `chroot` que usen 
+bases de datos MariaDB de tres formas: (1) Conectando la aplicación web a la 
+base de datos mediante un puerto TCP/IP donde responda MariaDB, 
+(2) poniendo el zócalo de MariaDB en un directorio dentro de la 
+jaula del servidor web o (3) Corriendo MariaDB dentro de la 
+jaula `chroot` (ver
 <http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot>).
 
-Para correr MariaDB dentro de la jaula usada por nginx, a continuación 
-documentamos como ubicar
-el socket de MariaDB dentro de la jaula del servidor web (/var/www/).
+A continuación documentamos como ubicar el zócalo de MariaDB dentro de la 
+jaula del servidor web (/var/www/) que nos parece un método seguro y 
+fácil e implementar.
+ 
+Una vez instale `mariadb-server` cree el directorio en el cual ubicará el
+zócalo, digamos:
 
-Una vez instale `maria-server` cree el directorio en el cual ubicará el
-socket, digamos:
-
-        mkdir -p /var/www/var/run/mysql/
-        chown _mysql:_mysql /var/www/var/run/mysql/
-        chmod a+w /var/www/var/run/mysql/
-        chmod +t /var/www/var/run/mysql/
-
-y después inicie MariaDB indicando la ruta del socket con la opción
+```sh
+        doas mkdir -p /var/www/var/run/mysql/
+        doas chown _mysql:_mysql /var/www/var/run/mysql/
+        doas chmod a+w /var/www/var/run/mysql/
+        doas chmod +t /var/www/var/run/mysql/
+```
+y después inicie MariaDB indicando la ruta del zócalo con la opción
 `--socket`, por ejemplo para que el cambio se efectúe en cada inicio,
 edite `/etc/rc.conf.local` para agregar:
 
+```sh
         mysqld_flags="--socket=/var/www/var/run/mysql/mysql.sock"
+```
 
-e inicie desde `/etc/rc.local` con:
+y reinicie el servicio con:
 
-        pgrep mysqld > /dev/null
-        if [ "$?" != 0  -a X"${mysqld_flags}" != X"NO" -a \
-            -x /usr/local/bin/mysqld_safe ]; then
-            echo -n ' mysqld ' 
-            /usr/local/bin/mysqld_safe ${mysqld_flags} &
-        fi
+```sh
+	doas rcctl -d restart mysqld
+```
 
-Sus aplicaciones PHP pueden entonces conectarse con:
+Puede verificar que el zócalo queda bien ubicado con:
+```sh
+	$ ls -l /var/www/var/run/mysql/
+```
+que debe responde con algo como
+```sh
+	srwxrwxrwx  1 _mysql  _mysql  0 Jul 18 21:41 mysql.sock     
+```
 
+Así una aplicación PHP que corran en el mismo servidor podrían realizar
+una conexión con:
+
+```php
         $dbhost  = "localhost";
         $dbuname = "miusuario";
         $dbpass  = "miclave";
         mysql_connect($dbhost, $dbuname, $dbpass);
+```
 
 Tenga en cuenta también que otros binarios de MariaDB también requerirán
 la opción `--socket=/var/www/var/run/mysql/mysql.sock` al ejecutarse por
 ejemplo:
 
-        mysqldump --socket=/var/www/var/run/mysql/mysql.sock  
-            \-p --all-databases
+        mysqldump --socket=/var/www/var/run/mysql/mysql.sock  \
+		-p --all-databases
         
 
 ### Lecturas recomendadas {#lecutras-mysql}
@@ -590,13 +744,13 @@ Referencias:
 
 -   Una explicación de algo de la instalación y el uso de MySQL en
     OpenBSD:
-    [](http://www.sancho2k.net/filemgmt_data/files/mysql_notes.html)
+    <http://www.sancho2k.net/filemgmt_data/files/mysql_notes.html>
 
 -   La documentación de MariaDB :
-    [](https://mariadb.com/kb/en/mariadb/documentation/)
+    <https://mariadb.com/kb/en/mariadb/documentation/>
 
 -   Ayuda para cambiar clave de root en sistemas Linux:
-    [](http://www.netadmintools.com/art90.html)
+    <http://www.netadmintools.com/art90.html>
 
 
 ## Servidor ldapd {#ldapd}
@@ -611,7 +765,7 @@ usuarios de una organización para permitir su autenticación en otros
 servicios (e.g nombres, apellidos, dirección, teléfono, login, clave).
 
 OpenBSD incluye (desde OpenBSD 4.8) un servidor para LDAP versión 3,
-`ldapd`. No incluye cliente para LDAP pero desde la línea de comandos
+`ldapd`. No incluye cliente para LDAP pero desde la línea de ordenes
 puede emplearse el paquete `openldap-client` o como interfaz web
 `phpldapadmin`[^lda.1].
 
@@ -665,7 +819,7 @@ La configuración por defecto emplea `/var/db/ldap` como directorio para
 mantener las bases de datos y mantiene una por cada espacio de nombres
 (namespace). Las conexiones no cifradas por defecto operan en el puerto
 389 y deben autenticarse con SASL (a menos que tengan la opción `secure`
-para permitir autenticación plana) y las que empleen certificado iran
+para permitir autenticación plana) y las que empleen certificado irán
 cifradas en el puerto 636.
 
 Cada vez que modifique el archivo de configuración del servidor, puede
@@ -676,7 +830,7 @@ verificarlo con:
 Para iniciar el servidor LDAP en modo de depuración para ver posibles
 errores:
 
-        doas ldadpd -dv
+        doas ldapd -dv
 
 Tras verificar el funcionamiento, para que en cada arranque se inicie el
 servidor puede agregar a `/etc/rc.conf.local`:
@@ -685,12 +839,12 @@ servidor puede agregar a `/etc/rc.conf.local`:
         pkg_scripts = "ldapd"
 
 E iniciar el servicio con `/etc/rc.d/ldapd start` y detenerlo con
-`/etc/rc.d/ldadp stop`
+`/etc/rc.d/ldapd stop`
 
 Es muy recomendable que agregue el esquema LDAP de Courier, de esta
 forma tomada de {3}:
 
--   Descarguelo y renombrelo:
+-   Descárguelo y renómbrelo:
 
             doas ftp -o /etc/ldap/courier.schema \
             http://courier.cvs.sourceforge.net/viewvc/courier/libs/authlib/authldap.schema
@@ -742,7 +896,7 @@ Además de modificar `/etc/ldap/ldap.conf` para agregar
 Una vez esté corriendo `ldapd` deberá iniciar un directorio para su
 organización y los usuarios que se autenticarán. Puede agregar estos
 datos con el programa `ldapadd` que hace parte de openldap-client.
-Programa que recibe datos en formato ldif, por ejemplo leidos de un
+Programa que recibe datos en formato ldif, por ejemplo leídos de un
 archivo. Un primer archivo con datos de la organización puede ser
 `org.ldif` y contener:
 
@@ -806,17 +960,17 @@ hace por defecto el instalador de adJ 5.5). Para esto verifique que en
 
 -   Las siguientes páginas man: ldapd 8. ldapctl 8. ldapd.conf 5.
 
--   [](http://dhobsd.pasosdejesus.org/index.php?id=ldapd).
+-   <http://dhobsd.pasosdejesus.org/index.php?id=ldapd>.
 
--   [](http://www.cyberciti.biz/faq/test-ssl-certificates-diagnosis-ssl-certificate/).
+-   <http://www.cyberciti.biz/faq/test-ssl-certificates-diagnosis-ssl-certificate/>.
 
--   [](http://www.tumfatig.net/20120817/monitoring-openbsds-ldap-daemon/).
+-   <http://www.tumfatig.net/20120817/monitoring-openbsds-ldap-daemon/>.
 
--   [](http://openbsd.7691.n7.nabble.com/dev-random-as-chrooted-named-s-entropy-source-current-td64344.html).
+-   <http://openbsd.7691.n7.nabble.com/dev-random-as-chrooted-named-s-entropy-source-current-td64344.html>.
 
 [^lda.1]: Si emplea un adJ 5.2 y planea conectarse desde clientes digamos en
     Ubuntu reciente requerirá el parche descrito en
-    [](http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html)
+    <http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html>
 
 
 ## Autoridad certificadora interna {#autoridad_certificadora}
@@ -831,7 +985,7 @@ Cada vez los programas, librerías y lenguajes están verificando con más
 insistencia que los certificados sean efectivamente firmados por 
 autoridades certificadoras.  
 
-En genral las autoridades certificadoras cobran por emitir firmas para 
+En general las autoridades certificadoras cobran por emitir firmas para 
 certificados.  Sin embargo <http://letsencrypt.org> es una autoridad 
 certificadora que expide certificados gratuitos para sitios públicos 
 pero no para sitios en redes internas por cuanto el proceso de 
@@ -906,16 +1060,16 @@ En el computador que hará la conexión (en este ejemplo
         openssl genrsa -des3 -out apbd2.miong.org.co.key 1024
         openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
 
-De una clave temporal y borrela con
+De una clave temporal y bórrela con
 
         openssl rsa -in apbd2.miong.org.co.key -out apbd2.miong.org.co.key
 
 Cree la solicitud de certificado con:
 
-        openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=CINEP/CN=apbd2.miong.org.co'
+        openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=MIONG/CN=apbd2.miong.org.co'
 
 Copie la solicitud `apbd2.miong.org.co.csr` al servidor 
-apbd1.miong.org.co y dejela en el directorio `/var/postgresql/data`
+apbd1.miong.org.co y déjela en el directorio `/var/postgresql/data`
 
 Y allí ejecute:
 
@@ -933,7 +1087,7 @@ A continuación copie el certificado generado
 #### Caso PostgreSQL
 
 En el servidor edite el archivo `/var/postgresql/data/pg_hba.conf` y 
-asegurese de agregar una línea para el usuario y el computador 
+asegúrese de agregar una línea para el usuario y el computador 
 cliente:
         hostssl all usuario 192.168.100.11/32 cert clientcert=1
 
@@ -959,7 +1113,7 @@ Configure la aplicación para que en cada arranque o uso establezca:
 
 #### Caso LDAPD
 
-Ubique el ceritifcado y llave en `/etc/ldad/certs/` del servidor 
+Ubique el certificado y llave en `/etc/ldap/certs/` del servidor 
 donde corre ldapd:
 
         doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
@@ -968,7 +1122,7 @@ Configure `/etc/ldapd.conf`
 
         listen on $if1 tls certificate apbd2.miong.org.co
 
-En los computadores que realicen conexiones al LDAP asegurese de 
+En los computadores que realicen conexiones al LDAP asegúrese de 
 agregar la llave de la entidad certificadora 
 `/var/postgresql/data/root.crt`, es decir en el servidor apbd1 ejecute:
 

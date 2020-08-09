@@ -1,0 +1,18 @@
+
+La distribución Aprendiendo de Jesús como servidor y cortafuegos
+
+Vladimir Támara Patiño (vtamara@pasosdeJesus.org)
+
+Este documento y sus fuentes se ceden al dominio público desde 2004.
+Esta es la versión 6.5 de este documento, actualizada por última
+vez en 22/07/2019 para que corresponda a la distribución adJ de
+OpenBSD 6.5. No se ofrece garantía alguna, por el contrario se
+aprecia que se envíen correcciones y sugerencias al autor. Este
+escrito se dedica a Dios por su infinita sabiduría.
+
+Agradecemos las correcciones de Luis Alejandro Cruz
+
+La versión publicada más reciente está tanto en línea como en archivo
+comprimido y como paquete para adJ/OpenBSD. Sus fuentes en DocBook
+están disponibles en https://github.com/pasosdeJesus/servidor_adJ/.
+

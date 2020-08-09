@@ -7,7 +7,7 @@
 # Créditos
 # Manejo de variables de configuración: Miembros de Structio.  
 #	http://structio.sourceforge.net/
-# Línea de comandos: WWWeb Tide Team 
+# Línea de ordenes: WWWeb Tide Team 
 #	http://www.ebbtide.com/Util/ksh_parse.html 
 # que también es de dominio público de acuerdo a http://www.ebbtide.com/Util/
 # "The following utilities have been written by the members of WWWeb Tide 
@@ -25,10 +25,10 @@ if (test ! -f confv.sh) then {
 
 
 # Leyendo funciones para ayudar en configuración
-. herram/confaux.sh
-. herram/misc.sh
+. herram_confsh/confaux.sh
+. herram_confsh/misc.sh
 
-# Reconociendo línea de comandos
+# Reconociendo línea de ordenes
 
 BASENAME=$(basename $0)
 USAGE="$BASENAME [-v] [-h] [-M] [-p prefijo]"
@@ -151,7 +151,7 @@ FALLAS
 
 VER TAMBIÉN
 	Para mejorar este script o hacer uno similar ver fuentes de 
-	herram/confaux.sh
+	herram_confsh/confaux.sh
 
 
 CRÉDITOS Y DERECHOS DE REPRODUCCIÓN 
@@ -289,7 +289,7 @@ check "ED" "" "test -x \$ED" `which ed 2> /dev/null`
 check "FIG2DEV" "optional" "test -x \$FIG2DEV" `which fig2dev 2> /dev/null`
 check "FIND" "" "test -x \$FIND" `which find 2> /dev/null`
 check "GZIP" "" "test -x \$GZIP" `which gzip 2> /dev/null`
-check "ISPELL" "optional" "test -x \$ISPELL" `which ispell 2> /dev/null`
+check "ASPELL" "optional" "test -x \$ASPELL" `which aspell 2> /dev/null`
 check "MAKE" "" "test -x \$MAKE" `which make 2> /dev/null`
 check "MV" "" "test -x \$MV" `which mv 2> /dev/null`
 check "MKDIR" "" "test -x \$MKDIR" `which mkdir 2> /dev/null`
@@ -372,7 +372,7 @@ if (test "$VERBOSE_FLAG" -gt "0") then {
 echo ",s|/usr/bin/awk|$AWK|g
 w
 q
-" | ed herram/db2rep 2> /dev/null
+" | ed herram_confsh/db2rep 2> /dev/null
 
 if (test ! -f personaliza.ent -a -f personaliza.ent.plantilla) then {
 	cp personaliza.ent.plantilla personaliza.ent
