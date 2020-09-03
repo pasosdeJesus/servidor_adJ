@@ -648,6 +648,9 @@ cambiarla entrando a la cuenta de administrador:
 
 -   Inicie el servidor con
     `/usr/local/libexec/mysqld --user=root --skip-grant-tables`
+    Esto usará el zócalo (socket) por omisión en `/var/run/mysql`,
+    si no existe esa ruta creela con `mkdir /var/run/mysql` y
+    dele permisos con `chown _mysql:_mysql /var/run/mysql`
 
 -   Ejecute:
 
