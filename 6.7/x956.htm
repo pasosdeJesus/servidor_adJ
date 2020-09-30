@@ -14,7 +14,7 @@ TITLE="Direcciones, enrutamiento, transporte y cortafuegos"
 HREF="x739.htm"><LINK
 REL="NEXT"
 TITLE="Otros servicios que puede prestar el servidor"
-HREF="x2207.htm"></HEAD
+HREF="x2219.htm"></HEAD
 ><BODY
 CLASS="section"
 BGCOLOR="#FFFFFF"
@@ -56,7 +56,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="x2207.htm"
+HREF="x2219.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
@@ -531,7 +531,7 @@ CLASS="literal"
 >/var/named/master</TT
 >. Pueden configurarse
         archivos como dice en <A
-HREF="a3120.htm"
+HREF="a3132.htm"
 >AA_Linux</A
 > por
         ejemplo los datos un servidor DNS primario del dominio
@@ -869,7 +869,7 @@ NAME="AEN1121"
 ><P
 >&#13;            Sección sobre DNS de las guías Aprendiendo a aprender Linux.
             <A
-HREF="a3120.htm"
+HREF="a3132.htm"
 >AA_Linux</A
 >
           </P
@@ -878,7 +878,7 @@ HREF="a3120.htm"
 ><P
 >&#13;            Referencia para administradores de BIND 9
             <A
-HREF="a3120.htm"
+HREF="a3132.htm"
 >bind9arm</A
 >.
           </P
@@ -898,7 +898,7 @@ HREF="a3120.htm"
 ><LI
 ><P
 >&#13;            <A
-HREF="a3120.htm"
+HREF="a3132.htm"
 >openbsdDnsDhcp</A
 >.
           </P
@@ -1002,15 +1002,18 @@ NAME="AEN1162"
 ></H3
 ><P
 >&#13;        Supongamos que requiere que unos usuarios puedan sólo ingresar
-        por sftp a sus archivos pero a nada más del sistema de archivos.
-        Agregrue el grupo <TT
+        por sftp a una jaula de archivos que incluya sus archivos y
+        otros directorios y archivos pero no al sistema de archivos
+        completo. Para esto agregue un grupo, digamos
+        <TT
 CLASS="literal"
 >jaulasftp</TT
-> al archivo
+>, al archivo
         <TT
 CLASS="literal"
 >/etc/group</TT
-> por ejemplo:
+> con un gid no usado (digamos
+        1002):
       </P
 ><PRE
 CLASS="programlisting"
@@ -1034,9 +1037,12 @@ CLASS="programlisting"
   X11Forwarding no
 </PRE
 ><P
->&#13;        Note que no se le permite ralizar tuneles ni reenvios y sólo
-        puede usar el sistema internal-sftp confiando a
-        <TT
+>&#13;        Note que no se le permite realizar túneles ni reenvíos y sólo
+        puede usar el sistema <TT
+CLASS="literal"
+>internal-sftp</TT
+> confinado
+        a <TT
 CLASS="literal"
 >/restovar/jaulasftp</TT
 >
@@ -1046,48 +1052,77 @@ CLASS="literal"
 CLASS="literal"
 >doas vipw</TT
 > edite cada usuario
-        por limitar par asegurar que su línea es de la forma siguiente:
+        por limitar (en el siguiente ejemplo <TT
+CLASS="literal"
+>uslim</TT
+>)
+        para asegurar que su línea es de la forma siguiente:
       </P
 ><PRE
 CLASS="programlisting"
 >&#13;    uslim:$2b$10$dEPqLC7YSmilUNURQXp2AeiptJVJ38H6ZsiI25w7fisMboDkBCZy.:1005:1002::0:0:Usuario Limitado:/home/uslim:/bin/false
 </PRE
 ><P
->&#13;        Teniendo en cuenta que para este usuario de ejmplo
+>&#13;        Teniendo en cuenta que para este usuario de ejemplo
         <TT
 CLASS="literal"
 >uslim</TT
->: 1. Que su grupo principal es el 1002 -
-        jaulsftp 2. Que no tiene interprete de ordenes, es decir que es
-        <TT
+>:
+      </P
+><P
+></P
+><OL
+COMPACT="COMPACT"
+TYPE="1"
+><LI
+><P
+>&#13;            Su grupo principal es el 1002 - jaulsftp
+          </P
+></LI
+><LI
+><P
+>&#13;            No tiene interprete de ordenes, es decir que es
+            <TT
 CLASS="literal"
 >/bin/false</TT
-> 3. Que su directorio personal es
-        <TT
+>
+          </P
+></LI
+><LI
+><P
+>&#13;            Su directorio personal es <TT
 CLASS="literal"
 >/home/uslim</TT
->, pero que en realidad debe
-        ubicarse dentro de la jaula para ser
-        <TT
+>
+            pero dentro de jaula, pues el administrador ubicará su
+            directorio en
+            <TT
 CLASS="literal"
 >/restovar/jaulasftp/home/uslim</TT
 >
-      </P
+          </P
+></LI
+></OL
 ><P
->&#13;        Cree el directorio /restovar/jaulasftp/home/uslim y ponga la
-        información que debe ver el usuario <TT
+>&#13;        Cree el directorio
+        <TT
+CLASS="literal"
+>/restovar/jaulasftp/home/uslim</TT
+> y ponga la
+        información del directorio personal del usuario
+        <TT
 CLASS="literal"
 >uslim</TT
-> en
-        su directorio personal.
+>.
       </P
 ><P
->&#13;        Cuando ese usuario ingrese vía sftp verá como raíz lo que haya
-        en <TT
+>&#13;        Cuando ese usuario ingrese vía sftp verá como raíz del sistema
+        de archivos lo que haya en
+        <TT
 CLASS="literal"
 >/restovar/jaulasftp</TT
 > y podrá ingresar a los
-        directorios y archiovs dentro de esa jaula en la medida que el
+        directorios y archivos dentro de esa jaula en la medida que el
         sistema de permisos típico se lo permita.
       </P
 ></DIV
@@ -1096,11 +1131,11 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1185"
+NAME="AEN1195"
 >Referencias y lecturas recomendadas</A
 ></H3
 ><P
->&#13;        Las siguientes páginas man: sshd 8.
+>&#13;        Las siguientes páginas man: sshd 8, sftp 1.
       </P
 ><P
 >&#13;        Separación de privilegios:
@@ -1110,6 +1145,10 @@ NAME="AEN1185"
 >&#13;        Página web:
         http://www.openssh.com
       </P
+><P
+>&#13;        Ejemplo de jaula sftp:
+        https://www.golinuxcloud.com/sftp-chroot-restrict-user-specific-directory/
+      </P
 ></DIV
 ></DIV
 ><DIV
@@ -1117,13 +1156,13 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN1192"
+NAME="AEN1204"
 >Protocolo DHCP</A
 ></H2
 ><P
 >&#13;      El protocolo DHCP se describen en el RFC 2131 (ver
       <A
-HREF="a3120.htm"
+HREF="a3132.htm"
 >rfc2131</A
 >), se trata de un modelo
       cliente-servidor en el que el servidor DHCP localiza direcciones
@@ -1137,8 +1176,8 @@ HREF="a3120.htm"
 >&#13;      En su modo de operación dinámico el servidor le asigna una IP a un
       sólo cliente por cierto periodo de tiempo, al cabo del cual podría
       asignarle otra IP<A
-NAME="AEN1197"
-HREF="#FTN.AEN1197"
+NAME="AEN1209"
+HREF="#FTN.AEN1209"
 ><SPAN
 CLASS="footnote"
 >[1]</SPAN
@@ -1150,7 +1189,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1199"
+NAME="AEN1211"
 >Configuración de un cliente DHCP</A
 ></H3
 ><P
@@ -1200,7 +1239,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1209"
+NAME="AEN1221"
 >Configuración de un servidor DHCP</A
 ></H3
 ><P
@@ -1246,7 +1285,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1218"
+NAME="AEN1230"
 >Referencias y lecturas recomendadas</A
 ></H3
 ><P
@@ -1255,7 +1294,7 @@ NAME="AEN1218"
       </P
 ><P
 >&#13;        El RFC 2131 (ver <A
-HREF="a3120.htm"
+HREF="a3132.htm"
 >rfc2131</A
 >).
       </P
@@ -1266,7 +1305,7 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN1223"
+NAME="AEN1235"
 >Servidor <TT
 CLASS="literal"
 >ntp</TT
@@ -1317,7 +1356,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1236"
+NAME="AEN1248"
 >Referencias y lecturas recomendadas</A
 ></H3
 ><P
@@ -1331,7 +1370,7 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN1240"
+NAME="AEN1252"
 >Servidor de correo electrónico</A
 ></H2
 ><P
@@ -1371,7 +1410,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1249"
+NAME="AEN1261"
 >Protocolo SMTP para enviar y recibir correo</A
 ></H3
 ><P
@@ -1440,8 +1479,8 @@ CLASS="emphasis"
 >Mail User Agent</I
 ></SPAN
 ><A
-NAME="AEN1267"
-HREF="#FTN.AEN1267"
+NAME="AEN1279"
+HREF="#FTN.AEN1279"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -1480,8 +1519,8 @@ CLASS="literal"
         destino o con otro MTA que actúe de intermediario, típicamente
         en el puerto TCP 25, y transmitir el mensaje siguiendo las
         reglas del protocolo SMTP <A
-NAME="AEN1275"
-HREF="#FTN.AEN1275"
+NAME="AEN1287"
+HREF="#FTN.AEN1287"
 ><SPAN
 CLASS="footnote"
 >[3]</SPAN
@@ -1543,7 +1582,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1297"
+NAME="AEN1309"
 >MTA OpenSMTPD</A
 ></H4
 ><P
@@ -1794,7 +1833,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN1354"
+NAME="AEN1366"
 >Depuración de OpenSMTP</A
 ></H5
 ><P
@@ -1820,7 +1859,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1360"
+NAME="AEN1372"
 >Pruebas</A
 ></H4
 ><P
@@ -1978,7 +2017,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1390"
+NAME="AEN1402"
 >Referencias</A
 ></H4
 ><P
@@ -2011,7 +2050,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN1401"
+NAME="AEN1413"
 >Configuración del cliente de correo (MUA)</A
 ></H5
 ><P
@@ -2033,7 +2072,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN1405"
+NAME="AEN1417"
 >Referencias</A
 ></H5
 ><P
@@ -2083,7 +2122,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1427"
+NAME="AEN1439"
 >Dominios virtuales</A
 ></H3
 ><P
@@ -2184,14 +2223,14 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1454"
+NAME="AEN1466"
 >Protocolos para revisar correo</A
 ></H3
 ><P
 >&#13;        Para extraer correos de un servidor pueden emplearse los
         protocolos inseguros<A
-NAME="AEN1457"
-HREF="#FTN.AEN1457"
+NAME="AEN1469"
+HREF="#FTN.AEN1469"
 ><SPAN
 CLASS="footnote"
 >[4]</SPAN
@@ -2207,7 +2246,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1459"
+NAME="AEN1471"
 >Implementación Dovecot de IMAPS y POP3S</A
 ></H4
 ><P
@@ -2293,7 +2332,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1479"
+NAME="AEN1491"
 >Implementación Courier de POP3S e IMAPS</A
 ></H4
 ><P
@@ -2308,7 +2347,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN1482"
+NAME="AEN1494"
 >Autenticación Courier</A
 ></H5
 ><P
@@ -2347,7 +2386,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN1492"
+NAME="AEN1504"
 >Sendmail almacenando correos en formato maildir</A
 ></H5
 ><P
@@ -2564,7 +2603,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN1545"
+NAME="AEN1557"
 >POP3S con Courier</A
 ></H5
 ><P
@@ -2744,7 +2783,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN1584"
+NAME="AEN1596"
 >IMAP-SSL con Courier</A
 ></H5
 ><P
@@ -2919,7 +2958,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN1626"
+NAME="AEN1638"
 >Facilitar uso de implementación Courier</A
 ></H5
 ><P
@@ -3020,7 +3059,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN1649"
+NAME="AEN1661"
 >Referencias y lecturas recomendadas</A
 ></H5
 ><P
@@ -3081,7 +3120,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1671"
+NAME="AEN1683"
 >Combatiendo correo no solicitado con SpamAssassin</A
 ></H3
 ><P
@@ -3124,7 +3163,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1679"
+NAME="AEN1691"
 >Configuración de spamd</A
 ></H4
 ><P
@@ -3163,7 +3202,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1689"
+NAME="AEN1701"
 >Configuración de procmail por usuario</A
 ></H4
 ><P
@@ -3245,7 +3284,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1702"
+NAME="AEN1714"
 >Pruebas</A
 ></H4
 ><P
@@ -3263,7 +3302,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1706"
+NAME="AEN1718"
 >Referencias y lecturas recomendadas</A
 ></H4
 ><P
@@ -3279,7 +3318,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1710"
+NAME="AEN1722"
 >Correo desde el web (webmail)</A
 ></H3
 ><DIV
@@ -3287,7 +3326,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1712"
+NAME="AEN1724"
 >Roundcubemail</A
 ></H4
 ><P
@@ -3366,7 +3405,7 @@ CLASS="programlisting"
     &#60;/VirtualHost&#62;                                  
 </PRE
 ><A
-NAME="AEN1728"
+NAME="AEN1740"
 ></A
 ><BLOCKQUOTE
 CLASS="BLOCKQUOTE"
@@ -3752,7 +3791,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1821"
+NAME="AEN1833"
 >Listas de correo</A
 ></H3
 ><DIV
@@ -3760,7 +3799,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1823"
+NAME="AEN1835"
 >Instalación de Mailman (sin
         <TT
 CLASS="literal"
@@ -3945,7 +3984,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN1866"
+NAME="AEN1878"
 >Lecturas recomendadas</A
 ></H5
 ><P
@@ -3970,7 +4009,7 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN1872"
+NAME="AEN1884"
 >Servidor <TT
 CLASS="literal"
 >ftp</TT
@@ -4123,7 +4162,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1908"
+NAME="AEN1920"
 >Servicio FTP en una DMZ</A
 ></H3
 ><P
@@ -4168,7 +4207,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1917"
+NAME="AEN1929"
 >Referencias y lecturas recomendadas</A
 ></H3
 ><P
@@ -4184,7 +4223,7 @@ CLASS="section"
 ><H2
 CLASS="section"
 ><A
-NAME="AEN1921"
+NAME="AEN1933"
 >Servidor web</A
 ></H2
 ><P
@@ -4199,7 +4238,7 @@ Las&nbsp;peticiones&nbsp;pudieron&nbsp;pasar&nbsp;antes&nbsp;por&nbsp;el&nbsp;co
 ><DIV
 CLASS="figure"
 ><A
-NAME="AEN1925"
+NAME="AEN1937"
 ></A
 ><P
 ><B
@@ -4258,7 +4297,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN1942"
+NAME="AEN1954"
 >nginx</A
 ></H3
 ><P
@@ -4339,7 +4378,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1963"
+NAME="AEN1975"
 >Generalidades del archivo de configuración de
         nginx</A
 ></H4
@@ -4464,7 +4503,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN1992"
+NAME="AEN2004"
 >Configuración de <TT
 CLASS="literal"
 >server_name</TT
@@ -4554,7 +4593,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN2009"
+NAME="AEN2021"
 >Pruebas cambiando resolución local en un
           computador</A
 ></H5
@@ -4591,7 +4630,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN2018"
+NAME="AEN2030"
 >Pruebas en una red cambiando resolución local para la
           red</A
 ></H5
@@ -4657,7 +4696,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN2032"
+NAME="AEN2044"
 >Pruebas cambiando configuración de servidor DNS</A
 ></H5
 ><P
@@ -4697,7 +4736,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN2040"
+NAME="AEN2052"
 >Configuración de nginx de acuerdo a como se almacenan o
         generan páginas en el servidor</A
 ></H4
@@ -4751,7 +4790,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN2055"
+NAME="AEN2067"
 >Caso: Servir archivos HTML ubicados en el sistema de
           archivos</A
 ></H5
@@ -4831,7 +4870,7 @@ CLASS="section"
 ><H5
 CLASS="section"
 ><A
-NAME="AEN2071"
+NAME="AEN2083"
 >Caso: Servir páginas generadas por un programa en
           PHP</A
 ></H5
@@ -4952,7 +4991,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN2099"
+NAME="AEN2111"
 >Soportar cifrado entre cliente y servidor</A
 ></H4
 ><P
@@ -4999,7 +5038,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN2110"
+NAME="AEN2122"
 >Certificados SSL gratuitos con Let’s Encrypt</A
 ></H3
 ><P
@@ -5036,7 +5075,7 @@ CLASS="section"
 ><H3
 CLASS="section"
 ><A
-NAME="AEN2117"
+NAME="AEN2129"
 >OpenBSD httpd</A
 ></H3
 ><P
@@ -5061,7 +5100,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN2123"
+NAME="AEN2135"
 >Configuración mínima</A
 ></H4
 ><P
@@ -5216,7 +5255,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN2163"
+NAME="AEN2175"
 >Servidor con cifrado</A
 ></H4
 ><P
@@ -5259,7 +5298,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN2172"
+NAME="AEN2184"
 >Dominios virtuales</A
 ></H4
 ><P
@@ -5308,7 +5347,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN2181"
+NAME="AEN2193"
 >Sitio con PHP</A
 ></H4
 ><P
@@ -5391,7 +5430,7 @@ CLASS="section"
 ><H4
 CLASS="section"
 ><A
-NAME="AEN2201"
+NAME="AEN2213"
 >Otros detalles de uso</A
 ></H4
 ><P
@@ -5426,8 +5465,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN1197"
-HREF="x956.htm#AEN1197"
+NAME="FTN.AEN1209"
+HREF="x956.htm#AEN1209"
 ><SPAN
 CLASS="footnote"
 >[1]</SPAN
@@ -5454,8 +5493,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN1267"
-HREF="x956.htm#AEN1267"
+NAME="FTN.AEN1279"
+HREF="x956.htm#AEN1279"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -5477,8 +5516,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN1275"
-HREF="x956.htm#AEN1275"
+NAME="FTN.AEN1287"
+HREF="x956.htm#AEN1287"
 ><SPAN
 CLASS="footnote"
 >[3]</SPAN
@@ -5552,8 +5591,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN1457"
-HREF="x956.htm#AEN1457"
+NAME="FTN.AEN1469"
+HREF="x956.htm#AEN1469"
 ><SPAN
 CLASS="footnote"
 >[4]</SPAN
@@ -5604,7 +5643,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="x2207.htm"
+HREF="x2219.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD

@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>2. Dispositivos de interconexión</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="next" href="ar01s03.html" title="3. Direcciones, enrutamiento, transporte y cortafuegos"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2. Dispositivos de interconexión</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ar01s03.html">Siguiente</a></td></tr></table><hr></div><div class="section" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm628579968"></a>2. Dispositivos de interconexión</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>2. Dispositivos de interconexión</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="next" href="ar01s03.html" title="3. Direcciones, enrutamiento, transporte y cortafuegos"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">2. Dispositivos de interconexión</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ar01s03.html">Siguiente</a></td></tr></table><hr></div><div class="section" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm95898112"></a>2. Dispositivos de interconexión</h2></div></div></div><p>
     Durante el arranque, OpenBSD detecta la gran mayoría de dispositivos
     conectados a un computador. Una vez en operación puede examinar la
     detección con <code class="literal">dmesg</code>.
@@ -8,14 +8,14 @@
     durante el arranque iniciando con <code class="literal">bsd -c</code> cuando
     esté en el prompt de arranque del programa <code class="literal">boot</code>
     (ver <a href="biblio.html" title="B. Bibliografía">usuario_OpenBSD</a>).
-  </p><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm3079666176"></a>2.1. Conexión con un módem nulo</h3></div></div></div><p>
+  </p><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm188875904"></a>2.1. Conexión con un módem nulo</h3></div></div></div><p>
       Para conectar una terminal a un sistema OpenBSD puede emplearse un
       módem nulo. La terminal puede ser un computador con OpenBSD o con
       cualquier otro sistema operativo y un programa que permita ver la
       información que llegue a un puerto serial y enviar la que se
       teclee (por ejemplo sirven varios programas para comunicarse vía
       módem).
-    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2393380224"></a>2.1.1. Módem Nulo</h4></div></div></div><p>
+    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3315226112"></a>2.1.1. Módem Nulo</h4></div></div></div><p>
         Un módem nulo es un cable serial que tiene en sus extremos dos
         conectores hembra para puerto serial y que intercambia algunas
         conexiones. Si ambos conectores son de 25 pines, todos los
@@ -64,7 +64,7 @@
         recibirá el mensaje y líneas en blanco (<code class="literal">cat</code>
         no es el programa apropiado para establecer la comunicación,
         sólo para probar).
-      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3079665152"></a>2.1.2. Servidor</h4></div></div></div><p>
+      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm515473536"></a>2.1.2. Servidor</h4></div></div></div><p>
         Con un módem nulo conectado y funcionado puede configurarse un
         sistema OpenBSD como servidor para que permita conectar
         terminales a un puerto serial. Debe configurarse el programa
@@ -85,12 +85,12 @@
         <code class="literal">/dev/tty00</code> (i.e el dispositivo del primer
         puerto serial); <code class="literal">/usr/libexec/getty std.9600</code>
         es la orden por ejecutar al arranque para manejar ese
-        dispositivo<sup>[<a name="idm3441148672" href="#ftn.idm3441148672">17</a>]</sup>; <code class="literal">vt220</code> indica el tipo de terminal
+        dispositivo<sup>[<a name="idm1393373184" href="#ftn.idm1393373184">17</a>]</sup>; <code class="literal">vt220</code> indica el tipo de terminal
         que se conectará; <code class="literal">on</code> y
-        <code class="literal">secure</code> son banderas<sup>[<a name="idm2073843840" href="#ftn.idm2073843840">18</a>]</sup> para <code class="literal">init</code>, el primero indica que
+        <code class="literal">secure</code> son banderas<sup>[<a name="idm1393373568" href="#ftn.idm1393373568">18</a>]</sup> para <code class="literal">init</code>, el primero indica que
         se esperan conexiones por esa línea tty y el segundo indica que
         puede iniciar conexiones el usuario root.
-      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm857619584"></a>2.1.3. Terminal</h4></div></div></div><p>
+      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1393372288"></a>2.1.3. Terminal</h4></div></div></div><p>
         Una vez conectado su módem nulo a un servidor OpenBSD ya
         configurado para recibir conexiones por el puerto serial, puede
         conectar una terminal.
@@ -149,9 +149,9 @@
         al servidor ejecute en el servidor: <code class="literal">zmrx</code> y
         después desde <code class="literal">tip</code> use:
         <code class="literal">~C zmtx miarchivo.txt</code>
-      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3595365632"></a>2.1.4. PPP sobre Módem Nulo</h4></div></div></div><p>
+      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1637824640"></a>2.1.4. PPP sobre Módem Nulo</h4></div></div></div><p>
         Una vez esté conectado un cliente con un servidor OpenBSD, es
-        posible emplear el protocolo PPP<sup>[<a name="idm1383793408" href="#ftn.idm1383793408">19</a>]</sup> para permitirle al computador cliente acceder a
+        posible emplear el protocolo PPP<sup>[<a name="idm1490279680" href="#ftn.idm1490279680">19</a>]</sup> para permitirle al computador cliente acceder a
         Internet o a la red a la que esté conectado el servidor.
       </p><p>
         Una forma posible para lograr conectividad a Internet en una
@@ -204,7 +204,7 @@
         Después pude iniciar la comunicación desde el cliente con:
       </p><pre class="programlisting">
     ppp -ddial modemnulo
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3595364480"></a>2.1.5. Referencias y lecturas recomendadas</h4></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm240989696"></a>2.1.5. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Puede consultar más sobre la conexión física de un módem nulo en
         <a href="biblio.html" title="B. Bibliografía">CablesModemNulo</a>. Puede consultar
         sobre comunicaciones seriales en FreeBSD (similar a OpenBSD) en
@@ -223,7 +223,7 @@
         usuario en OpenBSD en la página del manual. El archivo de
         configuración por defecto también cuenta con comentarios que
         ayudan.
-      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm2789856000"></a>2.2. Conexión a Internet con un módem o módem ISDN</h3></div></div></div><p>
+      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm1072741120"></a>2.2. Conexión a Internet con un módem o módem ISDN</h3></div></div></div><p>
       Es posible conectar un sistema OpenBSD a Internet empleando un
       módem o un módem ISDN. Para esto el módem que se emplea debe estar
       soportado y debe configurarse <code class="literal">ppp</code> para realizar
@@ -304,7 +304,7 @@
     } fi;
     kill -HUP $pid
     echo "Desconectado";
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm694050048"></a>2.3. Conexión a Internet ADSL con pppoe</h3></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm240992128"></a>2.3. Conexión a Internet ADSL con pppoe</h3></div></div></div><p>
       En Colombia los proveedores de acceso a Internet en planes de
       Banda Ancha típicamente emplean dispositivos y configuraciones que
       permiten conectar un computador como si fuera un equipo más en una
@@ -312,7 +312,7 @@
       computador (o si se usará dhcp), la mascara de red y la dirección
       de la puerta de enlace, y configurar como se explica en la sección
       de redes LAN Ethernet (ver
-      <a href="ar01s02.html#idm965565056" title="2.4. Uso y configuración en una red LAN Ethernet">Sección 2.4, “Uso y configuración en una red LAN Ethernet”</a>.
+      <a href="ar01s02.html#idm1638557696" title="2.4. Uso y configuración en una red LAN Ethernet">Sección 2.4, “Uso y configuración en una red LAN Ethernet”</a>.
     </p><p>
       Puede ocurrir que su proveedor emplee un módem que requiera el
       protocolo <code class="literal">pppoe</code> (e.g con un Módem Marconi). En
@@ -387,16 +387,16 @@
             fi                  
         done     
     fi
-</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1306746112"></a>2.3.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
+</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3167867392"></a>2.3.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Página del manual <code class="literal">pppoe</code>.
       </p><p>
         http://www.aei.ca/~pmatulis/pub/obsd_pppoe.html
-      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm965565056"></a>2.4. Uso y configuración en una red LAN Ethernet</h3></div></div></div><p>
+      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm1638557696"></a>2.4. Uso y configuración en una red LAN Ethernet</h3></div></div></div><p>
       La red local (LAN) Ethernet más simple puede conformarse con 2
       computadores cada uno con tarjeta ethernet interconectados por un
       cable UTP cruzado. Sin embargo típicamente una red ethernet consta
       de varios computadores con tarjetas Ethernet interconectados por
-      uno o más<sup>[<a name="idm3472903040" href="#ftn.idm3472903040">20</a>]</sup> concentradores (también llamado
+      uno o más<sup>[<a name="idm3167864832" href="#ftn.idm3167864832">20</a>]</sup> concentradores (también llamado
       <span class="emphasis"><em>hub</em></span> o <span class="emphasis"><em>switch</em></span>) y cables
       UTP directos de cada computador a algún concentrador. La velocidad
       de la red depende de la velocidad de las tarjetas de red, la
@@ -404,7 +404,7 @@
       velocidad se mide en Megabits (millones de bits por segundo), y
       sus valores típicos son 10Mb, 100Mb, 1000Mb o 1Gb y recientemente
       10Gb.
-    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1306744320"></a>2.4.1. Tarjetas Ethernet</h4></div></div></div><p>
+    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3167867904"></a>2.4.1. Tarjetas Ethernet</h4></div></div></div><p>
         La inmensa mayoría de tarjetas Ethernet de 10MB, 100MB y 1000MB,
         así como algunas de 10G son soportadas por OpenBSD, la lista
         completa la puede consultar en:
@@ -561,7 +561,7 @@
         controlador del ejemplo anterior puede verse con:
       </p><pre class="programlisting">
     man re
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm688032640"></a>2.4.2. Configuración de una interfaz de red</h4></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm482689408"></a>2.4.2. Configuración de una interfaz de red</h4></div></div></div><p>
         Debe configurar cada interfaz de red en un archivo con un nombre
         de la forma <code class="literal">/etc/hostname.interfaz</code>. Por
         ejemplo para el caso de la tarjeta con controlador
@@ -614,7 +614,7 @@
           con la tecla RETORNO.
         </p></blockquote></div><p>
         Y la IP de la compuerta de su red (ver
-        <a href="ar01s03.html#idm1193026432" title="3.1. Introducción a TCP/IPv4">Sección 3.1, “Introducción a TCP/IPv4”</a>) se configura en
+        <a href="ar01s03.html#idm4034645760" title="3.1. Introducción a TCP/IPv4">Sección 3.1, “Introducción a TCP/IPv4”</a>) se configura en
         <code class="literal">/etc/mygate</code> que también debe editar con su
         editor preferido y que también debe terminar con fin de línea.
         Un ejemplo típico del contenido sería una línea con:
@@ -634,7 +634,7 @@
         Note que si ha cambiado una tarjeta de red es posible que antes
         de reiniciar debe reconfigurar el cortafuegos en el archivo
         <code class="literal">/etc/pf.conf</code>
-      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm348116608"></a>2.4.3. Protocolo ARP</h4></div></div></div><p>
+      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2624042496"></a>2.4.3. Protocolo ARP</h4></div></div></div><p>
         La tabla del protocolo ARP asocia direcciones físicas de
         tarjetas de red conectadas a su red con direcciones IP. Para
         examinar tal tabla use:
@@ -644,14 +644,14 @@
         es posible agregar entradas de manera permanente o eliminarlas
         con las opciones <code class="literal">-s</code> y <code class="literal">-d</code>
         respectivamente.
-      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3898704128"></a>2.4.4. Cableado de una red local</h4></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm709293312"></a>2.4.4.1. Planeación</h5></div></div></div><p>
+      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idp120241792"></a>2.4.4. Cableado de una red local</h4></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idp23346944"></a>2.4.4.1. Planeación</h5></div></div></div><p>
           Necesitará un concentrador preferiblemente de 1Gb con
           suficientes puertos para todos los computadores que tenga o
           varios interconectados en cascada, cable UTP categoría 5e o 6
           con conectores RJ-45 y en cada computador deberá tener una
           tarjeta Ethernet (preferiblemente de 1GB) con un puerto para
           un conector RJ-45 (ver
-          <a href="ar01s02.html#idm688032640" title="2.4.2. Configuración de una interfaz de red">Configuración de una
+          <a href="ar01s02.html#idm482689408" title="2.4.2. Configuración de una interfaz de red">Configuración de una
           interfaz de red</a>).
         </p><p>
           El espacio físico en el que esté la red será la primera
@@ -677,8 +677,8 @@
           sucesivamente. Cómo compuerta emplee en todos los clientes la
           dirección del servidor y como máscara de red emplee
           <code class="literal">255.255.255.0</code> (ver
-          <a href="ar01s03.html#idm1193026432" title="3.1. Introducción a TCP/IPv4">Sección 3.1, “Introducción a TCP/IPv4”</a> ).
-        </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm2796102656"></a>2.4.4.2. Adquisición de Hardware</h5></div></div></div><p>
+          <a href="ar01s03.html#idm4034645760" title="3.1. Introducción a TCP/IPv4">Sección 3.1, “Introducción a TCP/IPv4”</a> ).
+        </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm478052864"></a>2.4.4.2. Adquisición de Hardware</h5></div></div></div><p>
           Para hacer la adquisición de Hardware tenga en cuenta:
         </p><div class="itemizedlist"><ul type="disc"><li><p>
               Los nombres de los componentes pueden variar de un almacén
@@ -705,7 +705,7 @@
             </p></li><li><p>
               Cada computador debe tener una tarjeta de red Ethernet
               preferiblemente 1Gb que pueda usar desde OpenBSD (ver
-              <a href="ar01s02.html#idm688032640" title="2.4.2. Configuración de una interfaz de red">Configuración de
+              <a href="ar01s02.html#idm482689408" title="2.4.2. Configuración de una interfaz de red">Configuración de
               una interfaz de red</a>) —recordar que las más
               incompatibles son las populares Encore.
             </p></li><li><p>
@@ -717,12 +717,12 @@
               RJ45 Este es el tipo de conectores que debe ir en cada
               extremo de un cable UTP en una red Ethernet como la que
               sugerimos.
-            </p></li></ul></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm67731840"></a>2.4.4.3. Instalación</h5></div></div></div><p>
+            </p></li></ul></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm478052608"></a>2.4.4.3. Instalación</h5></div></div></div><p>
           Una vez tenga instaladas las tarjetas de red debe conectar los
           cables a tales tarjetas y al concentrador. Como eventualmente
           usted mismo hará los cables, en esta sección damos
           instrucciones para que le resulte fácil el proceso. Requerirá
-          unas pinzas especiales <sup>[<a name="idm138922112" href="#ftn.idm138922112">21</a>]</sup> para conectores RJ-45 y un probador
+          unas pinzas especiales <sup>[<a name="idp95446400" href="#ftn.idp95446400">21</a>]</sup> para conectores RJ-45 y un probador
           (<span class="emphasis"><em>tester</em></span>) para comprobar que fluye
           corriente en los cables que haga.
         </p><p>
@@ -734,7 +734,7 @@
           compone de 8 cablecitos de colores tenga en cuenta:
         </p><p>
           Deje entre 8mm y 12 mm de los 8 cables al descubierto.
-          <sup>[<a name="idm67731328" href="#ftn.idm67731328">22</a>]</sup>
+          <sup>[<a name="idp82716928" href="#ftn.idp82716928">22</a>]</sup>
         </p><p>
           Al preparar los cables tenga en cuenta que las tarjetas de
           100MB y 1000MB requieren un orden especial de los cables que
@@ -777,13 +777,13 @@
         </p><p>
           Una vez tenga los cables verifique que la tarjeta de red de
           cada computador esté bien instalada (algunas tienen luces
-          <sup>[<a name="idp148711680" href="#ftn.idp148711680">23</a>]</sup> que se encienden cuando transmite o recibe
+          <sup>[<a name="idp82714496" href="#ftn.idp82714496">23</a>]</sup> que se encienden cuando transmite o recibe
           información por el cable), y conecte con cables todas las
           tarjetas al concentrador.
         </p><p>
           Verifique también que cada tarjeta de red sea reconocida por
           el kernel y asigne la IP que planeó para cada una (ver
-          <a href="ar01s02.html#idm688032640" title="2.4.2. Configuración de una interfaz de red">Configuración de una
+          <a href="ar01s02.html#idm482689408" title="2.4.2. Configuración de una interfaz de red">Configuración de una
           interfaz de red</a>).
         </p><p>
           Finalmente verifique la instalación transmitiendo paquetes de
@@ -794,7 +794,7 @@
     ping 192.168.1.2    
 </pre><p>
           y viceversa.
-        </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1541137280"></a>2.4.5. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+        </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm309970944"></a>2.4.5. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
             FAQ de OpenBSD Sección 6.
           </p></li><li><p>
             Páginas <code class="literal">man</code> de <code class="literal">arp</code>,
@@ -803,7 +803,7 @@
           </p></li><li><p>
             Sobre cables Ethernet puede consultarse en
             <a href="biblio.html" title="B. Bibliografía">ethernet_cables</a>
-          </p></li></ul></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm2231416832"></a>2.5. Red Local Inalámbrica: uso y configuración</h3></div></div></div><p>
+          </p></li></ul></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm309971712"></a>2.5. Red Local Inalámbrica: uso y configuración</h3></div></div></div><p>
       Las redes inalámbrica emplean ondas electromagnéticas transmitidas
       por aire, por lo que no se requieren cables, aunque el rango de
       alcance es limitado por el tipo de antenas que se empleen y los
@@ -823,7 +823,7 @@
       dedicado o bien un computador con OpenBSD que cuente con una
       tarjeta de inalámbrica que soporte el modo
       <code class="literal">hostap</code>.
-    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2231417216"></a>2.5.1. OpenBSD como cliente en una red inalámbrica</h4></div></div></div><p>
+    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2430579328"></a>2.5.1. OpenBSD como cliente en una red inalámbrica</h4></div></div></div><p>
         Hay una amplia gama de tarjetas de red inalámbricas (tanto PCI,
         como USB) con controladores para OpenBSD, sin embargo varias
         tarjetas de red populares no son soportadas, por lo que antes de
@@ -933,7 +933,7 @@
         <code class="literal">kismet</code>, el cual tiene un archivo de
         configuración (<code class="literal">/etc/kismet.conf</code>) en el que
         debe especificarse el controlador usado.
-      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm998940544"></a>2.5.2. Dispositivo dedicado que obra como Punto de Acceso
+      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm897038208"></a>2.5.2. Dispositivo dedicado que obra como Punto de Acceso
       Inalámbrico</h4></div></div></div><p>
         Estos dispositivo cuentan con una antena (típicamente pequeña)
         para la red inalámbrica y un conector para cable Ethernet que se
@@ -990,13 +990,13 @@
           </p></li><li><p>
             IP, máscara de red y rango de direcciones por repartir en la
             red inalámbrica.
-          </p></li></ul></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm998941568"></a>2.5.3. OpenBSD como Punto de Acceso Inalámbrico</h4></div></div></div><p>
+          </p></li></ul></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3177217152"></a>2.5.3. OpenBSD como Punto de Acceso Inalámbrico</h4></div></div></div><p>
         Si cuenta con una tarjeta de red inalámbrica con controladores
         para OpenBSD y que soporte el modo <code class="literal">hostap</code>
         (como puede consultar en la página del manual del controlador)
         es sencillo configurar un Punto de Acceso Inalámbrico,
         continuando las instrucciones de la sección
-        <a href="ar01s02.html#idm2231417216" title="2.5.1. OpenBSD como cliente en una red inalámbrica">OpenBSD como cliente en una
+        <a href="ar01s02.html#idm2430579328" title="2.5.1. OpenBSD como cliente en una red inalámbrica">OpenBSD como cliente en una
         red inalámbrica</a>.
       </p><p>
         Supongamos que su tarjeta esta asociada a la interfaz
@@ -1010,12 +1010,12 @@
 </pre><p>
         Tras esto desde los portátiles y computadores cercanos debe
         poder ver la red CASA y conectarse con WEP y la clave uvwxy.
-      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3405588096"></a>2.5.4. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2723057664"></a>2.5.4. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
             Páginas <code class="literal">man</code> de
             <code class="literal">ifconfig</code>, <code class="literal">wpi</code>
           </p></li><li><p>
             Ver <a href="biblio.html" title="B. Bibliografía">wndw</a>
-          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3441148672" href="#idm3441148672">17</a>] </sup>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1393373184" href="#idm1393373184">17</a>] </sup>
             Como parámetro getty recibe características de la línea que
             deben estar especificadas en
             <code xmlns="" class="literal">/etc/gettytab</code>. En este caso
@@ -1023,23 +1023,23 @@
             transmisión. Empleando un módem nulo con control de flujo es
             posible emplear velocidades mayores hasta
             <code xmlns="" class="literal">std.115200</code>.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2073843840" href="#idm2073843840">18</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1393373568" href="#idm1393373568">18</a>] </sup>
             banderas del inglés <span xmlns="" class="emphasis"><em>flags</em></span>
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1383793408" href="#idm1383793408">19</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1490279680" href="#idm1490279680">19</a>] </sup>
             PPP es un protocolo especificado en el RFC 1661.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3472903040" href="#idm3472903040">20</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3167864832" href="#idm3167864832">20</a>] </sup>
           Pueden ponerse concentradores en cascada.
-        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm138922112" href="#idm138922112">21</a>] </sup>
+        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp95446400" href="#idp95446400">21</a>] </sup>
               En Colombia a tal “<span xmlns="" class="quote">pinza especial</span>” se le
               conoce como “<span xmlns="" class="quote">ponchadora</span>”.
-            </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm67731328" href="#idm67731328">22</a>] </sup>
+            </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp82716928" href="#idp82716928">22</a>] </sup>
               Pablo Chamorro nos indicó que “<span xmlns="" class="quote">algunas pinzas tienen
               un tope, entonces al colocar las puntas de los cables
               junto al tope, el corte de la envoltura del cable siempre
               se realiza en el mismo punto para que ni sobre ni falte y
               así no hay que preocuparse por estimar el punto de
               corte.</span>”
-            </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp148711680" href="#idp148711680">23</a>] </sup>
+            </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp82714496" href="#idp82714496">23</a>] </sup>
               Luces es traducción de <span xmlns="" class="emphasis"><em>LED (Light emitting
               diode)</em></span>.
             </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ar01s03.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">La distribución Aprendiendo de Jesús como servidor y cortafuegos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 3. Direcciones, enrutamiento, transporte y cortafuegos</td></tr></table></div></body></html>
