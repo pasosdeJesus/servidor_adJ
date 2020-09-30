@@ -410,9 +410,11 @@ sus copias anteriores comprimidas como `/var/log/authlog.0.gz`,
 
 ### Jaula sftp {#jaulasftp}
 
-Supongamos que requiere que unos usuarios puedan sólo ingresar por sftp a sus
-archivos pero a nada más del sistema de archivos.  Agregrue el grupo
-`jaulasftp` al archivo `/etc/group` por ejemplo:
+Supongamos que requiere que unos usuarios puedan sólo ingresar por sftp a 
+una jaula de archivos que incluya sus archivos y otros directorios y archivos
+pero no al sistema de archivos completo.
+Para esto agregue un grupo, digamos `jaulasftp`, al archivo `/etc/group`
+con un gid no usado (digamos 1002):
 
         jaulasftp:*:1002:
 
@@ -428,43 +430,42 @@ Match group jaulasftp
   X11Forwarding no
 ```
 
-Note que no se le permite ralizar tuneles ni reenvios y sólo puede
-usar el sistema internal-sftp confiando a `/restovar/jaulasftp`
+Note que no se le permite realizar túneles ni reenvíos y sólo puede
+usar el sistema `internal-sftp` confinado a `/restovar/jaulasftp`
 
-Por ejemplo con `doas vipw` edite cada usuario por limitar par asegurar que
+Por ejemplo con `doas vipw` edite cada usuario por limitar (en
+el siguiente ejemplo `uslim`) para asegurar que
 su línea es de la forma siguiente:
 
         uslim:$2b$10$dEPqLC7YSmilUNURQXp2AeiptJVJ38H6ZsiI25w7fisMboDkBCZy.:1005:1002::0:0:Usuario Limitado:/home/uslim:/bin/false
 
-Teniendo en cuenta que para este usuario de ejmplo `uslim`:
-1. Que su grupo principal es el 1002 - jaulsftp
-2. Que no tiene interprete de ordenes, es decir que es `/bin/false`
-3. Que su directorio personal es `/home/uslim`, pero que en realidad debe
-   ubicarse dentro de la jaula para ser `/restovar/jaulasftp/home/uslim`
+Teniendo en cuenta que para este usuario de ejemplo `uslim`:
+
+1. Su grupo principal es el 1002 - jaulsftp
+2. No tiene interprete de ordenes, es decir que es `/bin/false`
+3. Su directorio personal es `/home/uslim` pero dentro de jaula, pues
+   el administrador ubicará su directorio en `/restovar/jaulasftp/home/uslim`
 
 
-Cree el directorio /restovar/jaulasftp/home/uslim y ponga la información
-que debe ver el usuario `uslim` en su directorio personal.
+Cree el directorio `/restovar/jaulasftp/home/uslim` y ponga la información
+del directorio personal del usuario `uslim`.
 
-Cuando ese usuario ingrese vía sftp verá como raíz lo que haya en
-`/restovar/jaulasftp`  y podrá ingresar a los directorios y archiovs
-dentro de esa jaula en la medida que el sistema de permisos típico 
-se lo permita.
-
-
-
-
+Cuando ese usuario ingrese vía sftp verá como raíz del sistema de
+archivos lo que haya en `/restovar/jaulasftp`  y podrá ingresar a los 
+directorios y archivos dentro de esa jaula en la medida que el sistema de 
+permisos típico se lo permita.
 
 
 ### Referencias y lecturas recomendadas {#referencias-sshd}
 
-Las siguientes páginas man: sshd 8.
+Las siguientes páginas man: sshd 8, sftp 1.
 
 Separación de privilegios:
 <http://www.counterpane.com/alert-openssh.html>
 
 Página web: <http://www.openssh.com>
 
+Ejemplo de jaula sftp: <https://www.golinuxcloud.com/sftp-chroot-restrict-user-specific-directory/>
 
 ## Protocolo DHCP {#dhcp}
 
