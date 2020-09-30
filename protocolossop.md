@@ -408,6 +408,54 @@ Por defecto este servicio dejará una bitácora en `/var/log/authlog` (y
 sus copias anteriores comprimidas como `/var/log/authlog.0.gz`,
 `/var/log/authlog.1.gz`, ...).
 
+### Jaula sftp {#jaulasftp}
+
+Supongamos que requiere que unos usuarios puedan sólo ingresar por sftp a sus
+archivos pero a nada más del sistema de archivos.  Agregrue el grupo
+`jaulasftp` al archivo `/etc/group` por ejemplo:
+
+        jaulasftp:*:1002:
+
+Indique a sshd la configuración especial para estos usuarios agregando a
+`/etc/ssh/sshd_config` :
+```
+Match group jaulasftp
+  ForceCommand internal-sftp
+  ChrootDirectory /restovar/jaulasftp
+  PermitTunnel no
+  AllowAgentForwarding no
+  AllowTcpForwarding no
+  X11Forwarding no
+```
+
+Note que no se le permite ralizar tuneles ni reenvios y sólo puede
+usar el sistema internal-sftp confiando a `/restovar/jaulasftp`
+
+Por ejemplo con `doas vipw` edite cada usuario por limitar par asegurar que
+su línea es de la forma siguiente:
+
+        uslim:$2b$10$dEPqLC7YSmilUNURQXp2AeiptJVJ38H6ZsiI25w7fisMboDkBCZy.:1005:1002::0:0:Usuario Limitado:/home/uslim:/bin/false
+
+Teniendo en cuenta que para este usuario de ejmplo `uslim`:
+1. Que su grupo principal es el 1002 - jaulsftp
+2. Que no tiene interprete de ordenes, es decir que es `/bin/false`
+3. Que su directorio personal es `/home/uslim`, pero que en realidad debe
+   ubicarse dentro de la jaula para ser `/restovar/jaulasftp/home/uslim`
+
+
+Cree el directorio /restovar/jaulasftp/home/uslim y ponga la información
+que debe ver el usuario `uslim` en su directorio personal.
+
+Cuando ese usuario ingrese vía sftp verá como raíz lo que haya en
+`/restovar/jaulasftp`  y podrá ingresar a los directorios y archiovs
+dentro de esa jaula en la medida que el sistema de permisos típico 
+se lo permita.
+
+
+
+
+
+
 ### Referencias y lecturas recomendadas {#referencias-sshd}
 
 Las siguientes páginas man: sshd 8.

@@ -1,3 +1,6 @@
+Versión 6.7
+:   - Nueva [xref](#jaula-sftp)
+
 Versión 6.6
 :   - Reescrita sección sobre servidores web con bastantes casos de uso de nginx [xref](#servidor-web)
 
