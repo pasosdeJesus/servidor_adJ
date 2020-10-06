@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>3. Direcciones, enrutamiento, transporte y cortafuegos</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="ar01s02.html" title="2. Dispositivos de interconexión"><link rel="next" href="ar01s04.html" title="4. Protocolos de soporte y de usuario"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3. Direcciones, enrutamiento, transporte y cortafuegos</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s02.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ar01s04.html">Siguiente</a></td></tr></table><hr></div><div class="section" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm215811328"></a>3. Direcciones, enrutamiento, transporte y cortafuegos</h2></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm4034645760"></a>3.1. Introducción a TCP/IPv4</h3></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>3. Direcciones, enrutamiento, transporte y cortafuegos</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="ar01s02.html" title="2. Dispositivos de interconexión"><link rel="next" href="ar01s04.html" title="4. Protocolos de soporte y de usuario"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">3. Direcciones, enrutamiento, transporte y cortafuegos</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s02.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ar01s04.html">Siguiente</a></td></tr></table><hr></div><div class="section" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm1862236672"></a>3. Direcciones, enrutamiento, transporte y cortafuegos</h2></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm3459950592"></a>3.1. Introducción a TCP/IPv4</h3></div></div></div><p>
       En una red TCP/IPv4, cada computador tiene como identificación una
       dirección IP única. Esta dirección consta de 32 bits, y suele
       escribirse como 4 números/bytes separando unos de otros por punto
@@ -72,9 +72,9 @@
       192.168.2.255 y así sucesivamente. Además de usar direcciones
       privadas, se facilita el crecimiento de la infraestructura de
       redes y la configuración del enrutamiento entre unas y otras.
-    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2378337792"></a>3.1.1. Tabla de Enrutamiento</h4></div></div></div><p>
+    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2031775616"></a>3.1.1. Tabla de Enrutamiento</h4></div></div></div><p>
         Como se presentó en la descripción de las capas en redes TCP/IP
-        (ver <a href="index.html#idm3530626816" title="1. Redes, protocolos e Internet">Sección 1, “Redes, protocolos e Internet”</a>),
+        (ver <a href="index.html#idm4018919040" title="1. Redes, protocolos e Internet">Sección 1, “Redes, protocolos e Internet”</a>),
         el protocolo IP mantiene una tabla de enrutamiento que asocia
         direcciones de red con compuertas, es decir con computadores
         conectados a la misma red que pueden retransmitir información a
@@ -141,7 +141,7 @@ traceroute 192.168.2.2
 doas tcpdump -i re0 -n -ttt
 </pre><p>
               tcpdump Permite analizar el tráfico de una red TCP/IP.
-            </p></dd></dl></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1954270208"></a>3.1.2. Otros aspectos de configuración de redes en OpenBSD</h4></div></div></div><p>
+            </p></dd></dl></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1999688704"></a>3.1.2. Otros aspectos de configuración de redes en OpenBSD</h4></div></div></div><p>
         Fuera de las tablas de enrutamiento y ARP, la funcionalidad de
         redes a nivel de kernel se puede controlar con:
       </p><div class="variablelist"><dl><dt><span class="term">
@@ -166,7 +166,7 @@ doas tcpdump -i re0 -n -ttt
           </span></dt><dd><p>
               Que permite controlar el tráfico de paquetes en el kernel
               y por tanto controlar la funcionalidad de
-              cortafuegos<sup>[<a name="idm3383325568" href="#ftn.idm3383325568">24</a>]</sup>. Se configura de manera permanente en el
+              cortafuegos<sup>[<a name="idm23455360" href="#ftn.idm23455360">24</a>]</sup>. Se configura de manera permanente en el
               archivo <code class="literal">/etc/pf.conf</code> (o el archivo
               especificado en la variable <code class="literal">pf_rules</code> de
               <code class="literal">rc.conf.local</code> o
@@ -191,7 +191,7 @@ doas pfctl -f /etc/pf.conf
         Las secciones de este capítulo explican algunas configuraciones
         típicas que pueden hacerse con pf y los correspondientes cambios
         a su archivo de configuración.
-      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm1780299648"></a>3.2. NAT (Network Address Translation)</h3></div></div></div><p>
+      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm1611129600"></a>3.2. NAT (Network Address Translation)</h3></div></div></div><p>
       Puede emplear NAT para que un computador conectado a una red
       privada y que se conecte a Internet, sea pasarela de los
       computadores de la red interna y así estos puedan emplear
@@ -273,11 +273,11 @@ doas tcpdump -i fxp0 -n host 8.8.8.8
       y en la interfaz interna se vería nuevamente traducidas como:
     </p><pre class="programlisting">
 07:09:59.359474 8.8.8.8 &gt; 192.168.44.93: icmp: echo reply
-</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1780298112"></a>3.2.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
+</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm4267534208"></a>3.2.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Las siguientes páginas man: pf 4, pfctl 4.
       </p><p>
         Guía del usuario de PF <a href="biblio.html" title="B. Bibliografía">PF</a>.
-      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm3019828096"></a>3.3. Cortafuegos: filtrado y túneles</h3></div></div></div><p>
+      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm664761728"></a>3.3. Cortafuegos: filtrado y túneles</h3></div></div></div><p>
       Un cortafuegos permite filtrar tráfico que puede llegar o salir a
       un computador conectado a una red como Internet.
     </p><p>
@@ -327,11 +327,11 @@ doas tcpdump -i fxp0 -n host 8.8.8.8
 
     pass in on $ext_if proto tcp from any to $serv_ip port $servicios_serv \
     flags S/SA synproxy state
-</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idp125329024"></a>3.3.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
+</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm348391168"></a>3.3.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Las siguientes páginas man: pf 4, pfctl 4.
       </p><p>
         Guía del usuario de PF <a href="biblio.html" title="B. Bibliografía">PF</a>.
-      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm2065685376"></a>3.4. ftp-proxy: para usar ftp desde la red interna</h3></div></div></div><p>
+      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm664761856"></a>3.4. ftp-proxy: para usar ftp desde la red interna</h3></div></div></div><p>
       Las características del protocolo ftp hacen que sea difícil
       emplearlo desde una red interna con un cortafuegos que hace NAT.
       pf ofrece facilidades para lograrlo en conjunto con el programa
@@ -370,11 +370,11 @@ doas tcpdump -i fxp0 -n host 8.8.8.8
       <code class="literal">/etc/rc.conf.local</code>:
     </p><pre class="programlisting">
     ftpproxy_flags=""
-</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idp125329280"></a>3.4.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
+</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1715954816"></a>3.4.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Las siguientes páginas man: ftp-proxy 8, pf 4.
       </p><p>
         Guía del usuario de PF <a href="biblio.html" title="B. Bibliografía">PF</a>.
-      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idp85512576"></a>3.5. Ejemplo del uso de PF en una DMZ</h3></div></div></div><p>
+      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm32696704"></a>3.5. Ejemplo del uso de PF en una DMZ</h3></div></div></div><p>
       De las secciones anteriores resultaría un archivo
       <code class="literal">/etc/pf.conf</code> (adaptado de la Guía de PF) como
       el siguiente:
@@ -450,9 +450,9 @@ doas tcpdump -i fxp0 -n host 8.8.8.8
     
     pass in on $ext_if proto tcp from any to $serv_ip port $servicios_serv \
         flags S/SA synproxy state
-</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm764653952"></a>3.5.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
+</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm819117568"></a>3.5.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Guía del usuario de PF <a href="biblio.html" title="B. Bibliografía">PF</a>.
-      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm1920269056"></a>3.6. Control de ancho de banda</h3></div></div></div><p>
+      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm1225170560"></a>3.6. Control de ancho de banda</h3></div></div></div><p>
       El siguiente ejemplo presenta cómo puede configurarse un servidor
       NAT para controlar ancho de banda de diversos computadores de la
       red interna. La conexión de la red interna es a 100MB, mientras
@@ -488,10 +488,10 @@ doas tcpdump -i fxp0 -n host 8.8.8.8
     pass  out on $int_if from any to $uext2 queue uext2_in
     pass  out on $int_if from any to $uext3 queue uext3_in
     pass  out on $int_if from any to $uext4 queue uext4_in
-</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idp85512704"></a>3.6.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
+</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm819115904"></a>3.6.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Las siguientes páginas man: pf 4, pfctl 4.
       </p><p>
         Guía del usuario de PF <a href="biblio.html" title="B. Bibliografía">PF</a>.
-      </p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3383325568" href="#idm3383325568">24</a>] </sup>
+      </p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm23455360" href="#idm23455360">24</a>] </sup>
                   Cortafuego del inglés <span xmlns="" class="emphasis"><em>firewall</em></span>
                 </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ar01s02.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ar01s04.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">2. Dispositivos de interconexión </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 4. Protocolos de soporte y de usuario</td></tr></table></div></body></html>

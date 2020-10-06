@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>5. Otros servicios que puede prestar el servidor</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="ar01s04.html" title="4. Protocolos de soporte y de usuario"><link rel="next" href="novedades.html" title="A. Novedades"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5. Otros servicios que puede prestar el servidor</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s04.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="novedades.html">Siguiente</a></td></tr></table><hr></div><div class="section" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm2586198272"></a>5. Otros servicios que puede prestar el servidor</h2></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm1575655296"></a>5.1. Cuotas</h3></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>5. Otros servicios que puede prestar el servidor</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="ar01s04.html" title="4. Protocolos de soporte y de usuario"><link rel="next" href="novedades.html" title="A. Novedades"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5. Otros servicios que puede prestar el servidor</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ar01s04.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="novedades.html">Siguiente</a></td></tr></table><hr></div><div class="section" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="idm1271862528"></a>5. Otros servicios que puede prestar el servidor</h2></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm1271863168"></a>5.1. Cuotas</h3></div></div></div><p>
       Pueden emplearse cuotas para limitar el espacio en disco y la
       cantidad de archivos que un usuario o un grupo puede tener.
     </p><p>
@@ -52,18 +52,18 @@
       archivo <code class="literal">/etc/rc.conf.local</code>:
     </p><pre class="programlisting">
     check_quotas=YES
-</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3583908864"></a>5.1.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
+</pre><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm540490880"></a>5.1.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Las siguientes páginas del manual de OpenBSD: quota 1, edquota
         8, quotaon 8, quotaoff 8, quotacheck 8 y repquota 8. En el FAQ
         de OpenBSD hay una sección sobre quotas:
         <a href="">http://www.openbsd.org/faq/faq10.html#Quotas</a>
-      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm2663229696"></a>5.2. Motor de bases de datos PostgreSQL</h3></div></div></div><p>
+      </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm540489216"></a>5.2. Motor de bases de datos PostgreSQL</h3></div></div></div><p>
       PostgreSQL es un motor de bases de datos relacionales (RDBMS) que
       verifica integridad referencial con gran funcionalidad como base
       de datos, aunque un poco más lenta que otros motores. Su licencia
       es tipo BSD. En esta sección describimos brevemente la instalación
       y uso en un sistema adJ.
-    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3583907072"></a>5.2.1. Primera instalación del servidor</h4></div></div></div><p>
+    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm109408384"></a>5.2.1. Primera instalación del servidor</h4></div></div></div><p>
         Este motor de bases de datos se instala con el archivo de
         ordenes <code class="literal">/inst-adJ.sh</code> que en instalaciones
         típicas de adJ basta ejecutar y volver a ejecutar para
@@ -202,7 +202,7 @@
 </pre><p>
         De esta manera desde la cuenta <code class="literal">_postgresql</code> no
         necesitará dar la clave del usuario <code class="literal">postgres</code>.
-      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3469732096"></a>5.2.2. Habilitando autenticación</h4></div></div></div><p>
+      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3687046272"></a>5.2.2. Habilitando autenticación</h4></div></div></div><p>
         Por defecto la forma de inicializar PostgreSQL no establecerá
         una clave de administrador ni exigirá autenticación para cuentas
         que se conecten desde la misma máquina. Sin embargo esto debe
@@ -222,7 +222,7 @@
       </p><p>
         Otra posibilidad es cambiar la configuración después de haber
         inicializado sin autenticación. Para esto cambie la clave del
-        administrador con<sup>[<a name="idm3252164608" href="#ftn.idm3252164608">29</a>]</sup>:
+        administrador con<sup>[<a name="idm3687045248" href="#ftn.idm3687045248">29</a>]</sup>:
       </p><pre class="programlisting">
     psql -h /var/www/var/run/postgresql -U postgres template1 
     template1=# alter user postgres with password 'MiClave';
@@ -272,7 +272,7 @@
         Para dar permiso a otro rol puede usarse:
       </p><pre class="programlisting">
     GRANT ALL on solicitud TO rodrigo;
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1395238400"></a>5.2.3. Creación de una base de datos</h4></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm29280896"></a>5.2.3. Creación de una base de datos</h4></div></div></div><p>
         Para crear la base de datos <code class="literal">prueba</code> puede usar
         el superusuario con la opción <code class="literal">-U postgres</code> o
         desde una cuenta que tenga permiso para crear bases de datos:
@@ -282,7 +282,7 @@
 </pre><p>
         Desde la interfaz <code class="literal">psql</code>, pueden darse ordenes
         SQL y otros específicos de PostgreSQL (ver
-        <a href="ar01s05.html#idm2206113536" title="5.2.4. Uso de una base de datos">Uso de una base de datos</a>). En
+        <a href="ar01s05.html#idm553782656" title="5.2.4. Uso de una base de datos">Uso de una base de datos</a>). En
         particular el usuario <code class="literal">postgres</code> y desde
         cuentas con permiso para crear usuarios, puede crear otros
         usuarios (globales para todas las bases de datos manejadas por
@@ -314,7 +314,7 @@
         desde la línea de ordenes a un base de datos con
       </p><pre class="programlisting">
     psql -h /var/www/var/run/postgresql -d test -U ejusuario --password -f crea.sql
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2206113536"></a>5.2.4. Uso de una base de datos</h4></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm553782656"></a>5.2.4. Uso de una base de datos</h4></div></div></div><p>
         Puede emplear <code class="literal">psql</code>, la interfaz texto que
         acepta ordenes SQL y que se distribuye con PostgreSQL. Para
         esto, entre a una base (digamos <code class="literal">b1908</code>) como
@@ -352,7 +352,7 @@
         la solicitaran— con una línea de la forma:
       </p><pre class="programlisting">
     *:*:*:usuario:clave
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm865821056"></a>5.2.5. Cotejación en PostgreSQL</h4></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2865141760"></a>5.2.5. Cotejación en PostgreSQL</h4></div></div></div><p>
         Desde adJ 5.2 se incluye un porte de PostgreSQL (la versión
         incluida en adJ 6.7 es postgresql-server-12.3p0) que
         soporta cotejaciones de acuerdo al locale, y por defecto se
@@ -405,7 +405,7 @@
         así como borrarlas con <code class="literal">DROP COLLATION esp;</code>.
         Puede consultar más en
         <a href="">http://www.postgresql.org/docs/9.1/static/collation.html</a>.
-      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1428186880"></a>5.2.6. Copias de respaldo</h4></div></div></div><p>
+      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1396888192"></a>5.2.6. Copias de respaldo</h4></div></div></div><p>
         Para sacar una copia de respaldo de todas las base de datos
         manejadas con PostgreSQL (y suponiendo que el zócalo está en
         <code class="literal">/var/www/var/run/postgresql</code>): ingrese a la
@@ -419,12 +419,12 @@
       </p><pre class="programlisting">
     psql -U postgres -h /var/www/var/run/postgresql/ \
         -f /respaldos/pgdump.sql template1
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1633510528"></a>5.2.7. Base PostgreSQL remota</h4></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1396882944"></a>5.2.7. Base PostgreSQL remota</h4></div></div></div><p>
         PostgreSQL permite conexiones remotas y cifradas, así que la
         aplicación puede estar en un servidor y la base de datos en
         otra.
       </p><div class="literallayout"><p>Para la operación cifrada se requiere un certificado para el servidor y un certificado para cada usuario de la base de datos que se emplee en conexiones remotas. Los certificados para los clientes deben tener el CN con el nombre del usuario que hará la conexión.<br>
-Por lo mismo en lugar de comprar certificados para esto es más práctico tener una autoridad certificadora que pueda firmarlos.</p></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm1428190336"></a>5.2.7.1. Autoridad certificadora SSL</h5></div></div></div><p>
+Por lo mismo en lugar de comprar certificados para esto es más práctico tener una autoridad certificadora que pueda firmarlos.</p></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm1055006464"></a>5.2.7.1. Autoridad certificadora SSL</h5></div></div></div><p>
           Las operaciones con SSL depende en cliente y en servidor de la
           librería LibreSSL (en otros sistemas OpenSSL). Esta incluye el
           programa <code class="literal">openssl</code> para hacer varias
@@ -463,7 +463,7 @@ Por lo mismo en lugar de comprar certificados para esto es más prá
           La autoridad certificadora no es más que un certificado
           autofirmado que se configura y usa consistentemente como
           autoridad certificadora.
-        </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm3647125632"></a>5.2.7.2. Configuración de servidor</h5></div></div></div><p>
+        </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm3208084736"></a>5.2.7.2. Configuración de servidor</h5></div></div></div><p>
           En el servidor deben quedar certificados del servidor en
           <code class="literal">/var/postgresql/data</code>:
         </p><div class="itemizedlist"><ul type="disc" compact><li><p>
@@ -486,7 +486,7 @@ Por lo mismo en lugar de comprar certificados para esto es más prá
           Es decir conexión SSL exigiendo certificado al cliente y que
           la autenticación sea por certificado. Lo cual también exige
           que el certificado del cliente tenga el CN igual al usuario.
-        </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm1811089920"></a>5.2.7.3. configuración de cada cliente</h5></div></div></div><div class="literallayout"><p>Para cada usuario debe hacerse un certificado que se ubica en cada comptuador cliente en <code class="literal">~/.postgresql/{usuario.crt, usuario.key}</code><br>
+        </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm3166417152"></a>5.2.7.3. configuración de cada cliente</h5></div></div></div><div class="literallayout"><p>Para cada usuario debe hacerse un certificado que se ubica en cada comptuador cliente en <code class="literal">~/.postgresql/{usuario.crt, usuario.key}</code><br>
 donde usuario debe correponder al usuario en la base de datos y al CN del certificado.</p></div><p>
           Desde el servidor puede generar y firmar certificado para
           cliente por 10 años (cambie <code class="literal">usuario</code> por el
@@ -536,7 +536,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
         </p><pre class="programlisting">
     PGSSLCERT=/home/usis/.postgresql/usuario.crt 
     PGSSLKEY=/home/usis/.postgresql/usuario.key
-</pre><div class="section" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="idm659964544"></a>5.2.7.3.1. Clientes en PHP</h6></div></div></div><p>
+</pre><div class="section" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="idm1517114880"></a>5.2.7.3.1. Clientes en PHP</h6></div></div></div><p>
             Copie las llaves dentro de la jaula chroot, haga que el
             dueño sea www:www e incluya en alguna fuente usada antes de
             las conexiones a base de datos (por ejemplo intente en
@@ -544,7 +544,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
           </p><pre class="programlisting">
     putenv('PGSSLCERT=/ojs/certs/ojs.crt');
     putenv('PGSSLKEY=/ojs/certs/ojs.key');
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="idm3129890048"></a>5.2.7.3.2. Clientes en Ruby on Rails</h6></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="idm3166414208"></a>5.2.7.3.2. Clientes en Ruby on Rails</h6></div></div></div><p>
             En <code class="literal">config/database.yml</code> debe verse algo
             como:
           </p><pre class="programlisting">
@@ -560,7 +560,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
     PGSSLCERT=/home/usis/.postgresql/usuario.crt \
     PGSSLKEY=/home/usis/.postgresql/usuario.key \
     rails dbconsole
-</pre></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3129892736"></a>5.2.8. Referencias y lecturas recomendadas</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+</pre></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3890937216"></a>5.2.8. Referencias y lecturas recomendadas</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
             Documentación del paquete postgresql (README.OpenBSD,
             INSTALL).
           </p></li><li><p>
@@ -572,7 +572,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
           </p></li><li><p>
             SSL Certificates For PostgreSQL :
             <a href="">https://www.howtoforge.com/postgresql-ssl-certificates</a>
-          </p></li></ul></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm4032175104"></a>5.3. MariaDB</h3></div></div></div><p>
+          </p></li></ul></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm2989474560"></a>5.3. MariaDB</h3></div></div></div><p>
       A partir de OpenBSD/adJ 5.7 MariaDB remplaza a MySQL. Según
       <a href="">https://es.wikipedia.org/wiki/MariaDB</a>
       MariaDB fue iniciada por el fundador de MySQL después de que
@@ -635,7 +635,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
       Si desea usar mysql con php, instale además de los paquetes
       básicos de php (<code class="literal">php-core-v</code> y
       <code class="literal">php-mysql-v</code>)
-    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2013267584"></a>5.3.1. Uso básico</h4></div></div></div><pre class="programlisting">
+    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1349161984"></a>5.3.1. Uso básico</h4></div></div></div><pre class="programlisting">
     mysql -u root -p 
 </pre><p>
         puede crear la base de datos <code class="literal">datos</code>, y un
@@ -664,7 +664,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
     SHOW CREATE TABLE tabla;
 </pre><p>
         que presentan estructura de la tabla.
-      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2834168448"></a>5.3.2. Cambio de la clave de administrador</h4></div></div></div><p>
+      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1634363392"></a>5.3.2. Cambio de la clave de administrador</h4></div></div></div><p>
         Si olvida la clave de root después de haberla establecido puede
         cambiarla entrando a la cuenta de administrador:
       </p><div class="itemizedlist"><ul type="disc"><li><p>
@@ -688,7 +688,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
 </pre></li><li><p>
             Vuelva a apagar el servidor y reinicielo con:
             <code class="literal">/usr/local/bin/mysqld_safe &amp;</code>
-          </p></li></ul></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2504075392"></a>5.3.3. Recuperación y backups</h4></div></div></div><p>
+          </p></li></ul></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3295840512"></a>5.3.3. Recuperación y backups</h4></div></div></div><p>
         MariaDB mantiene bases de datos en directorios y las tablas en
         archivos. No es recomendable que modifique tales archivos, al
         menos no, mientras el servidor esté activo.
@@ -701,7 +701,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
         y posteriormente restaurarla con:
       </p><pre class="programlisting">
     mysql &lt; /respaldomysql/dump-1nov2007.sql
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3781411968"></a>5.3.4. MariaDB y servidor web con chroot</h4></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2079100800"></a>5.3.4. MariaDB y servidor web con chroot</h4></div></div></div><p>
         Puede emplear aplicaciones para nginx o Apache en modo
         <code class="literal">chroot</code> que usen bases de datos MariaDB de
         tres formas: (1) Conectando la aplicación web a la base de datos
@@ -758,7 +758,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
     mysqldump --socket=/var/www/var/run/mysql/mysql.sock  \
     -p --all-databases
     
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3309638912"></a>5.3.5. Lecturas recomendadas</h4></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3301193344"></a>5.3.5. Lecturas recomendadas</h4></div></div></div><p>
         Referencias:
       </p><div class="itemizedlist"><ul type="disc"><li><p>
             Una explicación de algo de la instalación y el uso de MySQL
@@ -770,7 +770,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
           </p></li><li><p>
             Ayuda para cambiar clave de root en sistemas Linux:
             <a href="">http://www.netadmintools.com/art90.html</a>
-          </p></li></ul></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm2829562880"></a>5.4. Servidor ldapd</h3></div></div></div><p>
+          </p></li></ul></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm575842688"></a>5.4. Servidor ldapd</h3></div></div></div><p>
       LDAP (Lightweight Directory Access Protocol) es un protocolo para
       mantener e intercambiar información almacenada en directorios (i.e
       bases de datos especiales), su versión 3 se define en los RFC
@@ -785,8 +785,8 @@ donde usuario debe correponder al usuario en la base de datos y al 
       3, <code class="literal">ldapd</code>. No incluye cliente para LDAP pero
       desde la línea de ordenes puede emplearse el paquete
       <code class="literal">openldap-client</code> o como interfaz web
-      <code class="literal">phpldapadmin</code><sup>[<a name="idm3369232256" href="#ftn.idm3369232256">30</a>]</sup>.
-    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3369234304"></a>5.4.1. Instalación de ldapd</h4></div></div></div><p>
+      <code class="literal">phpldapadmin</code><sup>[<a name="idm1500172032" href="#ftn.idm1500172032">30</a>]</sup>.
+    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3853755264"></a>5.4.1. Instalación de ldapd</h4></div></div></div><p>
         No necesita instalar paquetes para la operación como servidor.
       </p><p>
         La configuración que se presenta emplea LDAPS para conexiones en
@@ -883,7 +883,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
             SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )  
 </pre></li><li><p>
             Reinicie ldapd
-          </p></li></ul></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3713255168"></a>5.4.2. Pruebas Iniciales con openldap-client</h4></div></div></div><p>
+          </p></li></ul></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm494775424"></a>5.4.2. Pruebas Iniciales con openldap-client</h4></div></div></div><p>
         Instale el paquete con:
       </p><pre class="programlisting">
     doas pkg_add openldap-client
@@ -916,7 +916,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
         agregar
       </p><pre class="programlisting">
     TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm3939870592"></a>5.4.3. Adición de datos iniciales</h4></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2929390976"></a>5.4.3. Adición de datos iniciales</h4></div></div></div><p>
         Una vez esté corriendo <code class="literal">ldapd</code> deberá iniciar
         un directorio para su organización y los usuarios que se
         autenticarán. Puede agregar estos datos con el programa
@@ -964,7 +964,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
         con:
       </p><pre class="programlisting">
     ldapsearch -x -b 'dc=www,dc=pasosdeJesus,dc=org' '(objectclass=*)'
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1117496448"></a>5.4.4. Instalación y configuración de
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm494776960"></a>5.4.4. Instalación y configuración de
       <code class="literal">phpldapadmin</code></h4></div></div></div><p>
         Instale el paquete y siga las instrucciones que de (por ejemplo
         activar <code class="literal">php-ldap</code>):
@@ -982,7 +982,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
     doas mkdir -p dev
     cd dev
     /dev/MAKEDEV arandom
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1823688576"></a>5.4.5. Referencias y lecturas recomendadas</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1030361600"></a>5.4.5. Referencias y lecturas recomendadas</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
             Las siguientes páginas man: ldapd 8. ldapctl 8. ldapd.conf
             5.
           </p></li><li><p>
@@ -993,10 +993,10 @@ donde usuario debe correponder al usuario en la base de datos y al 
             <a href="">http://www.tumfatig.net/20120817/monitoring-openbsds-ldap-daemon/</a>.
           </p></li><li><p>
             <a href="">http://openbsd.7691.n7.nabble.com/dev-random-as-chrooted-named-s-entropy-source-current-td64344.html</a>.
-          </p></li></ul></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm3705421824"></a>5.5. Autoridad certificadora interna</h3></div></div></div><p>
+          </p></li></ul></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="idm968893568"></a>5.5. Autoridad certificadora interna</h3></div></div></div><p>
       Los servicios en red (en particular ldapd, ver
-      <a href="ar01s05.html#idm2829562880" title="5.4. Servidor ldapd">Sección 5.4, “Servidor ldapd”</a> y postgresql remoto, ver
-      <a href="ar01s05.html#idm2663229696" title="5.2. Motor de bases de datos PostgreSQL">Sección 5.2, “Motor de bases de datos PostgreSQL”</a>) requieren cada vez más
+      <a href="ar01s05.html#idm575842688" title="5.4. Servidor ldapd">Sección 5.4, “Servidor ldapd”</a> y postgresql remoto, ver
+      <a href="ar01s05.html#idm540489216" title="5.2. Motor de bases de datos PostgreSQL">Sección 5.2, “Motor de bases de datos PostgreSQL”</a>) requieren cada vez más
       comunicaciones cifradas y suelen emplear SSL o TLS que requieren
       certificados públicos firmados por autoridades certificadoras.
     </p><p>
@@ -1017,7 +1017,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
       Esto hace necesario que cada organización que requiere servicios
       cifrados con SSL o TLS en su red interna (como PostgreSQL remoto o
       LDAP) cuente con su propia autoridad certificadora interna
-    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm730901888"></a>5.5.1. Conceptos</h4></div></div></div><p>
+    </p><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm746655616"></a>5.5.1. Conceptos</h4></div></div></div><p>
         Las operaciones con SSL dependen en cliente y en servidor de la
         librería LibreSSL (en otros sistemas OpenSSL). Esta incluye el
         programa openssl para hacer varias operaciones, incluyendo
@@ -1053,7 +1053,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
         La autoridad certificadora no es más que un certificado
         autofirmado que se configura y se usa consistentemente como
         autoridad certificadora.
-      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm730903552"></a>5.5.2. Configuración de servidor</h4></div></div></div><p>
+      </p></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1564045696"></a>5.5.2. Configuración de servidor</h4></div></div></div><p>
         Supongamos que ubicamos en
         <code class="literal">/var/postgresql/data</code> los archivos de la
         autoridad certificadora:
@@ -1075,7 +1075,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
     chmod 400 server.key
     chown postgres.postgres server.key
     openssl req -new -key server.key -days 3650 -out server.crt -x509 -subj '/C=CO/ST=Bogota/L=MiOng/O=MiOng/CN=miong.org.co/emailAddress=info@miong.org'
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1203055744"></a>5.5.3. Generación de un par de certificados</h4></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2330626176"></a>5.5.3. Generación de un par de certificados</h4></div></div></div><p>
         LDAP requiere que el CN del certificado corresponda al nombre
         del computador en la red interna.
       </p><p>
@@ -1113,7 +1113,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
         cliente donde se usará:
       </p><pre class="programlisting">
     scp apbd2.miong.org.co.crt apbd2.miong.org.co:~/ssl/
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1866058240"></a>5.5.4. Uso de los certificados</h4></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm1866058624"></a>5.5.4.1. Caso PostgreSQL</h5></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm685471872"></a>5.5.4. Uso de los certificados</h4></div></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm1386083584"></a>5.5.4.1. Caso PostgreSQL</h5></div></div></div><p>
           En el servidor edite el archivo
           <code class="literal">/var/postgresql/data/pg_hba.conf</code> y
           asegúrese de agregar una línea para el usuario y el computador
@@ -1140,7 +1140,7 @@ donde usuario debe correponder al usuario en la base de datos y al 
         </p><pre class="programlisting">
     PGSSLCERT=/home/usis/.postgresql/usuario.crt 
     PGSSLKEY=/home/usis/.postgresql/usuario.key
-</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm1385542528"></a>5.5.4.2. Caso LDAPD</h5></div></div></div><p>
+</pre></div><div class="section" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="idm399937152"></a>5.5.4.2. Caso LDAPD</h5></div></div></div><p>
           Ubique el certificado y llave en
           <code class="literal">/etc/ldap/certs/</code> del servidor donde corre
           ldapd:
@@ -1162,12 +1162,12 @@ donde usuario debe correponder al usuario en la base de datos y al 
           Copie el archivo <code class="literal">root-paracerts</code> en el
           cliente y agregue ese archivo al final de
           <code class="literal">/etc/ssl/cert.pem</code>
-        </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm1573443328"></a>5.5.5. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
+        </p></div></div><div class="section" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="idm2475485696"></a>5.5.5. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
             <a href="">https://www.howtoforge.com/postgresql-ssl-certificates</a>
-          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3252164608" href="#idm3252164608">29</a>] </sup>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3687045248" href="#idm3687045248">29</a>] </sup>
             Note que de esta forma puede cambiar la clave de otros
             usuarios de PostgreSQL.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3369232256" href="#idm3369232256">30</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1500172032" href="#idm1500172032">30</a>] </sup>
           Si emplea un adJ 5.2 y planea conectarse desde clientes
           digamos en Ubuntu reciente requerirá el parche descrito en
           <a xmlns="" href="">http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</a>
