@@ -408,7 +408,7 @@ Por defecto este servicio dejará una bitácora en `/var/log/authlog` (y
 sus copias anteriores comprimidas como `/var/log/authlog.0.gz`,
 `/var/log/authlog.1.gz`, ...).
 
-### Jaula sftp {#jaulasftp}
+### Jaula sftp {#jaula-sftp}
 
 Supongamos que requiere que unos usuarios puedan sólo ingresar por sftp a 
 una jaula de archivos que incluya sus archivos y otros directorios y archivos
