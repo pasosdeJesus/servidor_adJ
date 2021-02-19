@@ -528,6 +528,18 @@ También asegúrese de iniciar el servicio DHCP editando
 o en lugar de "" puede especificar las interfaces de red que el servidor
 debe atender separadas por espacio.
 
+### Instalación de OpenBSD/adJ en red {#instalacion-openbsd-red}
+
+En un servidor OpenBSD, prepare un directorio para servir archivos de arranque
+con tftp:
+
+doas mkdir /var/tftp
+doas cp /usr/mdec/pxeboot /var/tftp
+doas cp /bsd.rd /var/tftp
+doas chown -R _tftpd /var/tftp
+cp 
+
+
 ### Referencias y lecturas recomendadas {#referencias-dhcpd}
 
 Las siguientes páginas man: dhcp8, dhclient 8, dhclient.conf5, dhcpd8 y
@@ -1344,7 +1356,7 @@ y <http://structio.sourceforge.net/guias/basico_OpenBSD/correo.html#procmail>
 * Más sobre IMAP en <http://www.linux-sec.net/Mail/SecurePop3/ > y
 <http://talk.trekweb.com/~jasonb/articles/exim_maildir_imap.shtml>
 * POP3S e IMAPS en OpenBSD/LDAP/Sendmail
-<http://dhobsd.pasosdeJesus.org/index.php?id=view/POP3S+e+IMAPS+en+OpenBSD%2FLDAP%2FSendmail>
+<https://dhobsd.pasosdejesus.org/pop3s_e_imaps_en_openbsd_ldap_sendmail.html>
 * El uso de certificados existentes con courier se señala en
 <http://milliwaysconsulting.net/support/systems/courier-ssl.html>
 

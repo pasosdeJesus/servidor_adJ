@@ -1,3 +1,6 @@
+Versión 6.8
+:   - Mejorada [xref](#ldapd)
+
 Versión 6.7
 :   - Nueva [xref](#jaula-sftp)
 

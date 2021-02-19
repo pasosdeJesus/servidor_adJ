@@ -83,7 +83,7 @@ A continuación se dan detalles del proceso de instalación y uso de
 PostgreSQL en caso de que requiera instalar por su cuenta o aprender más
 sobre este motor de bases de datos.
 
-Para emplearlo por primera vez instale el paquete `postgresql-server` (también 
+Para emplearlo por primera vez instale el paquete `postgresql-server` (también
 es recomendable `postgresql-docs`).
 
 Este paquete deja instrucciones específicas para inicializar la base de
@@ -97,7 +97,7 @@ escrito describe son:
     requiere puede crearlo con:
 
             doas useradd -c "Administrador de PostgreSQL" -g =uid -m -d /var/postgresql \
-            -s /bin/sh -u 503 _postgresql 
+            -s /bin/sh -u 503 _postgresql
             doas passwd _postgresql
 
 -   A diferencia de versiones anteriores, este paquete ya no inicializa
@@ -135,7 +135,7 @@ escrito describe son:
 
             pkg_scripts="cron montaencres montaencpos postgresql httpd cupsd"
 
-Inicialmente el servidor queda configurado con un zócalo (socket) Unix 
+Inicialmente el servidor queda configurado con un zócalo (socket) Unix
 (solo desde la misma máquina). Puede comprobar que está corriendo el servidor
 (postmaster) con:
 
@@ -176,7 +176,7 @@ Antes de reiniciar PostgreSQL asegúrese de crear el directorio:
 También tenga en cuenta que las diversas herramientas reciben como
 parámetro adicional `-h ruta`. Por ejemplo si ejecuta Apache con
 `chroot` en `/var/www/` puede tener configurado su directorio para
-zócalos en `/var/www/var/run/postgresql`, en ese caso puede iniciar 
+zócalos en `/var/www/var/run/postgresql`, en ese caso puede iniciar
 `psql` con la base `prueba` usando:
 
         psql -h /var/www/var/run/postgresql prueba
@@ -214,7 +214,7 @@ Otra posibilidad es cambiar la configuración después de haber
 inicializado sin autenticación. Para esto cambie la clave del
 administrador con[^aut.1]:
 
-        psql -h /var/www/var/run/postgresql -U postgres template1 
+        psql -h /var/www/var/run/postgresql -U postgres template1
         template1=# alter user postgres with password 'MiClave';
 
 Después edite `/var/postgresql/data/pg_hba.conf` y cambie en las lineas
@@ -363,7 +363,7 @@ Una vez creada puede realizar operaciones empleándola por ejemplo:
 
 la primera sentencia dará:
 
-        ?column? 
+        ?column?
         ----------
         t
         (1 row)
@@ -387,7 +387,7 @@ También podrá renombrar cotejaciones que haya creado con
 ### Copias de respaldo {#respaldo-postgresql}
 
 Para sacar una copia de respaldo de todas las base de datos manejadas
-con PostgreSQL (y suponiendo que el zócalo está en 
+con PostgreSQL (y suponiendo que el zócalo está en
 `/var/www/var/run/postgresql`):
 ingrese a la cuenta del administrador:
 
@@ -403,31 +403,31 @@ Puede restablecer una copia con
 
 ### Base PostgreSQL remota {#base-postgresql-remota}
 
-PostgreSQL permite conexiones remotas y cifradas, así que la aplicación 
+PostgreSQL permite conexiones remotas y cifradas, así que la aplicación
 puede estar en un servidor y la base de datos en otra.
 
-Para la operación cifrada se requiere un certificado para el servidor y un 
+Para la operación cifrada se requiere un certificado para el servidor y un
 certificado para cada usuario de la base de datos que se emplee en
 conexiones remotas.  Los certificados para los clientes deben tener el CN
-con el nombre del usuario que hará la conexión.   
-Por lo mismo en lugar de comprar certificados para esto es más práctico 
+con el nombre del usuario que hará la conexión.
+Por lo mismo en lugar de comprar certificados para esto es más práctico
 tener una autoridad certificadora que pueda firmarlos.
 
 #### Autoridad certificadora SSL
 
-Las operaciones con SSL depende en cliente y en servidor de la librería 
+Las operaciones con SSL depende en cliente y en servidor de la librería
 LibreSSL (en otros sistemas OpenSSL). Esta incluye el programa
 ```openssl``` para hacer varias operaciones, incluyendo operaciones
-de una autoridad certificadora. 
+de una autoridad certificadora.
 
-Un certificado SSL siempre va con una llave privada (el certificado es la 
-llave pública).   
+Un certificado SSL siempre va con una llave privada (el certificado es la
+llave pública).
 
 El proceso para crear un certificado es:
 
 1. Crear la llave privada para el certificado (extensión .key)
 2. Generar el certificado (llave pública) pero sin firma (extensión .csr)
-3. Firmar el certificado con una autoridad certificadora y generar el certificado 
+3. Firmar el certificado con una autoridad certificadora y generar el certificado
 4. Usar el certificado firmado junto con la llave privada para realizar conexiones (el certificado firmado se compartirá, mientras que la llave privada no)
 
 Los archivos intermedios pueden examinarse así:
@@ -436,7 +436,7 @@ Los archivos intermedios pueden examinarse así:
 * Llaves: ```openssl rsa -check -in client.key ```
 * Certificados: ```openssl x509 -noout -text -in client.crt```
 
-La autoridad certificadora no es más que un certificado autofirmado que 
+La autoridad certificadora no es más que un certificado autofirmado que
 se configura y usa consistentemente como autoridad certificadora.
 
 #### Configuración de servidor
@@ -448,44 +448,44 @@ En el servidor deben quedar certificados del servidor en ```/var/postgresql/data
 * server.crt Certificado del servidor
 * server.key Llave privada del servidor
 
-Por cada cliente que se va a conectar debe configurarse en 
+Por cada cliente que se va a conectar debe configurarse en
 ```/var/postgresql/data/pg_hba.conf``` el/los usuarios que
-se conectarán.  Contrario a lo especificado en la documentación de 
-PostgreSQL en casos de SSL en ese archivo sólo nos han funcionado 
-líneas de la forma: 
+se conectarán.  Contrario a lo especificado en la documentación de
+PostgreSQL en casos de SSL en ese archivo sólo nos han funcionado
+líneas de la forma:
 
         hostssl all usuario 192.168.100.11/32 cert clientcert=1
 
-Es decir conexión SSL exigiendo certificado al cliente y que la autenticación 
+Es decir conexión SSL exigiendo certificado al cliente y que la autenticación
 sea por certificado. Lo cual también exige que el certificado del cliente
 tenga el CN igual al usuario.
 
 #### configuración de cada cliente
 
-Para cada usuario debe hacerse un certificado que se ubica en 
-cada comptuador cliente en ```~/.postgresql/{usuario.crt, usuario.key}```  
-donde usuario debe correponder al usuario en la base de datos y 
+Para cada usuario debe hacerse un certificado que se ubica en
+cada comptuador cliente en ```~/.postgresql/{usuario.crt, usuario.key}```
+donde usuario debe correponder al usuario en la base de datos y
 al CN del certificado.
 
 Desde el servidor puede generar y firmar certificado para cliente por
-10 años (cambie ```usuario``` por el usuario PostgreSQL dueño de la 
+10 años (cambie ```usuario``` por el usuario PostgreSQL dueño de la
 base de datos y que usara desde los clientes para conectarse, si
 prefiere un lapso de tiempo diferente especifíquelo en días después
 de la opción ```-days```):
 
-        doas su - 
+        doas su -
         cd /var/postgresql/data
         openssl genrsa -des3 -out usuario.key 1024
         openssl rsa -in usuario.key -out usuario.key
         openssl req -new -key usuario.key -out usuario.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=Pasos de Jesus/CN=usuario'
         openssl x509 -req -days 3650 -in usuario.csr -CA root.crt -CAkey server.key -out usuario.crt -CAcreateserial
 
-A continuación copie el certificado generado (```usuario.crt```) y la 
+A continuación copie el certificado generado (```usuario.crt```) y la
 llave privada (```usuario.key```) al computador cliente donde se usará:
 
         scp usuario.key usuario.crt mius@192.168.100.11:~/.postgresql/
 
-En el servidor edite el archivo ```/var/postgresql/data/pg_hba.conf``` 
+En el servidor edite el archivo ```/var/postgresql/data/pg_hba.conf```
 y asegúrese de agregar una línea para el usuario y el computador cliente:
 
         hostssl all usuario 192.168.100.11/32 cert clientcert=1
@@ -498,7 +498,7 @@ Desde el cliente ejecute:
 
         doas chmod 0600 /home/usis/.postgresql/usuario.key
 
-y pruebe la conexión asegurando que se usa el certificado 
+y pruebe la conexión asegurando que se usa el certificado
 del usuario respectivo:
 
         PGSSLCERT=/home/usis/.postgresql/usuario.crt \
@@ -507,7 +507,7 @@ del usuario respectivo:
 
 Configure la aplicación para que en cada arranque o uso establezca:
 
-        PGSSLCERT=/home/usis/.postgresql/usuario.crt 
+        PGSSLCERT=/home/usis/.postgresql/usuario.crt
         PGSSLKEY=/home/usis/.postgresql/usuario.key
 
 ##### Clientes en PHP
@@ -546,7 +546,7 @@ y al hacer operaciones que usen base de datos (rails dbconsole, iniciar unicorn,
 -   SSL Certificates For PostgreSQL :
     <https://www.howtoforge.com/postgresql-ssl-certificates>
 
-[^aut.1]: Note que de esta forma puede cambiar la clave de otros 
+[^aut.1]: Note que de esta forma puede cambiar la clave de otros
     usuarios de PostgreSQL.
 
 
@@ -580,7 +580,7 @@ segunda línea cada una comiencen con el caracter tabulador. A
 continuación regenere el archivo binario `/etc/login.conf.db` con
 
         cd /etc
-        doas cap_mkdb /etc/login.conf 
+        doas cap_mkdb /etc/login.conf
 
 Después agregue `mysqld` a `pkg_scripts` en `/etc/rc.conf.local` por ejemplo con:
 	doas rcctl enable mysqld
@@ -594,9 +594,9 @@ Los errores quedarán en `/var/mysql/host.err`.
 Después puede establecer una clave para el usuario `root` de MariaDB
 cuando ingresa desde `localhost` con:
 
-        /usr/local/bin/mysqladmin -u root  password 'nueva-clave' 
+        /usr/local/bin/mysqladmin -u root  password 'nueva-clave'
         /usr/local/bin/mysqladmin -u root -pnueva-clave -h &ESERV; password 'nueva-clave'
-        
+
 
 Después puede iniciar una sesión, crear bases de datos, crear usuarios y
 otorgarles privilegios.
@@ -604,14 +604,14 @@ otorgarles privilegios.
 Para apagar el servidor mysql:
 
         mysqladmin -u root -p shutdown
-        
+
 
 Si desea usar mysql con php, instale además de los paquetes básicos de
 php (`php-core-v` y `php-mysql-v`)
 
 ### Uso básico {#uso-mariadb}
 
-        mysql -u root -p 
+        mysql -u root -p
 
 puede crear la base de datos `datos`, y un usuario `erfurt` que la pueda
 administrar (i.e con todos los privilegios excepto GRANT) y con clave
@@ -679,18 +679,18 @@ y posteriormente restaurarla con:
 
 ### MariaDB y servidor web con chroot {#chroot-mysql}
 
-Puede emplear aplicaciones para nginx o Apache en modo `chroot` que usen 
-bases de datos MariaDB de tres formas: (1) Conectando la aplicación web a la 
-base de datos mediante un puerto TCP/IP donde responda MariaDB, 
-(2) poniendo el zócalo de MariaDB en un directorio dentro de la 
-jaula del servidor web o (3) Corriendo MariaDB dentro de la 
+Puede emplear aplicaciones para nginx o Apache en modo `chroot` que usen
+bases de datos MariaDB de tres formas: (1) Conectando la aplicación web a la
+base de datos mediante un puerto TCP/IP donde responda MariaDB,
+(2) poniendo el zócalo de MariaDB en un directorio dentro de la
+jaula del servidor web o (3) Corriendo MariaDB dentro de la
 jaula `chroot` (ver
 <http://structio.sourceforge.net/guias/servidor_OpenBSD/mysql.html#mysql-chroot>).
 
-A continuación documentamos como ubicar el zócalo de MariaDB dentro de la 
-jaula del servidor web (/var/www/) que nos parece un método seguro y 
+A continuación documentamos como ubicar el zócalo de MariaDB dentro de la
+jaula del servidor web (/var/www/) que nos parece un método seguro y
 fácil e implementar.
- 
+
 Una vez instale `mariadb-server` cree el directorio en el cual ubicará el
 zócalo, digamos:
 
@@ -720,7 +720,7 @@ Puede verificar que el zócalo queda bien ubicado con:
 ```
 que debe responde con algo como
 ```sh
-	srwxrwxrwx  1 _mysql  _mysql  0 Jul 18 21:41 mysql.sock     
+	srwxrwxrwx  1 _mysql  _mysql  0 Jul 18 21:41 mysql.sock
 ```
 
 Así una aplicación PHP que corran en el mismo servidor podrían realizar
@@ -739,7 +739,7 @@ ejemplo:
 
         mysqldump --socket=/var/www/var/run/mysql/mysql.sock  \
 		-p --all-databases
-        
+
 
 ### Lecturas recomendadas {#lecutras-mysql}
 
@@ -783,21 +783,21 @@ copiarse a `/etc/ldap/certs` y ejecutar:
         cd /etc/ldap/certs
         chown _ldapd:_ldapd *
         chmod 0640 /etc/ldap/certs/*key
-        chmod 0644 /etc/ldap/certs/*crt 
+        chmod 0644 /etc/ldap/certs/*crt
 
 Para configurar el servidor, verifique que exista el usuario `_ldapd` y
 el grupo `_ldapd` y edite `/etc/ldapd.conf`:
 
-        schema "/etc/ldap/core.schema"                                                  
-        schema "/etc/ldap/inetorgperson.schema"                                         
-        schema "/etc/ldap/nis.schema"                                                   
-         
+        schema "/etc/ldap/core.schema"
+        schema "/etc/ldap/inetorgperson.schema"
+        schema "/etc/ldap/nis.schema"
+
         lan_if = "re1"
-        
+
         listen on $lan_if ldaps certificate www.pasosdeJesus.org
         listen on lo0 secure
         listen on "/var/run/ldapi"
-        
+
         namespace "dc=www,dc=pasosdeJesus,dc=org" {
                 rootdn          "cn=root,dc=www,dc=pasosdeJesus,dc=org"
                 rootpw          "secret"
@@ -808,7 +808,7 @@ el grupo `_ldapd` y edite `/etc/ldapd.conf`:
                 index           objectClass
                 index           sn
                 fsync           on
-        }                                                                               
+        }
 
 Recuerde que la clave del directorio debe ser mejor que la presentada
 (i.e remplace `secret` por una buena clave). En lugar de poner la clave
@@ -854,10 +854,10 @@ forma tomada de {3}:
 
 -   Edite /etc/ldap/courier.schema y quite comentario a las líneas:
 
-            attributetype ( 1.3.6.1.4.1.10018.1.1.14 NAME 'mailhost'                        
+            attributetype ( 1.3.6.1.4.1.10018.1.1.14 NAME 'mailhost'
                     DESC 'Host to which incoming POP/IMAP connections should be proxied'
-                    EQUALITY caseIgnoreIA5Match                                        
-                    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )  
+                    EQUALITY caseIgnoreIA5Match
+                    SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} )
 
 -   Reinicie ldapd
 
@@ -873,7 +873,16 @@ Verifique localmente que el servidor no cifrado corre con:
 
 Respecto al servidor cifrado puede analizar la conexión SSL con:
 
-        openssl s_client -connect 192.168.2.1:465
+        openssl s_client -connect 192.168.2.1:636
+
+Si está usando un certificado firmado por su propia autoridad certificadora
+y obtiene un error como
+`verify error:num=21:unable to verify the first certificate`
+asegurese de:
+
+1. Que el certificado de su autoridad certificadora no haya expirado
+2. Agregar el certificado de su autoridad certificadora al archivo
+   `/etc/ssl/certs.pem`
 
 Puede verificar sus certificados contra la entidad que los expide
 siguiendo instrucciones de {4}.
@@ -883,16 +892,45 @@ poniendo en `/etc/openldap/ldap.conf`:
 
         TLS_REQCERT never
 
+Por otra parte si prefiere que `ldapsearch` haga verificaciones
+completas de certificados, descargue el certificado de su entidad
+certificadora y agreguelo por ejemplo a
+`/etc/ssl/certs/ca-certificates.crt`
+y agregue a `/etc/ldap/ldap.conf` la línea:
+
+```
+TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
+```
+
+Con esto, al ejecutar:
+
+```
+ldapsearch -H ldaps://www.pasosdeJesus.org -x -b "dc=pasosdeJesus,dc=org"
+'(objectclass=*)'
+```
+
+debería obtener
+
+```
+# extended LDIF
+#
+# LDAPv3
+# base <dc=pasosdeJesus,dc=org> with scope subtree
+# filter: (objectclass=*)
+# requesting: ALL
+#
+
+# search result
+search: 2
+result: 32 No such object
+
+# numResponses: 1
+```
+
 Para hacer pruebas desde otro computador, tenga en cuenta que en OpenBSD
-ldapsearch utiliza openssl mientras que por ejemplo en Ubuntu emplea
-GNUTLS, por esto eventualmente puede requerir descargar certificado de
-autoridad certificadora (digamos gd.pem) y ejecutar:
+`ldapsearch` utiliza openssl mientras que por ejemplo en Ubuntu emplea
+GNUTLS.
 
-        doas cat /etc/ssl/certs/gd.pem >> /etc/ssl/certs/ca-certificates.crt 
-
-Además de modificar `/etc/ldap/ldap.conf` para agregar
-
-        TLS_CACERT      /etc/ssl/certs/ca-certificates.crt
 
 ### Adición de datos iniciales {#datos-iniciales-ldapd}
 
@@ -943,10 +981,25 @@ con:
 
 ### Instalación y configuración de `phpldapadmin` {#phpldapadmin}
 
-Instale el paquete y siga las instrucciones que de (por ejemplo activar
-`php-ldap`):
+Aunque hay un paquete para OpenBSD, la igual que la distribución oficial de 
+phpldapadmin no soporta php-5.5 ni TLS, por lo que 
+se recomienda emplear <https://github.com/leenooks/phpLDAPadmin> así:
 
-        doas pkg_add phpldapadmin
+<pre>
+# mkdir -p ~/servidor/
+# cd ~/servidor/
+# git clone https://github.com/leenooks/phpLDAPadmin.git
+# cp -rf phpLDAPadmin /var/www/phpldapadmin
+# doas ln -s ../phpldapadmin /var/www/htdocs/phpldapadmin
+# doas $EDITOR /var/www/phpldapadmin/config/config.php
+</pre>
+
+para configurarlo (use su editor preferido en lugar de $EDITOR o defina esa
+variable) es importante que por lo menos quite el comentario a la
+línea
+<pre>
+$config->custom->jpeg['tmpdir'] = '/tmp';
+</pre>
 
 También debe asegurar que pueden emplearse los dispositivos de
 generación de números aleatorios en la jaula chroot de Apache (esto lo
@@ -959,11 +1012,106 @@ hace por defecto el instalador de adJ 5.5). Para esto verifique que en
         cd dev
         /dev/MAKEDEV arandom
 
+
+#### Preparando cuentas
+
+Primero cree un grupo `posix` en grupos.
+A continuación cree cuentas de usuario, tenga en cuenta que en la configuración
+por omisión debe emplear cifrado SHA para la clave (que no es tan seguro pero 
+es el común que es soportada tanto por `phpLdapAdmin` como por `ldadpd`).
+
+#### Diferencias con OpenLDAP
+
+* El renombramiento de objetos opera con OpenLDAP pero no con ldapd.
+
+#### Ayudas para depurar problemas con LDAP y PHP
+
+Para depurar problemas de conexión de clientes en PHP a ldadp ha servido
+recordar:
+
+* libssl: Realiza conexiones seguras SSL y TLS
+* Librerías de OpenLDAP: son usadas practicamente por todos los programas 
+  para realizar conexiones LDAP.
+* Desde el cliente, es buen experimento probar que desde la jauala chroot
+  `/var/www` se puedan hacer conexiones SSL con `openssl s_client`  y que
+  se pueda ejecutar `ldapsearch` (aunque por lo
+  visto php-ldap no utiliza archivos de configuración de `ldapsearch`
+  como `/etc/openldap/ldap.conf`).
+* PHP: Su móduo ldapd debe estar compilado con las mismas librerías
+  libssl y OpenLDAP usadas en el sistema.
+* Puede probarse con un programa como este:
+```
+<?php
+
+function muestra_est_ldap($ad) {
+  ldap_get_option($ad, LDAP_OPT_DEREF, $deref);
+  echo "deref=$deref\n";
+  ldap_get_option($ad, LDAP_OPT_SIZELIMIT, $sizelimit);
+  echo "sizelimit=$sizelimit\n";
+  ldap_get_option($ad, LDAP_OPT_TIMELIMIT, $timelimit);
+  echo "timelimit=$timelimit\n";
+  ldap_get_option($ad, LDAP_OPT_NETWORK_TIMEOUT, $network_timeout);
+  echo "network_timeout=$network_timeout\n";
+  ldap_get_option($ad, LDAP_OPT_PROTOCOL_VERSION, $protocol_version);
+  echo "protocol_version=$protocol_version\n";
+  ldap_get_option($ad, LDAP_OPT_ERROR_NUMBER, $error_number); 
+  echo "error_number=$error_number\n";
+  ldap_get_option($ad, LDAP_OPT_REFERRALS, $referrals);
+  echo "referrals=$referrals\n";
+  ldap_get_option($ad, LDAP_OPT_RESTART, $restart);
+  echo "restart=$restart\n";
+  ldap_get_option($ad, LDAP_OPT_HOST_NAME, $host_name);
+  echo "host_name=$host_name\n";
+  ldap_get_option($ad, LDAP_OPT_ERROR_STRING, $error_string);
+  echo "error_string=$error_string\n";
+  #ldap_get_option($ad, LDAP_OPT_MATCHED_ON, $error_string);
+  #echo "error_string=$error_string\n";
+  ldap_get_option($ad, LDAP_OPT_SERVER_CONTROLS, $error_string);
+  echo "error_string=$error_string\n";
+  # LDAP_OPT_ERROR_STRING string
+  # LDAP_OPT_MATCHED_DN string
+  # LDAP_OPT_SERVER_CONTROLS array
+  # LDAP_OPT_CLIENT_CONTROLS
+  #
+}
+
+echo "openssl_get_cert_location: ";
+var_dump(openssl_get_cert_locations());
+echo "";
+$ldap_server = "ldaps://apbd1.miorg.org.co/";
+$ldap_user = "cn=unusuario,ou=gente,dc=miorg,dc=org,dc=co";
+$ldap_pass = "unusuario";
+
+putenv('LDAPTLS_REQCERT=never');
+ldap_set_option(NULL, LDAP_OPT_DEBUG_LEVEL, 7);
+
+$ad = ldap_connect($ldap_server) or die("No se pudo conectar a {$ldap_server}");
+echo "ad= "; print_r($ad); echo "\n";
+
+muestra_est_ldap($ad);
+echo "Intentando conectar con $ldap_user - $ldap_pass\n";
+$conectado = @ldap_bind($ad, $ldap_user, $ldap_pass);
+
+if (!$conectado) {
+  echo "No se pudo conectar al servidor\n";
+  echo "Mensaje de error OpenLdap: " . ldap_error($ad) . "\n";
+  muestra_est_ldap($ad);
+  exit;
+}
+
+echo "conectado= "; print_r($conectado); echo "\n"
+```
+
+#### Ayudas para depurar problemas con LDAP y Ruby
+
+
+
+
 ### Referencias y lecturas recomendadas {#referencias-ldapd}
 
 -   Las siguientes páginas man: ldapd 8. ldapctl 8. ldapd.conf 5.
 
--   <http://dhobsd.pasosdejesus.org/index.php?id=ldapd>.
+-   <https://dhobsd.pasosdejesus.org/ldapd.html>.
 
 -   <http://www.cyberciti.biz/faq/test-ssl-certificates-diagnosis-ssl-certificate/>.
 
@@ -978,37 +1126,37 @@ hace por defecto el instalador de adJ 5.5). Para esto verifique que en
 
 ## Autoridad certificadora interna {#autoridad_certificadora}
 
-Los servicios en red (en particular ldapd, ver [xref](#ldapd)  y 
-postgresql remoto, ver [xref](#postgresql)) 
-requieren cada vez más comunicaciones cifradas y suelen emplear 
-SSL o TLS que requieren certificados públicos firmados por 
-autoridades certificadoras.  
+Los servicios en red (en particular ldapd, ver [xref](#ldapd)  y
+postgresql remoto, ver [xref](#postgresql))
+requieren cada vez más comunicaciones cifradas y suelen emplear
+SSL o TLS que requieren certificados públicos firmados por
+autoridades certificadoras.
 
-Cada vez los programas, librerías y lenguajes están verificando con más 
-insistencia que los certificados sean efectivamente firmados por 
-autoridades certificadoras.  
+Cada vez los programas, librerías y lenguajes están verificando con más
+insistencia que los certificados sean efectivamente firmados por
+autoridades certificadoras.
 
-En general las autoridades certificadoras cobran por emitir firmas para 
-certificados.  Sin embargo <http://letsencrypt.org> es una autoridad 
-certificadora que expide certificados gratuitos para sitios públicos 
-pero no para sitios en redes internas por cuanto el proceso de 
-expedición de certificados 
-requiere resolver por DNS desde sus servidores el dominio para el cual 
-se está creando el certificado.  Además sus certificados son de 
-3 meses por cuanto deben renovarse cada 3 meses.  
+En general las autoridades certificadoras cobran por emitir firmas para
+certificados.  Sin embargo <http://letsencrypt.org> es una autoridad
+certificadora que expide certificados gratuitos para sitios públicos
+pero no para sitios en redes internas por cuanto el proceso de
+expedición de certificados
+requiere resolver por DNS desde sus servidores el dominio para el cual
+se está creando el certificado.  Además sus certificados son de
+3 meses por cuanto deben renovarse cada 3 meses.
 
-Esto hace necesario que cada organización que requiere servicios 
-cifrados con SSL o TLS en su red interna (como PostgreSQL remoto o 
+Esto hace necesario que cada organización que requiere servicios
+cifrados con SSL o TLS en su red interna (como PostgreSQL remoto o
 LDAP) cuente con su propia autoridad certificadora interna
 
 ###  Conceptos
 
-Las operaciones con SSL dependen en cliente y en servidor de la 
-librería LibreSSL (en otros sistemas OpenSSL). Esta incluye el 
-programa openssl para hacer varias operaciones, incluyendo operaciones 
+Las operaciones con SSL dependen en cliente y en servidor de la
+librería LibreSSL (en otros sistemas OpenSSL). Esta incluye el
+programa openssl para hacer varias operaciones, incluyendo operaciones
 de una autoridad certificadora.
 
-Un certificado SSL siempre se asocia a una llave privada (el 
+Un certificado SSL siempre se asocia a una llave privada (el
 certificado es la llave pública).
 
 El proceso para crear un certificado es:
@@ -1024,12 +1172,12 @@ Los archivos intermedios pueden examinarse así:
 - Llaves: `openssl rsa -check -in client.key`
 - Certificados: `openssl x509 -noout -text -in client.crt`
 
-La autoridad certificadora no es más que un certificado autofirmado 
+La autoridad certificadora no es más que un certificado autofirmado
 que se configura y se usa consistentemente como autoridad certificadora.
 
 ### Configuración de servidor
 
-Supongamos que ubicamos en `/var/postgresql/data` los 
+Supongamos que ubicamos en `/var/postgresql/data` los
 archivos de la autoridad certificadora:
 
 - `root.crt` Autoridad certificadora (igual a server.crt)
@@ -1037,7 +1185,7 @@ archivos de la autoridad certificadora:
 - `server.crt` Certificado del servidor
 - `server.key` Llave privada del servidor
 
-Se pueden generar así (como se explica en 
+Se pueden generar así (como se explica en
 <https://www.howtoforge.com/postgresql-ssl-certificates>):
 
 
@@ -1046,16 +1194,16 @@ Se pueden generar así (como se explica en
         chmod 400 server.key
         chown postgres.postgres server.key
         openssl req -new -key server.key -days 3650 -out server.crt -x509 -subj '/C=CO/ST=Bogota/L=MiOng/O=MiOng/CN=miong.org.co/emailAddress=info@miong.org'
- 
+
 ### Generación de un par de certificados
 
-LDAP requiere que el CN del certificado corresponda al nombre del 
+LDAP requiere que el CN del certificado corresponda al nombre del
 computador en la red interna.
 
-Los certificados para clientes de PostgreSQL requieren que el CN del 
+Los certificados para clientes de PostgreSQL requieren que el CN del
 Certificado corresponda al usuario en la base de datos.
 
-En el computador que hará la conexión (en este ejemplo 
+En el computador que hará la conexión (en este ejemplo
 `apbd2.miong.org.co`) ejecute:
 
         mkdir ~/ssl
@@ -1071,16 +1219,16 @@ Cree la solicitud de certificado con:
 
         openssl req -new -key apbd2.miong.org.co.key -out apbd2.miong.org.co.csr -subj '/C=CO/ST=Cundinamarca/L=Bogota/O=MIONG/CN=apbd2.miong.org.co'
 
-Copie la solicitud `apbd2.miong.org.co.csr` al servidor 
+Copie la solicitud `apbd2.miong.org.co.csr` al servidor
 apbd1.miong.org.co y déjela en el directorio `/var/postgresql/data`
 
 Y allí ejecute:
 
-        doas su - 
+        doas su -
         cd /var/postgresql/data
         openssl x509 -req -days 3650 -in apbd2.miong.org.co.csr -CA root.crt -CAkey server.key -out apbd2.miong.org.co.crt -CAcreateserial
 
-A continuación copie el certificado generado 
+A continuación copie el certificado generado
 (`apbd2.miong.org.co.crt`)  al computador cliente donde se usará:
 
         scp apbd2.miong.org.co.crt apbd2.miong.org.co:~/ssl/
@@ -1089,8 +1237,8 @@ A continuación copie el certificado generado
 
 #### Caso PostgreSQL
 
-En el servidor edite el archivo `/var/postgresql/data/pg_hba.conf` y 
-asegúrese de agregar una línea para el usuario y el computador 
+En el servidor edite el archivo `/var/postgresql/data/pg_hba.conf` y
+asegúrese de agregar una línea para el usuario y el computador
 cliente:
         hostssl all usuario 192.168.100.11/32 cert clientcert=1
 
@@ -1102,7 +1250,7 @@ Desde el cliente ejecute:
 
         doas chmod 0600 /home/usis/.postgresql/usuario.key
 
-y pruebe la conexión asegurando que se usa el certificado del usuario 
+y pruebe la conexión asegurando que se usa el certificado del usuario
 respectivo:
 
         PGSSLCERT=/home/usis/.postgresql/usuario.crt \
@@ -1111,12 +1259,12 @@ respectivo:
 
 Configure la aplicación para que en cada arranque o uso establezca:
 
-        PGSSLCERT=/home/usis/.postgresql/usuario.crt 
+        PGSSLCERT=/home/usis/.postgresql/usuario.crt
         PGSSLKEY=/home/usis/.postgresql/usuario.key
 
 #### Caso LDAPD
 
-Ubique el certificado y llave en `/etc/ldap/certs/` del servidor 
+Ubique el certificado y llave en `/etc/ldap/certs/` del servidor
 donde corre ldapd:
 
         doas cp apbd2.miong.org.co.{key,crt} /etc/ldap/certs/
@@ -1125,14 +1273,14 @@ Configure `/etc/ldapd.conf`
 
         listen on $if1 tls certificate apbd2.miong.org.co
 
-En los computadores que realicen conexiones al LDAP asegúrese de 
-agregar la llave de la entidad certificadora 
+En los computadores que realicen conexiones al LDAP asegúrese de
+agregar la llave de la entidad certificadora
 `/var/postgresql/data/root.crt`, es decir en el servidor apbd1 ejecute:
 
         cd /var/postgresql/data
         openssl x509 -noout -text -in root.crt > root-paracerts
 
-Copie el archivo `root-paracerts` en el cliente y agregue ese archivo 
+Copie el archivo `root-paracerts` en el cliente y agregue ese archivo
 al final de `/etc/ssl/cert.pem`
 
 ### Referencias

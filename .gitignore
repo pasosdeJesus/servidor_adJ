@@ -13,4 +13,8 @@ personaliza.ent
 servidor_adJ-4.1.2.xdbk
 html
 *xdbk
-
+*.eps
+servidor_adJ-*
+imp
+servidor_adJ.aspell
+servidor_adJ_gh-pages

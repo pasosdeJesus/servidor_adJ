@@ -812,7 +812,7 @@ Hay una amplia gama de tarjetas de red inalámbricas (tanto PCI, como
 USB) con controladores para OpenBSD, sin embargo varias tarjetas de red
 populares no son soportadas, por lo que antes de comprar examine el
 listado de tarjetas soportadas en:
-<http://dhobsd.pasosdejesus.org/?id=CompatibilidadHardware>. Una vez
+<https://dhobsd.pasosdejesus.org/compatibilidadhardware.html>. Una vez
 conecte su tarjeta de red inalámbrica, busque la interfaz de red
 asociada con
 
