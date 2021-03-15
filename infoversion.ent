@@ -335,6 +335,7 @@
 <!ENTITY p-lua "lua-5.1.5p6">
 <!ENTITY p-lua "lua-5.3.5">
 <!ENTITY p-lua-libmpack "lua-libmpack-1.0.3">
+<!ENTITY p-lynx "lynx-2.8.9rel1p0">
 <!ENTITY p-lz4 "lz4-1.9.2p0">
 <!ENTITY p-lzlib "lzlib-1.11">
 <!ENTITY p-lzo2 "lzo2-2.10p2">
