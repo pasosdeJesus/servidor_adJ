@@ -235,12 +235,12 @@ debe configurarse `ppp` para realizar la conexión.
 Hay diversos tipos de módems (tarjetas ISA, PCI, módems externos USB o
 seriales), los módems externos que se conectan a puerto serial son los
 más fáciles de configurar, algunos módems USB también son soportados
-(los que tengan ordenes multiplexadas y datos --como indica la página
+(los que tengan órdenes multiplexadas y datos --como indica la página
 del manual del controlador `umodem`) y eventualmente es posible hacer
 funcionar tarjetas ISDN ISA o PCI
 ([http://people.freebsd.org/~hm/i4b-home/](http://people.freebsd.org/~hm/i4b-home/)).
 
-Los módems y los módems ISDN reciben ordenes AT y se configuran
+Los módems y los módems ISDN reciben órdenes AT y se configuran
 empleando `ppp`. Por ejemplo el archivo `/etc/ppp/ppp.conf` podría
 incluir porciones como las siguientes (remplazando el número de
 teléfono, el nombre de la cuenta y la clave por los correctos):

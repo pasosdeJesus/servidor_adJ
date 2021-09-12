@@ -1,3 +1,8 @@
+Versión 6.9
+:   - Mejorada [xref](#mariadb)
+    - Mejorada [xref](#pf)
+    - Ortografía y uso de pandoc reciente proveniente de portes de OpenBSD
+
 Versión 6.8
 :   - Mejorada [xref](#ldapd)
 

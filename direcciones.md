@@ -141,7 +141,7 @@ emplear algunas herramientas de diagnóstico por ejemplo:
     tcpdump
     Permite analizar el tráfico de una red TCP/IP.
 
-### Otros aspectos de configuración de redes en OpenBSD {#configuracion-OpenBSD}
+### Otros aspectos de configuración de redes en OpenBSD {#pf}
 
 Fuera de las tablas de enrutamiento y ARP, la funcionalidad de redes a
 nivel de kernel se puede controlar con:
@@ -162,7 +162,7 @@ nivel de kernel se puede controlar con:
     `/etc/sysctl.conf`. Resaltamos la variable `net.inet.ip.forwarding`
     que debe activarse para que un sistema opere como enrutador.
 
-pf
+`pf`
 
 :   Que permite controlar el tráfico de paquetes en el kernel y por
     tanto controlar la funcionalidad de cortafuegos[^dir.1]. Se configura de
@@ -446,7 +446,8 @@ De las secciones anteriores resultaría un archivo `/etc/pf.conf`
             port $servicios_tcp keep state
         pass in on $ext_if inet proto udp from any to ($ext_if) \
             port $servicios_udp keep state
-        pass in inet proto icmp all icmp-type $servicios_icmp keep state
+        pass in on $ext_if inet proto icmp all icmp-type 8 code 0 # permite ping
+
         
         pass in on $ext_if proto tcp from any to $serv_ip port $servicios_serv \
             flags S/SA synproxy state

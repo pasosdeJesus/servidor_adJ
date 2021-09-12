@@ -72,7 +72,7 @@ sistema adJ.
 
 ### Primera instalación del servidor {#primera-instalacion}
 
-Este motor de bases de datos se instala con el archivo de ordenes
+Este motor de bases de datos se instala con el archivo de órdenes
 `/inst-adJ.sh` que en instalaciones típicas de adJ basta ejecutar y
 volver a ejecutar para actualizar o para volver a inicializar PostgreSQL
 u otro paquete de esta distribución. En caso de actualizar este archivo
@@ -268,7 +268,7 @@ bases de datos:
         createdb -h /var/www/var/run/postgresql -U postgres prueba
         psql -h /var/www/var/run/postgresql -U postgres prueba
 
-Desde la interfaz `psql`, pueden darse ordenes SQL y otros específicos
+Desde la interfaz `psql`, pueden darse órdenes SQL y otros específicos
 de PostgreSQL (ver [Uso de una base de datos](#uso-base)). En particular
 el usuario `postgres` y desde cuentas con permiso para crear usuarios,
 puede crear otros usuarios (globales para todas las bases de datos
@@ -281,7 +281,7 @@ La orden `CREATE USER` presentado puede ir seguido de `CREATEUSER`
 para crear un superusuario (sin restricción alguna), o `CREATEDB` para
 crear un usuario que pueda crear bases de datos o `PASSWORD 'clave'`
 para crear un usuario con una clave (emplea autenticación configurada).
-Desde la línea de ordenes puede crearse un usuario con:
+Desde la línea de órdenes puede crearse un usuario con:
 
         createuser -h /var/www/var/run/postgresql -U postgres  usejemplo
 
@@ -289,24 +289,24 @@ Para eliminar un usuario desde `psql` se usa:
 
         DROP USER usejemplo;
 
-y para eliminarlo desde línea de ordenes:
+y para eliminarlo desde línea de órdenes:
 
         dropuser -h /var/www/var/run/postgresql -U postgres usejemplo
 
-Puede ejecutarse un script SQL (`crea.sql`) desde la línea de ordenes a
+Puede ejecutarse un script SQL (`crea.sql`) desde la línea de órdenes a
 un base de datos con
 
         psql -h /var/www/var/run/postgresql -d test -U ejusuario --password -f crea.sql
 
 ### Uso de una base de datos {#uso-base}
 
-Puede emplear `psql`, la interfaz texto que acepta ordenes SQL y que se
+Puede emplear `psql`, la interfaz texto que acepta órdenes SQL y que se
 distribuye con PostgreSQL. Para esto, entre a una base (digamos `b1908`)
 como un usuario (digamos `u1908`) con:
 
         psql -h /var/www/var/run/postgresql  -U u1908 -d b1908
 
-En esta interfaz puede dar ordenes SQL y algunas ordenes internos que
+En esta interfaz puede dar órdenes SQL y algunas órdenes internos que
 puede listar con `\h`. Algunos ejemplos de operaciones útiles son:
 
 `\dt`
@@ -559,18 +559,17 @@ consideraba que Oracle había hecho la compra para reducir competencia de
 sus bases de datos.
 
 Debe instalar los paquetes &p-mariadb-client; y &p-mariadb-server;. Aunque
-el nombre de los paquetes cambia las ordenes para operarla siguen
-siendo los mismos. Tras instalar el servidor debe ejecutar
-`mysql_install_db`.
+el nombre de los paquetes cambia las órdenes para operarla siguen
+siendo los mismos. 
 
 Inicialice el directorio donde estarán las bases de datos con
 
         doas /usr/local/bin/mysql_install_db
 
 Para aumentar el límite de archivos que el usuario `_mysql` de clase
-`mysql` puede abrir agregue a `/etc/login.conf`:
+`mysqld` agregue a `/etc/login.conf`:
 
-        mysql:\
+        mysqld:\
             :openfiles-cur=2048:\
             :openfiles-max=4096:\
             :tc=servicio:
@@ -582,7 +581,10 @@ continuación regenere el archivo binario `/etc/login.conf.db` con
         cd /etc
         doas cap_mkdb /etc/login.conf
 
-Después agregue `mysqld` a `pkg_scripts` en `/etc/rc.conf.local` por ejemplo con:
+Cambie la clase del usuario `_mysql` de `servicio` a `mysqld`.
+
+Después agregue `mysqld` a `pkg_scripts` en `/etc/rc.conf.local` por 
+ejemplo con:
 	doas rcctl enable mysqld
 
 A continuación lance el servidor con:
@@ -594,6 +596,7 @@ Los errores quedarán en `/var/mysql/host.err`.
 Después puede establecer una clave para el usuario `root` de MariaDB
 cuando ingresa desde `localhost` con:
 
+        doas su - root
         /usr/local/bin/mysqladmin -u root  password 'nueva-clave'
         /usr/local/bin/mysqladmin -u root -pnueva-clave -h &ESERV; password 'nueva-clave'
 
@@ -689,37 +692,39 @@ jaula `chroot` (ver
 
 A continuación documentamos como ubicar el zócalo de MariaDB dentro de la
 jaula del servidor web (/var/www/) que nos parece un método seguro y
-fácil e implementar.
+fácil de implementar.
 
 Una vez instale `mariadb-server` cree el directorio en el cual ubicará el
 zócalo, digamos:
 
-```sh
+```
         doas mkdir -p /var/www/var/run/mysql/
         doas chown _mysql:_mysql /var/www/var/run/mysql/
         doas chmod a+w /var/www/var/run/mysql/
         doas chmod +t /var/www/var/run/mysql/
 ```
-y después inicie MariaDB indicando la ruta del zócalo con la opción
-`--socket`, por ejemplo para que el cambio se efectúe en cada inicio,
-edite `/etc/rc.conf.local` para agregar:
+y después puede bien iniciar MariaDB indicando la ruta del zócalo con la 
+opción `--socket` y en cada uso del cliente `mysql` también debe especificar
+ese parámetro, o bien puede configurar en `/etc/my.cnf` en la sección
+`client-server` el zócalo por omisión con:
 
-```sh
-        mysqld_flags="--socket=/var/www/var/run/mysql/mysql.sock"
+```
+    [client-server]
+    socket = /var/www/var/run/mysql/mysql.sock
 ```
 
-y reinicie el servicio con:
+Reinicie el servicio con:
 
-```sh
+```
 	doas rcctl -d restart mysqld
 ```
 
 Puede verificar que el zócalo queda bien ubicado con:
-```sh
+```
 	$ ls -l /var/www/var/run/mysql/
 ```
 que debe responde con algo como
-```sh
+```
 	srwxrwxrwx  1 _mysql  _mysql  0 Jul 18 21:41 mysql.sock
 ```
 
@@ -768,7 +773,7 @@ usuarios de una organización para permitir su autenticación en otros
 servicios (e.g nombres, apellidos, dirección, teléfono, login, clave).
 
 OpenBSD incluye (desde OpenBSD 4.8) un servidor para LDAP versión 3,
-`ldapd`. No incluye cliente para LDAP pero desde la línea de ordenes
+`ldapd`. No incluye cliente para LDAP pero desde la línea de órdenes
 puede emplearse el paquete `openldap-client` o como interfaz web
 `phpldapadmin`[^lda.1].
 
@@ -985,21 +990,21 @@ Aunque hay un paquete para OpenBSD, la igual que la distribución oficial de
 phpldapadmin no soporta php-5.5 ni TLS, por lo que 
 se recomienda emplear <https://github.com/leenooks/phpLDAPadmin> así:
 
-<pre>
+```
 # mkdir -p ~/servidor/
 # cd ~/servidor/
 # git clone https://github.com/leenooks/phpLDAPadmin.git
 # cp -rf phpLDAPadmin /var/www/phpldapadmin
 # doas ln -s ../phpldapadmin /var/www/htdocs/phpldapadmin
 # doas $EDITOR /var/www/phpldapadmin/config/config.php
-</pre>
+```
 
 para configurarlo (use su editor preferido en lugar de $EDITOR o defina esa
 variable) es importante que por lo menos quite el comentario a la
 línea
-<pre>
+```
 $config->custom->jpeg['tmpdir'] = '/tmp';
-</pre>
+```
 
 También debe asegurar que pueden emplearse los dispositivos de
 generación de números aleatorios en la jaula chroot de Apache (esto lo

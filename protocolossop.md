@@ -442,7 +442,7 @@ su línea es de la forma siguiente:
 Teniendo en cuenta que para este usuario de ejemplo `uslim`:
 
 1. Su grupo principal es el 1002 - jaulsftp
-2. No tiene interprete de ordenes, es decir que es `/bin/false`
+2. No tiene interprete de órdenes, es decir que es `/bin/false`
 3. Su directorio personal es `/home/uslim` pero dentro de jaula, pues
    el administrador ubicará su directorio en `/restovar/jaulasftp/home/uslim`
 
@@ -489,7 +489,7 @@ TCP/IPv4 de la tarjeta puede especificarse obtener dirección
 automáticamente. En el caso de Linux Ubuntu al Editar las Conexiones de
 Red puede especificarse que una tarjeta de red usará DHCP. Un OpenBSD
 con una interfaz de red (digamos `rl0`) se configura como cliente de
-DHCP desde la línea de ordenes con:
+DHCP desde la línea de órdenes con:
 
         doas dhclient rl0 
 
@@ -590,7 +590,7 @@ y uso de cada uno y la configuración de paquetes que implementan los
 protocolos auxiliares POP3S e IMAPS, de clientes de correo web y de
 listas de correo.
 
-adJ cuenta con las ordenes `prepsendmail` y `prepopensmtpd` que
+adJ cuenta con las órdenes `prepsendmail` y `prepopensmtpd` que
 configuran de manera automática sendmail y OpenSMTPD respectivamente con
 TLS y SASL, así como POP3S e IMAPS. Soportan opcionalmente mantener el
 correo en una partición cifrada y copia de respaldo del correo en otra
@@ -1521,7 +1521,7 @@ PostgreSQL:
 
             ALTER USER roundcube WITH PASSWORD 'nueva_clave';
 
-    Salir con '\\q' y desde la línea de ordenes ingresar a la nueva
+    Salir con '\\q' y desde la línea de órdenes ingresar a la nueva
     base con:
 
             psql -h /var/www/var/run/postgresql -Uroundcube roundcubemail
@@ -1886,7 +1886,7 @@ La página del manual de `ftpd`.
 Un servidor web recibe peticiones acordes al protocolo HTTP, las procesa, 
 recolecta la información que va retornar y la retorna típicamente en 
 HTML/CSS/Javascipt también mediante el protocolo HTTP.     
-Las peticiones pudieron pasar antes por el cortafuegos si lo hay o de otro 
+Las peticiones pudieron pasar antes por el cortafuegos si lo hay o por otro 
 servidor que actue como proxy.
 
 El siguiente diagrama presenta más detalles de los elementos involucrados
@@ -1919,8 +1919,8 @@ de Let's Encrypt.
 
 nginx es un servidor web que en el caso de adJ está incluido entre
 los paquetes que se insalan por omisión.
-Su binario queda ubica en `/usr/local/sbin/nginx` y puede consultar la versión 
-ejecutando `nginx -v`
+Su binario queda ubicado en `/usr/local/sbin/nginx` y puede consultar la 
+versión ejecutando `nginx -v`
 
 Cuando corre en OpenBSD lee el archivo de configuración `/etc/nginx/nginx.conf`
 y después cambia el directorio raíz  con `chroot` a  `/var/www` para correr en 
@@ -1931,11 +1931,11 @@ un atacante vería como raíz lo que este en `/var/www`.
 
 Puede iniciarlo manualmente con:
 
-        doas /etc/rc.d/nginx start
+        doas rcctl start nginx
 
 y detenerlo con
 
-        doas /etc/rc.d/nginx stop
+        doas rcctl stop nginx
 
 Para que inicie automáticamente en cada arranque basta agregar en
 `/etc/rc.conf.local`:
@@ -1952,7 +1952,7 @@ como responder a solicitudes http.
 
 Algunas de las directivas del archivo de configuracioń tienen bloques que a su 
 vez tienen directivas. Cada bloque se inicia con `{` y se cierra con `}`.  
-Las directivas que no tienen bloque deben terminarse con `;`
+Las directivas que no tienen bloque deben terminar con `;`
 
 Pueden ponerse comentarios a la derecha del símbolo `#` en cualquier línea (el 
 resto de la línea después del `#` es comentario).
