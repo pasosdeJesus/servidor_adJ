@@ -610,7 +610,7 @@ Para apagar el servidor mysql:
 
 
 Si desea usar mysql con php, instale además de los paquetes básicos de
-php (`php-core-v` y `php-mysql-v`)
+php (`php-core-v` y `php-mysqli-v`)
 
 ### Uso básico {#uso-mariadb}
 
