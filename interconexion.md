@@ -643,16 +643,21 @@ aunque en algunos casos es necesario reiniciar el computador.
 Note que si ha cambiado una tarjeta de red es posible que antes de
 reiniciar debe reconfigurar el cortafuegos en el archivo `/etc/pf.conf`
 
-### Protocolo ARP para IPv4 sobre Ethernet
+### Protocolo ARP para IPv4 y NDP para IPv6 sobre Ethernet
 
 La tabla del protocolo ARP asocia direcciones físicas de tarjetas de red
-conectadas a su red con direcciones IP. Para examinar tal tabla use:
+conectadas a su red con direcciones IPv4. Para examinar tal tabla use:
 
         arp -a 
 
-# 
-es posible agregar entradas de manera permanente o eliminarlas con las
+Es posible agregar entradas de manera permanente o eliminarlas con las
 opciones `-s` y `-d` respectivamente.
+
+La tabla análoga para IPv6 puede listarse con el protocolo de descubrimiento
+de red (*Network Discovery Protocolo - NDP*):
+
+        ndp -a
+
 
 ### Cableado de una red local {#cableado}
 
