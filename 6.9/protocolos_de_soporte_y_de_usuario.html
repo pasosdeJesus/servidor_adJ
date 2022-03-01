@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>5. Protocolos de soporte y de usuario</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="direcciones_enrutamiento_transporte_y_cortafuegos.html" title="4. Direcciones, enrutamiento, transporte y cortafuegos"><link rel="next" href="otros_servicios_que_puede_prestar_el_servidor.html" title="6. Otros servicios que puede prestar el servidor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">5. Protocolos de soporte y de usuario</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="otros_servicios_que_puede_prestar_el_servidor.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="protocolos_de_soporte_y_de_usuario"></a>5. Protocolos de soporte y de usuario</h2></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-dns"></a>5.1. Servicio DNS</h3></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="resolucion-de-nombres"></a>5.1.1. Resolución de nombres</h4></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>6. Protocolos de soporte y de usuario</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="direcciones_enrutamiento_transporte_y_cortafuegos.html" title="5. Direcciones, enrutamiento, transporte y cortafuegos"><link rel="next" href="otros_servicios_que_puede_prestar_el_servidor.html" title="7. Otros servicios que puede prestar el servidor"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">6. Protocolos de soporte y de usuario</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="otros_servicios_que_puede_prestar_el_servidor.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="protocolos_de_soporte_y_de_usuario"></a>6. Protocolos de soporte y de usuario</h2></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-dns"></a>6.1. Servicio DNS</h3></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="resolucion-de-nombres"></a>6.1.1. Resolución de nombres</h4></div></div></div><p>
         Para resolver nombres, OpenBSD emplea rutinas propias de
         resolución incluidas en la librería de C, se configuran en
         <code class="literal">/etc/resolv.conf</code>. Este archivo puede incluir,
@@ -26,7 +26,7 @@
           </p></li><li><p>
             <code class="literal">yp</code> que indica emplear el sistema YP si
             <code class="literal">ypbind</code> está corriendo.
-          </p></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="unbound"></a>5.1.2. Servidor recursivo unbound</h4></div></div></div><p>
+          </p></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="unbound"></a>6.1.2. Servidor recursivo unbound</h4></div></div></div><p>
         Un servidor recursivo recibe consultas de dominios y las reenvía
         a otros servidores –comenzando por los servidores raíz– o si
         tiene respuesta a las consultas en su repositorio temporal
@@ -91,7 +91,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
         depurar con:
       </p><pre class="programlisting">
     unbound -c /var/unbound/etc/unbound.conf -vvvv -d
-</pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="nsd"></a>5.1.3. Servidor autoritario con NSD</h4></div></div></div><p>
+</pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="nsd"></a>6.1.3. Servidor autoritario con NSD</h4></div></div></div><p>
         Desde adJ y OpenBSD 5.7 hace parte del sistema base junto con
         <code class="literal">unbound</code> (que vinieron a remplazar
         <code class="literal">named</code>). Usa una configuración basada en la de
@@ -175,7 +175,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
     dig @200.201.202.203 correo.miescuela.edu.co
 </pre><p>
         que debería dar la IP pública.
-      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="named"></a>5.1.4. named</h4></div></div></div><p>
+      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="named"></a>6.1.4. named</h4></div></div></div><p>
         OpenBSD aún incluye como paquete el servidor BIND 9, bajo el
         nombre <code class="literal">named</code>, que por defecto corre con
         <code class="literal">chroot</code> en el directorio
@@ -287,7 +287,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
         y en el mismo archivo en la definición de
         <code class="literal">pkg_scripts</code> agregando
         <code class="literal">named</code>.
-      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="vistas"></a>5.1.4.1. Vistas para resolver nombres interna y
+      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="vistas"></a>6.1.4.1. Vistas para resolver nombres interna y
         externamente</h5></div></div></div><p>
           Si cuenta con una LAN conectada a Internet por medio de un
           cortafuegos con OpenBSD que maneja el DNS de su organización y
@@ -392,7 +392,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
         IN      PTR     www.miong.org.
         IN      PTR     correo.miong.org
         IN      PTR     ns1.miong.org
-</pre></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-dns"></a>5.1.5. Referencias y lecturas recomendadas</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+</pre></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-dns"></a>6.1.5. Referencias y lecturas recomendadas</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
             Sección sobre DNS de las guías Aprendiendo a aprender Linux.
             <a href="biblio.html" title="B. Bibliografía">AA_Linux</a>
           </p></li><li><p>
@@ -415,7 +415,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
             http://eradman.com/posts/run-your-own-server.html
           </p></li><li><p>
             https://calomel.org/unbound_dns.html
-          </p></li></ul></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-ssh"></a>5.2. Servidor <code class="literal">ssh</code></h3></div></div></div><p>
+          </p></li></ul></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-ssh"></a>6.2. Servidor <code class="literal">ssh</code></h3></div></div></div><p>
       Al instalar OpenBSD con soporte de red, tendrá la oportunidad de
       activar o no el servidor de OpenSSH <code class="literal">sshd</code>. Si
       posteriormente requiere cambiar la configuración edite el archivo
@@ -442,7 +442,7 @@ dig @192.168.100.100 correo.miescuela.edu.co
       <code class="literal">/var/log/authlog</code> (y sus copias anteriores
       comprimidas como <code class="literal">/var/log/authlog.0.gz</code>,
       <code class="literal">/var/log/authlog.1.gz</code>, …).
-    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="jaula-sftp"></a>5.2.1. Jaula sftp</h4></div></div></div><p>
+    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="jaula-sftp"></a>6.2.1. Jaula sftp</h4></div></div></div><p>
         Supongamos que requiere que unos usuarios puedan sólo ingresar
         por sftp a una jaula de archivos que incluya sus archivos y
         otros directorios y archivos pero no al sistema de archivos
@@ -497,7 +497,7 @@ Match group jaulasftp
         <code class="literal">/restovar/jaulasftp</code> y podrá ingresar a los
         directorios y archivos dentro de esa jaula en la medida que el
         sistema de permisos típico se lo permita.
-      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-sshd"></a>5.2.2. Referencias y lecturas recomendadas</h4></div></div></div><p>
+      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-sshd"></a>6.2.2. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Las siguientes páginas man: sshd 8, sftp 1.
       </p><p>
         Separación de privilegios:
@@ -508,7 +508,7 @@ Match group jaulasftp
       </p><p>
         Ejemplo de jaula sftp:
         <a href="https://www.golinuxcloud.com/sftp-chroot-restrict-user-specific-directory/" target="_top">https://www.golinuxcloud.com/sftp-chroot-restrict-user-specific-directory/</a>
-      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="dhcp"></a>5.3. Protocolo DHCP</h3></div></div></div><p>
+      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="dhcp"></a>6.3. Protocolo DHCP</h3></div></div></div><p>
       El protocolo DHCP se describen en el RFC 2131 (ver
       <a href="biblio.html" title="B. Bibliografía">rfc2131</a>), se trata de un modelo
       cliente-servidor en el que el servidor DHCP localiza direcciones
@@ -520,8 +520,8 @@ Match group jaulasftp
     </p><p>
       En su modo de operación dinámico el servidor le asigna una IP a un
       sólo cliente por cierto periodo de tiempo, al cabo del cual podría
-      asignarle otra IP<sup>[<a name="idm3278482960" href="#ftn.idm3278482960">25</a>]</sup>.
-    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="cliente-DHCP"></a>5.3.1. Configuración de un cliente DHCP</h4></div></div></div><p>
+      asignarle otra IP<sup>[<a name="idp2509990224" href="#ftn.idp2509990224">24</a>]</sup>.
+    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="cliente-DHCP"></a>6.3.1. Configuración de un cliente DHCP</h4></div></div></div><p>
         La configuración de un computador para operar como cliente de
         DHCP depende del sistema operativo, en el caso de Windows en las
         propiedades TCP/IPv4 de la tarjeta puede especificarse obtener
@@ -544,7 +544,7 @@ Match group jaulasftp
         <code class="literal">/etc/hostname.rl0</code> la línea:
       </p><pre class="programlisting">
     dhcp
-</pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="servidor-DHCP"></a>5.3.2. Configuración de un servidor DHCP</h4></div></div></div><p>
+</pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="servidor-DHCP"></a>6.3.2. Configuración de un servidor DHCP</h4></div></div></div><p>
         Una configuración típica para un servidor DHCP que servirá
         direcciones para la red local 192.168.17.x en el rango
         192.168.17.142 a 192.168.17.164 y que enviará además entre los
@@ -568,18 +568,18 @@ Match group jaulasftp
 </pre><p>
         o en lugar de "" puede especificar las interfaces de
         red que el servidor debe atender separadas por espacio.
-      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-openbsd-red"></a>5.3.3. Instalación de OpenBSD/adJ en red</h4></div></div></div><p>
+      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-openbsd-red"></a>6.3.3. Instalación de OpenBSD/adJ en red</h4></div></div></div><p>
         En un servidor OpenBSD, prepare un directorio para servir
         archivos de arranque con tftp:
       </p><p>
         doas mkdir /var/tftp doas cp /usr/mdec/pxeboot /var/tftp doas cp
         /bsd.rd /var/tftp doas chown -R _tftpd /var/tftp cp
-      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-dhcpd"></a>5.3.4. Referencias y lecturas recomendadas</h4></div></div></div><p>
+      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-dhcpd"></a>6.3.4. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Las siguientes páginas man: dhcp8, dhclient 8, dhclient.conf5,
         dhcpd8 y dhcpd.conf5.
       </p><p>
         El RFC 2131 (ver <a href="biblio.html" title="B. Bibliografía">rfc2131</a>).
-      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-ntp"></a>5.4. Servidor <code class="literal">ntp</code></h3></div></div></div><p>
+      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-ntp"></a>6.4. Servidor <code class="literal">ntp</code></h3></div></div></div><p>
       El protocolo NTP permite mantener sincronizado el reloj de un
       computador con otro donde corra un servidor NTP.
     </p><p>
@@ -601,10 +601,10 @@ Match group jaulasftp
       con lo cual actúa como cliente empleando aleatoriamente alguno de
       los servidores de NTP disponibles mundialmente en
       <code class="literal">pool.ntp.org</code>.
-    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-ntp"></a>5.4.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
+    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-ntp"></a>6.4.1. Referencias y lecturas recomendadas</h4></div></div></div><p>
         Documentación disponible en
         <a href="http://www.openntpd.org" target="_top">http://www.openntpd.org</a>.
-      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servicios-correo"></a>5.5. Servidor de correo electrónico</h3></div></div></div><p>
+      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servicios-correo"></a>6.5. Servidor de correo electrónico</h3></div></div></div><p>
       OpenBSD incluye dos MTAs de correo: (1)una versión auditada de
       <code class="literal">sendmail</code> y (2) OpenSMTPD. En este capítulo
       detallamos la configuración y uso de cada uno y la configuración
@@ -622,7 +622,7 @@ Match group jaulasftp
 </pre><p>
       y a continuación edite el archivo recién copiado para adaptarlo a
       su entorno.
-    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="smtp"></a>5.5.1. Protocolo SMTP para enviar y recibir correo</h4></div></div></div><p>
+    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="smtp"></a>6.5.1. Protocolo SMTP para enviar y recibir correo</h4></div></div></div><p>
         SMTP Nombre del protocolo para transmisión de correo electrónico
         en Internet.
       </p><p>
@@ -655,7 +655,7 @@ Match group jaulasftp
             Que ambos usuarios tengan un programa con el que puedan leer
             y redactar correos, como por ejemplo mail, mutt,
             mozilla-thunderbird (a ese programa se le llamará MUA -
-            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idm3278444304" href="#ftn.idm3278444304">26</a>]</sup>).
+            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idp1659453136" href="#ftn.idp1659453136">25</a>]</sup>).
           </p></li></ul></div><p>
         Si tanto pablo como rodrigo emplean como MUA
         <code class="literal">mail</code>, y ambos computadores tiene como MTA
@@ -676,12 +676,12 @@ Match group jaulasftp
         Enviar un mensaje significa crear una conexión TCP con el MTA
         destino o con otro MTA que actúe de intermediario, típicamente
         en el puerto TCP 25, y transmitir el mensaje siguiendo las
-        reglas del protocolo SMTP <sup>[<a name="idm3278400528" href="#ftn.idm3278400528">27</a>]</sup>. Para establecer el computador con el cual
+        reglas del protocolo SMTP <sup>[<a name="idp1659318992" href="#ftn.idp1659318992">26</a>]</sup>. Para establecer el computador con el cual
         conectarse sendmail revisa con el resolvedor DNS, registros MX
         asociados con el dominio de la dirección, si los hay intenta
         enviar a cada uno en orden de prioridad –los registros MX con
         menor número tienen mayor prioridad (ver
-        <a href="protocolos_de_soporte_y_de_usuario.html#servidor-dns" title="5.1. Servicio DNS">Servicio DNS</a>).
+        <a href="protocolos_de_soporte_y_de_usuario.html#servidor-dns" title="6.1. Servicio DNS">Servicio DNS</a>).
       </p><p>
         En respeto debe estar corriendo un proceso que acepte
         la conexión en el puerto 25, i.e. sendmail o algún otro MTA que
@@ -710,7 +710,7 @@ Match group jaulasftp
         configurar un cliente de correo web (webmail) para examinar
         correos desde el web. Otro servicio asociado al correo son las
         listas de correo que facilitan el envío de correo masivo.
-      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="opensmtpd"></a>5.5.1.1. MTA OpenSMTPD</h5></div></div></div><p>
+      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="opensmtpd"></a>6.5.1.1. MTA OpenSMTPD</h5></div></div></div><p>
           Se trata de un MTA desarrollado principalmente para OpenBSD
           por desarrolladores de OpenBSD. Aunque aún se considera
           experimental hemos comprobado su estabilidad para dominios
@@ -840,7 +840,7 @@ listen on all port 25 tls pki miong.org auth-optional
               Escuchando conexiones planas que requieren paso a cifradas
               (con STARTTLS) y que exigen autenticación por el puerto
               587.
-            </p></li></ul></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="smtpd-depura"></a>5.5.1.1.1. Depuración de OpenSMTP</h6></div></div></div><p>
+            </p></li></ul></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="smtpd-depura"></a>6.5.1.1.1. Depuración de OpenSMTP</h6></div></div></div><p>
             OpenSMTP envía mensajes de error a la bitácora
             <code class="literal">/var/log/maillog</code>. Puede ejecutarse en
             modo de depuración para determinar problemas con:
@@ -849,7 +849,7 @@ listen on all port 25 tls pki miong.org auth-optional
 </pre><p>
             Esto no lo activará como servicio y presentará errores en
             pantalla.
-          </p></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="pruebas"></a>5.5.1.2. Pruebas</h5></div></div></div><p>
+          </p></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="pruebas"></a>6.5.1.2. Pruebas</h5></div></div></div><p>
           Desde el mismo computador inicie un diálogo con:
         </p><pre class="programlisting">
 $ telnet localhost 25
@@ -956,13 +956,13 @@ Escape character is '^]'
 </pre><p>
           También puede probar el servicio del puerto 465 con la misma
           secuencia, pero iniciando con:
-        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="referencias-opensmtpd"></a>5.5.1.3. Referencias</h5></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="referencias-opensmtpd"></a>6.5.1.3. Referencias</h5></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
               <code class="literal">man smtpd</code>,
               <code class="literal">man smtpd.conf</code>,
               <code class="literal">man smtpctl</code>
             </p></li><li><p>
               <a href="http://www.opensmtpd.org/" target="_top">http://www.opensmtpd.org/</a>
-            </p></li></ul></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="conf-mua"></a>5.5.1.3.1. Configuración del cliente de correo (MUA)</h6></div></div></div><p>
+            </p></li></ul></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="conf-mua"></a>6.5.1.3.1. Configuración del cliente de correo (MUA)</h6></div></div></div><p>
             Dependiendo de su cliente de correo será posible emplear los
             nuevos protocolos. Por ejemplo
             <code class="literal">mozilla-thunderbird</code> lo soporta, basta que
@@ -971,7 +971,7 @@ Escape character is '^]'
             puerto 25 como el 465). Tenga en cuenta que el nombre del
             usuario con el cual autenticarse debe incluir el dominio
             (e.g pablo@miong.org).
-          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="referencias-smtp-auth-tls"></a>5.5.1.3.2. Referencias</h6></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="referencias-smtp-auth-tls"></a>6.5.1.3.2. Referencias</h6></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
                 <code class="literal">man starttls</code>
               </p></li><li><p>
                 <a href="http://www.dorkzilla.org/~dlg/sendmail/" target="_top">http://www.dorkzilla.org/~dlg/sendmail/</a>
@@ -985,7 +985,7 @@ Escape character is '^]'
                 <a href="http://www.sendmail.org/~ca/email/authrealms.html" target="_top">http://www.sendmail.org/~ca/email/authrealms.html</a>
               </p></li><li><p>
                 <a href="http://www.bitstream.net/support/email/thunderbird/auth.html" target="_top">http://www.bitstream.net/support/email/thunderbird/auth.html</a>
-              </p></li></ul></div></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="dominios-virtuales-correo"></a>5.5.2. Dominios virtuales</h4></div></div></div><p>
+              </p></li></ul></div></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="dominios-virtuales-correo"></a>6.5.2. Dominios virtuales</h4></div></div></div><p>
         Si un mismo servidor atiende diversos dominios DNS, puede lograr
         que se acepte correo para cada dominio. Para esto:
       </p><div class="itemizedlist"><ul type="disc"><li><p>
@@ -1023,14 +1023,14 @@ table aliasesejemplo db:/etc/mail/aliasesejemplo.db
             Reinicie <code class="literal">smtpd</code> por ejemplo con:
           </p><pre class="programlisting">
     doas rcctl -d restart smtpd
-</pre></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="protocolos-revisar-correo"></a>5.5.3. Protocolos para revisar correo</h4></div></div></div><p>
+</pre></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="protocolos-revisar-correo"></a>6.5.3. Protocolos para revisar correo</h4></div></div></div><p>
         Para extraer correos de un servidor pueden emplearse los
-        protocolos inseguros<sup>[<a name="idm2154581648" href="#ftn.idm2154581648">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
+        protocolos inseguros<sup>[<a name="idp1659304656" href="#ftn.idp1659304656">27</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
         POP3S e IMAPS En esta sección se describe la configuración
         extra-rápida pero insegura de POP3, y la configuración segura
         pero que requiere configuración más delicada de POP3S e IMAPS
         con las implementaciones de Courier.
-      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="dovecot"></a>5.5.3.1. Implementación Dovecot de IMAPS y POP3S</h5></div></div></div><p>
+      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="dovecot"></a>6.5.3.1. Implementación Dovecot de IMAPS y POP3S</h5></div></div></div><p>
           Instale el paquete dovecot-2.3.14p0v0 y asegúrese de dejar
           <code class="literal">dovecot</code> en la variable
           <code class="literal">pkg_scripts</code> de
@@ -1070,13 +1070,13 @@ table aliasesejemplo db:/etc/mail/aliasesejemplo.db
           Una vez confirme la operación recomendamos que sólo abra el
           puerto 993 del cortafuegos para permitir conexiones IMAP
           remotas sobre SSL.
-        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="pop3s-imaps-courier"></a>5.5.3.2. Implementación Courier de POP3S e IMAPS</h5></div></div></div><p>
+        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="pop3s-imaps-courier"></a>6.5.3.2. Implementación Courier de POP3S e IMAPS</h5></div></div></div><p>
           Esta implementación requiere que se cambie la forma de
           almacenar correos recibidos por sendmail de formato mbox a
           formato maildir. Esto y la autenticación que requiere courier
           exigen una configuración especial que se describe a
           continuación.
-        </p><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="autenticacion-courier"></a>5.5.3.2.1. Autenticación Courier</h6></div></div></div><p>
+        </p><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="autenticacion-courier"></a>6.5.3.2.1. Autenticación Courier</h6></div></div></div><p>
             Instale <code class="literal">courier-authlib</code>, paquete que se
             encarga de la autenticación. Para iniciarlo en cada arranque
             agregue <code class="literal">courier_authdaemond</code> a la variable
@@ -1086,7 +1086,7 @@ table aliasesejemplo db:/etc/mail/aliasesejemplo.db
             Una vez en operación puede probar la autenticación con
             <code class="literal">authtest usuario</code> y
             <code class="literal">authtest usuario clave</code>
-          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="acomplamiento-sendmail"></a>5.5.3.2.2. Sendmail almacenando correos en formato maildir</h6></div></div></div><p>
+          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="acomplamiento-sendmail"></a>6.5.3.2.2. Sendmail almacenando correos en formato maildir</h6></div></div></div><p>
             El formato mbox almacena todos los correos en un sólo
             archivo, uno tras otro. El formato maildir (propio del MTA
             qmail) almacena cada correo en un archivo separado en algún
@@ -1175,7 +1175,7 @@ table aliasesejemplo db:/etc/mail/aliasesejemplo.db
 Dec 19 18:31:59 servidor sendmail[22209]: kBJNVwMt022209: to=test@localhost, ctladdr=pablo (1000/1000), delay=00:00:01, xdelay=00:00:01, mailer=relay, pri=30061, relay=[127.0.0.1] [127.0.0.1], dsn=2.0.0, stat=Sent (kBJNVw3t021322 Message accepted for delivery)
 Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bin/procmail", ctladdr=&lt;test@miong.org&gt; (1008/10), delay=00:00:00, xdelay=00:00:00, mailer=prog, pri=30756, dsn=2.0.0, stat=Sent
         
-</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="pop3s-courier"></a>5.5.3.2.3. POP3S con Courier</h6></div></div></div><p>
+</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="pop3s-courier"></a>6.5.3.2.3. POP3S con Courier</h6></div></div></div><p>
             POP3 (Post Office Protocol) es un protocolo que permite
             sacar correos de un servidor para llevarlos a otro
             computador donde podrán examinarse con un MUA.
@@ -1274,7 +1274,7 @@ Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bi
             Notará que la implementación Courier de POP3S intenta
             extraer correos del directorio
             <code class="literal">Maildir/cur</code>
-          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="imap-ssl-courier"></a>5.5.3.2.4. IMAP-SSL con Courier</h6></div></div></div><p>
+          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="imap-ssl-courier"></a>6.5.3.2.4. IMAP-SSL con Courier</h6></div></div></div><p>
             IMAP es un protocolo que permite a un MUA examinar y
             administrar correos que llegan a un servidor, típicamente
             sin sacar los correos del servidor (a diferencia de POP) y
@@ -1357,7 +1357,7 @@ Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bi
     ZZZZ LOGOUT
     * BYE Courier-IMAP server shutting down
     ZZZZ OK LOGOUT completed
-</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="courier-cuentas"></a>5.5.3.2.5. Facilitar uso de implementación Courier</h6></div></div></div><p>
+</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="courier-cuentas"></a>6.5.3.2.5. Facilitar uso de implementación Courier</h6></div></div></div><p>
             Una vez se use procmail para recibir en formato Maildir los
             correos de un usuario, ese usuario no podrá seguir usando
             <code class="literal">mail</code> para ver los correos recibidos, pero
@@ -1402,7 +1402,7 @@ chown -R cuenta:cuenta /home/cuenta/{.forward,.procmailrc,.muttrc,Maildir}
 touch /var/mail/cuenta
 chown -R cuenta:cuenta /var/mail/cuenta
 chmod og-r /var/mail/cuenta
-</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="referencias-courier"></a>5.5.3.2.6. Referencias y lecturas recomendadas</h6></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
+</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="referencias-courier"></a>6.5.3.2.6. Referencias y lecturas recomendadas</h6></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
                 El protocolo POP3 se describe en el RFC 1939
                 <a href="http://www.faqs.org/rfcs/rfc1939.html" target="_top">http://www.faqs.org/rfcs/rfc1939.html</a>
               </p></li><li><p>
@@ -1426,7 +1426,7 @@ chmod og-r /var/mail/cuenta
                 El uso de certificados existentes con courier se señala
                 en
                 <a href="http://milliwaysconsulting.net/support/systems/courier-ssl.html" target="_top">http://milliwaysconsulting.net/support/systems/courier-ssl.html</a>
-              </p></li></ul></div></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="spam"></a>5.5.4. Combatiendo correo no solicitado con SpamAssassin</h4></div></div></div><p>
+              </p></li></ul></div></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="spam"></a>6.5.4. Combatiendo correo no solicitado con SpamAssassin</h4></div></div></div><p>
         OpenBSD incluye el programa <code class="literal">spamd</code> que maneja
         listas negras (o grises) de IPs de las cuales no recibe correo
         alguno. Tal aproximación es bastante radical y en ocasiones
@@ -1449,7 +1449,7 @@ chmod og-r /var/mail/cuenta
         agregarse al encabezado del correo y ser tratado como spam
         envíandolo por ejemplo a la carpeta Junk (que es el nombre
         estándar empleado por diversos clientes de correo).
-      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="configuracion-spamd"></a>5.5.4.1. Configuración de spamd</h5></div></div></div><p>
+      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="configuracion-spamd"></a>6.5.4.1. Configuración de spamd</h5></div></div></div><p>
           Para iniciar el servicio ejecute:
         </p><pre class="programlisting">
     /usr/local/bin/spamd -u _spamdaemon -d      
@@ -1462,7 +1462,7 @@ chmod og-r /var/mail/cuenta
           La configuración por defecto de SpamAssassin es bastante
           buena, pero puede personalizarse en el archivo
           <code class="literal">/etc/mail/spamassassin/local.cf</code>.
-        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="configuracion-usuario-procmail"></a>5.5.4.2. Configuración de procmail por usuario</h5></div></div></div><p>
+        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="configuracion-usuario-procmail"></a>6.5.4.2. Configuración de procmail por usuario</h5></div></div></div><p>
           Cada usuario que requiera el uso de SpamAssassin para
           clasificar automáticamente los no solicitados en el buzón
           <code class="literal">spamagarrado</code>, debe tener configurado
@@ -1488,7 +1488,7 @@ chmod og-r /var/mail/cuenta
           O como las siguientes que suponen que el usuario
           <code class="literal">pablo</code> maneja su correo en formato
           <code class="literal">maildir</code> (para permitir consulta con IMAPS
-          –ver <a href="protocolos_de_soporte_y_de_usuario.html#pop3s-imaps-courier" title="5.5.3.2. Implementación Courier de POP3S e IMAPS">Implementación
+          –ver <a href="protocolos_de_soporte_y_de_usuario.html#pop3s-imaps-courier" title="6.5.3.2. Implementación Courier de POP3S e IMAPS">Implementación
           Courier de POP3S e IMAPS</a>):
         </p><pre class="programlisting">
     :0fw: spamassassin.lock
@@ -1511,14 +1511,14 @@ chmod og-r /var/mail/cuenta
     :0
     * .*
     /home/pablo/Maildir/
-</pre></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="pruebas-spam"></a>5.5.4.3. Pruebas</h5></div></div></div><p>
+</pre></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="pruebas-spam"></a>6.5.4.3. Pruebas</h5></div></div></div><p>
           Envíe al usuario al cual le configuró procmail un archivo cuyo
           cuerpo sea el mensaje del archivo
           <code class="literal">/usr/local/share/doc/SpamAssassin/sample-spam.txt</code>.
           Debe quedar en la carpeta de correos no solicitados.
-        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="referencias-spamd"></a>5.5.4.4. Referencias y lecturas recomendadas</h5></div></div></div><p>
+        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="referencias-spamd"></a>6.5.4.4. Referencias y lecturas recomendadas</h5></div></div></div><p>
           <code class="literal">/usr/local/share/doc/SpamAssassin/OpenBSD-SpamAssassin-mini-howto.html</code>
-        </p></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="correo-web"></a>5.5.5. Correo desde el web (webmail)</h4></div></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="roundcubemail"></a>5.5.5.1. Roundcubemail</h5></div></div></div><p>
+        </p></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="correo-web"></a>6.5.5. Correo desde el web (webmail)</h4></div></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="roundcubemail"></a>6.5.5.1. Roundcubemail</h5></div></div></div><p>
           Este cliente de correo para el web tiene una interfaz bastante
           agradable para el usuario final, con buen rango de
           posibilidades (libreta de direcciones LDAP, búsquedas,
@@ -1583,7 +1583,7 @@ chmod og-r /var/mail/cuenta
               </p></blockquote></div></li><li><p>
               Para configurar una base de datos en PostgreSQL con socket
               en <code class="literal">/var/www/var/run/postgresql</code> (ver
-              <a href="otros_servicios_que_puede_prestar_el_servidor.html#postgresql" title="6.2. Motor de bases de datos PostgreSQL">???</a>) ejecutar:
+              <a href="otros_servicios_que_puede_prestar_el_servidor.html#postgresql" title="7.2. Motor de bases de datos PostgreSQL">???</a>) ejecutar:
             </p><pre class="programlisting">
     doas su - _postgresql
     createuser -h /var/www/var/run/postgresql -Upostgres roundcube
@@ -1745,7 +1745,7 @@ chmod og-r /var/mail/cuenta
     Connected to localhost.
     Escape character is '^]'.
     200 openpoppassd v1.1 hello, who are you?
-</pre></li></ol></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="listas-correo"></a>5.5.6. Listas de correo</h4></div></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="mailman"></a>5.5.6.1. Instalación de Mailman (sin
+</pre></li></ol></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="listas-correo"></a>6.5.6. Listas de correo</h4></div></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="mailman"></a>6.5.6.1. Instalación de Mailman (sin
         <code class="literal">chroot</code>)</h5></div></div></div><p>
           Instalar paquete de mailman
           <code class="literal">pkg_add $PKG_PATH/mailman.tgz</code> que
@@ -1843,9 +1843,9 @@ chmod og-r /var/mail/cuenta
           Asignar password al sitio de mailman con
         </p><pre class="programlisting">
     /usr/local/lib/mailman/bin/mmsitepass
-</pre><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="lecturas-mailman"></a>5.5.6.1.1. Lecturas recomendadas</h6></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
+</pre><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="lecturas-mailman"></a>6.5.6.1.1. Lecturas recomendadas</h6></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
                 <code class="literal">/usr/local/share/doc/mailman/README.OpenBSD</code>
-              </p></li></ul></div></div></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-ftp"></a>5.6. Servidor <code class="literal">ftp</code></h3></div></div></div><p>
+              </p></li></ul></div></div></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-ftp"></a>6.6. Servidor <code class="literal">ftp</code></h3></div></div></div><p>
       Sólo recomendamos el servicio ftp para poner un servidor anónimo
       (con el usuario <code class="literal">anonymous</code> y una clave
       arbitraria). No para que transfiera datos de un usuario porque
@@ -1914,7 +1914,7 @@ chmod og-r /var/mail/cuenta
       <code class="literal">-S -l</code> y ejecutar:
     </p><pre class="programlisting">
     touch /var/log/ftpd
-</pre><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="ftpdmz"></a>5.6.1. Servicio FTP en una DMZ</h4></div></div></div><p>
+</pre><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="ftpdmz"></a>6.6.1. Servicio FTP en una DMZ</h4></div></div></div><p>
         Si su servicio ftp opera en un servidor de la red interna, puede
         emplear ftp-proxy para hacerlo visible al exterior.
       </p><p>
@@ -1938,14 +1938,14 @@ chmod og-r /var/mail/cuenta
         las opciones <code class="literal">-D 7 -dvv</code> que lo hará correr en
         primer plano enviando bitácora a salida estándar con máximo
         nivel de verbosidad.
-      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-ftp"></a>5.6.2. Referencias y lecturas recomendadas</h4></div></div></div><p>
+      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-ftp"></a>6.6.2. Referencias y lecturas recomendadas</h4></div></div></div><p>
         La página del manual de <code class="literal">ftpd</code>.
-      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-web"></a>5.7. Servidor web</h3></div></div></div><div class="literallayout"><p>Un servidor web recibe peticiones acordes al protocolo HTTP, las procesa, recolecta la información que va retornar y la retorna típicamente en HTML/CSS/Javascipt también mediante el protocolo HTTP.<br>
+      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-web"></a>6.7. Servidor web</h3></div></div></div><div class="literallayout"><p>Un servidor web recibe peticiones acordes al protocolo HTTP, las procesa, recolecta la información que va retornar y la retorna típicamente en HTML/CSS/Javascipt también mediante el protocolo HTTP.<br>
 Las peticiones pudieron pasar antes por el cortafuegos si lo hay o por otro servidor que actue como proxy.</p></div><p>
       El siguiente diagrama presenta más detalles de los elementos
       involucrados en servir páginas web generadas por una aplicación
       Ruby on Rails.
-    </p><div class="figure"><a name="idm641673488"></a><p class="title"><b>Figura 1. Diagrama de peticion y respuesta web</b></p><div class="mediaobject"><img src="img/diagrama-web.png" alt="Diagrama de peticion y respuesta
+    </p><div class="figure"><a name="idp661843152"></a><p class="title"><b>Figura 1. Diagrama de peticion y respuesta web</b></p><div class="mediaobject"><img src="img/diagrama-web.png" alt="Diagrama de peticion y respuesta
         web"></div></div><p>
       Así que la configuración de un servidor web debe tener en cuenta
       por lo menos:
@@ -1970,9 +1970,9 @@ Las peticiones pudieron pasar antes por el cortafuegos si lo hay o p
     </p><p>
       Ambos pueden emplear certificados SSL tanto comprados como los
       gratuitos de Let’s Encrypt.
-    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="nginx"></a>5.7.1. nginx</h4></div></div></div><p>
+    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="nginx"></a>6.7.1. nginx</h4></div></div></div><p>
         nginx es un servidor web que en el caso de adJ está incluido
-        entre los paquetes que se insalan por omisión. Su binario queda
+        entre los paquetes que se instalan por omisión. Su binario queda
         ubicado en <code class="literal">/usr/local/sbin/nginx</code> y puede
         consultar la versión ejecutando <code class="literal">nginx -v</code>
       </p><p>
@@ -2001,11 +2001,11 @@ Las peticiones pudieron pasar antes por el cortafuegos si lo hay o p
 </pre><p>
         y que añada <code class="literal">nginx</code> en
         <code class="literal">pkg_scripts</code>.
-      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="generalidades-del-archivo-de-configuraci%C3%B3n-de-nginx"></a>5.7.1.1. Generalidades del archivo de configuración de
+      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="generalidades-del-archivo-de-configuraci%C3%B3n-de-nginx"></a>6.7.1.1. Generalidades del archivo de configuración de
         nginx</h5></div></div></div><p>
           El archivo de configuración consta de directivas que le
           indican a nginx como responder a solicitudes http.
-        </p><div class="literallayout"><p>Algunas de las directivas del archivo de configuracioń tienen bloques que a su vez tienen directivas. Cada bloque se inicia con <code class="literal">{</code> y se cierra con <code class="literal">}</code>.<br>
+        </p><div class="literallayout"><p>Algunas de las directivas del archivo de configuración tienen bloques que a su vez tienen directivas. Cada bloque se inicia con <code class="literal">{</code> y se cierra con <code class="literal">}</code>.<br>
 Las directivas que no tienen bloque deben terminar con <code class="literal">;</code></p></div><p>
           Pueden ponerse comentarios a la derecha del símbolo
           <code class="literal">#</code> en cualquier línea (el resto de la línea
@@ -2027,6 +2027,7 @@ http {
   server {
     server_name 127.0.0.1;
     listen 80:
+    listen [::]:80:
     root htdocs;
   }
 }
@@ -2040,28 +2041,30 @@ http {
           <code class="literal">server_name</code> (con nombre de servidor) y
           <code class="literal">listen</code> (con puerto) acordes a los URLs que
           se esperan sean usados por los usuarios y otras directivas de
-          acuerdo al contenido que se desea servir.
+          acuerdo al contenido que se desea servir. En este ejemplo el
+          servidor escucha en el puerto 80 por IPv4 y en el puerto 80
+          por IPv6.
         </p><p>
-          En el ejemplo anterior la directiva <code class="literal">root</code>
-          indica que se servirán contenido alojado en el sistema de
-          archivos en la ruta <code class="literal">/var/www/htdocs</code> (como
-          nginx correo en la jaula <code class="literal">/var/www</code> basta
-          indicar la ruta dentro de esa). La directiva
+          En este ejemplo la directiva <code class="literal">root</code> indica
+          que se servirán contenido alojado en el sistema de archivos en
+          la ruta <code class="literal">/var/www/htdocs</code> (como nginx correo
+          en la jaula <code class="literal">/var/www</code> basta indicar la ruta
+          dentro de esa). La directiva
           <code class="literal">index index.html</code> indica que si el usuario
           no especifica una ruta particular en el URL se servirá el
           archivo <code class="literal">/var/www/htdocs/index.html</code> que si
           desea probar puede iniciar con el contenido:
         </p><pre class="programlisting">
 &lt;h1&gt;Bienvenido a servir contenido web con nginx&lt;/h1&gt;
-</pre></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="configuraci%C3%B3n-de-server_name-y-listen-de-acuerdo-a-urls-que-se-esperan-del-usuario"></a>5.7.1.2. Configuración de <code class="literal">server_name</code> y
+</pre></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="configuraci%C3%B3n-de-server_name-y-listen-de-acuerdo-a-urls-que-se-esperan-del-usuario"></a>6.7.1.2. Configuración de <code class="literal">server_name</code> y
         <code class="literal">listen</code> de acuerdo a URLs que se esperan del
         usuario</h5></div></div></div><p>
           Los URLs que usen que incluyen el protocolo
           (<code class="literal">http</code> sin cifrar o <code class="literal">https</code>
-          con cifrado) el nombre del servidor (o dirección IP si no
-          tiene dominos DNS configurados) y el puerto (si el usuario no
-          emplea un puerto y el URL comienza con <code class="literal">http</code>
-          se usa el puerto 80, o si comienza con
+          con cifrado) el nombre del servidor (o dirección IPv4 o IPv6
+          si no tiene dominos DNS configurados) y el puerto (si el
+          usuario no emplea un puerto y el URL comienza con
+          <code class="literal">http</code> se usa el puerto 80, o si comienza con
           <code class="literal">https</code> se emplea por omisión el puerto 443).
         </p><p>
           Otro caso sencillo de configurar es servir contenido estático
@@ -2069,6 +2072,8 @@ http {
           una red local en la que el servidor tiene una IP estática
           asignada (digamos 192.168.20.20) o si ha contratado una IP
           pública con su proveedor de Internet digamos 125.125.123.1
+          como en el siguiente ejemplo que supone que sólo configura
+          IPv4:
         </p><pre class="programlisting">
 http {
   include mime.types;
@@ -2081,26 +2086,26 @@ http {
   }
 }
 </pre><p>
+          En caso de usar IPv6 tras configurar nginx, para abrir la
+          página desde un navegador deberá seguir el estándar de
+          encerrar la dirección IPv6 entre paréntesis cuadrados.
+        </p><p>
           Si prefiere usar un nombre en lugar de una IP (digamos
           miong.org) deberá tramitar el registro del dominio ante
           un registrador y pagar la anualidad. En tal caso la sección
-          <code class="literal">server</code> para el puerto 80 sería (cambiando
-          <code class="literal">www</code> por el registro que hay configurado en
-          su dominio y <code class="literal">minombre.org</code> por el dominio
-          que haya contratado):
+          <code class="literal">server</code> para el puerto 80 por IPv4 y 80 por
+          IPv6 sería (cambiando <code class="literal">www</code> por el registro
+          que hay configurado en su dominio y
+          <code class="literal">minombre.org</code> por el dominio que haya
+          contratado):
         </p><pre class="programlisting">
   server {
     server_name www.minombre.org;
     listen 80:
+    listen [::]:80:
     root htdocs;
   }
-</pre><p>
-          Claro que es posible configurar a manera de prueba resolución
-          local en un computador para que el nombre se asocie a la IP
-          esperada o incluso si tiene control de un resolvedor de una
-          red local para que en la red local el nombre resuelva al
-          servidor donde corre el nginx.
-        </p><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="pruebas-cambiando-resoluci%C3%B3n-local-en-un-computador"></a>5.7.1.2.1. Pruebas cambiando resolución local en un
+</pre><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="pruebas-cambiando-resoluci%C3%B3n-local-en-un-computador"></a>6.7.1.2.1. Pruebas cambiando resolución local en un
           computador</h6></div></div></div><p>
             Si en su red local el servidor nginx corre en la dirección
             192.168.10.2, en otro computador con adJ (digamos con IP
@@ -2114,7 +2119,13 @@ http {
 </pre><p>
             Siempre y cuando en <code class="literal">/etc/resolv.conf</code>
             tenga <code class="literal">lookup file</code>
-          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="pruebas-en-una-red-cambiando-resoluci%C3%B3n-local-para-la-red"></a>5.7.1.2.2. Pruebas en una red cambiando resolución local para la
+          </p><p>
+            Si en su red emplea IPv6 con direcciones estáticas lo que
+            tendría que agregar a <code class="literal">/etc/hosts</code> sería
+            una línea de la forma:
+          </p><pre class="programlisting">
+fd4d:da20:9e56:8:10 www.midominio.org
+</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="pruebas-en-una-red-cambiando-resoluci%C3%B3n-local-para-la-red"></a>6.7.1.2.2. Pruebas en una red cambiando resolución local para la
           red</h6></div></div></div><p>
             Para cambiar la resolución de nombres en una red local
             podría emplear un servidor de nombres completo como
@@ -2124,8 +2135,8 @@ http {
             Por ejemplo si <code class="literal">unbound</code> corre en el
             servidor 192.168.10.1 para su dominio
             <code class="literal">midominio.org</code>, puede configurarlo para
-            que dirija a 192.168.10.2 cuando desde la red local
-            soliciten <code class="literal">www.mindominio.org</code>, modificando
+            que dirija a 192.168.10.2 cuando desde la red local alguien
+            solicite <code class="literal">www.mindominio.org</code>, modificando
             el archivo <code class="literal">/var/unbound/etc/unbound.conf</code>
             para que incluya:
           </p><pre class="programlisting">
@@ -2138,31 +2149,41 @@ local-zone: "midominio.org" static
 local-data: "midominio.org IN A 192.168.10.2"
 local-data: "www.midominio.org IN A 192.168.10.2"
 </pre><p>
-            Cada vez que haga modificaciones al archivo de configuracion
-            de unbound debe reiniciar por ejemplo con:
+            Si además (o en cambio) el servidor tiene una dirección IPv6
+            debe agregar otro <code class="literal">local-data</code>:
+          </p><pre class="programlisting">
+local-data: "midominio.org IN A fd4d:da20:9e54::10:10"
+</pre><p>
+            Cada vez que haga modificaciones al archivo de configuración
+            de unbound debe reiniciarlo por ejemplo con:
           </p><pre class="programlisting">
 doas rcctl -d restart unbound
 </pre><p>
-            Y en cada computador de la red local debe configura que el
+            Y en cada computador de la red local debe configurar que el
             servidor DNS sea 192.168.10.1.
-          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="pruebas-cambiando-configuraci%C3%B3n-de-servidor-dns"></a>5.7.1.2.3. Pruebas cambiando configuración de servidor DNS</h6></div></div></div><p>
-            Si está pagand a su proveedor de Internet una IP (digamos
-            125.125.121.1) y si pagó el registro de un dominio (digamos
-            www.midominio.org) ante un registrador de dominios, debe
-            editar la configuración del servidor DNS que haya
+          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="pruebas-cambiando-configuraci%C3%B3n-de-servidor-dns"></a>6.7.1.2.3. Pruebas cambiando configuración de servidor DNS</h6></div></div></div><p>
+            Si está pagando a su proveedor de Internet una IP pública
+            (digamos 125.125.121.1) y si pagó el registro de un dominio
+            (digamos www.midominio.org) ante un registrador de dominios,
+            debe editar la configuración del servidor DNS que haya
             configurado con el registrador (muchos registradores ofrecen
             servidores DNS editables desde el web).
           </p><p>
             Debe agregar un registro que indique que las peticiones a su
-            dominio y al y al subdominio
-            <code class="literal">www.midominio.org</code> se dirigen a la IP
-            pública de su servidor. Tanto con <code class="literal">bind</code>
-            como con <code class="literal">nsd</code> que son 2 servidores DNS
-            populares se harían con líneas de la forma:
+            dominio y al subdominio <code class="literal">www.midominio.org</code>
+            se dirigen a la IP pública de su servidor. Tanto con
+            <code class="literal">bind</code> como con <code class="literal">nsd</code> que
+            son 2 servidores DNS populares se harían con líneas de la
+            forma:
           </p><pre class="programlisting">
 midominio.org.  A   125.125.121.1;
 www.midominio.org.  A   125.125.121.1;
-</pre></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="configuraci%C3%B3n-de-nginx-de-acuerdo-a-como-se-almacenan-o-generan-p%C3%A1ginas-en-el-servidor"></a>5.7.1.3. Configuración de nginx de acuerdo a como se almacenan o
+</pre><p>
+            Si además cuenta con una IPv6 pública también deberá
+            agregarla con registros AAAA, por ejemplo:
+          </p><pre class="programlisting">
+www.midominio.org.  AAAA    2600:33:33::10:10
+</pre></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="configuraci%C3%B3n-de-nginx-de-acuerdo-a-como-se-almacenan-o-generan-p%C3%A1ginas-en-el-servidor"></a>6.7.1.3. Configuración de nginx de acuerdo a como se almacenan o
         generan páginas en el servidor</h5></div></div></div><p>
           Hay varias posibilidades:
         </p><div class="itemizedlist"><ul type="disc"><li><p>
@@ -2182,7 +2203,7 @@ www.midominio.org.  A   125.125.121.1;
             </p></li><li><p>
               Redirigir la petición a otro computador donde corra un
               servidor web operando así como un proxy
-            </p></li></ul></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="caso-servir-archivos-html-ubicados-en-el-sistema-de-archivos"></a>5.7.1.3.1. Caso: Servir archivos HTML ubicados en el sistema de
+            </p></li></ul></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="caso-servir-archivos-html-ubicados-en-el-sistema-de-archivos"></a>6.7.1.3.1. Caso: Servir archivos HTML ubicados en el sistema de
           archivos</h6></div></div></div><p>
             Este es el caso de uso original, se espera que organice los
             contenidos HTML (junto con gráficas, documentos que
@@ -2224,7 +2245,7 @@ server {
             quedarán en
             <code class="literal">/var/www/logs/miproyecto1-error.log</code> y
             <code class="literal">/var/www/logs/miproyecto1-access.log</code>
-          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="nginx-php"></a>5.7.1.3.2. Caso: Servir páginas generadas por un programa en
+          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="nginx-php"></a>6.7.1.3.2. Caso: Servir páginas generadas por un programa en
           PHP</h6></div></div></div><p>
             En el caso de adJ, se recomienda emplear php con nginx
             mediante Fast-CGI comunicandose con un zócalo (socket)
@@ -2275,7 +2296,7 @@ location ~ ^(.+\.php)$ {
             <code class="literal">index.html</code>:
           </p><pre class="programlisting">
 index index.php index.html; 
-</pre></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="soportar-cifrado-entre-cliente-y-servidor"></a>5.7.1.4. Soportar cifrado entre cliente y servidor</h5></div></div></div><div class="literallayout"><p>El cifrado con TLS requiere en el servidor un certificado firmado por una autoridad certificadora que consta de un archivo público y uno privado.<br>
+</pre></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="soportar-cifrado-entre-cliente-y-servidor"></a>6.7.1.4. Soportar cifrado entre cliente y servidor</h5></div></div></div><div class="literallayout"><p>El cifrado con TLS requiere en el servidor un certificado firmado por una autoridad certificadora que consta de un archivo público y uno privado.<br>
 Típicamente usted debe generar ambos archivos y enviar el público a una autoridad certificadora, que por un pago, lo devolverá firmado.</p></div><p>
           Otra posibilidad es que emplee los certificados gratuitos
           generados por Let’s Encrypt como se describe más adelante.
@@ -2292,7 +2313,7 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
   ssl on;
   ssl_certificate /etc/ssl/midominio.org.crt;
   ssl_certificate_key /etc/ssl/private/midominio.org.key;
-</pre></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="letsencrypt"></a>5.7.2. Certificados SSL gratuitos con Let’s Encrypt</h4></div></div></div><p>
+</pre></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="letsencrypt"></a>6.7.2. Certificados SSL gratuitos con Let’s Encrypt</h4></div></div></div><p>
         Hasta hace un tiempo era impensable contar con un certificado
         SSL válido para los diversos navegadores (candadito verde) y que
         fuese gratuito. Sin embargo algunas empresas empezaron a
@@ -2313,14 +2334,14 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
         tiene una raíz diferente:
       </p><pre class="programlisting">
     doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d miong.org -d www.miong.org  -w /var/www/roundcubemail -d correo.miong.org
-</pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="openbsd-httpd"></a>5.7.3. OpenBSD httpd</h4></div></div></div><p>
+</pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="openbsd-httpd"></a>6.7.3. OpenBSD httpd</h4></div></div></div><p>
         A continuación describimos algunos casos de uso del nuevo
         <code class="literal">httpd</code> que soporta contenido estático, FastCGI
         sin reescritura y SSL. Sus fuentes se basan en las de
         <code class="literal">relayd</code> que fue introducido y madurado en
         OpenBSD desde la versión 4.1 (inicialmente llamado
         <code class="literal">hoststated</code>).
-      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="httpd-min"></a>5.7.3.1. Configuración mínima</h5></div></div></div><p>
+      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="httpd-min"></a>6.7.3.1. Configuración mínima</h5></div></div></div><p>
           En el archivo <code class="literal">/etc/rc.conf.local</code> agregue:
         </p><pre class="programlisting">
     httpd_flags=""
@@ -2378,7 +2399,7 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
               agregando la opción
               <code class="literal">root directorio_relativo_a_jaula</code> dentro
               de la sección <code class="literal">server</code>.
-            </p></li></ul></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="httpd-ssl"></a>5.7.3.2. Servidor con cifrado</h5></div></div></div><p>
+            </p></li></ul></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="httpd-ssl"></a>6.7.3.2. Servidor con cifrado</h5></div></div></div><p>
           Al ejemplo de configuración mínima anterior bastaría agregarle
           ssl a la opción listen e indicar el puerto 443, que es el
           asignado por defecto para HTTPS:
@@ -2396,7 +2417,7 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
           <code class="literal">ssl certificate archivo</code> y
           <code class="literal">ssl key archivo</code> dentro de la sección
           server.
-        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="httpd-dom"></a>5.7.3.3. Dominios virtuales</h5></div></div></div><p>
+        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="httpd-dom"></a>6.7.3.3. Dominios virtuales</h5></div></div></div><p>
           Si la misma IP debe servir diversos dominios, cree una sección
           <code class="literal">server</code> por cada dominio con el nombre del
           dominio y emplee la misma opción <code class="literal">listen</code>
@@ -2420,7 +2441,7 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
     }
 
     include "/etc/nginx/mime.types"
-</pre></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="httpd-php"></a>5.7.3.4. Sitio con PHP</h5></div></div></div><p>
+</pre></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="httpd-php"></a>6.7.3.4. Sitio con PHP</h5></div></div></div><p>
           Es posible que sirva contenidos PHP usando php-fpm como
           FastCGI. Sin embargo debe asegurar haber aplicado los parches
           más recientes para 5.6 (ya incluidos en binarios de adJ) y
@@ -2458,7 +2479,7 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
             </p></li><li><p>
               A la variable <code class="literal">pkg_scripts</code> añadir
               <code class="literal">php-fpm</code>
-            </p></li></ul></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="httpd-otros"></a>5.7.3.5. Otros detalles de uso</h5></div></div></div><p>
+            </p></li></ul></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="httpd-otros"></a>6.7.3.5. Otros detalles de uso</h5></div></div></div><p>
           Si requiere volver a leer archivo de configuración, en lugar
           de reiniciar httpd puede ejecutar:
         </p><pre class="programlisting">
@@ -2466,7 +2487,7 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
 </pre><p>
           El formato de las bitácoras por defecto es similar al de
           <code class="literal">nginx</code>
-        </p></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3278482960" href="#idm3278482960">25</a>] </sup>
+        </p></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp2509990224" href="#idp2509990224">24</a>] </sup>
           Típicamente un cliente enviará un paquete DHCPDISCOVER a toda
           la red (opcionalmente con sugerencia de la IP que quiere), un
           servidor que reciba tal paquete le responderá con un DHCPOFFER
@@ -2474,10 +2495,10 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
           puede responder con DHCPREQUEST para confirmar los parámetros
           y el servidor responde con un DHCPACK para confirmar
           asignación.
-        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3278444304" href="#idm3278444304">26</a>] </sup>
+        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1659453136" href="#idp1659453136">25</a>] </sup>
                 De acuerdo al RFC 1123 los nombre MUA y MTA son propios
                 del protocolo X.400.
-              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm3278400528" href="#idm3278400528">27</a>] </sup>
+              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1659318992" href="#idp1659318992">26</a>] </sup>
             De acuerdo al protocolo SMTP, sendmail de amor
             se conectaría por el puerto 25 a sendmail en
             respeto y enviaría los mensajes
@@ -2508,7 +2529,7 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
 </pre><p>
             (para emplear <code class="literal">-f</code> con sendmail debe ser
             usuario autorizado).
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm2154581648" href="#idm2154581648">28</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1659304656" href="#idp1659304656">27</a>] </sup>
             Son inseguros porque transmiten claves y el contenido de los
             mensajes planos por la red
-          </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="otros_servicios_que_puede_prestar_el_servidor.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">4. Direcciones, enrutamiento, transporte y cortafuegos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 6. Otros servicios que puede prestar el servidor</td></tr></table></div></body></html>
+          </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="otros_servicios_que_puede_prestar_el_servidor.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">5. Direcciones, enrutamiento, transporte y cortafuegos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 7. Otros servicios que puede prestar el servidor</td></tr></table></div></body></html>

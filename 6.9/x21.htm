@@ -14,7 +14,7 @@ TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
 HREF="t1.htm"><LINK
 REL="NEXT"
 TITLE="Dispositivos de interconexión"
-HREF="x229.htm"></HEAD
+HREF="x238.htm"></HEAD
 ><BODY
 CLASS="sect1"
 BGCOLOR="#FFFFFF"
@@ -56,7 +56,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="x229.htm"
+HREF="x238.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
@@ -214,6 +214,29 @@ CLASS="programlisting"
 >&#13;    ping6 ::1
 </PRE
 ><P
+>&#13;    Y que como en IPv6 es común que una misma interfaz de red tenga
+    muchas direcciones IPv6 también se puede usar la dirección de enlace
+    local (<SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>link-local address</I
+></SPAN
+>) `fe80::1%lo0%.
+  </P
+><PRE
+CLASS="programlisting"
+>&#13;    ping6  fe80::1%lo0
+</PRE
+><P
+>&#13;    Las direcciones de enlace local siempre comienzan con
+    <TT
+CLASS="literal"
+>fe80</TT
+> sólo se usan en redes de área local y son
+    útiles en el proceso de auto-configuración IPv6.
+  </P
+><P
 >&#13;    Internet es una red mundial de redes que están interconectadas vía
     satélite, por cables submarinos, fibra óptica y muchos otros medios
     de transmisión financiados por estados y organizaciones. Las
@@ -225,19 +248,19 @@ CLASS="programlisting"
     temas introducidos serán tratados en detalle en otras secciones
     aplicándolos especialmente al caso de redes Ethernet (ver
     <A
-HREF="x229.htm"
+HREF="x238.htm"
 >la sección de nombre <I
 >Dispositivos de interconexión</I
 ></A
 >,
     <A
-HREF="x739.htm"
+HREF="x791.htm"
 >la sección de nombre <I
 >Direcciones, enrutamiento, transporte y cortafuegos</I
 ></A
 >
     y <A
-HREF="x957.htm"
+HREF="x1008.htm"
 >la sección de nombre <I
 >Protocolos de soporte y de usuario</I
 ></A
@@ -355,8 +378,8 @@ CLASS="emphasis"
     </P
 ><P
 >&#13;      La asignación de direcciones IP<A
-NAME="AEN97"
-HREF="#FTN.AEN97"
+NAME="AEN102"
+HREF="#FTN.AEN102"
 ><SPAN
 CLASS="footnote"
 >[4]</SPAN
@@ -378,8 +401,8 @@ CLASS="footnote"
       enrutadores conectados. Algunos de estos protocolos dependen de
       otros, dando lugar a varias capas de protocolos: aplicación,
       transporte, Internet, enlace<A
-NAME="AEN100"
-HREF="#FTN.AEN100"
+NAME="AEN105"
+HREF="#FTN.AEN105"
 ><SPAN
 CLASS="footnote"
 >[5]</SPAN
@@ -459,8 +482,8 @@ CLASS="emphasis"
 >. Describiremos el uso del
         esquema más popular y económico en este momento: 1000Mbps,
         Full-duplex con cable de pares trenzados <A
-NAME="AEN110"
-HREF="#FTN.AEN110"
+NAME="AEN115"
+HREF="#FTN.AEN115"
 ><SPAN
 CLASS="footnote"
 >[6]</SPAN
@@ -486,16 +509,16 @@ NAME="capa-de-enlace"
 ><P
 >&#13;        En el caso de una red Ethernet e IPv4 se trata del protocolo
         ARP<A
-NAME="AEN116"
-HREF="#FTN.AEN116"
+NAME="AEN121"
+HREF="#FTN.AEN121"
 ><SPAN
 CLASS="footnote"
 >[7]</SPAN
 ></A
 >, que se encarga de traducir direcciones IPv4 a
         direcciones MAC <A
-NAME="AEN118"
-HREF="#FTN.AEN118"
+NAME="AEN123"
+HREF="#FTN.AEN123"
 ><SPAN
 CLASS="footnote"
 >[8]</SPAN
@@ -541,8 +564,8 @@ CLASS="literal"
 ><P
 >&#13;        En el caso de una conexión por modem el protocolo es
         PPP<A
-NAME="AEN129"
-HREF="#FTN.AEN129"
+NAME="AEN134"
+HREF="#FTN.AEN134"
 ><SPAN
 CLASS="footnote"
 >[9]</SPAN
@@ -580,26 +603,17 @@ CLASS="emphasis"
 ></SPAN
 > (IP) que es
         un protocolo diseñado para Internet y del cual hay dos
-        versiones: IPv4 e IPv6. Describiremos la versión 4 <A
-NAME="AEN136"
-HREF="#FTN.AEN136"
+        versiones: IPv4 e IPv6 (ver <A
+NAME="AEN141"
+HREF="#FTN.AEN141"
 ><SPAN
 CLASS="footnote"
 >[10]</SPAN
 ></A
-> (la versión 6 fue diseñada para soportar más
-        computadores conectados a Internet y se espera que pronto se use
-        ampliamente <A
-NAME="AEN138"
-HREF="#FTN.AEN138"
-><SPAN
-CLASS="footnote"
->[11]</SPAN
-></A
 >).
       </P
 ><P
->&#13;        Este protocolo permite la transmisión de paquetes (llamados
+>&#13;        IPv4 e IPv6 permiten la transmisión de paquetes (llamados
         datagramas) en redes donde cada computador interconectado se
         identifica con una dirección única. Tales direcciones están
         diseñadas para interconectar varias redes, identificar los
@@ -622,10 +636,10 @@ CLASS="emphasis"
       </P
 ><P
 >&#13;        Cada datagrama por transmitir es pasado a la capa de IP por otro
-        protocolo de una capa superior (e.g TCP) junto con dirección
+        protocolo de una capa superior (e.g TCP) junto con la dirección
         destino, IP mantiene una tabla de enrutamiento que asocia
         direcciones destino con compuertas (computadores intermediarios
-        en inglés <SPAN
+        o en inglés <SPAN
 CLASS="emphasis"
 ><I
 CLASS="emphasis"
@@ -637,33 +651,82 @@ CLASS="emphasis"
         enrutamiento puede ser modificada manualmente (con
         <TT
 CLASS="literal"
->route show</TT
->) o puede ser modificada
-        automáticamente cuando una compuerta envía un mensaje indicando
-        la dirección de otra compuerta más apropiada para llegar a una
-        dirección. Hay siempre una compuerta por defecto a la que se
-        envían paquetes que IP no sepa como enrutar.
+>route</TT
+>) o puede ser modificada automáticamente
+        cuando una compuerta envía un mensaje indicando la dirección de
+        otra compuerta más apropiada para llegar a una dirección. Hay
+        siempre una compuerta por defecto a la que se envían paquetes
+        que IP no sepa como enrutar.
       </P
 ><P
 >&#13;        IP no es protocolo fiable, porque no asegura que un paquete
         llegue a su destino y no realiza retransmisiones. Aunque para
         informar algunas situaciones anómalas emplea el protocolo ICMP
         <A
-NAME="AEN146"
-HREF="#FTN.AEN146"
+NAME="AEN149"
+HREF="#FTN.AEN149"
 ><SPAN
 CLASS="footnote"
->[12]</SPAN
+>[11]</SPAN
 ></A
 >.
       </P
 ><P
->&#13;        OpenBSD cuenta con una excelente implementación de IPv4 con
-        posibilidad de filtrar, redirigir, traducir direcciones,
-        balancear carga y muchas otras opciones que se configuran de
-        forma sencilla con PF. Además implementa características no
-        estándar como IPsec para transmisión cifrada y IPcomp para
-        comprimir.
+>&#13;        Las direcciones IPv4 son de 4 bytes (o 32 bits) y suelen
+        escribirse como cuatro octetos en decimal separados por punto es
+        decir cuatro números en decimal cada uno entre 0 y 255 e.g
+        192.168.112.3
+      </P
+><P
+>&#13;        Como se explica en
+        <A
+HREF="https://www.youtube.com/watch?v=cVyhDp14fac"
+TARGET="_top"
+>https://www.youtube.com/watch?v=cVyhDp14fac</A
+>
+        y otros vídeos producidos por LACNIC, en 1990 empezó a
+        estudiarse el agotamiento de direcciones IPv4. Pues aunque hay
+        4300 millones de direcciones IPv4 su agotamiento fue generado
+        por una asignación inicial deficiente y por el crecimiento
+        hiper-exponencial de internet desde 1993. Aunque se
+        desarrollaron arreglos como NAT la solución fue rediseñar la
+        capa IP en lo que conocemos como IPv6.
+      </P
+><P
+>&#13;        Algunas características de IPv6 que solucionan falencias de IPv4
+        son: * 128 bits de direccionamiento que posibilita más de 10^38
+        direcciones, y que contrasta con IPv4 que usa 32 bits
+        posibilitando menos de 10^10 direcciones (bastaría para ponerle
+        dirección a cada átomo del sol que se calculan en 10^37 –se
+        calcula que los átomos del universo son 10^80 ver
+        <A
+HREF="https://blogs.hoy.es/curiosidades-cientificas/2019/12/27/cuantos-atomos-universo/"
+TARGET="_top"
+>https://blogs.hoy.es/curiosidades-cientificas/2019/12/27/cuantos-atomos-universo/</A
+>)
+        * IPSec incorporado * Mecanismos para facilitar configuración de
+        la red
+      </P
+><P
+>&#13;        Las direcciones IPv6 como son de 128 bits suelen escribirse con
+        8 números de 16 bits cada uno en hexadecimal (sin ceros al
+        comienzo) y separados por dos puntos. e.g
+        1f8a:3900:0000:0000:0000:e12a:1:2f0 Para abreviar los números
+        intermedios que sean 0000 suele usarse :: así que la dirección
+        anterior se puede abreviar como 1f8a:3900::e12a:1:2f0. La
+        primera mitad de esta dirección ayuda a enrutar globalmente
+        (tipicamente los primeros 48 bits son para enrutamiento y los
+        siguientes 16 para identificar subredes) y la segunda mitad a
+        identificar interfaces de red en redes locales.
+      </P
+><P
+>&#13;        Al momento de este escrito no es claro cuando se completará el
+        transito de IPv4 a IPv6 por lo demorado de su implementación por
+        ejemplo en latinoamérica, pero durante este, hay mecanismos que
+        permiten la coexistencia de los dos protocolos, el más
+        recomendable en un servidor es la doble pila, es decir que las
+        interfaces de red tengan tanto una dirección IPv4 como una
+        dirección IPv6 (en realidad varias direcciones IPv6).
       </P
 ></DIV
 ><DIV
@@ -682,35 +745,35 @@ NAME="capa-de-transporte"
         requiere porque el nivel de red puede enrutar diversos paquetes
         de forma diferente. En esta capa hay dos protocolos:
         TCP<A
-NAME="AEN152"
-HREF="#FTN.AEN152"
+NAME="AEN161"
+HREF="#FTN.AEN161"
+><SPAN
+CLASS="footnote"
+>[12]</SPAN
+></A
+> y UDP<A
+NAME="AEN163"
+HREF="#FTN.AEN163"
 ><SPAN
 CLASS="footnote"
 >[13]</SPAN
-></A
-> y UDP<A
-NAME="AEN154"
-HREF="#FTN.AEN154"
-><SPAN
-CLASS="footnote"
->[14]</SPAN
 ></A
 >. El primero es fiable, asegura que la transmisión
         enviada sea recibida, UDP por su parte no busca confirmar que la
         información llegue a su destino (aunque permite hacer
         difusión<A
-NAME="AEN156"
-HREF="#FTN.AEN156"
+NAME="AEN165"
+HREF="#FTN.AEN165"
+><SPAN
+CLASS="footnote"
+>[14]</SPAN
+></A
+> y multidifusión<A
+NAME="AEN168"
+HREF="#FTN.AEN168"
 ><SPAN
 CLASS="footnote"
 >[15]</SPAN
-></A
-> y multidifusión<A
-NAME="AEN159"
-HREF="#FTN.AEN159"
-><SPAN
-CLASS="footnote"
->[16]</SPAN
 ></A
 > mientras que TCP no). Ambos protocolos emplean
         puertos para permitir más de una conexión con uno o más
@@ -766,7 +829,7 @@ CLASS="variablelist"
                 de forma insegura pues las claves se transmiten planas
                 (ssh es un reemplazo seguro, ver
                 <A
-HREF="x957.htm#servidor-ssh"
+HREF="x1008.htm#servidor-ssh"
 >la sección de nombre <I
 >Servidor <TT
 CLASS="literal"
@@ -797,7 +860,7 @@ CLASS="emphasis"
                 RFC 1123, permite transmisión de archivos de manera
                 insegura pues las claves se transmiten planas (ver
                 <A
-HREF="x957.htm#servidor-ftp"
+HREF="x1008.htm#servidor-ftp"
 >la sección de nombre <I
 >Servidor <TT
 CLASS="literal"
@@ -839,7 +902,7 @@ CLASS="emphasis"
 >) que especifica cómo se realiza la
                 transmisión de correo electrónico (ver
                 <A
-HREF="x957.htm#servicios-correo"
+HREF="x1008.htm#servicios-correo"
 >la sección de nombre <I
 >Servidor de correo electrónico</I
 ></A
@@ -922,11 +985,11 @@ NAME="lecturas-redes-protocolos-internet"
 ><P
 >&#13;          Puede consultar más sobre el IETF y otras organizaciones que
           mantienen Internet en <A
-HREF="a3211.htm"
+HREF="a3278.htm"
 >taioetf</A
 > y
           en <A
-HREF="a3211.htm"
+HREF="a3278.htm"
 >osietf</A
 >.
         </P
@@ -935,19 +998,19 @@ HREF="a3211.htm"
 ><P
 >&#13;          Puede consultar los RFC en
           <A
-HREF="a3211.htm"
+HREF="a3278.htm"
 >rfceditor</A
 >. También puede
           consultar versiones en castellano en
           <A
-HREF="a3211.htm"
+HREF="a3278.htm"
 >rfces</A
 >
         </P
 ></LI
 ><LI
 ><P
->&#13;          Páginas del manual netintro4, ip4, inet4, ip4
+>&#13;          Páginas del manual netintro, ip, inet, ip, ip6, inet6, icmp6
         </P
 ></LI
 ><LI
@@ -1071,8 +1134,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN97"
-HREF="x21.htm#AEN97"
+NAME="FTN.AEN102"
+HREF="x21.htm#AEN102"
 ><SPAN
 CLASS="footnote"
 >[4]</SPAN
@@ -1094,8 +1157,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN100"
-HREF="x21.htm#AEN100"
+NAME="FTN.AEN105"
+HREF="x21.htm#AEN105"
 ><SPAN
 CLASS="footnote"
 >[5]</SPAN
@@ -1116,8 +1179,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN110"
-HREF="x21.htm#AEN110"
+NAME="FTN.AEN115"
+HREF="x21.htm#AEN115"
 ><SPAN
 CLASS="footnote"
 >[6]</SPAN
@@ -1146,8 +1209,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN116"
-HREF="x21.htm#AEN116"
+NAME="FTN.AEN121"
+HREF="x21.htm#AEN121"
 ><SPAN
 CLASS="footnote"
 >[7]</SPAN
@@ -1168,8 +1231,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN118"
-HREF="x21.htm#AEN118"
+NAME="FTN.AEN123"
+HREF="x21.htm#AEN123"
 ><SPAN
 CLASS="footnote"
 >[8]</SPAN
@@ -1194,8 +1257,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN129"
-HREF="x21.htm#AEN129"
+NAME="FTN.AEN134"
+HREF="x21.htm#AEN134"
 ><SPAN
 CLASS="footnote"
 >[9]</SPAN
@@ -1216,8 +1279,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN136"
-HREF="x21.htm#AEN136"
+NAME="FTN.AEN141"
+HREF="x21.htm#AEN141"
 ><SPAN
 CLASS="footnote"
 >[10]</SPAN
@@ -1240,33 +1303,11 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN138"
-HREF="x21.htm#AEN138"
+NAME="FTN.AEN149"
+HREF="x21.htm#AEN149"
 ><SPAN
 CLASS="footnote"
 >[11]</SPAN
-></A
-></TD
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
-WIDTH="95%"
-><P
->&#13;            OpenBSD tiene soporte para IPv6
-          </P
-></TD
-></TR
-><TR
-><TD
-ALIGN="LEFT"
-VALIGN="TOP"
-WIDTH="5%"
-><A
-NAME="FTN.AEN146"
-HREF="x21.htm#AEN146"
-><SPAN
-CLASS="footnote"
->[12]</SPAN
 ></A
 ></TD
 ><TD
@@ -1287,11 +1328,11 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN152"
-HREF="x21.htm#AEN152"
+NAME="FTN.AEN161"
+HREF="x21.htm#AEN161"
 ><SPAN
 CLASS="footnote"
->[13]</SPAN
+>[12]</SPAN
 ></A
 ></TD
 ><TD
@@ -1310,11 +1351,11 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN154"
-HREF="x21.htm#AEN154"
+NAME="FTN.AEN163"
+HREF="x21.htm#AEN163"
 ><SPAN
 CLASS="footnote"
->[14]</SPAN
+>[13]</SPAN
 ></A
 ></TD
 ><TD
@@ -1332,11 +1373,11 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN156"
-HREF="x21.htm#AEN156"
+NAME="FTN.AEN165"
+HREF="x21.htm#AEN165"
 ><SPAN
 CLASS="footnote"
->[15]</SPAN
+>[14]</SPAN
 ></A
 ></TD
 ><TD
@@ -1360,11 +1401,11 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN159"
-HREF="x21.htm#AEN159"
+NAME="FTN.AEN168"
+HREF="x21.htm#AEN168"
 ><SPAN
 CLASS="footnote"
->[16]</SPAN
+>[15]</SPAN
 ></A
 ></TD
 ><TD
@@ -1417,7 +1458,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="x229.htm"
+HREF="x238.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD

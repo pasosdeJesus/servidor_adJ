@@ -1,0 +1,448 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>4. </title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"><link rel="start" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="up" href="index.html" title="La distribución Aprendiendo de Jesús como servidor y cortafuegos"><link rel="prev" href="dispositivos_de_interconexion.html" title="3. Dispositivos de interconexión"><link rel="next" href="direcciones_enrutamiento_transporte_y_cortafuegos.html" title="5. Direcciones, enrutamiento, transporte y cortafuegos"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">4. </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="dispositivos_de_interconexion.html">Anterior</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Siguiente</a></td></tr></table><hr></div><div class="sect1" lang="es"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="section"></a>4. </h2></div></div></div><p>
+    es posible agregar entradas de manera permanente o eliminarlas con
+    las opciones <code class="literal">-s</code> y <code class="literal">-d</code>
+    respectivamente.
+  </p><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="cableado"></a>4.1. Cableado de una red local</h3></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="planeaci%C3%B3n"></a>4.1.1. Planeación</h4></div></div></div><p>
+        Necesitará un concentrador preferiblemente de 1Gb con
+        suficientes puertos para todos los computadores que tenga o
+        varios interconectados en cascada, cable UTP categoría 5e o 6
+        con conectores RJ-45 y en cada computador deberá tener una
+        tarjeta Ethernet (preferiblemente de 1GB) con un puerto para un
+        conector RJ-45 (ver
+        <a href="dispositivos_de_interconexion.html#configuracion-interfaz" title="3.4.2. Configuración de una interfaz de red">Configuración de una
+        interfaz de red</a>).
+      </p><p>
+        El espacio físico en el que esté la red será la primera
+        restricción que debe tener en cuenta. Haga un plano de ese
+        espacio con las distancias a escala, ubique los computadores y
+        diseñe el recorrido de los cables al concentrador. Hay varias
+        recomendaciones que puede tener en cuenta al diseñar el mapa:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+            Es aconsejable por estética y seguridad que los cables vayan
+            por canaletas.
+          </p></li><li><p>
+            La longitud máxima de cada cable (para unir concentrador y
+            computador) es de 100 m.
+          </p></li><li><p>
+            Busque que los cables/canaletas vayan por las paredes del
+            recinto y estén resguardadas (para evitar que alguien se
+            tropiece).
+          </p></li></ul></div><p>
+        En el mapa que haga también puede consignar las direcciones IP
+        que planee usar en cada computador. Emplee direcciones estáticas
+        asignadas para redes privadas, por ejemplo 192.168.1.1 al
+        servidor y los clientes 192.168.1.2, 192.168.1.3 y así
+        sucesivamente. Cómo compuerta emplee en todos los clientes la
+        dirección del servidor y como máscara de red emplee
+        <code class="literal">255.255.255.0</code> (ver
+        <a href="direcciones_enrutamiento_transporte_y_cortafuegos.html#ipv4" title="5.1. Introducción a TCP/IPv4">Sección 5.1, “Introducción a TCP/IPv4”</a> ). Así como toda dirección IPv4
+        que comience con 192.168 es privada para redes locales de máximo
+        65535 computadores, también son privadas las direcciones entre
+        172.16.0.0-172.31.255.255 y en el rango 10.0.0.0 -
+        10.255.255.255. Para un caso sencillo como el que aquí
+        presentamos, donde hay un sólo switch también pueden emplearse
+        direcciones de enlace local (<span class="emphasis"><em>link local
+        address</em></span>) en el rango 169.254.0.0 - 169.254.255.255.
+      </p><p>
+        Si planea implementar doble pila con IPv6 inicialmente asignando
+        direcciones locales únicas (<span class="emphasis"><em>Unique Local Addresses -
+        ULA </em></span>), que comienzan con `fc00`` seguidas de un
+        prefijo aleatorio escogido por usted de 48 bits, después 16 bits
+        para identificar subredes (digamos 00:01) y los 64 bits finales
+        usados para identificar cada interfaz de red (puede emplear por
+        ejemplo la dirección MAC de cada computador). Pueden verse
+        detalles en el RFC 4193 o incluso para evitar duplicaciones hay
+        una base pública en https://www.sixxs.net/tools/grh/ula/. Asi
+        por ejemplo si su prefijo de 48 bits aleatorio es
+        fd4d:da20:9e54, puede comenzar con fc00:fd4d:da20:9e54:0001::1
+        en el primer computador, fc00:fd4d:da20:9e54:0001::2 en el
+        segundo y así sucesivamente.
+      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="adquisicion-de-hardware"></a>4.1.2. Adquisición de Hardware</h4></div></div></div><p>
+        Para hacer la adquisición de Hardware tenga en cuenta:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+            Los nombres de los componentes pueden variar de un almacén a
+            otro, algunos sinónimos son:
+          </p><div class="itemizedlist"><ul type="circle"><li><p>
+                tarjeta ethernet, tarjeta con conectores RJ45
+              </p></li><li><p>
+                concentrador o <span class="emphasis"><em>hub</em></span> o
+                <span class="emphasis"><em>switch</em></span> repetidor, su velocidad
+                junto con la velocidad de las interfaces de red
+                establecerá el limite de velociad de la red interna.
+              </p></li><li><p>
+                cable de pares trenzados, par trenzado, twisted pair,
+                cable Ethernet, UTP (<span class="emphasis"><em>Unshielded Twisted
+                Pair</em></span>). La categoría 5 será útil en redes de
+                hasta 100MB, las categorías 5e y 6 para redes hasta de
+                1G, las categorías 6A y 7 para redes hasta de 10G.
+              </p></li></ul></div></li><li><p>
+            Use el plano de red para determinar la longitud de cada
+            cable, recuerde que todo computador debe tener un cable que
+            lo una con el concentrador (compre un poco más de la
+            longitud que midió pues al intentar ensamblar los conectores
+            podría perder algo de cable en cada intento).
+          </p></li><li><p>
+            El concentrador debe tener suficientes puertos para todos
+            los computadores (pueden ponerse varios concentradores en
+            cascada).
+          </p></li><li><p>
+            Cada computador debe tener una tarjeta de red Ethernet
+            preferiblemente 1Gb que pueda usar desde OpenBSD (ver
+            <a href="dispositivos_de_interconexion.html#configuracion-interfaz" title="3.4.2. Configuración de una interfaz de red">Configuración de una
+            interfaz de red</a>) —recordar que las más incompatibles
+            son las populares Encore.
+          </p></li><li><p>
+            Cada cable debe tener dos conectores RJ-45. Uno para
+            conectarlo al computador y el otro para conectarlo al
+            concentrador. (Compre varios conectores RJ-45 adicionales
+            pues al intentar ensamblar podría perder algunos).
+          </p></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-de-cables-y-concentrador"></a>4.1.3. Instalación</h4></div></div></div><p>
+        Una vez tenga instaladas las tarjetas de red debe conectar los
+        cables a tales tarjetas y al concentrador. Como eventualmente
+        usted mismo hará los cables, en esta sección damos instrucciones
+        para que le resulte fácil el proceso. Requerirá unas pinzas
+        especiales <sup>[<a name="idp232766544" href="#ftn.idp232766544">20</a>]</sup> para conectores RJ-45 y un probador
+        (<span class="emphasis"><em>tester</em></span>) para comprobar que fluye corriente
+        en los cables que haga.
+      </p><p>
+        Ubique en el espacio para la red los computadores y los cables
+        (verifique que las medidas de su plano hayan sido correctas).
+      </p><p>
+        Ponga en cada extremo de cada uno de los cables un conector
+        RJ-45 empleando unas pinzas especiales. Como el cable UTP se
+        compone de 8 cablecitos de colores tenga en cuenta:
+      </p><p>
+        Deje entre 8mm y 12 mm de los 8 cables al descubierto.
+        <sup>[<a name="idp232789712" href="#ftn.idp232789712">21</a>]</sup>
+      </p><p>
+        Al preparar los cables tenga en cuenta que las tarjetas de 100MB
+        y 1000MB requieren un orden especial de los cables que conforman
+        un UTP 5, UTP 5e o UTP 6, si no aplica este orden, con algunos
+        cables de varios metros puede tener problemas de comunicación
+        (ni siquiera podrá resolver ARP). En redes de 10MB y 100MB puede
+        usar cualquier de estos tipos de cables, pero para redes de
+        1000MB debe usar UTP 5e o UTP 6. Hay dos secuencias
+        estandarizadas para los cables que conforman un UTP 5/5e/6, de
+        las cuales la más común es la TIA/EIA-568-B:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+            Para cables directos (que unen por ejemplo un computador a
+            un concentrador), los dos extremos del cable se ponen en el
+            conector RJ-45 siguiendo la misma secuencia: 1 -
+            blanco/naranja, 2 - naranja, 3 - blanco/verde, 4 - azul, 5 -
+            blanco/azul, 6 - verde, 7 - blanco/cafe, 8 - cafe
+          </p></li><li><p>
+            Para un cable cruzado (que permite unir dos computadores o
+            en algunos casos 2 concentradores): Lado 1: 1 -
+            blanco/naranja, 2 - naranja, 3 - blanco/verde, 4 - azul, 5 -
+            blanco/azul, 6 - verde, 7 - blanco/cafe, 8 - cafe. Lado 2: 1
+            - blanco/verde, 2 - verde , 3 - blanco/naranja, 4 -
+            blanco/cafe, 5 - cafe, 6 - naranja, 7 - azul, 8 -
+            blanco/azul.
+          </p></li></ul></div><p>
+        Empareje los 8 cablecitos antes de intentar ponerlos en el
+        conector RJ-45. Póngalos en el orden antes indicado para cables
+        directos.
+      </p><p>
+        El conector RJ45 tiene varios canales, por cada uno de esos
+        canales debe pasar un cablecito de color. Empuje bien los
+        cablecitos hasta el fondo del conector RJ-45 y con las pinzas
+        especiales baje los contactos del conector y asegure el cable.
+      </p><p>
+        Después de ensamblar el primer extremo verifique con un probador
+        que todos los cablecitos hagan contacto. Después ensamble el
+        segundo extremo empleando la misma secuencia de colores y
+        después verifique que estén haciendo buen contacto con un
+        probador.
+      </p><p>
+        Una vez tenga los cables verifique que la tarjeta de red de cada
+        computador esté bien instalada (algunas tienen luces <sup>[<a name="idp232643536" href="#ftn.idp232643536">22</a>]</sup> que se encienden cuando transmite o recibe
+        información por el cable), y conecte con cables todas las
+        tarjetas al concentrador.
+      </p><p>
+        Verifique también que cada tarjeta de red sea reconocida por el
+        kernel y asigne la IP que planeó para cada una (ver
+        <a href="dispositivos_de_interconexion.html#configuracion-interfaz" title="3.4.2. Configuración de una interfaz de red">Configuración de una
+        interfaz de red</a>).
+      </p><p>
+        Finalmente verifique la instalación transmitiendo paquetes de un
+        computador a otro. Por ejemplo desde el servidor (tal vez con IP
+        192.168.1.1) intente conectarse a un cliente (tal vez IP
+        192.168.1.2) con <code class="literal">ping</code> :
+      </p><pre class="programlisting">
+    ping 192.168.1.2    
+</pre><p>
+        y viceversa.
+      </p><p>
+        En caso de implementar doble pila (o un red puramente sobre
+        IPv6) verifique con las direcciones estáticas que asignó, por
+        ejemplo
+      </p><pre class="programlisting">
+    ping6 fc00:fd4d:da20:9e54:0001::2
+</pre><p>
+        En el caso de IPv6 en redes locales con un sólo switch es aún
+        más simple emplear direcciones de enlace local que son asignadas
+        automáticamente en cada interfaz de red empleando el prefijo
+        fe80 y un posfijo asignado automáticamente a partir de la
+        direción MAC finalizado con el signo porciento y una
+        identifcación de la subred que en el caso de OpenBSD es la
+        interfaz de red. Así por ejemplo cuando inicie inet6 en una
+        interfaz de red ix0 con
+      </p><pre class="programlisting">
+    doas ifconfig ix0 inet6 up
+</pre><p>
+        O si en el archivo de configuración de la interfa (digamos
+        <code class="literal">/etc/hostname.ix0</code>) pone
+      </p><pre class="programlisting">
+    inet6 up
+</pre><p>
+        Al revisar la interfaz con <code class="literal">ifconfig ix0</code> verá
+        la dirección de enlace local auto-asignada, algo como
+        <code class="literal">fe80::a236:9fff:fe83:b686%ix0</code> y desde otro
+        computador conectado al mismo switch donde también active IPv6
+        en la interfaz de red podrá verificar conexión con:
+      </p><pre class="programlisting">
+    ping6 fe80::a236:9fff:fe83:b686%ix0
+</pre></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="referencias-lan"></a>4.2. Referencias</h3></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+          FAQ de OpenBSD Sección 6.
+        </p></li><li><p>
+          Páginas <code class="literal">man</code> de <code class="literal">arp</code>,
+          <code class="literal">route</code>, <code class="literal">ifconfig</code>,
+          <code class="literal">hostname.if</code>
+        </p></li><li><p>
+          Sobre cables Ethernet puede consultarse en
+          <a href="biblio.html" title="B. Bibliografía">ethernet_cables</a>
+        </p></li></ul></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="red-inalambrica"></a>4.3. Red Local Inalámbrica: uso y configuración</h3></div></div></div><p>
+      Las redes inalámbrica emplean ondas electromagnéticas transmitidas
+      por aire, por lo que no se requieren cables, aunque el rango de
+      alcance es limitado por el tipo de antenas que se empleen y los
+      obstáculos (sin antenas especiales piense en menos de 50 metros
+      con línea de vista y menos cuando hay paredes y otros obstáculos).
+    </p><p>
+      Para redes locales los protocolos más utilizados son IEEE 802.11a,
+      802.11b y 802.11g, que emplean rangos del espectro
+      electromagnético (como 2.4GHz) los cuales pueden usarse sin
+      requerir permiso en Colombia y dan tasas de transferencia entre
+      11Mbps y 54Mbps.
+    </p><p>
+      Una red local inalámbrica requiere un Punto de Acceso Inalámbrico
+      (en inglés <span class="emphasis"><em>Access Point</em></span>) que atienda
+      peticiones y dé respuestas a todos los computadores cliente que se
+      conecten. Tal Punto de Acceso Inalámbrico puede ser un dispositivo
+      dedicado o bien un computador con OpenBSD que cuente con una
+      tarjeta de inalámbrica que soporte el modo
+      <code class="literal">hostap</code>.
+    </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="cliente-inalambrico"></a>4.3.1. OpenBSD como cliente en una red inalámbrica</h4></div></div></div><p>
+        Hay una amplia gama de tarjetas de red inalámbricas (tanto PCI,
+        como USB) con controladores para OpenBSD, sin embargo varias
+        tarjetas de red populares no son soportadas, por lo que antes de
+        comprar examine el listado de tarjetas soportadas en:
+        <a href="https://dhobsd.pasosdejesus.org/compatibilidadhardware.html" target="_top">https://dhobsd.pasosdejesus.org/compatibilidadhardware.html</a>.
+        Una vez conecte su tarjeta de red inalámbrica, busque la
+        interfaz de red asociada con
+      </p><pre class="programlisting">
+    ifconfig
+</pre><p>
+        o algunos detalles de lo que se ve del hardware con
+      </p><pre class="programlisting">
+    dmess | less
+</pre><p>
+        Por ejemplo una Intel PRO/Wireless se ve así:
+      </p><pre class="programlisting">
+    wpi0 at pci3 dev 0 function 0 "Intel PRO/Wireless 3945ABG" rev 0x02: irq 10, MoW1, address 00:1b:77:d6:52:ee
+</pre><p>
+        y una D-Link USB típica se ve:
+      </p><pre class="programlisting">
+    rum0 at uhub0 port 5 "Ralink 802.11 bg WLAN" rev 2.00/0.01 addr 2
+    rum0: MAC/BBP RT2573 (rev 0x2573a), RF RT2528, address 00:1e:58:b0:db:68
+</pre><p>
+        En algunos casos OpenBSD incluye el controlador completo de
+        fuentes abiertas para a la tarjeta (por ejemplo
+        <code class="literal">rum0</code>) pero en otros es necesario descargar
+        firmware adicional (por ejemplo <code class="literal">wpi0</code>). Vea la
+        página del controlador para encontrar detalles, por ejemplo en
+        el caso de <code class="literal">wpi0</code> al examinar
+        <code class="literal">man wpi</code> se ve que esta tarjeta requiere
+        firmware adicional que debe instalarse conectando el computador
+        a Internet con una tarjeta soporte y ejecuntado:
+      </p><pre class="programlisting">
+    doas fw_update
+</pre><p>
+        Después de tener controlador completo puede buscar redes
+        inalámbricas cercanas con
+      </p><pre class="programlisting">
+    doas ifconfig rum0 scan 
+</pre><p>
+        remplazando <code class="literal">rum0</code> por la interfaz de su
+        tarjeta. Verá un listado de redes próximas con identificación,
+        calidad de la señal, velocidad y tipo de cifrado.
+      </p><p>
+        Para conectarse a una red basta configurar la tarjeta con la
+        identificación, tipo de cifrado y clave apropiadas y
+        posteriormente asignar una IP en la red inalámbrica, bien
+        manualmente o bien por DHCP si el Access Point lo soporta (como
+        ocurre típicamente). Para configurar a una red de nombre MIRED
+        que no emplea cifrado:
+      </p><pre class="programlisting">
+    doas ifconfig rum0 nwid MIRED 
+</pre><p>
+        Si la red emplea cifrad WEP (un mecanismo de cifrado débil),
+        puede especificar la llave de cifrado en hexadecimal:
+      </p><pre class="programlisting">
+    doas ifconfig rum0 nwid MIRED nwkey 0x123498a2d2
+</pre><p>
+        o en ASCII:
+      </p><pre class="programlisting">
+    doas ifconfig rum0 nwid MIRED nwkey "clave"
+</pre><p>
+        Si la red emplea cifrado WAP (un mecanismo de cifrado más
+        fuerte):
+      </p><pre class="programlisting">
+    doas ifconfig rum0 nwid MIRED wpakey MICLAVE
+</pre><p>
+        Después puede examinar nuevamente con
+        <code class="literal">ifconfig</code> si ya se ve estado Activo en la
+        interfaz de red lo cual le confirma que logró conexión y
+        posteriormente puede establecer la IP bien manualmente si conoce
+        el segmente de red:
+      </p><pre class="programlisting">
+    ifconfig rum0 192.168.1.15
+</pre><p>
+        o bien automáticamente si el Acess Point soporta DHCP con:
+      </p><pre class="programlisting">
+    doas dhclient rum0
+</pre><p>
+        Tras esto al examinar con <code class="literal">ifconfig</code> se ve algo
+        como:
+      </p><pre class="programlisting">
+    rum0: flags=8c43&lt;UP,BROADCAST,RUNNING,OACTIVE,SIMPLEX,MULTICAST&gt; mtu 1500
+            lladdr 00:1e:58:b0:db:68
+            priority: 4
+            groups: wlan egress
+            media: IEEE802.11 autoselect (OFDM36 mode 11g)
+            status: active
+            ieee80211: nwid MIRED chan 1 bssid 00:02:6f:5f:f8:6a 117dB nwkey &lt;not displayed&gt; 100dBm
+            inet 192.168.44.50 netmask 0xffffff00 broadcast 192.168.44.255
+            inet6 fe80::21e:58ff:feb0:db68%rum0 prefixlen 64 scopeid 0x6
+</pre><p>
+        Si requiere conectarse en cada arranque del computador configure
+        en <code class="literal">hostname.rum0</code> (cambiando rum0 por su
+        interfaz). Por ejemplo si tiene una IP fija con:
+      </p><pre class="programlisting">
+    inet 192.168.44.50 255.255.255.0 NONE nwid "MIRED" nwkey "clave"
+</pre><p>
+        o si requiere DHCP:
+      </p><pre class="programlisting">
+    nwid "MIRED" nwkey "0x1112131415"
+    inet autoconf
+</pre><p>
+        o si es WPA con DHCP:
+      </p><pre class="programlisting">
+    nwid "MIRED" wpakey "clave"
+    inet autoconf
+</pre><p>
+        El tráfico de red inalámbrico puede examinarse con el paquete
+        <code class="literal">kismet</code>, el cual tiene un archivo de
+        configuración (<code class="literal">/etc/kismet.conf</code>) en el que
+        debe especificarse el controlador usado.
+      </p><p>
+        Si el Access Point soporta IPv6 puede conectar en modo IPv6 puro
+        y emplear auto-configuración con:
+      </p><pre class="programlisting">
+    nwid "MIRED" wpakey "clave"
+    inet6 autoconf
+</pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="dispositivo-AP"></a>4.3.2. Dispositivo dedicado que obra como Punto de Acceso
+      Inalámbrico</h4></div></div></div><p>
+        Estos dispositivo cuentan con una antena (típicamente pequeña)
+        para la red inalámbrica y un conector para cable Ethernet que se
+        conecta a la red cableada, la cual típicamente va a Internet.
+      </p><p>
+        Normalmente los dispositivos que obran como Punto de Acceso
+        Inalámbrico (Access Point) cuentan con un servicio de
+        configuración que opera sobre HTTP por lo que pueden conectarse
+        a un computador y emplear un navegador web.
+      </p><p>
+        Para conectarlo a un computador basta que ponga un cable
+        Ethernet sin cruzar entre ambos y que ambos estén en el mismo
+        segmento de red con IPs diferentes. La IP inicial de su Punto de
+        Acceso Inalámbrico seguramente la podrá ver en el manual del
+        usuario (típicamente es 192.168.0.1 o 192.1681.1.1 con máscara
+        de red 255.255.255.0). Para determinar la IP de un Punto de
+        Accesos Inalámbrico también puede intentar conectándolo a un
+        computador y usando <code class="literal">tcpdump</code> para examinar el
+        tráfico que pasa por la interfaz de red a la cual conecte el
+        Punto de Acceso Inalámbrico.
+      </p><p>
+        Una vez determine la IP del Punto de Acceso Inalámbrico ponga el
+        computador con el que configurará en el mismo segmento de red.
+        Por ejemplo si el Access Point tiene IP 192.168.1.1 y lo conectó
+        a la interfaz <code class="literal">rl0</code>, configure esa interfaz de
+        red por ejemplo con:
+      </p><pre class="programlisting">
+    ifconfig rl0 192.168.1.2 
+</pre><p>
+        tras lo cual ya debe poder ejecutar:
+      </p><pre class="programlisting">
+    ping 192.168.1.1
+</pre><p>
+        obtener respuesta del Punto de Acceso Inalámbrico y configurarlo
+        abriendo en un navegador el URL
+        <code class="literal">http://192.168.1.1</code>.
+      </p><p>
+        El Punto de Acceso Inalámbrico normalmente obrará como enrutador
+        y hará NAT a una nueva red que será independiente de la red
+        cableada a la cual lo conecte. Por ejemplo si lo conecta por
+        cable Ethernet a una red con IPs 192.168.190/24, podrá enrutar y
+        hacer NAT a otra red como la 192.168.1/24. Algunos Puntos de
+        Acceso Inalámbricos (como el EnGenius EOC 1650) soportan un modo
+        puente que permite distribuir con DHCP algunas direcciones de la
+        misma red cableada. Esto tiene la ventaja de dejar tanto la red
+        inalámbrica como la cableada en el mismo segmento de red.
+      </p><p>
+        Las particularidades de configuración de cada Punto de Acceso
+        Inalámbrico varían de un modelo a otro, pero normalmente debe
+        especificar:
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+            IP, máscara de red, puerta de enlace y servidor DNS en la
+            red cableada.
+          </p></li><li><p>
+            IP, máscara de red y rango de direcciones por repartir en la
+            red inalámbrica.
+          </p></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="PAI"></a>4.3.3. OpenBSD como Punto de Acceso Inalámbrico</h4></div></div></div><p>
+        Si cuenta con una tarjeta de red inalámbrica con controladores
+        para OpenBSD y que soporte el modo <code class="literal">hostap</code>
+        (como puede consultar en la página del manual del controlador)
+        es sencillo configurar un Punto de Acceso Inalámbrico,
+        continuando las instrucciones de la sección
+        <a href="section.html#cliente-inalambrico" title="4.3.1. OpenBSD como cliente en una red inalámbrica">OpenBSD como cliente en una
+        red inalámbrica</a>.
+      </p><p>
+        Supongamos que su tarjeta esta asociada a la interfaz
+        <code class="literal">ath0</code>, que desea emplear el segmento
+        192.168.3/24, llamar a la red CASA con cifrado WEP y clave
+        “<span class="quote">uvwxy</span>”. Basta que en
+        <code class="literal">/etc/hostname.ath0</code> configure:
+      </p><pre class="programlisting">
+    inet 192.168.3.1 255.255.255.0 NONE media autoselect \
+    mediaopt hostap nwid CASA chan 11 nwkey "uvwxy"
+</pre><p>
+        Tras esto desde los portátiles y computadores cercanos debe
+        poder ver la red CASA y conectarse con WEP y la clave uvwxy.
+      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-wlan"></a>4.3.4. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+            Páginas <code class="literal">man</code> de
+            <code class="literal">ifconfig</code>, <code class="literal">wpi</code>
+          </p></li><li><p>
+            Ver <a href="biblio.html" title="B. Bibliografía">wndw</a>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp232766544" href="#idp232766544">20</a>] </sup>
+            En Colombia a tal “<span xmlns="" class="quote">pinza especial</span>” se le conoce
+            como “<span xmlns="" class="quote">ponchadora</span>”.
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp232789712" href="#idp232789712">21</a>] </sup>
+            Pablo Chamorro nos indicó que “<span xmlns="" class="quote">algunas pinzas tienen
+            un tope, entonces al colocar las puntas de los cables junto
+            al tope, el corte de la envoltura del cable siempre se
+            realiza en el mismo punto para que ni sobre ni falte y así
+            no hay que preocuparse por estimar el punto de
+            corte.</span>”
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp232643536" href="#idp232643536">22</a>] </sup>
+            Luces es traducción de <span xmlns="" class="emphasis"><em>LED (Light emitting
+            diode)</em></span>.
+          </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="dispositivos_de_interconexion.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">3. Dispositivos de interconexión </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 5. Direcciones, enrutamiento, transporte y cortafuegos</td></tr></table></div></body></html>
