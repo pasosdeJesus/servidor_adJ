@@ -222,7 +222,7 @@
       </p><p>
         Otra posibilidad es cambiar la configuración después de haber
         inicializado sin autenticación. Para esto cambie la clave del
-        administrador con<sup>[<a name="idm272881840" href="#ftn.idm272881840">28</a>]</sup>:
+        administrador con<sup>[<a name="idm902689712" href="#ftn.idm902689712">28</a>]</sup>:
       </p><pre class="programlisting">
     psql -h /var/www/var/run/postgresql -U postgres template1
     template1=# alter user postgres with password 'MiClave';
@@ -354,7 +354,7 @@
     *:*:*:usuario:clave
 </pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="postgresql-cotejacion"></a>7.2.5. Cotejación en PostgreSQL</h4></div></div></div><p>
         Desde adJ 5.2 se incluye un porte de PostgreSQL (la versión
-        incluida en adJ 6.9 es postgresql-server-14beta1) que
+        incluida en adJ 7.0 es postgresql-server-14.2) que
         soporta cotejaciones de acuerdo al locale, y por defecto se
         crean cotejaciones para todos los países de habla hispana, con
         nombres de la forma <code class="literal">es_CO_UTF_8</code>. Donde
@@ -591,8 +591,8 @@
       Oracle compró Sun y MySQL, pues consideraba que Oracle había hecho
       la compra para reducir competencia de sus bases de datos.
     </p><p>
-      Debe instalar los paquetes mariadb-client-10.5.9v1 y
-      mariadb-server-10.5.9v1. Aunque el nombre de los paquetes cambia
+      Debe instalar los paquetes mariadb-client-10.6.4v1 y
+      mariadb-server-10.6.4p2v1. Aunque el nombre de los paquetes cambia
       las órdenes para operarla siguen siendo los mismos.
     </p><p>
       Inicialice el directorio donde estarán las bases de datos con
@@ -800,7 +800,7 @@
       3, <code class="literal">ldapd</code>. No incluye cliente para LDAP pero
       desde la línea de órdenes puede emplearse el paquete
       <code class="literal">openldap-client</code> o como interfaz web
-      <code class="literal">phpldapadmin</code><sup>[<a name="idp1911427408" href="#ftn.idp1911427408">29</a>]</sup>.
+      <code class="literal">phpldapadmin</code><sup>[<a name="idm902729648" href="#ftn.idm902729648">29</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-ldapd"></a>7.4.1. Instalación de ldapd</h4></div></div></div><p>
         No necesita instalar paquetes para la operación como servidor.
       </p><p>
@@ -1316,10 +1316,10 @@ echo "conectado= "; print_r($conectado); echo "\n"
           <code class="literal">/etc/ssl/cert.pem</code>
         </p></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias"></a>7.5.5. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
             <a href="https://www.howtoforge.com/postgresql-ssl-certificates" target="_top">https://www.howtoforge.com/postgresql-ssl-certificates</a>
-          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm272881840" href="#idm272881840">28</a>] </sup>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm902689712" href="#idm902689712">28</a>] </sup>
             Note que de esta forma puede cambiar la clave de otros
             usuarios de PostgreSQL.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1911427408" href="#idp1911427408">29</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm902729648" href="#idm902729648">29</a>] </sup>
           Si emplea un adJ 5.2 y planea conectarse desde clientes
           digamos en Ubuntu reciente requerirá el parche descrito en
           <a xmlns="" href="http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html" target="_top">http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</a>
