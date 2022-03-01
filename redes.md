@@ -52,6 +52,16 @@ ejemplo con IPv6 (y protocolo ICMP6) es:
 
         ping6 ::1
 
+Y que como en IPv6 es común que una misma interfaz de red tenga muchas
+direcciones IPv6 también se puede usar la dirección de enlace local 
+(*link-local address*) `fe80::1%lo0%.
+
+        ping6  fe80::1%lo0
+
+Las direcciones de enlace local siempre comienzan con `fe80` sólo se
+usan en redes de área local y son útiles en el proceso de auto-configuración
+IPv6.
+
 [//]: # "protocolo"
 [//]: # "Conjunto de reglas que determinan como se realiza la comunicación entre computadores conectados a una red."
 
@@ -233,11 +243,9 @@ protocolo de la capa física. Los protocolos de esta capa deben tener en
 cuenta la retransmisión de la información en caso de error al enviar y
 el verificar información recibida. En esta capa está el *Internet
 Protocol* (IP) que es un protocolo diseñado para Internet y del cual hay
-dos versiones: IPv4 e IPv6. Describiremos la versión 4 [^red.10] (la versión
-6 fue diseñada para soportar más computadores conectados a Internet y se
-espera que pronto se use ampliamente [^red.11]).
+dos versiones: IPv4 e IPv6 (ver [^red.10]).
 
-Este protocolo permite la transmisión de paquetes (llamados datagramas)
+IPv4 e IPv6 permiten la transmisión de paquetes (llamados datagramas)
 en redes donde cada computador interconectado se identifica con una
 dirección única. Tales direcciones están diseñadas para interconectar
 varias redes, identificar los computadores que pertenecen a una red
@@ -251,12 +259,12 @@ llama MTU (*Maximal Transfer Unit*), en el caso de Ethernet es 1500
 bytes.
 
 Cada datagrama por transmitir es pasado a la capa de IP por otro
-protocolo de una capa superior (e.g TCP) junto con dirección destino, IP
+protocolo de una capa superior (e.g TCP) junto con la dirección destino, IP
 mantiene una tabla de enrutamiento que asocia direcciones destino con
-compuertas (computadores intermediarios en inglés *gateways*). Así que
+compuertas (computadores intermediarios o en inglés *gateways*). Así que
 envía el datagrama empleando el nivel físico a la dirección de la
 compuerta que mantenga en su tabla de enrutamiento. La tabla de
-enrutamiento puede ser modificada manualmente (con `route show`) o puede
+enrutamiento puede ser modificada manualmente (con `route`) o puede
 ser modificada automáticamente cuando una compuerta envía un mensaje
 indicando la dirección de otra compuerta más apropiada para llegar a una
 dirección. Hay siempre una compuerta por defecto a la que se envían
@@ -274,11 +282,45 @@ situaciones anómalas emplea el protocolo ICMP [^red.12].
 para realizar algunas consultas para verificar el funcionamiento de una
 red o medir (e.g eco, estampilla de tiempo)."
 
-OpenBSD cuenta con una excelente implementación de IPv4 con posibilidad
-de filtrar, redirigir, traducir direcciones, balancear carga y muchas
-otras opciones que se configuran de forma sencilla con PF. Además
-implementa características no estándar como IPsec para transmisión
-cifrada y IPcomp para comprimir.
+Las direcciones IPv4 son de 4 bytes (o 32 bits) y suelen escribirse como
+cuatro octetos en decimal separados por punto es decir cuatro números 
+en decimal cada uno entre 0 y 255  e.g 192.168.112.3
+
+Como se explica en <https://www.youtube.com/watch?v=cVyhDp14fac> y 
+otros vídeos producidos por LACNIC, en 1990
+empezó a estudiarse el agotamiento de direcciones IPv4.
+Pues aunque hay 4300 millones de direcciones IPv4 su agotamiento fue
+generado por una asignación inicial deficiente y por el crecimiento 
+hiper-exponencial de internet desde 1993. Aunque se desarrollaron 
+arreglos como NAT la solución fue rediseñar la capa IP en lo que 
+conocemos como IPv6.
+
+Algunas características de IPv6 que solucionan falencias de IPv4 son:
+* 128 bits de direccionamiento que posibilita más de 10^38 direcciones,
+  y que contrasta con IPv4 que usa 32 bits posibilitando menos de 10^10
+  direcciones  (bastaría para ponerle dirección a cada átomo del sol que 
+  se calculan en 10^37 --se calcula que los átomos del universo son
+  10^80 ver
+  <https://blogs.hoy.es/curiosidades-cientificas/2019/12/27/cuantos-atomos-universo/>)
+* IPSec incorporado
+* Mecanismos para facilitar configuración de la red
+
+Las direcciones IPv6 como son de 128 bits suelen escribirse con 8
+números de 16 bits cada uno en hexadecimal (sin ceros al comienzo) y separados 
+por dos puntos. e.g 1f8a:3900:0000:0000:0000:e12a:1:2f0
+Para abreviar los números intermedios que sean 0000 suele usarse :: así que 
+la dirección anterior se puede abreviar como 1f8a:3900::e12a:1:2f0.
+La primera mitad de esta dirección ayuda a enrutar globalmente
+(tipicamente los primeros 48 bits son para enrutamiento y los siguientes
+16 para identificar subredes) y la segunda mitad a identificar 
+interfaces de red en redes locales.
+
+Al momento de este escrito no es claro cuando se completará el transito de 
+IPv4 a IPv6 por lo demorado de su implementación por ejemplo en latinoamérica,
+pero durante este, hay mecanismos que permiten la coexistencia de los dos
+protocolos, el más recomendable en un servidor es la doble pila, es decir
+que las interfaces de red tengan tanto una dirección IPv4 como una
+dirección IPv6 (en realidad varias direcciones IPv6).
 
 ### Capa de transporte
 
@@ -381,7 +423,7 @@ BGP
 -   Puede consultar los RFC en [rfceditor](#biblio). También puede
     consultar versiones en castellano en [rfces](#biblio)
 
--   Páginas del manual netintro4, ip4, inet4, ip4
+-   Páginas del manual netintro, ip, inet, ip, ip6, inet6, icmp6
 
 -   https://en.wikipedia.org/wiki/Internet_protocol_suitehttps://en.wikipedia.org/wiki/Internet_protocol_suite
 
@@ -423,8 +465,6 @@ BGP
 
 [^red.10]: El protocolo IPv4 está descrito en el RFC 791, aunque puede verse
     una descripción en conjunto con otros protocolos en el RFC 1122
-
-[^red.11]: OpenBSD tiene soporte para IPv6
 
 [^red.12]: ICMP Internet Control Message Protocol, se describe en el RFC792,
     permite enviar mensajes de error (e.g dirección inalcanzable, tiempo

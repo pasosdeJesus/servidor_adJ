@@ -267,7 +267,6 @@ asociada una dirección IP a una interfaz `tun` (e.g a `tun0`). Puede
 también emplear el siguiente script para realizar la conexión:
 
         #!/bin/sh
-        # Dominio público. 2004.
         
         # Usa configuración de /etc/ppp/ppp.conf regla PAP
         
@@ -468,13 +467,13 @@ nombre de la interfaz de red (en este ejemplo `lo0`, `re0`, `re1`,
 cada interfaz, por ejemplo las características de la interfaz `re0` son:
 
         flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
-        lladdr 00:14:d1:1a:cf:b2
+        lladdr 52:74:f2:b1:a8:7f
         priority: 0
         groups: egress
         media: Ethernet autoselect (100baseTX full-duplex,rxpause,txpause)
         status: active
         inet 189.148.51.41 netmask 0xffffff00 broadcast 189.148.51.255
-        inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
+        inet6 fe80::5074:f2ff:feb1:a87f%re0 prefixlen 64 scopeid 0x1
 
 Algunas de las interfaces corresponden a tarjetas de red (en este
 ejemplo `re0`, `re1`, `re2` y `vr0`) mientras que otras son virtuales,
@@ -510,9 +509,24 @@ Con respecto a las propiedades de cada interfaz física, resaltamos
 
 :   Propiedades IPv6, por ejemplo:
 
-            inet6 fe80::214:d1ff:fe1a:cfb2%re0 prefixlen 64 scopeid 0x1
+            inet6 fe80::5074:f2ff:feb1:a87f%re0 prefixlen 64 scopeid 0x1
 
-    Indica que la dirección IPv6 es `fe80::214:d1ff:fe1a:cfb2`
+    Indica que la dirección IPv6 es `fe80::214:d1ff:fe1a:cfb2%re0`.
+    En este caso se trata de una dirección de enlace local (porque
+    comienza con `fe80`) que se asigna automáticamente a la inetrfaz
+    de red cuando se configura IPv6 a partir de la dirección MAC. 
+    Como se indica en https://ben.akrin.com/?p=1347 el proceso para
+    asignarla es:
+
+    1. Tome la dirección mac. Por ejemplo 52:74:f2:b1:a8:7f
+    2. Ponga un ff:fe en la mitad: 52:74:f2:ff:fe:b1:a8:7f
+    3. Reformatee en notación IPv6 5274:f2ff:feb1:a87f
+    4. Convierta e primero octeto de hexadecimal a binario: 52 -> 01010010
+    5. Invierta el bit en el índice 7: 01010010 -> 01010000
+    6. Convierta el octeto de vuelta a hexadecimal: 01010000 -> 50
+    7. Remplace el primer octeto con el que calculó: 5074:f2ff:feb1:a87f
+    8. Ponga antes fe80:: que es el prefijo de enlace local: fe80::5074:f2ff:feb1:a87f
+    9. !Listo!
 
 `media`
 
@@ -536,10 +550,10 @@ con:
 
 Un ejemplo típico de una tarjeta Ethernet reconocida es:
 
-        re0 at pci0 dev 8 function 0 "Realtek 8169" rev 0x10: RTL8169/8110SB (0x1000), apic 2 int 16 (irq 10), address 00:14:d1:1a:cf:b2
+        re0 at pci0 dev 8 function 0 "Realtek 8169" rev 0x10: RTL8169/8110SB (0x1000), apic 2 int 16 (irq 10), address 52:74:f2:b1:a8:7f
 
 Note que se lista el nombre de la interfaz (i.e `re0`), los recursos de
-hardware que emplea y la dirección MAC (i.e `00:14:d1:1a:cf:b2`).
+hardware que emplea y la dirección MAC (i.e `52:74:f2:b1:a8:7f`).
 
 OpenBSD incluye documentación completa para cada tipo de dispositivo
 detectable (por ejemplo opciones); para el caso del controlador del
@@ -557,7 +571,11 @@ con controlador `re` e interfaz asignada por el kernel en el arranque
 Como se explica en `man hostname.if` en el caso de una red IPv4 con DHCP
 basta que ese archivo tenga la línea:
 
-        dhcp
+        inet autoconf
+
+Y para una red con IPv6
+
+        inet6 autoconf
 
 Si el direccionamiento en la red local es estático, tal archivo debe
 tener en una línea separados por un espacio los siguientes datos (en
@@ -577,6 +595,11 @@ La línea completa sería:
 
         inet 189.148.51.41 255.255.255.0 NONE
 
+O en el caso de doble pila la dirección IPv4 seguida de la IPv6:
+
+        inet 189.148.51.41 255.255.255.0 NONE
+        inet6 3900:e9:8321::2
+
 Un archivo como estos lo puede crear y/o editar con cualquier editor de
 texto (por ejemplo `mg` o `vim`). Si tiene sesión de X-Window puede
 emplear desde una terminal
@@ -591,9 +614,9 @@ detectada por ifconfig (excepto lo0, enc0, pflog0, tun).
 > **Advertencia**
 >
 > Es importante que la línea del archivo `/etc/hostname.re0` que
-> configura sus propiedades IPv4, termine con el caracter fin de línea,
-> es decir que en el editor con el que la edite termine la línea con la
-> tecla RETORNO.
+> configura sus propiedades IPv4 y/o IPv6, termine con el caracter 
+> fin de línea, es decir que en el editor con el que la edite termine 
+> la línea con la tecla RETORNO.
 
 Y la IP de la compuerta de su red (ver [xref](#ipv4)) se configura en
 `/etc/mygate` que también debe editar con su editor preferido y que
@@ -601,6 +624,11 @@ también debe terminar con fin de línea. Un ejemplo típico del contenido
 sería una línea con:
 
         189.148.51.1
+
+O en el caso de doble pila las compuertas IPv4 e IPv6
+
+        189.148.51.1
+        inet 3900:e9:8321::2
 
 Con adJ puede hacer botón derecho sobre el escritorio
 Dispositivos-&gt;Red-&gt;Configurar Puerta de Enlace.
@@ -615,13 +643,14 @@ aunque en algunos casos es necesario reiniciar el computador.
 Note que si ha cambiado una tarjeta de red es posible que antes de
 reiniciar debe reconfigurar el cortafuegos en el archivo `/etc/pf.conf`
 
-### Protocolo ARP
+### Protocolo ARP para IPv4 sobre Ethernet
 
 La tabla del protocolo ARP asocia direcciones físicas de tarjetas de red
 conectadas a su red con direcciones IP. Para examinar tal tabla use:
 
         arp -a 
 
+# 
 es posible agregar entradas de manera permanente o eliminarlas con las
 opciones `-s` y `-d` respectivamente.
 
@@ -652,11 +681,30 @@ diseñar el mapa:
     estén resguardadas (para evitar que alguien se tropiece).
 
 En el mapa que haga también puede consignar las direcciones IP que
-planee usar en cada computador. Emplee direcciones asignadas para redes
-privadas, por ejemplo 192.168.1.1 al servidor y los clientes
+planee usar en cada computador. Emplee direcciones estáticas asignadas para 
+redes privadas, por ejemplo 192.168.1.1 al servidor y los clientes
 192.168.1.2, 192.168.1.3 y así sucesivamente. Cómo compuerta emplee en
 todos los clientes la dirección del servidor y como máscara de red
-emplee `255.255.255.0` (ver [xref](#ipv4) ).
+emplee `255.255.255.0` (ver [xref](#ipv4) ).   Así como toda dirección
+IPv4 que comience con 192.168 es privada para redes locales de máximo 
+65535 computadores, también son privadas las direcciones entre 
+172.16.0.0-172.31.255.255 y en el rango 10.0.0.0 - 10.255.255.255.
+Para un caso sencillo como el que aquí presentamos, donde hay un sólo
+switch también pueden emplearse direcciones de enlace local 
+(*link local address*) en el rango 169.254.0.0 - 169.254.255.255.
+
+Si planea implementar doble pila con IPv6 inicialmente
+asignando direcciones locales únicas (*Unique Local Addresses - ULA *),
+que comienzan con `fc00`` seguidas de un prefijo
+aleatorio escogido por usted de 48 bits, después 16 bits para identificar 
+subredes (digamos 00:01) y los 64 bits finales usados para identificar
+cada interfaz de red (puede emplear por ejemplo la dirección MAC de cada
+computador).   Pueden verse detalles en el RFC 4193 o incluso
+para evitar duplicaciones hay una base pública en
+https://www.sixxs.net/tools/grh/ula/.  Asi por ejemplo si su
+prefijo de 48 bits aleatorio es fd4d:da20:9e54, puede comenzar con 
+fc00:fd4d:da20:9e54:0001::1 en el primer computador,
+fc00:fd4d:da20:9e54:0001::2 en el segundo y así sucesivamente.
 
 #### Adquisición de Hardware {#adquisicion-de-hardware}
 
@@ -667,10 +715,14 @@ Para hacer la adquisición de Hardware tenga en cuenta:
 
     -   tarjeta ethernet, tarjeta con conectores RJ45
 
-    -   concentrador o *hub* o *switch* repetidor
+    -   concentrador o *hub* o *switch* repetidor, su velocidad
+        junto con la velocidad de las interfaces de red establecerá
+        el limite de velociad de la red interna.
 
     -   cable de pares trenzados, par trenzado, twisted pair, cable
-        Ethernet, UTP (*Unshielded Twisted Pair*).
+        Ethernet, UTP (*Unshielded Twisted Pair*).  La categoría
+        5 será útil en redes de hasta 100MB, las categorías 5e y 6 para redes
+        hasta de 1G, las categorías 6A y 7 para redes hasta de 10G.
 
 -   Use el plano de red para determinar la longitud de cada cable,
     recuerde que todo computador debe tener un cable que lo una con el
@@ -691,9 +743,6 @@ Para hacer la adquisición de Hardware tenga en cuenta:
     conectores RJ-45 adicionales pues al intentar ensamblar podría
     perder algunos).
 
-    RJ45
-    Este es el tipo de conectores que debe ir en cada extremo de un
-    cable UTP en una red Ethernet como la que sugerimos.
 
 #### Instalación {#instalacion-de-cables-y-concentrador}
 
@@ -766,6 +815,35 @@ con `ping` :
 
 y viceversa.
 
+En caso de implementar doble pila (o un red puramente sobre IPv6) verifique
+con las direcciones estáticas que asignó, por ejemplo
+
+        ping6 fc00:fd4d:da20:9e54:0001::2
+
+En el caso de IPv6 en redes locales con un sólo switch es aún más
+simple emplear direcciones de enlace local que son 
+asignadas automáticamente en cada interfaz de red empleando
+el prefijo fe80 y un posfijo asignado automáticamente a partir
+de la direción MAC finalizado con el signo porciento y una identifcación
+de la subred que en el caso de OpenBSD es la interfaz de red.
+Así por ejemplo cuando inicie inet6 en una interfaz de red ix0 con
+
+        doas ifconfig ix0 inet6 up
+
+O si en el archivo de configuración de la interfa (digamos `/etc/hostname.ix0`)
+pone
+
+        inet6 up
+
+Al revisar la interfaz con `ifconfig ix0` verá la dirección de enlace local 
+auto-asignada, algo como `fe80::a236:9fff:fe83:b686%ix0` y desde otro
+computador conectado al mismo switch donde también active IPv6 en la
+interfaz de red podrá verificar conexión con:
+
+        ping6 fe80::a236:9fff:fe83:b686%ix0
+
+
+
 ### Referencias {#referencias-lan}
 
 -   FAQ de OpenBSD Sección 6.
@@ -836,9 +914,10 @@ abiertas para a la tarjeta (por ejemplo `rum0`) pero en otros es
 necesario descargar firmware adicional (por ejemplo `wpi0`). Vea la
 página del controlador para encontrar detalles, por ejemplo en el caso
 de `wpi0` al examinar `man wpi` se ve que esta tarjeta requiere firmware
-adicional que debe instalar con:
+adicional que debe instalarse conectando el computador a Internet
+con una tarjeta soporte y ejecuntado:
 
-        doas pkg_add http://damien.bergamini.free.fr/packages/openbsd/wpi-firmware-3.2.tgz
+        doas fw_update
 
 Después de tener controlador completo puede buscar redes inalámbricas
 cercanas con
@@ -857,7 +936,7 @@ a una red de nombre MIRED que no emplea cifrado:
 
         doas ifconfig rum0 nwid MIRED 
 
-Si la red emplea cifrad oWEP (un mecanismo de cifrado débil),
+Si la red emplea cifrad WEP (un mecanismo de cifrado débil),
 puede especificar la llave de cifrado en hexadecimal:
 
         doas ifconfig rum0 nwid MIRED nwkey 0x123498a2d2
@@ -901,15 +980,25 @@ una IP fija con:
 
 o si requiere DHCP:
 
-        dhcp NONE NONE NONE nwid "MIRED" nwkey "0x1112131415"
+        nwid "MIRED" nwkey "0x1112131415"
+        inet autoconf
 
 o si es WPA con DHCP:
 
-        dhcp nwid "MIRED" wpakey "clave"
+        nwid "MIRED" wpakey "clave"
+        inet autoconf
 
 El tráfico de red inalámbrico puede examinarse con el paquete `kismet`,
 el cual tiene un archivo de configuración (`/etc/kismet.conf`) en el que
 debe especificarse el controlador usado.
+
+
+Si el Access Point soporta IPv6 puede conectar en modo IPv6 puro y
+emplear auto-configuración con:
+
+        nwid "MIRED" wpakey "clave"
+        inet6 autoconf
+
 
 ### Dispositivo dedicado que obra como Punto de Acceso Inalámbrico {#dispositivo-AP}
 

@@ -1,3 +1,6 @@
+Versión 7.0
+:   - Documentado uso de IPv6 [xref](#redes_protocolos_e_internet) e [xref](#dispositivos_de_interconexion)
+
 Versión 6.9
 :   - Mejorada [xref](#mariadb)
     - Mejorada [xref](#pf)

@@ -1918,7 +1918,7 @@ de Let's Encrypt.
 ### nginx
 
 nginx es un servidor web que en el caso de adJ está incluido entre
-los paquetes que se insalan por omisión.
+los paquetes que se instalan por omisión.
 Su binario queda ubicado en `/usr/local/sbin/nginx` y puede consultar la 
 versión ejecutando `nginx -v`
 
@@ -1950,7 +1950,7 @@ y que añada `nginx` en `pkg_scripts`.
 El archivo de configuración consta de directivas que le indican a nginx 
 como responder a solicitudes http.
 
-Algunas de las directivas del archivo de configuracioń tienen bloques que a su 
+Algunas de las directivas del archivo de configuración tienen bloques que a su 
 vez tienen directivas. Cada bloque se inicia con `{` y se cierra con `}`.  
 Las directivas que no tienen bloque deben terminar con `;`
 
@@ -1970,6 +1970,7 @@ navegador empleando una dirección de la forma <http://127.0.0.1>
 	  server {
 	    server_name 127.0.0.1;
 	    listen 80:
+	    listen [::]:80:
 	    root htdocs;
 	  }
 	}
@@ -1981,9 +1982,10 @@ La directiva `server` tiene un bloque dentro del cual deben ponerse,
 entre otras, las directivas `server_name` (con nombre de servidor) y 
 `listen` (con puerto) acordes a los URLs que se esperan sean usados 
 por los usuarios y otras directivas de acuerdo al contenido que se
-desea servir.
+desea servir. En este ejemplo el servidor escucha en el puerto 80 por IPv4 
+y en el puerto 80 por IPv6.
 
-En el ejemplo anterior la directiva `root` indica que se servirán
+En este ejemplo la directiva `root` indica que se servirán
 contenido alojado en el sistema de archivos en la ruta `/var/www/htdocs`
 (como nginx correo en la jaula `/var/www` basta indicar la ruta
 dentro de esa).  La directiva `index index.html` indica que si
@@ -1997,16 +1999,17 @@ iniciar con el contenido:
 #### Configuración de `server_name` y `listen` de acuerdo a URLs que se esperan del usuario
 
 Los URLs que usen que incluyen el protocolo (`http` sin cifrar o
-`https` con cifrado) el nombre del servidor (o dirección IP si no tiene 
-dominos DNS configurados) y el puerto (si el usuario no emplea un puerto 
-y el URL comienza con `http` se usa el puerto 80, o si comienza con 
+`https` con cifrado) el nombre del servidor (o dirección IPv4 o IPv6 si 
+no tiene dominos DNS configurados) y el puerto (si el usuario no emplea un 
+puerto y el URL comienza con `http` se usa el puerto 80, o si comienza con 
 `https` se emplea por omisión el puerto 443).
 
 Otro caso sencillo de configurar es servir contenido estático HTML, CSS
 y Javascript a usuarios ubicados en computadores en una red local en
 la que el servidor tiene una IP estática asignada (digamos
 192.168.20.20) o si ha contratado una IP pública con su proveedor de 
-Internet digamos 125.125.123.1
+Internet digamos 125.125.123.1 como en el siguiente ejemplo que supone
+que sólo configura IPv4:
 
 	http {
 	  include mime.types;
@@ -2019,23 +2022,25 @@ Internet digamos 125.125.123.1
 	  }
 	}
 
+En caso de usar IPv6 tras configurar nginx, para abrir la página desde un
+navegador deberá seguir el estándar de encerrar la dirección IPv6 entre 
+paréntesis cuadrados.
 
 Si prefiere usar un nombre en lugar de una IP (digamos &EDOMINIO;) 
 deberá tramitar el registro del dominio ante un registrador y pagar la 
-anualidad.  En tal caso la sección `server` para el puerto 80 sería 
+anualidad.  En tal caso la sección `server` para el puerto 80 por IPv4
+y 80 por IPv6 sería 
 (cambiando `www` por el registro que hay configurado en su dominio y 
 `minombre.org` por el dominio que haya contratado): 
 
 	  server {
 	    server_name www.minombre.org;
 	    listen 80:
+	    listen [::]:80:
 	    root htdocs;
 	  }
 
-Claro que es posible configurar a manera de prueba resolución local en un 
-computador para que el nombre se asocie a la IP esperada o incluso si tiene 
-control de un resolvedor de una red local para que en la red local el 
-nombre resuelva al servidor donde corre el nginx.
+
 
 ##### Pruebas cambiando resolución local en un computador
 
@@ -2049,6 +2054,11 @@ Eso lo puede hacer en el archivo `/etc/hosts` con una línea de la forma
 
 Siempre y cuando en  `/etc/resolv.conf` tenga `lookup file`
 
+Si en su red emplea IPv6 con direcciones estáticas lo que tendría que agregar
+a `/etc/hosts` sería una línea de la forma:
+
+	fd4d:da20:9e56:8:10 www.midominio.org
+
 ##### Pruebas en una red cambiando resolución local para la red
 
 Para cambiar la resolución de nombres en una red local podría emplear un 
@@ -2057,7 +2067,7 @@ como `unbound`.
 
 Por ejemplo si `unbound` corre en el servidor 192.168.10.1 para su 
 dominio `midominio.org`, puede configurarlo para que dirija a 192.168.10.2 
-cuando desde la red local soliciten `www.mindominio.org`, modificando
+cuando desde la red local alguien solicite `www.mindominio.org`, modificando
 el archivo `/var/unbound/etc/unbound.conf` para que incluya:
 
 	interface: 127.0.0.1
@@ -2069,30 +2079,41 @@ el archivo `/var/unbound/etc/unbound.conf` para que incluya:
 	local-data: "midominio.org IN A 192.168.10.2"
 	local-data: "www.midominio.org IN A 192.168.10.2"
 
+Si además (o en cambio) el servidor tiene una dirección IPv6 debe agregar otro
+`local-data`:
 
-Cada vez que haga modificaciones al archivo de configuracion de unbound 
-debe reiniciar por ejemplo con:
+	local-data: "midominio.org IN A fd4d:da20:9e54::10:10"
+
+Cada vez que haga modificaciones al archivo de configuración de unbound 
+debe reiniciarlo por ejemplo con:
 
 	doas rcctl -d restart unbound
 
-Y en cada computador de la red local debe configura que el servidor DNS sea 192.168.10.1.
+Y en cada computador de la red local debe configurar que el servidor DNS 
+sea 192.168.10.1.
 
 
 ##### Pruebas cambiando configuración de servidor DNS
 
-Si está pagand a su proveedor de Internet una IP (digamos 125.125.121.1) 
-y si pagó el registro de un dominio (digamos www.midominio.org) ante un 
-registrador de dominios, debe editar la configuración del servidor DNS
+Si está pagando a su proveedor de Internet una IP pública (digamos 
+125.125.121.1) y si pagó el registro de un dominio (digamos www.midominio.org) 
+ante un registrador de dominios, debe editar la configuración del servidor DNS
 que haya configurado con el registrador (muchos registradores ofrecen
 servidores DNS editables desde el web). 
 
 Debe agregar un registro que indique que las peticiones a su dominio
-y al y al subdominio `www.midominio.org` se dirigen a la IP pública de 
+y al subdominio `www.midominio.org` se dirigen a la IP pública de 
 su servidor.  Tanto con `bind` como con `nsd` que son 2 servidores DNS
 populares se harían con líneas de la forma:
 
 	midominio.org.	A	125.125.121.1;
 	www.midominio.org.	A	125.125.121.1;
+
+Si además cuenta con una IPv6 pública también deberá agregarla con registros
+AAAA, por ejemplo:
+
+	www.midominio.org.	AAAA	2600:33:33::10:10
+
 
 #### Configuración de nginx de acuerdo a como se almacenan o generan páginas en el servidor
 
