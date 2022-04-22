@@ -400,6 +400,159 @@ Puede restablecer una copia con
         psql -U postgres -h /var/www/var/run/postgresql/ \
             -f /respaldos/pgdump.sql template1
 
+Para actualizar PostgreSQL estos procedimientos son el método demorado
+pero seguro:
+
+1. Sacar una copia de respaldo antes de actualizar
+2. Actualizar PostgreSQL
+3. Restaurar el respaldo 
+
+Sin embargo en ocasiones funciona un método rápido con `pg_upgrade` que
+se presenta en la siguiente sección.
+
+### Actualización con `pg_upgrade` {#pg-upgrade}
+
+Documentación del paquete `postgresql-pg_upgrade` para actualizar
+de PostgreSQL 13 a PostgreSQL 14 (para pasar a versiones anteriores
+el procedimiento es el mismo, excepto de 11 a 12 que se detalla más
+adelante).
+
+1. Saque los respaldos típicos, i.e si está actualizando adJ completo y
+   usando `inst-adJ.sh` permitir que saque
+   volcado (digamos `/var/www/resbase/pga-5.sql` y que copie base binaria 
+   digamos en `data--20200319.tar.gz`) y detener
+   cuando pregunte `Desea eliminar la actual versión de PostgreSQL`
+
+2. Detenga la base anterior:
+   ```
+   doas rcctl stop postgresql
+   ```
+   y mueva directorio con datos de PostgreSQL 13
+   ```
+   doas mv /var/postgresql/data /var/postgresql/data-13
+   ```
+3. Desinstale paquetes de `postgresql` anteriores. Puede hacerlos con
+   el siguiente y confirmando que elimina todos los dependientes:
+
+   ```
+   doas pkg_delete postgresql-client postgresql-docs postgresql-previous
+   ```
+
+4. Instale paquetes `postgresql-client`, `postgresql-server`,
+   `postgresql-contrib`, `postgresql-previous` y 
+   `postgresql-pg_upgrade` (inicialmente no instalar `postgresql-docs` 
+   porque tiene conflicto con `postgresql-previous`).
+   ```
+   cd &VER-ADJ;-amd64/paquetes
+   PKG_PATH=. doas pkg_add ./libxml* ./postgresql-server-* \
+          ./postgresql-contrib-* postgresql-previous-* \
+          ./postgresql-pg_up*
+   (Si está corriendo una versión de adJ anterior a la 6.6 puede encontrar
+   los paquetes `postgresql-previous` y `postgresql-pg_upgrade` en
+   <http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/> en un directorio
+   de la forma `6.5-extra`. Como no están firmados al momento de insalarlos
+   con `pkg_add` use la opción `-D unsigned`).
+
+5. Inicialice un nueva base en `/var/postgresql/data` con la clave de 
+   administrador de la anterior (suponiendo que está en el archivo 
+   `.pgpass` de la cuenta `_postgresql` como ocurre por omisión en adJ) con:
+   ```
+   doas su - _postgresql
+   grep postgres .pgpass |  sed  -e  "s/.*://g" > /tmp/clave.txt
+   LANG=C.UTF-8 initdb --encoding=UTF-8 -U postgres --auth=md5 \
+      --pwfile=/tmp/clave.txt  -D/var/postgresql/data
+   ```
+
+6. Durante la actualización mantenga la configuración por omisión (no mover
+   sockets) y edite y cambie `pg_hba.conf` de `data` y de `data-13`
+   ```
+   $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-13/pg_hba.conf
+   ```
+   temporalmente a un modo inseguro, remplazando
+   ```
+   local all all md5
+   ```
+   por
+   ```
+   local all all trust
+   ```
+
+7. Inicie la restauración así:
+   ```
+   doas su - _postgresql
+   pg_upgrade -b /usr/local/bin/postgresql-13/ -B /usr/local/bin \ 
+      -U postgres -d /var/postgresql/data-13/ -D /var/postgresql/data
+   ```
+   Si llega a fallar con:
+   ```
+   $ pg_upgrade -b /usr/local/bin/postgresql-12/ -B /usr/local/bin \
+      -U postgres -d /var/postgresql/data-12/ -D /var/postgresql/data
+   Checking for presence of required libraries fatal
+   Your installation references loadable libraries ...
+   ```
+   Seguramente faltó instalar `postgresql-contrib` que
+   incluye `accent` y otros módulos. Instalar y repetir
+
+8. Arranque la nueva base con configuración por omisión de manera temporal con 
+   ```
+   doas rcctl start postgresql
+   ```
+
+9. Asegure la clave, revisándola con `cat /tmp/clave.txt` y estableciendola
+   con:
+   ```
+   psql -U postgres template1
+   ALTER USER postgres WITH PASSWORD 'nuevaaqui';
+   ```
+
+10. Detenga nuevamente servicio `postgresql`  (i.e
+    `doas rcctl stop postgresql), modifique 
+    `/var/postgresql/data/postgresql.conf` para cambiar
+    ubicación del socket y en general rehacer la configuración que tenía 
+    su base (e.g conexiones TCP, llaves, etc).
+    ```
+    unix_socket_directories = '/var/www/var/run/postgresql'
+    # comma-separated list of directories
+    ```
+    En `data/pg_hba.conf` vuelva a dejar `md5` en lugar de `trust`
+
+11. Inicie servicio y compruebe operación
+
+12. Una vez se complete con éxito se puede eliminar el cluster 
+    anterior ./delete_old_cluster.sh
+
+Si había detenido la actualización de `inst-adJ.sh` vuelva a
+ejecutar y a la pregunta "Desea eliminar la actual
+versión de PostgreSQL y los datos asociados para
+actualizarla" responda No.
+
+#### Quitar `OIDS` para actualizar de PostgreSQL 11 a 12
+
+En la actualización de PostgreSQL 11 a 12 se ha requerido un
+procedimiento adicional, previo a los pasos que se indicaron.
+
+Por cada tabla, debe ejecutar `ALTER TABLE x SET WITHOUT OIDS;`
+cambiando x por el nombre de cada tabla. 
+
+Puede automatizarse con:
+```
+$ doas su - _postgresql
+$ psql -U postgres -h /var/www/var/run/postgresql/
+postgres=# \t on
+postgres=# \o /tmp/quitaoids.sh
+postgres=# SELECT '/usr/local/adJ/pg_quita_oids.sh ' || datname FROM
+  pg_database WHERE datname NOT IN ('template0', 'template1', 'postgres');
+postgres=# \q
+```
+note que se exluyen las bases `postgres`, `template0` y `template1`.
+El script `/usr/local/adJ/pg_quita_oids.sh` está disponible en
+<https://github.com/pasosdeJesus/adJ/blob/master/arboldd/usr/local/adJ/pg_quita_oids.sh>
+
+Tras asegurar que tiene el script `/usr/local/adJ/pg_quita_oids.sh` y 
+generar `/tmp/quitaoids.sh` como se describió, ejecute:
+```
+$ sh /tmp/quita_oids.sh
+```
 
 ### Base PostgreSQL remota {#base-postgresql-remota}
 
