@@ -1,5 +1,5 @@
 Versión 7.1
-:   - Se documenta actualización rápida de PostgreSQL ver [xref](#pg_upgrade).
+:   - Se documenta actualización rápida de PostgreSQL ver [xref](#pg-upgrade).
 :   - Mejorada configuración se OpenSMTP [xref](#opensmtpd).
 
 Versión 7.0
