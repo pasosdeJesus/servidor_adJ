@@ -483,15 +483,29 @@ adelante).
    pg_upgrade -b /usr/local/bin/postgresql-13/ -B /usr/local/bin \ 
       -U postgres -d /var/postgresql/data-13/ -D /var/postgresql/data
    ```
-   Si llega a fallar con:
+   Si llega a fallar con un mensaje de error del estilo:
    ```
-   $ pg_upgrade -b /usr/local/bin/postgresql-12/ -B /usr/local/bin \
-      -U postgres -d /var/postgresql/data-12/ -D /var/postgresql/data
    Checking for presence of required libraries fatal
    Your installation references loadable libraries ...
    ```
    Seguramente faltó instalar `postgresql-contrib` que
-   incluye `accent` y otros módulos. Instalar y repetir
+   incluye `accent` y otros módulos. Instale y repita.
+
+   Si falla con un error como 
+   ```
+   *failure*
+   Consult the last few lines of "pg_upgrade_dump_32486425.log"
+   ```
+   y al consultar las últimas líneas del archivo indicado se ve
+   ```
+   pg_dump: error: query failed: ERROR:  could not access file "$libdir/postgis-3"
+   ```
+   debe quitar la extensión postgis en las bases del cluster anterior
+   con:
+   ```
+   DROP EXTENSION postgis;
+   ```
+   y volver a agregarlo después de completar la actualización.
 
 8. Arranque la nueva base con configuración por omisión de manera temporal con 
    ```

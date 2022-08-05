@@ -584,14 +584,15 @@ Documentación disponible en <http://www.openntpd.org>.
 
 ## Servidor de correo electrónico {#servicios-correo}
 
-OpenBSD incluye dos MTAs de correo: (1)una versión auditada de
-`sendmail` y (2) OpenSMTPD. En este capítulo detallamos la configuración
-y uso de cada uno y la configuración de paquetes que implementan los
+OpenBSD incluye en el sistema base el MTAs OpenSMTPD y cuenta con un 
+porte de `sendmail`.
+En este capítulo detallamos la configuración de OpenSMTPD
+y la configuración de paquetes que implementan los
 protocolos auxiliares POP3S e IMAPS, de clientes de correo web y de
 listas de correo.
 
-adJ cuenta con las órdenes `prepsendmail` y `prepopensmtpd` que
-configuran de manera automática sendmail y OpenSMTPD respectivamente con
+adJ cuenta con la órden `prepopensmtpd` que
+configura de manera automática OpenSMTPD con
 TLS y SASL, así como POP3S e IMAPS. Soportan opcionalmente mantener el
 correo en una partición cifrada y copia de respaldo del correo en otra
 partición también cifrada. Antes de emplearlos ejecute:
@@ -657,10 +658,10 @@ la dirección, si los hay intenta enviar a cada uno en orden de prioridad
 [Servicio DNS](#servidor-dns)).
 
 En &ENOMCLIENTE2; debe estar corriendo un proceso que acepte la conexión
-en el puerto 25, i.e. sendmail o algún otro MTA que reciba el mensaje
-siguiendo el protocolo SMTP.
+en el puerto 25, i.e. `smtpd` (que es el servicio de OpenSMTP) o algún 
+otro MTA que reciba el mensaje siguiendo el protocolo SMTP.
 
-sendmail en &ENOMCLIENTE2; agrega el mensaje que recibe en el archivo tipo
+`smtpd`e n &ENOMCLIENTE2; agrega el mensaje que recibe en el archivo tipo
 texto `/var/mail/&EUSUARIO2;` que está en formato mbox.
 
 Archivo donde exim deja los correos destinados al usuario &EUSUARIO2;.
@@ -681,43 +682,34 @@ las listas de correo que facilitan el envío de correo masivo.
 #### MTA OpenSMTPD {#opensmtpd}
 
 Se trata de un MTA desarrollado principalmente para OpenBSD por
-desarrolladores de OpenBSD. Aunque aún se considera experimental hemos
-comprobado su estabilidad para dominios virtuales que manejan menos de
-1000 correos diarios.
-
-Antes de iniciar el servicio es importante detener sendmail con:
-
-        /etc/rc.d/sendmail stop
-
-y deshabilitarlo dejando en /etc/rc.conf.local la línea:
-
-        sendmail_flags=NO
+desarrolladores de OpenBSD. 
 
 El servicio se inicia con:
 
-        doas /etc/rc.d/smtpd start
+        doas rcctl start smtpd
 
 y se detiene con:
 
-        doas /etc/rc.d/smtpd stop
+        doas rcctl stop smtpd
 
-Para que inicie en cada arranque y se reinicie fácil ejecutando
-`/etc/rc.local` agregue `smtpd` a la variable `pkg_scripts` de
-`/etc/rc.conf.local` y en ese mismo archivo agregue:
+Para que inicie en cada arranque ejecute
+        doas rcctl enalbe smtpd
+
+lo cual modificará el archivo `/etc/rc.conf.local` y agregará `smtpd` a la 
+variable `pkg_scripts` y allí mismo agregará la línea
 
         smtdp_flags=""
 
-También modifique `/etc/mailer.conf` y cambie algunas líneas para que
-sean:
+Puede también verificar que `/etc/mailer.conf` incluya:
 
         sendmail        /usr/sbin/smtpctl
         send-mail       /usr/sbin/smtpctl
         mailq           /usr/sbin/smtpctl
-        makemap         /usr/libexec/smtpd/makemap
-        newaliases      /usr/libexec/smtpd/makemap
+        makemap         /usr/sbin/smtpctl
+        newaliases      /usr/sbin/smtpctl
 
 Una vez en operación pueden examinarse diversos aspectos (como
-bitácoras, examinar cola de correos, estadísticas) con `smtpctl`.
+bitácoras, examinar cola de correoso o estadísticas) con `smtpctl`.
 
 La configuración se define en el archivo `/etc/mail/smtpd.conf`. La
 configuración más simple que sólo aceptará correo local con aliases
@@ -728,33 +720,35 @@ formato mbox en `/var/mail` o hará relevo es:
 
         table aliases file:/etc/mail/aliases
 
-	action "local" mbox alias <aliases>
-	action "relay" relay
+        action "local_mai" mbox alias <aliases>
+        action "outbound" relay
 
-	match for local action "local"
-	match for any action "relay"
+        match for local action "local_mail"
+        match for any action "outbound"
 
-Para que permita enviar y recibir de otros computadores debe cambiarse
-la interfaz donde escucha y el nombre de quien acepta correos, por
-ejemplo:
+Puede verificar la sintaxis del archivo de configuración con:
 
-        listen on all
+        doas smtpd -n
 
-        table aliases file:/etc/mail/aliases
+Y puede iniciar el servicio en consola produciendo mucho detalle de
+depuración con:
 
-	action "local" mbox alias <aliases>
-	action "relay" relay
+        doas smtpd -d -vvvvvvvvv
 
-	match from any for domain "&EDOMINIO;" action "local"
-	match for local action "local"
-	match for any action "relay"
+Y probar un envío a un usuario local con:
+
+        mail &EUSUARIO;@localhost
+        Subject: hola
+        
+        1,2,3
+        .
 
 Si prefiere recibir en formato maildir (por defecto en `~/Maildir` de 
 cada usuario) y tener opción de procesar usuario a usuario con procmail 
 vía el archivo `~/.forward` es mejor cambiar 
-`action "local" mbox alias <aliases>` por:
+`action "local_mail" mbox alias <aliases>` por:
 
-	action "local" maildir alias <aliases>
+       action "local_mail" maildir alias <aliases>
 
 La tabla de alias que usa esta configuración es el archivo plano
 `/etc/mail/aliases`. Si prefiere usar base de datos DB en lugar de
@@ -767,24 +761,18 @@ Y en el archivo de configuración cambie
 
         table aliases db:/etc/mail/aliases.db
 
-Para asegurar el relevo de correos provenientes de &EDOMINIO; o de la IP
-192.168.1.2, basta agregar al mismo archivo de configuración:
-
-        match for &EDOMINIO; action "relay"
-        match for 192.168.1.2 action "relay"
-
-Para agregar autenticación y TLS basta generar certificado SSL 
+Para que permita enviar y recibir de otros computadores debe habilitar
+TLS, así como generar certificado SSL
 y dejar `&EDOMINIO;.crt` en `/etc/ssl/` 
 y `&EDOMINIO;.key` en `/etc/ssl/private` para
-después cambiar en el archivo de configuración la línea con `listen`
-por:
+después agregar al archivo de configuración:
 
-	pki &EDOMINIO; cert "/etc/ssl/&EDOMINIO;.crt"
-	pki &EDOMINIO; key "/etc/ssl/private/&EDOMINIO;.key"
+        pki &EDOMINIO; cert "/etc/ssl/&EDOMINIO;.crt"
+        pki &EDOMINIO; key "/etc/ssl/private/&EDOMINIO;.key"
 
-	listen on all port 465 smtps pki &EDOMINIO; auth-optional
-	listen on all port 587 tls pki &EDOMINIO; auth
-	listen on all port 25 tls pki &EDOMINIO; auth-optional
+        listen on all port 465 smtps pki &EDOMINIO; auth-optional
+        listen on all port 587 tls pki &EDOMINIO; auth
+        listen on all port 25 tls pki &EDOMINIO; auth-optional
 
 Así quedará:
 
@@ -794,27 +782,35 @@ Así quedará:
 * Escuchando conexiones planas que requieren paso a cifradas (con STARTTLS)
   y que exigen autenticación por el puerto 587.
 
+Para asegurar el relevo de correos provenientes de &EDOMINIO; o de la IP
+192.168.1.2, basta agregar al mismo archivo de configuración:
+
+        match for &EDOMINIO; action "outbound"
+        match for 192.168.1.2 action "outbound"
+
+
+
 ##### Depuración de OpenSMTP {#smtpd-depura}
 
 OpenSMTP envía mensajes de error a la bitácora `/var/log/maillog`. Puede
 ejecutarse en modo de depuración para determinar problemas con:
 
-        smtpd -d
+        smtpd -d -vvvvv
 
-Esto no lo activará como servicio y presentará errores en pantalla.
+Esto no lo activará como servicio y presentará errores detallados en pantalla.
 
 #### Pruebas
 
 Desde el mismo computador inicie un diálogo con:
 
-	$ telnet localhost 25
+        $ telnet localhost 25
 
 O desde otro computador con:
 
         $ telnet correo.&EDOMINIO; 25
-	Trying 1.2.3.4
-	Connected to correo.&EDOMINIO;
-	Escape character is '^]'
+        Trying 1.2.3.4
+        Connected to correo.&EDOMINIO;
+        Escape character is '^]'
         220 correo.&EDOMINIO; ESMTP OpenSMTPD
 
 Inicie dialogo con:
@@ -825,97 +821,103 @@ remplazando 200.21.23.4 por la IP desde la que inicia la conexión.
 
 Verá algo como:
 
-	250-correo.&EDOMINIO; Hello [200.21.23.4] [200.21.23.4], pleased to meet you
-	250-8BITMIME
-	250-ENHANCEDSTATUSCODES
-	250-DSN
-	250-STARTTLS
-	250 HELP
+        250-correo.&EDOMINIO; Hello [200.21.23.4] [200.21.23.4], pleased to meet you
+        250-8BITMIME
+        250-ENHANCEDSTATUSCODES
+        250-DSN
+        250-STARTTLS
+        250 HELP
 
 Note que debe aparecer la línea `STARTTLS`.
 
-Para probar la autenticación es mejor emplear el puerto 465 y openssl:
+Para probar la autenticación debe usar OpenSSL.
+Bien conectandose de manera cifrada directamente al puerto 465:
 
         openssl s_client -connect correo.&EDOMINIO;:465
-	...
-   	    Start Time: 1578243911
-	    Timeout   : 7200 (sec)
-	    Verify return code: 0 (ok)
-	---
-	220 correo.&EDOMINIO; ESMTP OpenSMTPD
+
+O iniciando sesión de TLS por el puerto 25 o por el puerto 587:
+
+        openssl s_client -connect correo.&EDOMINIO;:465 -starttls smtp
+        ...
+            Start Time: 1578243911
+            Timeout   : 7200 (sec)
+            Verify return code: 0 (ok)
+        ---
+        220 correo.&EDOMINIO; ESMTP OpenSMTPD
         EHLO [200.21.23.4]
-	250-kadosh.pasosdeJesus.org Hello [200.21.23.4] [200.21.23.4], pleased to meet you
-	250-8BITMIME
-	250-ENHANCEDSTATUSCODES
-	250-SIZE 134217728
-	250-DSN
-	250-AUTH PLAIN LOGIN
-	250 HELP
+        250-kadosh.pasosdeJesus.org Hello [200.21.23.4] [200.21.23.4], pleased to meet you
+        250-8BITMIME
+        250-ENHANCEDSTATUSCODES
+        250-SIZE 134217728
+        250-DSN
+        250-AUTH PLAIN LOGIN
+        250 HELP
 
 
-Note que ya está disponible autenticación `AUTH` con métodos PLAIN y 
-LOGIN. Para autenticarse debe dar una identificación y una clave válida en el
-sistema pero codificadas en base 64. Puede emplear la interfaz CGI
-disponible en <http://www.motobit.com/util/base64-decoder-encoder.asp>
-o eventualmente el programa disponible en
-<http://www.sendmail.org/~ca/email/prgs/ed64.c> que puede compilar y
-usar como root así:
+Una vez tenga una conexión con TLS tendrá disponibles autenticación `AUTH` con 
+métodos `PLAIN` y `LOGIN`. 
+Para autenticarse debe dar una identificación y una clave válida en el
+sistema pero codificadas en base 64. Para esto instale el paquete
+`base64` con `pkg_add base64` y para ver la cadena que tendría que emplear 
+con `AUTH PLAIN` use:
 
-        cd /root/tmp
-        ftp http://www.sendmail.org/~ca/email/prgs/ed64.c
-        cc -o ed64 ed64.c
-        ./ed64 -e
-        MiUsuario
+        printf '\0MiUsario\0MiClave' | base64
+        AE1pVXNhcmlvAE1pQ2xhdmU=
+
+o para ver las 2 cadenas por usar con `AUTH LOGIN` use:
+
+        printf 'MiUsario' | base64  
         TWlVc3Vhcmlv
-        MiClave
+        printf 'MiClave' | base64  
         TWlDbGF2ZQ==
 
-Retomando la sesión y usando estos datos:
+Para obtener la codificación de una cadena en base 64 también podría emplear
+un sitio como <http://www.motobit.com/util/base64-decoder-encoder.asp>
+(aunque no es recomendable digitar el par usuario y clave válidos).
+
+Retomando la sesión iniciada y usando estos datos con `AUTH PLAIN`:
+
+        AUTH PLAIN
+        334
+        AE1pVXNhcmlvAE1pQ2xhdmU=
+        235 2.0.0: Authentication succeeded
+
+o bien con `AUTH LOGIN`:
 
         AUTH LOGIN
         334 VXNlcm5hbWU6
         TWlVc3Vhcmlv
         334 UGFzc3dvcmQ6
         TWlDbGF2ZQ==
-	235 2.0.0: Authentication succeeded
+        235 2.0.0: Authentication succeeded
 
 puede intentar el envío de un correo por ejemplo con:
 
-        MAIL FROM:<&EUSUARIO;@&EDOMINIO;>
-        250 OK                                                                          
-        RCPT TO:<&EUSUARIO2;@&EDOMINIO;>
-        250 Accepted                                                                    
-        DATA                                                                            
-        354 Enter message, ending with "." on a line by itself                          
+        mail from:<&EUSUARIO;@&EDOMINIO;>
+        250 OK
+        rcpt to:<&EUSUARIO2;@&EDOMINIO;>
+        250 Accepted
+        data
+        354 Enter mail, ending with "." on a line by itself
         From: "&EUSUARIO;@&EDOMINIO;" <&EUSUARIO;@&EDOMINIO;>
         To:  &EUSUARIO2;@&EDOMINIO;
         Subject: probando
-        1234                                                                            
-        .                                                                               
-        250 OK id=1GZXFP-000540-7J                                                      
-        QUIT
+        1234
+        .
+        250 2.0.0 52476910 Message accepted for delivery
+        quit
 
-De requerirlo puede rastrear problemas en `/var/log/maillog`.
-Si desea probar el método PLAIN, con ed64 emplee:
 
-        MiUsuario\0MiUsuario@pasosdeJesus.org\0MiClave
-        TWlVc3VhcmlvAE1pVXN1YXJpb0BwYXNvc2RlamVzdXMub3JnAE1pQ2xhdmU=
-
-y al dialogar en SMTP:
-
-        AUTH PLAIN TWlVc3VhcmlvAE1pVXN1YXJpb0BwYXNvc2RlamVzdXMub3JnAE1pQ2xhdmU= 
-
-También puede probar el servicio del puerto 465 con la misma secuencia,
-pero iniciando con:
-
+De requerirlo puede rastrear problemas en `/var/log/maillog`[^smtp.4]: 
 
 
 #### Referencias {#referencias-opensmtpd}
 
--   `man smtpd`, `man smtpd.conf`, `man smtpctl`
+- `man smtpd`, `man smtpd.conf`, `man smtpctl`
 
--   <http://www.opensmtpd.org/>
+- <http://www.opensmtpd.org/>
 
+- <https://wiki.archlinux.org/title/OpenSMTPD#Local_mail>
 
 ##### Configuración del cliente de correo (MUA) {#conf-mua}
 
@@ -1758,10 +1760,9 @@ Asignar password al sitio de mailman con
 [^smtp.1]: De acuerdo al RFC 1123 los nombre MUA y MTA son propios del
     protocolo X.400.
 
-[^smtp.2]: De acuerdo al protocolo SMTP, sendmail de &ENOMCLIENTE; se
-    conectaría por el puerto 25 a sendmail en &ENOMCLIENTE2; y enviaría
-    los mensajes `EHLO`, `MAIL FROM:
-           &EUSUARIO;@&ECLIENTE;`, después enviaría
+[^smtp.2]: De acuerdo al protocolo SMTP, el MTA de &ENOMCLIENTE; se
+    conectaría por el puerto 25 al MTA en &ENOMCLIENTE2; y enviaría
+    los mensajes `EHLO`, `MAIL FROM:<&EUSUARIO;@&ECLIENTE;>`, después enviaría
     `RCPT TO: &EUSUARIO2;@&ECLIENTE2;`, después `DATA` y a continuación el
     cuerpo del correo comenzando con el encabezado de acuerdo al RFC
     822, con un cuerpo de mensaje que emplee 7 bits y terminando con una
@@ -1774,19 +1775,16 @@ Asignar password al sitio de mailman con
             Un cortísimo saludo para bendición de nuestro Creador.
             .  
 
-    Si lo desea puede experimentar con este protocolo, empleando telnet
-    y el MTA de su computador: `telnet localhost 25`. Claro resulta más
-    transparente empleando directamente sendmail :
-
-         
-            sendmail -bm
-            &EUSUARIO2;@&ECLIENTE2; -f
-            &EUSUARIO;@&ECLIENTE; 
-
-    (para emplear `-f` con sendmail debe ser usuario autorizado).
-
 [^smtp.3]: Son inseguros porque transmiten claves y el contenido de los
     mensajes planos por la red
+
+[^smtp.4]: Hemos notado que no funciona `RCPT TO` en mayúscula sino sólo
+    `rcpto to` en minúscula.  Al usar mayúscula se genera un error
+    del estilo 
+    
+        RENEGOTIATING
+        9898059462808:error:1404C042:SSL routines:ST_OK:called a function you should not call:/usr/src/lib/libssl/ssl_lib.c:2435:`
+
 
 ## Servidor `ftp`
 

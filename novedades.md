@@ -1,5 +1,6 @@
 Versión 7.1
 :   - Se documenta actualización rápida de PostgreSQL ver [xref](#pg_upgrade).
+:   - Mejorada configuración se OpenSMTP [xref](#opensmtpd).
 
 Versión 7.0
 :   - Documentado uso de IPv6 [xref](#redes_protocolos_e_internet) e [xref](#dispositivos_de_interconexion)
