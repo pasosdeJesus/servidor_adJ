@@ -1890,7 +1890,7 @@ servidor que actue como proxy.
 El siguiente diagrama presenta más detalles de los elementos involucrados
 en servir páginas web generadas por una aplicación Ruby on Rails.
 
-![Diagrama de peticion y respuesta web](img/diagrama-web.png)
+![](img/diagrama-web.png)
 
 
 Así que la configuración de un servidor web debe tener en cuenta por lo 
