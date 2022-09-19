@@ -520,7 +520,7 @@ Match group jaulasftp
     </p><p>
       En su modo de operación dinámico el servidor le asigna una IP a un
       sólo cliente por cierto periodo de tiempo, al cabo del cual podría
-      asignarle otra IP<sup>[<a name="idm1452180784" href="#ftn.idm1452180784">24</a>]</sup>.
+      asignarle otra IP<sup>[<a name="idm612470704" href="#ftn.idm612470704">24</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="cliente-DHCP"></a>5.3.1. Configuración de un cliente DHCP</h4></div></div></div><p>
         La configuración de un computador para operar como cliente de
         DHCP depende del sistema operativo, en el caso de Windows en las
@@ -607,9 +607,18 @@ Match group jaulasftp
       </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servicios-correo"></a>5.5. Servidor de correo electrónico</h3></div></div></div><p>
       OpenBSD incluye en el sistema base el MTAs OpenSMTPD y cuenta con
       un porte de <code class="literal">sendmail</code>. En este capítulo
-      detallamos la configuración de OpenSMTPD y la configuración de
-      paquetes que implementan los protocolos auxiliares POP3S e IMAPS,
-      de clientes de correo web y de listas de correo.
+      detallamos la configuración de OpenSMTPD, así como la
+      configuración del paquete <code class="literal">dovecot</code> que
+      implementa los protocolos auxiliares POP3S e IMAPS para leer
+      correo de manera segura, así como de SpamAssassin para combatir
+      spam y el cliente de correo web Roundcube.
+    </p><p>
+      En
+      <a href="https://github.com/pasosdeJesus/servidor_adJ/blob/servidor_adJ-7.0/protocolossop.md#servidor-de-correo-electr%C3%B3nico-servicios-correo" target="_top">versiones
+      históricas de este documento</a> podrá consultar sobre la
+      configuración de sendmail (otro MTA), de couriermail (otro sistema
+      que implementa POP3S e IMAPS) y de mailman (para manejar listas de
+      correo).
     </p><p>
       adJ cuenta con la órden <code class="literal">prepopensmtpd</code> que
       configura de manera automática OpenSMTPD con TLS y SASL, así como
@@ -622,15 +631,6 @@ Match group jaulasftp
       y a continuación edite el archivo recién copiado para adaptarlo a
       su entorno.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="smtp"></a>5.5.1. Protocolo SMTP para enviar y recibir correo</h4></div></div></div><p>
-        SMTP Nombre del protocolo para transmisión de correo electrónico
-        en Internet.
-      </p><p>
-        MTA Sigla para el tipo de programas que pueden transmitir un
-        correo (por ejemplo exim y sendmail).
-      </p><p>
-        MUA Sigla para el tipo de programas que un usuario puede emplear
-        para redactar y leer correos (por ejemplo mail y mutt).
-      </p><p>
         Como se explica en AA_Linux el servicio básico de correo
         empleado en Internet y en una red TCP/IP se basa en el protocolo
         SMTP (<span class="emphasis"><em>Simple Mail Transfer Protocol</em></span>)
@@ -654,7 +654,7 @@ Match group jaulasftp
             Que ambos usuarios tengan un programa con el que puedan leer
             y redactar correos, como por ejemplo mail, mutt,
             mozilla-thunderbird (a ese programa se le llamará MUA -
-            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idm1452353584" href="#ftn.idm1452353584">25</a>]</sup>).
+            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="idm612562352" href="#ftn.idm612562352">25</a>]</sup>).
           </p></li></ul></div><p>
         Si tanto pablo como rodrigo emplean como MUA
         <code class="literal">mail</code>, y ambos computadores tiene como MTA
@@ -675,7 +675,7 @@ Match group jaulasftp
         Enviar un mensaje significa crear una conexión TCP con el MTA
         destino o con otro MTA que actúe de intermediario, típicamente
         en el puerto TCP 25, y transmitir el mensaje siguiendo las
-        reglas del protocolo SMTP <sup>[<a name="idm1452257456" href="#ftn.idm1452257456">26</a>]</sup>. Para establecer el computador con el cual
+        reglas del protocolo SMTP <sup>[<a name="idm612618032" href="#ftn.idm612618032">26</a>]</sup>. Para establecer el computador con el cual
         conectarse sendmail revisa con el resolvedor DNS, registros MX
         asociados con el dominio de la dirección, si los hay intenta
         enviar a cada uno en orden de prioridad –los registros MX con
@@ -687,13 +687,10 @@ Match group jaulasftp
         es el servicio de OpenSMTP) o algún otro MTA que reciba el
         mensaje siguiendo el protocolo SMTP.
       </p><p>
-        <code class="literal">smtpd</code>e n respeto agrega el mensaje
+        <code class="literal">smtpd</code> en respeto agrega el mensaje
         que recibe en el archivo tipo texto
         <code class="literal">/var/mail/rodrigo</code> que está en formato
         mbox.
-      </p><p>
-        Archivo donde exim deja los correos destinados al usuario
-        rodrigo.
       </p><p>
         Cuando rodrigo lo desee, podrá emplear
         <code class="literal">mail</code> para leer los correos que se hayan
@@ -705,11 +702,9 @@ Match group jaulasftp
         en las que se emplean otras posibilidades de SMTP, protocolos
         auxiliares y programas. Por ejemplo los usuarios de una
         organización suelen extraer sus correos del servidor desde otros
-        computadores con MUAs gráficos empleando el protocolo inseguro
-        POP3 o los protocolos seguros POP3S e IMAPS. También es posible
-        configurar un cliente de correo web (webmail) para examinar
-        correos desde el web. Otro servicio asociado al correo son las
-        listas de correo que facilitan el envío de correo masivo.
+        computadores con MUAs gráficos empleando los protocolos seguros
+        POP3S e IMAPS. También es posible configurar un cliente de
+        correo web (webmail) para examinar correos desde el web.
       </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="opensmtpd"></a>5.5.1.1. MTA OpenSMTPD</h5></div></div></div><p>
           Se trata de un MTA desarrollado principalmente para OpenBSD
           por desarrolladores de OpenBSD.
@@ -722,7 +717,7 @@ Match group jaulasftp
         </p><pre class="programlisting">
     doas rcctl stop smtpd
 </pre><p>
-          Para que inicie en cada arranque ejecute doas rcctl enalbe
+          Para que inicie en cada arranque ejecute doas rcctl enable
           smtpd
         </p><p>
           lo cual modificará el archivo
@@ -742,7 +737,7 @@ Match group jaulasftp
     newaliases      /usr/sbin/smtpctl
 </pre><p>
           Una vez en operación pueden examinarse diversos aspectos (como
-          bitácoras, examinar cola de correoso o estadísticas) con
+          bitácoras, examinar cola de correos o estadísticas) con
           <code class="literal">smtpctl</code>.
         </p><p>
           La configuración se define en el archivo
@@ -755,7 +750,7 @@ Match group jaulasftp
 
     table aliases file:/etc/mail/aliases
 
-    action "local_mai" mbox alias &lt;aliases&gt;
+    action "local_mail" mbox alias &lt;aliases&gt;
     action "outbound" relay
 
     match for local action "local_mail"
@@ -799,8 +794,8 @@ Match group jaulasftp
         </p><pre class="programlisting">
     table aliases db:/etc/mail/aliases.db
 </pre><p>
-          Para que permita enviar y recibir de otros computadores debe
-          habilitar TLS, así como generar certificado SSL y dejar
+          Para que permita enviar y recibir desde otros computadores
+          debe habilitar TLS, así como generar certificado SSL y dejar
           <code class="literal">miong.org.crt</code> en
           <code class="literal">/etc/ssl/</code> y
           <code class="literal">miong.org.key</code> en
@@ -880,15 +875,15 @@ Match group jaulasftp
           O iniciando sesión de TLS por el puerto 25 o por el puerto
           587:
         </p><pre class="programlisting">
-    openssl s_client -connect correo.miong.org:465 -starttls smtp
+    openssl s_client -connect correo.miong.org:587 -starttls smtp
     ...
         Start Time: 1578243911
         Timeout   : 7200 (sec)
         Verify return code: 0 (ok)
     ---
-    220 correo.miong.org ESMTP OpenSMTPD
+    250 HELP
     EHLO [200.21.23.4]
-    250-kadosh.pasosdeJesus.org Hello [200.21.23.4] [200.21.23.4], pleased to meet you
+    250-correo.miong.org Hello [200.21.23.4] [200.21.23.4], pleased to meet you
     250-8BITMIME
     250-ENHANCEDSTATUSCODES
     250-SIZE 134217728
@@ -956,7 +951,7 @@ Match group jaulasftp
     quit
 </pre><p>
           De requerirlo puede rastrear problemas en
-          <code class="literal">/var/log/maillog</code><sup>[<a name="idp701292112" href="#ftn.idp701292112">27</a>]</sup>:
+          <code class="literal">/var/log/maillog</code><sup>[<a name="idm612609968" href="#ftn.idm612609968">27</a>]</sup>:
         </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="referencias-opensmtpd"></a>5.5.1.3. Referencias</h5></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
               <code class="literal">man smtpd</code>,
               <code class="literal">man smtpd.conf</code>,
@@ -1028,11 +1023,9 @@ table aliasesejemplo db:/etc/mail/aliasesejemplo.db
     doas rcctl -d restart smtpd
 </pre></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="protocolos-revisar-correo"></a>5.5.3. Protocolos para revisar correo</h4></div></div></div><p>
         Para extraer correos de un servidor pueden emplearse los
-        protocolos inseguros<sup>[<a name="idp701406416" href="#ftn.idp701406416">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
-        POP3S e IMAPS En esta sección se describe la configuración
-        extra-rápida pero insegura de POP3, y la configuración segura
-        pero que requiere configuración más delicada de POP3S e IMAPS
-        con las implementaciones de Courier.
+        protocolos inseguros<sup>[<a name="idp1096062160" href="#ftn.idp1096062160">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
+        POP3S e IMAPS En esta sección se describe la configuración de
+        estos.
       </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="dovecot"></a>5.5.3.1. Implementación Dovecot de IMAPS y POP3S</h5></div></div></div><p>
           Instale el paquete dovecot-2.3.16p1v0 y asegúrese de dejar
           <code class="literal">dovecot</code> en la variable
@@ -1065,194 +1058,17 @@ table aliasesejemplo db:/etc/mail/aliasesejemplo.db
         </p><pre class="programlisting">
     /etc/rc.d/dovecot start
 </pre><p>
-          y pruébelo en los puertos 143 (IAMP sin cifrar), 993 (IMAP
+          y pruébelo en los puertos 143 (IMAP sin cifrar), 993 (IMAP
           sobre SSL), 110 (POP3 sin cifrar) y 995 (POP3 sobre SSL). Por
           defecto dovecot intentará recuperar correos en formato maildir
           de la carpeta <code class="literal">Maildir</code> de cada usuario.
-        </p><p>
-          Una vez confirme la operación recomendamos que sólo abra el
-          puerto 993 del cortafuegos para permitir conexiones IMAP
-          remotas sobre SSL.
-        </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="pop3s-imaps-courier"></a>5.5.3.2. Implementación Courier de POP3S e IMAPS</h5></div></div></div><p>
-          Esta implementación requiere que se cambie la forma de
-          almacenar correos recibidos por sendmail de formato mbox a
-          formato maildir. Esto y la autenticación que requiere courier
-          exigen una configuración especial que se describe a
-          continuación.
-        </p><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="autenticacion-courier"></a>5.5.3.2.1. Autenticación Courier</h6></div></div></div><p>
-            Instale <code class="literal">courier-authlib</code>, paquete que se
-            encarga de la autenticación. Para iniciarlo en cada arranque
-            agregue <code class="literal">courier_authdaemond</code> a la variable
-            <code class="literal">pkg_scripts</code> de
-            <code class="literal">/etc/rc.conf.local</code>.
-          </p><p>
-            Una vez en operación puede probar la autenticación con
-            <code class="literal">authtest usuario</code> y
-            <code class="literal">authtest usuario clave</code>
-          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="acomplamiento-sendmail"></a>5.5.3.2.2. Sendmail almacenando correos en formato maildir</h6></div></div></div><p>
-            El formato mbox almacena todos los correos en un sólo
-            archivo, uno tras otro. El formato maildir (propio del MTA
-            qmail) almacena cada correo en un archivo separado en algún
-            directorio, por defecto hay 3 directorios
-            (<code class="literal">cur</code>, <code class="literal">new</code> y
-            <code class="literal">tmp</code>) aunque el usuario puede crear otros.
-          </p><p>
-            Típicamente <code class="literal">sendmail</code> deja los correos que
-            recibe en formato mbox en archivos del directorio
-            <code class="literal">/var/mail</code>. En esta sección se explica
-            como lograr que los almacene en el directorio
-            <code class="literal">Maildir</code> de la cuenta de un usuario.
-          </p><p>
-            Una sencilla solución que no requiere mayores cambios es
-            emplear <code class="literal">procmail</code>. Instale el paquete
-            <code class="literal">y en la cuenta de cada usuario que vaya a usar POP3S o IMAPS cree los archivos `.forward` y `.procmailrc`, análogos a los siguientes (suponemos que se trata del usuario</code>):
-          </p><div class="itemizedlist"><ul type="disc"><li><p>
-                En <code class="literal">/home/pablo/.forward</code>
-              </p><pre class="programlisting">
-    "| exec /usr/local/bin/procmail"
-</pre><p>
-                las comillas son indispensables así como el símbolo
-                “<span class="quote">|</span>”.
-              </p></li><li><p>
-                En <code class="literal">/home/pablo/.procmailrc</code>
-              </p><pre class="programlisting">
-    LINEBUF=4096
-    #VERBOSE=on
-    PMDIR=/home/pablo/
-    MAILDIR=$PMDIR/Maildir/
-    FORMAIL=/usr/local/bin/formail
-    SENDMAIL=/usr/sbin/sendmail
-    #LOGFILE=$PMDIR/log
-
-    :0
-    * .*
-    /home/pablo/Maildir/
-</pre><p>
-                Note que el directorio de la variable
-                <code class="literal">MAILDIR</code> termina con “<span class="quote">/</span>”.
-                Esto es indispensable para indicar a
-                <code class="literal">procmail</code> que debe guardar en esa ruta
-                en formato Maildir.
-              </p></li><li><p>
-                Deje además listo un directorio en formato Maildir en
-                <code class="literal">/home/pablo/Maildir</code> con:
-              </p><pre class="programlisting">
-    maildirmake /home/pablo/Maildir
-    chown -R pablo:estudiante /home/pablo/Maildir
-</pre></li></ul></div><p>
-            De esta forma cada vez que sendmail reciba un correo para el
-            usuario local
-            `<code class="literal">en vez de almacenar en</code>/var/mail/pablo<code class="literal">ejecutará la línea del archivo</code>/home/pablo/.forward<code class="literal">, la cual a su vez ejecutará procmail para procesar el correo que llega por entrada estándar.</code>procmail<code class="literal">empleará la configuración de</code>/home/pablo/.procmailrc<code class="literal">que le indica guardar todo correo que llegue a la cuenta en</code>/home/pablo/Maildir/<code class="literal">(como se trata de un directorio y termina con '/',</code>procmail<code class="literal">identifica que debe salvar en formato</code>Maildir<code class="literal">, si fuera un archivo agregaría en formato</code>MBOX`).
-          </p><p>
-            El usuario pablo podría probar su archivo de
-            configuración de <code class="literal">procmail</code> modificando
-            <code class="literal">~/.procmail</code> para quitar el comentario de
-            la línea
-          </p><pre class="programlisting">
-    VERBOSE=on
-      
-</pre><p>
-            y ejecutando:
-          </p><pre class="programlisting">
-    cd /home/pablo
-    procmail 
-    Mensaje de prueba
-    Termínelo con Control-D
-    .
-    procmail: [21024] Fri Jul  1 18:32:30 2005
-    procmail: Assigning "PMDIR=/home/pablo/"
-    procmail: Assigning "MAILDIR=/home/pablo/Maildir/"
-    procmail: Assigning "FORMAIL=/usr/local/bin/formail"
-    procmail: Assigning "SENDMAIL=/usr/sbin/sendmail"
-    procmail: Assigning "LOGFILE=/home/pablo/log"
-</pre><p>
-            Tras lo cual debe encontrar un nuevo archivo en
-            <code class="literal">Maildir/new</code> con el mensaje de prueba.
-          </p><p>
-            Puede verificar el funcionamiento de
-            <code class="literal">.forward</code> enviando un correo a la cuenta
-            del usuario y revisando la bitácora
-            <code class="literal">/var/log/maillog</code> donde deben aparecer un
-            par de líneas análogas a:
-          </p><pre class="programlisting">
-Dec 19 18:31:59 servidor sendmail[22209]: kBJNVwMt022209: to=test@localhost, ctladdr=pablo (1000/1000), delay=00:00:01, xdelay=00:00:01, mailer=relay, pri=30061, relay=[127.0.0.1] [127.0.0.1], dsn=2.0.0, stat=Sent (kBJNVw3t021322 Message accepted for delivery)
-Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bin/procmail", ctladdr=&lt;test@miong.org&gt; (1008/10), delay=00:00:00, xdelay=00:00:00, mailer=prog, pri=30756, dsn=2.0.0, stat=Sent
-        
-</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="pop3s-courier"></a>5.5.3.2.3. POP3S con Courier</h6></div></div></div><p>
-            POP3 (Post Office Protocol) es un protocolo que permite
-            sacar correos de un servidor para llevarlos a otro
-            computador donde podrán examinarse con un MUA.
-          </p><p>
-            Para que los usuarios puedan emplear clientes de correo que
-            soporten POP3, es necesario configurar un servidor de este
-            protocolo. Dado que este protocolo por defecto transmite
-            claves planas es necesario emplearlo sobre una conexión SSL
-            –de ahí el nombre POP3S.
-          </p><p>
-            Después de configurar autenticación y acople con sendmail
-            como se explicó en secciones anteriores. Instale el paquete
-            <code class="literal">courier-pop3</code>. Este paquete se configura
-            en el directorio <code class="literal">/etc/courier</code>, donde deja
-            varios archivos de configuración de ejemplo que debe editar
-            (también podrá encontrar los archivos de ejemplo en
-            <code class="literal">/usr/local/share/examples/courier/</code>).
-          </p><p>
-            En <code class="literal">/etc/courier/pop3d</code> cambie
-          </p><pre class="programlisting">
-    POP3DSTART=YES
-    MAILDIRPATH=Maildir
-      
-</pre><p>
-            y en <code class="literal">/etc/courier/pop3d-ssl</code> cambie
-          </p><pre class="programlisting">
-    MAILDIRPATH=Maildir
-      
-</pre><p>
-            Para emplear SSL requiere un certificado (por defecto en
-            <code class="literal">/etc/ssl/private/pop3d.pem</code>) firmado por
-            una Autoridad Certificadora, . Alternativamente puede
-            generar certificados autofirmados, para esto modifique la
-            información del archivo
-            <code class="literal">/etc/courier/pop3d.cnf</code> y ejecute:
-          </p><pre class="programlisting">
-    doas mkpop3dcert
-      
-</pre><p>
-            Script que creará un certificado válido por un año (si lo
-            requiere por más tiempo puede editar el script y cambiar el
-            número de días de validez en la opción
-            <code class="literal">-days</code> de <code class="literal">openssl</code>).
-          </p><p>
-            En caso de que si tenga un certificado firmado digamos para
-            su servidor web, puede emplearlo (ver courier-cert) así:
-          </p><pre class="programlisting">
-    cd /etc/ssl/private
-    cat server.key ../server.crt &gt; pop3d.pem
-          
-</pre><p>
-            Para iniciar POP3S ejecute:
-          </p><pre class="programlisting">
-    doas mkdir -p /var/run/courier
-    doas /usr/local/libexec/pop3d-ssl.rc start
-      
-</pre><p>
-            líneas que se recomienda agregar a
-            <code class="literal">/etc/rc.local</code> si planea prestar servicio
-            continuo (y abrir el puerto apropiado del cortafuegos, ver a
-            continuación).
-          </p><p>
-            Para detener POP3S:
-          </p><pre class="programlisting">
-    doas /usr/local/libexec/pop3d-ssl.rc stop
-      
-</pre><p>
+        </p><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="dovecot-pop3s"></a>5.5.3.1.1. Pruebas a POP3S</h6></div></div></div><p>
             POP3 usa por defecto el puerto 110, POP3S típicamente emplea
             el puerto 995. Para abrir ese puerto en un cortafuegos en
             <code class="literal">/etc/pf.conf</code> podría emplear una línea de
             la forma:
           </p><pre class="programlisting">
     pass in on $ext_if proto tcp to ($ext_if) port pop3s keep state
-      
 </pre><p>
             Puede probar el funcionamiento del servidor con:
           </p><pre class="programlisting">
@@ -1273,75 +1089,12 @@ Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bi
     2 1128
     3 2430
     . 
-</pre><p>
-            Notará que la implementación Courier de POP3S intenta
-            extraer correos del directorio
-            <code class="literal">Maildir/cur</code>
-          </p></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="imap-ssl-courier"></a>5.5.3.2.4. IMAP-SSL con Courier</h6></div></div></div><p>
+</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="dovecot-imaps"></a>5.5.3.1.2. Pruebas a IMAPS</h6></div></div></div><p>
             IMAP es un protocolo que permite a un MUA examinar y
             administrar correos que llegan a un servidor, típicamente
             sin sacar los correos del servidor (a diferencia de POP) y
             con la posibilidad de manejar directorios/carpetas.
           </p><p>
-            Después de configurar autenticación y acople con
-            <code class="literal">sendmail</code> como se explicó en secciones
-            anteriores. Instale el paquete
-            <code class="literal">courier-imap</code> y edite
-            <code class="literal">/etc/courier/imapd</code> para cambiar por lo
-            menos:
-          </p><pre class="programlisting">
-    IMAPDSTART=YES
-    MAILDIRPATH=Maildir
-</pre><p>
-            y <code class="literal">/etc/courier/imapd-ssl</code> para dejar
-          </p><pre class="programlisting">
-    MAILDIRPATH=Maildir
-</pre><p>
-            y eventualmente dependiendo de los clientes para el IMAPS
-            (por ejemplo roundcube-0.5) también puede requerir:
-          </p><pre class="programlisting">
-    TLS_PROTOCOL=SSL23
-</pre><p>
-            Para generar un certificado autofirmado edite
-            <code class="literal">imapd.cnf</code> para personalizar sus datos y
-            ejecute
-          </p><pre class="programlisting">
-    mkimapdcert
-</pre><p>
-            o si desea emplear el mismo certificado de su servidor web:
-          </p><pre class="programlisting">
-    cd /etc/ssl/private
-    cat server.key ../server.crt &gt; imapd.pem
-</pre><p>
-            Para iniciar IMAPS ejecute:
-          </p><pre class="programlisting">
-    doas /etc/rc.d/courier_imap_ssl start
-</pre><p>
-            y para detenerlo:
-          </p><pre class="programlisting">
-    doas /etc/rc.d/courier_imap_ssl stop
-</pre><p>
-            Para iniciar el servicio cada vez que arranque el sistema
-            agregue <code class="literal">courier_imap_ssl</code> a la variable
-            <code class="literal">pkg_scripts</code> en
-            <code class="literal">/etc/rc.conf.local</code>.
-          </p><p>
-            Cuando ejecute tanto <code class="literal">authdaemond</code> como
-            <code class="literal">imapd-ssl</code> deben quedar corriendo varios
-            procesos: <code class="literal">authdaemond</code> (o el método de
-            autenticación que haya configurado),
-            <code class="literal">couriertcpd</code>,
-            <code class="literal">courierlogger</code>. Si desea ver mensajes de
-            depuración en <code class="literal">/var/log/maillog</code>, cambie en
-            <code class="literal">/etc/courier/imapd</code>:
-          </p><pre class="programlisting">
-    DEBUG_LOGIN=1
-</pre><p>
-            podrá detener los servicios con:
-          </p><pre class="programlisting">
-    doas /usr/local/libexec/imapd-ssl.rc stop
-    rm /var/run/courier/imapd-ssl.pid
-</pre><p>
             Si tiene cortafuegos activo asegúrese también de abrir el
             puerto 993 agregando a <code class="literal">/etc/pf.conf</code> algo
             como:
@@ -1360,64 +1113,11 @@ Dec 19 18:31:59 servidor sm-mta[21454]: kBJNVw3t021322: to="| exec /usr/local/bi
     ZZZZ LOGOUT
     * BYE Courier-IMAP server shutting down
     ZZZZ OK LOGOUT completed
-</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="courier-cuentas"></a>5.5.3.2.5. Facilitar uso de implementación Courier</h6></div></div></div><p>
-            Una vez se use procmail para recibir en formato Maildir los
-            correos de un usuario, ese usuario no podrá seguir usando
-            <code class="literal">mail</code> para ver los correos recibidos, pero
-            si podrá emplear <code class="literal">mutt</code> agregando al
-            archivo de configuración <code class="literal">~/.muttrc</code>:
-          </p><pre class="programlisting">
-set spoolfile=imaps://localhost/INBOX
+
 set folder=imaps://localhost/
-        
-</pre><p>
-            Como administrador del sistema podrá automatizar más la
-            configuración de cuentas nuevas así:
-          </p><div class="orderedlist"><ol type="1"><li><p>
-                Crear archivos en <code class="literal">/etc/skel</code> que se
-                copiarán a cada cuenta nueva, (el contenido de cada uno
-                debe ser como el descrito en secciones anteriores):
-              </p><pre class="programlisting">
-maildirmake /etc/skel
-/etc/skel/.forward
-/etc/skel/.muttrc
-/etc/skel/.procmailrc
-</pre></li><li><p>
-                Como será <code class="literal">procmail</code> y no
-                <code class="literal">sendmail</code> quien manejará correos, cada
-                vez que cree una cuenta ejecute:
-              </p><pre class="programlisting">
-touch /var/mail/usuario
-chown usuario:usuario /var/mail/usuario
-chmod go-r /var/mail/usuario
-</pre><p>
-                y ajuste el archivo <code class="literal">.procmailrc</code>. Es
-                recomendable que haga esto en un script que primero
-                ejecute <code class="literal">adduser</code>, y que sería la nueva
-                orden para crear cuentas en el sistema.
-              </p></li></ol></div><p>
-            Esta configuración se aplicará a nuevas cuentas que cree,
-            pero debe replicarla en cuentas ya creadas:
-          </p><pre class="programlisting">
-cd /etc/skel
-cp -rf Maildir .forward .procmailrc .muttrc /home/cuenta/ 
-chown -R cuenta:cuenta /home/cuenta/{.forward,.procmailrc,.muttrc,Maildir}
-touch /var/mail/cuenta
-chown -R cuenta:cuenta /var/mail/cuenta
-chmod og-r /var/mail/cuenta
-</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="referencias-courier"></a>5.5.3.2.6. Referencias y lecturas recomendadas</h6></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
+</pre></div><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="referencias-dovecot"></a>5.5.3.1.3. Referencias y lecturas recomendadas</h6></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
                 El protocolo POP3 se describe en el RFC 1939
                 <a href="http://www.faqs.org/rfcs/rfc1939.html" target="_top">http://www.faqs.org/rfcs/rfc1939.html</a>
-              </p></li><li><p>
-                Puede consultar más sobre la configuración de IMAP con
-                Courier en
-                &lt;http://dantams.sdf-eu.org/guides/obsd_courier_imap.html
-                &gt; y
-                <a href="http://es.tldp.org/Manuales-LuCAS/doc-tutorial-postfix-ldap-courier-spamassassin-amavis-squirrelmail" target="_top">http://es.tldp.org/Manuales-LuCAS/doc-tutorial-postfix-ldap-courier-spamassassin-amavis-squirrelmail</a>
-              </p></li><li><p>
-                Más sobre <code class="literal">procmail</code> en
-                &lt;http://pm-doc.sourceforge.net/pm-tips.html &gt; y
-                <a href="http://structio.sourceforge.net/guias/basico_OpenBSD/correo.html#procmail" target="_top">http://structio.sourceforge.net/guias/basico_OpenBSD/correo.html#procmail</a>
               </p></li><li><p>
                 Más sobre IMAP en
                 &lt;http://www.linux-sec.net/Mail/SecurePop3/ &gt; y
@@ -1425,10 +1125,6 @@ chmod og-r /var/mail/cuenta
               </p></li><li><p>
                 POP3S e IMAPS en OpenBSD/LDAP/Sendmail
                 <a href="https://dhobsd.pasosdejesus.org/pop3s_e_imaps_en_openbsd_ldap_sendmail.html" target="_top">https://dhobsd.pasosdejesus.org/pop3s_e_imaps_en_openbsd_ldap_sendmail.html</a>
-              </p></li><li><p>
-                El uso de certificados existentes con courier se señala
-                en
-                <a href="http://milliwaysconsulting.net/support/systems/courier-ssl.html" target="_top">http://milliwaysconsulting.net/support/systems/courier-ssl.html</a>
               </p></li></ul></div></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="spam"></a>5.5.4. Combatiendo correo no solicitado con SpamAssassin</h4></div></div></div><p>
         OpenBSD incluye el programa <code class="literal">spamd</code> que maneja
         listas negras (o grises) de IPs de las cuales no recibe correo
@@ -1471,45 +1167,25 @@ chmod og-r /var/mail/cuenta
           <code class="literal">spamagarrado</code>, debe tener configurado
           <code class="literal">procmail</code>, esto puede hacerse modificando o
           creando el archivo <code class="literal">~/.procmailrc</code> para que
-          incluya líneas como las siguientes (en caso de que el usuario
-          maneje su correo en formato <code class="literal">mbox</code> como
-          ocurre por defecto en OpenBSD):
-        </p><pre class="programlisting">
-    :0fw                                                                            
-    * &lt; 256000
-    | spamc                                                                         
-    
-    :0e                                                                             
-    {
-        EXITCODE=$?
-    }
-    
-    :0:                                                                             
-    * ^X-Spam-Status: Yes
-    spamagarrado # buzón donde va todo el spam
-</pre><p>
-          O como las siguientes que suponen que el usuario
+          incluya líneas como las siguientes que suponene que el usuario
           <code class="literal">pablo</code> maneja su correo en formato
           <code class="literal">maildir</code> (para permitir consulta con IMAPS
-          –ver <a href="protocolos_de_soporte_y_de_usuario.html#pop3s-imaps-courier" title="5.5.3.2. Implementación Courier de POP3S e IMAPS">Implementación
-          Courier de POP3S e IMAPS</a>):
+          –ver <a href="protocolos_de_soporte_y_de_usuario.html#dovecot" title="5.5.3.1. Implementación Dovecot de IMAPS y POP3S">Implementación Dovecot de IMAPS y
+          POP3S</a>):
         </p><pre class="programlisting">
+    LINEBUF=4096
+    VERBOSE=on
+    PMDIR=/home/pablo
+    LOGFILE=/home/pablo/proclog
+    
     :0fw: spamassassin.lock
-    * &lt; 512000
+    * &lt; 256000
     | spamc
     
-    # Los correos con puntaje de 15 o superior casi que con seguridad son spam (con
-    # 0.05% de falsos positivos de acuerdo a rules/STATISTICS.txt). Pongamolos
-    # en un mbox diferente llamado .Spam.
-    :0:
-    * ^X-Spam-Level: \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
-    /home/pablo/Maildir/.Spam/
-    
-    # Todo correo marcado como spam (e.g. con puntaje mayor que el umbral puesto)
-    # se mueve a "PosibleSpam".
     :0:
     * ^X-Spam-Status: Yes
-    /home/pablo/Maildir/.PosibleSpam/
+    /home/pablo/Maildir/.Junk/ # This is the mailbox where all spam goes.
+    
     
     :0
     * .*
@@ -1532,12 +1208,11 @@ chmod og-r /var/mail/cuenta
           información, puede obtener correo de servidores IMAP e IMAPS.
         </p><p>
           Basta instalar el paquete <code class="literal">roundcubemail</code> o
-          descargar ls fuentes más recientes de
+          descargar las fuentes más recientes de
           <a href="http://sourceforge.net/projects/roundcubemail/" target="_top">http://sourceforge.net/projects/roundcubemail/</a>
           e instalarlas en <code class="literal">/var/www/roundcubemail</code>, y
-          seguir instrucciones del archivo INSTALL que resumimos a
-          continuación junto con instrucciones de módulos, suponiendo
-          que en el mismo servidor
+          seguir instrucciones del archivo INSTALL. Las complementaremos
+          aquí suponiendo que en el mismo servidor
           (<code class="literal">correo.miong.org</code>) están los servicios
           IMAPS y SMTP y que se empleará el motor de bases de datos
           PostgreSQL:
@@ -1548,42 +1223,30 @@ chmod og-r /var/mail/cuenta
               correo de la organización se consultará en
               <code class="literal">correo.miong.org</code> (IP interna
               192.168.60.1 y externa 200.200.200.200) con protocolo
-              HTTPS, el archivo
-              <code class="literal">/var/www/conf/httpd.conf</code> debe incluir:
+              HTTPS, el archivo <code class="literal">/etc/nginx/nginx.conf</code>
+              debe incluir:
             </p><pre class="programlisting">
-    &lt;VirtualHost 127.0.0.1:443 192.168.60.1:443 200.200.200.200:443&gt;
-    DocumentRoot "/var/www/roundcubemail/"
-    ServerName correo.miong.org
+location /roundcubemail/ {
+        root /var/www/htdocs/;
+        index index.php;
 
-    &lt;Directory /var/www/roundcubemail/&gt;
-        AllowOverride All
-    &lt;/Directory&gt;
+        location ~ ^/roundcubemail/(.+\.php)$ {
+                root /var/www/htdocs/;
+                try_files $uri =404;
+                fastcgi_intercept_errors on;
+                include        fastcgi_params;
+                fastcgi_param  SERVER_NAME      $host;
+                fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+                fastcgi_read_timeout 900;
+                fastcgi_index       index.php;
+                fastcgi_pass   unix:/var/run/php-fpm.sock;
+        }
 
-    ServerAdmin admin@miong.org
-    ErrorLog logs/round-error_log
-    TransferLog logs/round-access_log
-
-    SSLEngine on
-    SSLCertificateFile    /etc/ssl/server.crt
-    SSLCertificateKeyFile /etc/ssl/private/server.key
-    &lt;/VirtualHost&gt;                                  
-</pre><div class="blockquote"><blockquote class="blockquote"><p>
-                <span class="strong"><strong>Advertencia</strong></span>
-              </p><p>
-                Es importante que en la configuración de Apache, como se
-                presenta en el ejemplo incluya
-              </p><pre class="programlisting">
-    &lt;Directory /var/www/roundcubemail/&gt;
-        AllowOverride All
-    &lt;/Directory&gt;
-</pre><p>
-                para que se tomen las opciones de configuración del
-                archivo <code class="literal">.htaccess</code> especialmente del
-                directorio <code class="literal">logs</code> donde se almacenan
-                bitácoras y en particular si se activa puede mantenerse
-                la bitácora <code class="literal">imap</code> donde quedan claves
-                planas.
-              </p></blockquote></div></li><li><p>
+        location ~ ^/roundcubemail/logs/errors {
+               deny all;
+        }
+}
+</pre></li><li><p>
               Para configurar una base de datos en PostgreSQL con socket
               en <code class="literal">/var/www/var/run/postgresql</code> (ver
               <a href="otros_servicios_que_puede_prestar_el_servidor.html#postgresql" title="6.2. Motor de bases de datos PostgreSQL">???</a>) ejecutar:
@@ -1605,12 +1268,8 @@ chmod og-r /var/mail/cuenta
     psql -h /var/www/var/run/postgresql -Uroundcube roundcubemail
 </pre><p>
               le solicitará la clave que estableció para el usuario
-              <code class="literal">roundcube</code>, a continuación desde la
-              interfaz de PostgreSQL ejecute el script de inicialización
-              con:
-            </p><pre class="programlisting">
-    \i /var/www/roundcubemail/SQL/postgres.initial.sql
-</pre></li><li><p>
+              <code class="literal">roundcube</code>.
+            </p></li><li><p>
               Salga de la interfaz de PostgreSQL con
               <code class="literal">\q</code> y de la cuenta _postgresql con
               <code class="literal">exit</code>. Después debe configurar
@@ -1620,66 +1279,49 @@ chmod og-r /var/mail/cuenta
             </p><pre class="programlisting">
     ls /var/www/roundcubemail/config
 </pre><p>
-              le faltan los archivos <code class="literal">main.inc.php</code> y
-              <code class="literal">db.inc.php</code> inicie con plantillas así:
+              le faltan el archivo <code class="literal">config.inc.php</code>
+              inicielo con la plantilla así:
             </p><pre class="programlisting">
-    cp /var/www/roundcubemail/config/main.inc.php.dist \
-        /var/www/roundcubemail/config/main.inc.php
-    cp /var/www/roundcubemail/config/db.inc.php.dist \
-        /var/www/roundcubemail/config/db.inc.php
+    cp /var/www/roundcubemail/config/config.inc.php.dist \
+        /var/www/roundcubemail/config/config.inc.php
 </pre><p>
-              Edítelos para que se adapten a su caso. Por ejemplo en
-              <code class="literal">config/main.inc.php</code> basta modificar las
+              Edítelo para que se adapten a su caso. Por ejemplo en las
               líneas:
             </p><pre class="programlisting">
-    $rcmail_config['force_https'] = TRUE;
+    $config['db_dsnw'] = 'pgsql://roundcube:nueva_clave@unix(/var/run/postgresql)/roundcubemail';
 
-    $rcmail_config['auto_create_user'] = TRUE;
+    $config['default_host'] = 'ssl://correo.miong.org';
 
-    $rcmail_config['default_host'] = 'ssl://correo.miong.org:993';
+    $config['default_port'] = 993;
 
-    $rcmail_config['default_port'] = 993;
+    $config['imap_conn_options'] = array(
+      'ssl' =&gt; array(
+        'verify_peer'       =&gt; false,
+        'allow_self_signed' =&gt; true,
+        'cafile'  =&gt; '/etc/ssl/cert.pem',
+        'ciphers' =&gt; 'TLSv1+HIGH:!aNull:@STRENGTH',
+        'peer_name'         =&gt; 'correo.miong.org',
+      ),
+    );
 
-    $rcmail_config['smtp_server'] = '127.0.0.1';
-
-    $rcmail_config['mail_domain'] = 'miong.org';
-</pre><p>
-              y en el archivo <code class="literal">config/db.inc.php</code> la
-              línea:
-            </p><pre class="programlisting">
-    $rcmail_config['db_dsn'] = 'pgsql://roundcube:nueva_clave@127.0.0.1/roundcubemail';
+    $config['smtp_server'] = 'ssl://correo.&amp;EDOMINIO';
+    $config['smtp_port'] = 465;
+    $config['smtp_user'] = '%u';
+    $config['smtp_pass'] = '%p';
 </pre></li><li><p>
-              Edite el archivo de configuración de Apache
-              <code class="literal">/var/www/conf/php.ini</code> para deshabilitar
-              cifrado de sesiones y establecer zona horaria en la
-              líneas:
-            </p><pre class="programlisting">
-    suhosin.session.encrypt = Off
-    date.timezone = America/Bogota
-</pre><p>
-              y reinicie Apache.
-            </p></li><li><p>
               De permiso para completar instalación y pruebas desde el
               web, editando el archivo
-              <code class="literal">config/main.inc.php</code> y cambiando la
+              <code class="literal">config/config.inc.php</code> y cambiando la
               línea:
             </p><pre class="programlisting">
-    $rcmail_config['enable_installer'] = true;
-</pre><p>
-              y ejecutando:
-            </p><pre class="programlisting">
-    doas chmod -R a+rx /var/www/roundcubemail/installer
+    $config['enable_installer'] = true;
 </pre></li><li><p>
               Con un navegador examine el URL
               <code class="literal">https://correo.miong.org/installer/</code>
               compruebe las dependencias solicitadas y realice las
               pruebas disponibles. Una vez concluya evite el uso de ese
-              directorio ejecutando:
-            </p><pre class="programlisting">
-    doas chmod -R a-rx /var/www/roundcubemail/installer
-</pre><p>
-              y cambiando en <code class="literal">config/main.inc.php</code> la
-              línea:
+              directorio cambiando en
+              <code class="literal">config/main.inc.php</code> la línea:
             </p><pre class="programlisting">
     $rcmail_config['enable_installer'] = false;
 </pre></li></ol></div><p>
@@ -1692,22 +1334,22 @@ chmod og-r /var/mail/cuenta
               agregue password en el arreglo <code class="literal">plugins</code>,
               si sólo tiene este plugin quedará:
             </p><pre class="programlisting">
-    $rcmail_config['plugins'] = array('password');
+    $config['plugins'] = array('password');
 </pre></li></ol></div><p>
           Si además desea permitir que los usuarios puedan cambiar su
           clave desde este webmail active el plugin password como se
           presenta a continuación:
         </p><div class="orderedlist"><ol type="1"><li><p>
-              Edite el archivo <code class="literal">config/main.inc.php</code> y
-              añada <code class="literal">password</code> al arreglo
-              <code class="literal">rcmail_config['plugins']</code>, por ejemplo
-              si no hay otros plugins cambiando
+              Edite el archivo <code class="literal">config/config.inc.php</code>
+              y añada <code class="literal">password</code> al arreglo
+              <code class="literal">config['plugins']</code>, por ejemplo si no
+              hay otros plugins cambiando
             </p><pre class="programlisting">
-    $rcmail_config['plugins'] = array();
+    $config['plugins'] = array();
 </pre><p>
               por
             </p><pre class="programlisting">
-    $rcmail_config['plugins'] = array('password');
+    $config['plugins'] = array('password');
 </pre></li><li><p>
               Si no existe el archivo
               <code class="literal">plugins/password/config.inc.php</code> inicie
@@ -1724,20 +1366,10 @@ chmod og-r /var/mail/cuenta
     $rcmail_config['password_pop_host'] = '127.0.0.1';
     $rcmail_config['password_pop_port'] = 106;
 </pre></li><li><p>
-              Instale el paquete <code class="literal">openpoppassd</code>
-              disponible en
-              <a href="ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/" target="_top">ftp://ftp.pasosdeJesus.org/pub/AprendiendoDeJesus/</a>
-              (tiene una falla corregida con respecto al paquete oficial
-              por lo cual le sugerimos emplear ese) y configúrelo para
-              que inicie durante el arranque por ejemplo agregando a
-              <code class="literal">/etc/rc.local</code>:
-            </p><pre class="programlisting">
-    pgrep poppassd &gt; /dev/null 2&gt;&amp;1
-    if (test "$?" != "0") then {
-            echo -n ' poppassd'
-            /usr/local/libexec/openpoppassd
-    } fi;
-</pre><p>
+              Instale el paquete <code class="literal">openpoppassd</code> y
+              configúrelo para que inicie durante el arranque con
+              <code class="literal">doas rcctl enable openpoppassd</code>
+            </p><p>
               Una vez lo haya iniciado puede probarlo con:
             </p><pre class="programlisting">
     telnet localhost 106
@@ -1748,107 +1380,7 @@ chmod og-r /var/mail/cuenta
     Connected to localhost.
     Escape character is '^]'.
     200 openpoppassd v1.1 hello, who are you?
-</pre></li></ol></div></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="listas-correo"></a>5.5.6. Listas de correo</h4></div></div></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="mailman"></a>5.5.6.1. Instalación de Mailman (sin
-        <code class="literal">chroot</code>)</h5></div></div></div><p>
-          Instalar paquete de mailman
-          <code class="literal">pkg_add $PKG_PATH/mailman.tgz</code> que
-          requiere
-          `<code class="literal">se crean automáticamente el grupo</code>_mailman<code class="literal">y el usuario</code>_mailman`
-        </p><p>
-          Leer
-          <code class="literal">/usr/local/share/doc/mailman/README.OpenBSD</code>
-        </p><p>
-          Editar <code class="literal">/var/www/conf/httpd.conf</code> agregando
-          la linea:
-        </p><pre class="programlisting">
-    ScriptAlias /mailman/ "$mailmandir/cgi-bin/"
-</pre><p>
-          donde $mailmandir es
-          <code class="literal">/usr/local/lib/mailman/</code> agregar también:
-        </p><pre class="programlisting">
-    &lt;Directory "/usr/local/lib/mailman/cgi-bin"&gt;
-        AllowOverride None
-        Options None
-        Order allow,deny
-        Allow from all
-    &lt;/Directory&gt;
-</pre><p>
-          además agregar las lineas:
-        </p><pre class="programlisting">
-    Alias /pipermail/ "/var/spool/mailman/archives/public/"
-    
-    &lt;Directory "/var/spool/mailman/archives/public/"&gt;
-            Options FollowSymLinks
-            AddDefaultCharset Off
-    &lt;/Directory&gt;
-</pre><p>
-          al mismo archivo.
-        </p><p>
-          Copiar los iconos:
-          <code class="literal">cp /usr/local/lib/mailman/icons/*  /var/www/icons/</code>
-          Reiniciar el apache para que cargue los cambios.
-        </p><pre class="programlisting">
-    apachectl stop
-    . /etc/rc.conf.local
-    httpd $httpd_flags
-</pre><p>
-          editar el archivo
-          <code class="literal">/usr/local/lib/mailman/Mailman/mm_cfg.py</code>
-          agregando las lineas
-        </p><pre class="programlisting">
-    DEFAULT_EMAIL_HOST = 'dominio.net'
-    DEFAULT_URL_HOST = 'www.dominio.net'
-    DEFAULT_URL_PATTERN = 'http://%s/mailman/'
-    add_virtualhost(DEFAULT_URL_HOST, DEFAULT_EMAIL_HOST)
-</pre><p>
-          Crear primera lista llamada mailman
-        </p><pre class="programlisting">
-    /usr/local/lib/mailman/bin/newlist mailman
-</pre><p>
-          agregar a <code class="literal">/etc/mail/aliases</code> las lineas:
-        </p><pre class="programlisting">
-    ## mailman mailing list
-    mailman:              "|/usr/local/lib/mailman/mail/mailman post mailman"
-    mailman-admin:        "|/usr/local/lib/mailman/mail/mailman admin mailman"
-    mailman-bounces:      "|/usr/local/lib/mailman/mail/mailman bounces mailman"
-    mailman-confirm:      "|/usr/local/lib/mailman/mail/mailman confirm mailman"
-    mailman-join:         "|/usr/local/lib/mailman/mail/mailman join mailman"
-    mailman-leave:        "|/usr/local/lib/mailman/mail/mailman leave mailman"
-    mailman-owner:        "|/usr/local/lib/mailman/mail/mailman owner mailman"
-    mailman-request:      "|/usr/local/lib/mailman/mail/mailman request mailman"
-    mailman-subscribe:    "|/usr/local/lib/mailman/mail/mailman subscribe mailman"
-    mailman-unsubscribe:  "|/usr/local/lib/mailman/mail/mailman unsubscribe mailman"
-</pre><p>
-          Regenerar alias con <code class="literal">newaliases</code>
-        </p><p>
-          Poner en el crontab algunas lineas:
-        </p><pre class="programlisting">
-    crontab -u _mailman  /usr/local/lib/mailman/cron/crontab.in
-</pre><p>
-          Reiniciar mailman:
-        </p><pre class="programlisting">
-    /usr/local/lib/mailman/bin/mailmanctl start
-</pre><p>
-          Hacer que cada vez que se inicie el equipo corra mailman,
-          agregando al archivo <code class="literal">/etc/rc.local</code> las
-          lineas:
-        </p><pre class="programlisting">
-    if [ X"$mailmanctl_flags" != X"NO" -a  \
-        -x /usr/local/lib/mailman/bin/mailmanctl ]; then
-              echo -n ' mailman'
-              /usr/local/lib/mailman/bin/mailmanctl $mailmanctl_flags
-    fi
-</pre><p>
-          y en <code class="literal">/etc/rc.conf.local</code>:
-        </p><pre class="programlisting">
-    mailmanctl_flags="-s -q start"
-</pre><p>
-          Asignar password al sitio de mailman con
-        </p><pre class="programlisting">
-    /usr/local/lib/mailman/bin/mmsitepass
-</pre><div class="sect5" lang="es"><div class="titlepage"><div><div><h6 class="title"><a name="lecturas-mailman"></a>5.5.6.1.1. Lecturas recomendadas</h6></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
-                <code class="literal">/usr/local/share/doc/mailman/README.OpenBSD</code>
-              </p></li></ul></div></div></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-ftp"></a>5.6. Servidor <code class="literal">ftp</code></h3></div></div></div><p>
+</pre></li></ol></div></div></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-ftp"></a>5.6. Servidor <code class="literal">ftp</code></h3></div></div></div><p>
       Sólo recomendamos el servicio ftp para poner un servidor anónimo
       (con el usuario <code class="literal">anonymous</code> y una clave
       arbitraria). No para que transfiera datos de un usuario porque
@@ -2491,7 +2023,7 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
 </pre><p>
           El formato de las bitácoras por defecto es similar al de
           <code class="literal">nginx</code>
-        </p></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1452180784" href="#idm1452180784">24</a>] </sup>
+        </p></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm612470704" href="#idm612470704">24</a>] </sup>
           Típicamente un cliente enviará un paquete DHCPDISCOVER a toda
           la red (opcionalmente con sugerencia de la IP que quiere), un
           servidor que reciba tal paquete le responderá con un DHCPOFFER
@@ -2499,10 +2031,10 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
           puede responder con DHCPREQUEST para confirmar los parámetros
           y el servidor responde con un DHCPACK para confirmar
           asignación.
-        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1452353584" href="#idm1452353584">25</a>] </sup>
+        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm612562352" href="#idm612562352">25</a>] </sup>
                 De acuerdo al RFC 1123 los nombre MUA y MTA son propios
                 del protocolo X.400.
-              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm1452257456" href="#idm1452257456">26</a>] </sup>
+              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm612618032" href="#idm612618032">26</a>] </sup>
             De acuerdo al protocolo SMTP, el MTA de amor se
             conectaría por el puerto 25 al MTA en respeto y
             enviaría los mensajes <code xmlns="" class="literal">EHLO</code>,
@@ -2520,14 +2052,14 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
 
     Un cortísimo saludo para bendición de nuestro Creador.
     .  
-</pre></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp701292112" href="#idp701292112">27</a>] </sup>
+</pre></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idm612609968" href="#idm612609968">27</a>] </sup>
               Hemos notado que no funciona <code xmlns="" class="literal">RCPT TO</code> en
               mayúscula sino sólo <code xmlns="" class="literal">rcpto to</code> en
               minúscula. Al usar mayúscula se genera un error del estilo
             </p><pre class="programlisting">
 RENEGOTIATING
 9898059462808:error:1404C042:SSL routines:ST_OK:called a function you should not call:/usr/src/lib/libssl/ssl_lib.c:2435:`
-</pre></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp701406416" href="#idp701406416">28</a>] </sup>
+</pre></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1096062160" href="#idp1096062160">28</a>] </sup>
             Son inseguros porque transmiten claves y el contenido de los
             mensajes planos por la red
           </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="otros_servicios_que_puede_prestar_el_servidor.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">4. Direcciones, enrutamiento, transporte y cortafuegos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 6. Otros servicios que puede prestar el servidor</td></tr></table></div></body></html>
