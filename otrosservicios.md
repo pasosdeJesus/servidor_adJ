@@ -412,11 +412,6 @@ se presenta en la siguiente sección.
 
 ### Actualización con `pg_upgrade` {#pg-upgrade}
 
-Documentación del paquete `postgresql-pg_upgrade` para actualizar
-de PostgreSQL 13 a PostgreSQL 14 (para pasar a versiones anteriores
-el procedimiento es el mismo, excepto de 11 a 12 que se detalla más
-adelante).
-
 1. Saque los respaldos típicos, i.e si está actualizando adJ completo y
    usando `inst-adJ.sh` permitir que saque
    volcado (digamos `/var/www/resbase/pga-5.sql` y que copie base binaria 
@@ -427,9 +422,9 @@ adelante).
    ```
    doas rcctl stop postgresql
    ```
-   y mueva directorio con datos de PostgreSQL 13
+   y mueva directorio con datos de PostgreSQL 14
    ```
-   doas mv /var/postgresql/data /var/postgresql/data-13
+   doas mv /var/postgresql/data /var/postgresql/data-14
    ```
 3. Desinstale paquetes de `postgresql` anteriores. Puede hacerlos con
    el siguiente y confirmando que elimina todos los dependientes:
@@ -464,9 +459,9 @@ adelante).
    ```
 
 6. Durante la actualización mantenga la configuración por omisión (no mover
-   sockets) y edite y cambie `pg_hba.conf` de `data` y de `data-13`
+   sockets) y edite y cambie `pg_hba.conf` de `data` y de `data-14`
    ```
-   $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-13/pg_hba.conf
+   $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-14/pg_hba.conf
    ```
    temporalmente a un modo inseguro, remplazando
    ```
@@ -480,8 +475,8 @@ adelante).
 7. Inicie la restauración así:
    ```
    doas su - _postgresql
-   pg_upgrade -b /usr/local/bin/postgresql-13/ -B /usr/local/bin \ 
-      -U postgres -d /var/postgresql/data-13/ -D /var/postgresql/data
+   pg_upgrade -b /usr/local/bin/postgresql-14/ -B /usr/local/bin \
+      -U postgres -d /var/postgresql/data-14/ -D /var/postgresql/data
    ```
    Si llega a fallar con un mensaje de error del estilo:
    ```

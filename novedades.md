@@ -1,4 +1,7 @@
-Versión 7.1
+Versión 7.2
+:   - Mejorada actualización rápida de PostgreSQL ver [xref](#pg-upgrade).
+
+:Versión 7.1
 :   - Se documenta actualización rápida de PostgreSQL ver [xref](#pg-upgrade).
 :   - Mejorada configuración se OpenSMTP [xref](#opensmtpd), eliminados
       temas de correo obsoletos y actualizadas configuraciones relacionadas.
