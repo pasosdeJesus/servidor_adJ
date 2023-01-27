@@ -412,43 +412,46 @@ se presenta en la siguiente sección.
 
 ### Actualización con `pg_upgrade` {#pg-upgrade}
 
-1. Saque los respaldos típicos, i.e si está actualizando adJ completo y
-   usando `inst-adJ.sh` permitir que saque
+1. Saca los respaldos típicos, i.e si estás actualizando adJ completo y
+   usando `inst-adJ.sh` permite que saque
    volcado (digamos `/var/www/resbase/pga-5.sql` y que copie base binaria 
-   digamos en `data--20200319.tar.gz`) y detener
+   digamos en `data--20200319.tar.gz`) y deten
    cuando pregunte `Desea eliminar la actual versión de PostgreSQL`
 
-2. Detenga la base anterior:
+2. Deten la base anterior:
    ```
    doas rcctl stop postgresql
    ```
-   y mueva directorio con datos de PostgreSQL 14
+   y mueve directorio con datos de PostgreSQL 14
    ```
    doas mv /var/postgresql/data /var/postgresql/data-14
    ```
-3. Desinstale paquetes de `postgresql` anteriores. Puede hacerlos con
-   el siguiente y confirmando que elimina todos los dependientes:
+3. Desinstala paquetes de `postgresql` anteriores. Puedes hacerlo con
+   la siguiente orden y confirmando que elimine todos los dependientes:
 
    ```
    doas pkg_delete postgresql-client postgresql-docs postgresql-previous
    ```
 
-4. Instale paquetes `postgresql-client`, `postgresql-server`,
+4. Instala paquetes `postgresql-client`, `postgresql-server`,
    `postgresql-contrib`, `postgresql-previous` y 
-   `postgresql-pg_upgrade` (inicialmente no instalar `postgresql-docs` 
+   `postgresql-pg_upgrade` (inicialmente no instales `postgresql-docs` 
    porque tiene conflicto con `postgresql-previous`).
+
    ```
    cd &VER-ADJ;-amd64/paquetes
    PKG_PATH=. doas pkg_add ./libxml* ./postgresql-server-* \
           ./postgresql-contrib-* postgresql-previous-* \
           ./postgresql-pg_up*
+   ```
+
    (Si está corriendo una versión de adJ anterior a la 6.6 puede encontrar
    los paquetes `postgresql-previous` y `postgresql-pg_upgrade` en
    <http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/> en un directorio
-   de la forma `6.5-extra`. Como no están firmados al momento de insalarlos
+   de la forma `6.5-extra`. Como no están firmados al momento de instalarlos
    con `pkg_add` use la opción `-D unsigned`).
 
-5. Inicialice un nueva base en `/var/postgresql/data` con la clave de 
+5. Inicializa un nueva base en `/var/postgresql/data` con la clave de 
    administrador de la anterior (suponiendo que está en el archivo 
    `.pgpass` de la cuenta `_postgresql` como ocurre por omisión en adJ) con:
    ```
@@ -458,8 +461,8 @@ se presenta en la siguiente sección.
       --pwfile=/tmp/clave.txt  -D/var/postgresql/data
    ```
 
-6. Durante la actualización mantenga la configuración por omisión (no mover
-   sockets) y edite y cambie `pg_hba.conf` de `data` y de `data-14`
+6. Durante la actualización mantén la configuración por omisión (no muevas
+   zócalos --sockets) y edita y cambia `pg_hba.conf` de `data` y de `data-14`
    ```
    $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-14/pg_hba.conf
    ```
@@ -472,7 +475,7 @@ se presenta en la siguiente sección.
    local all all trust
    ```
 
-7. Inicie la restauración así:
+7. Inicia la restauración así:
    ```
    doas su - _postgresql
    pg_upgrade -b /usr/local/bin/postgresql-14/ -B /usr/local/bin \
@@ -483,8 +486,8 @@ se presenta en la siguiente sección.
    Checking for presence of required libraries fatal
    Your installation references loadable libraries ...
    ```
-   Seguramente faltó instalar `postgresql-contrib` que
-   incluye `accent` y otros módulos. Instale y repita.
+   Seguramente te faltó instalar `postgresql-contrib` que
+   incluye `accent` y otros módulos. Instala y repite.
 
    Si falla con un error como 
    ```
@@ -495,45 +498,47 @@ se presenta en la siguiente sección.
    ```
    pg_dump: error: query failed: ERROR:  could not access file "$libdir/postgis-3"
    ```
-   debe quitar la extensión postgis en las bases del cluster anterior
+   debes quitar la extensión postgis en las bases del cluster anterior
    con:
    ```
    DROP EXTENSION postgis;
    ```
    y volver a agregarlo después de completar la actualización.
 
-8. Arranque la nueva base con configuración por omisión de manera temporal con 
+8. Arranca la nueva base con configuración por omisión de manera temporal con 
    ```
    doas rcctl start postgresql
    ```
 
-9. Asegure la clave, revisándola con `cat /tmp/clave.txt` y estableciendola
+9. Asegura la clave, revisándola con `cat /tmp/clave.txt` y establecela
    con:
    ```
    psql -U postgres template1
    ALTER USER postgres WITH PASSWORD 'nuevaaqui';
    ```
 
-10. Detenga nuevamente servicio `postgresql`  (i.e
-    `doas rcctl stop postgresql), modifique 
+10. Detén nuevamente el servicio `postgresql`  (i.e
+    `doas rcctl stop postgresql`), modifica 
     `/var/postgresql/data/postgresql.conf` para cambiar
-    ubicación del socket y en general rehacer la configuración que tenía 
-    su base (e.g conexiones TCP, llaves, etc).
+    la ubicación del socket y en general rehacer la configuración que tenía
+    tu base (e.g conexiones TCP, llaves, etc).
+
     ```
+    work_mem = 128MB
+    ...
     unix_socket_directories = '/var/www/var/run/postgresql'
-    # comma-separated list of directories
     ```
-    En `data/pg_hba.conf` vuelva a dejar `md5` en lugar de `trust`
+    En `data/pg_hba.conf` vuelve a dejar `md5` en lugar de `trust`
 
-11. Inicie servicio y compruebe operación
+11. Inicia el servicio y comprueba su operación
 
-12. Una vez se complete con éxito se puede eliminar el cluster 
-    anterior ./delete_old_cluster.sh
+12. Una vez completes este procedimiento con éxito puedes eliminar el 
+    cluster anterior ./delete_old_cluster.sh
 
-Si había detenido la actualización de `inst-adJ.sh` vuelva a
-ejecutar y a la pregunta "Desea eliminar la actual
+Si habías detenido la actualización de `inst-adJ.sh` vuelve a
+ejecutarla y a la pregunta "Desea eliminar la actual
 versión de PostgreSQL y los datos asociados para
-actualizarla" responda No.
+actualizarla" responde No.
 
 #### Quitar `OIDS` para actualizar de PostgreSQL 11 a 12
 
