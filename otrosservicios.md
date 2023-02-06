@@ -418,7 +418,45 @@ se presenta en la siguiente sección.
    digamos en `data--20200319.tar.gz`) y deten
    cuando pregunte `Desea eliminar la actual versión de PostgreSQL`
 
-2. Deten la base anterior:
+2. `pg_upgrade` no opera bien con PostGIS, por eso si has usado esa extensión
+   en alguna base de datos es mejor quitarla antes de actualizar y volver
+   a agregarla después de actualizar.  Si tienes muchas bases de datos,
+   desde el usuario `_postgresql` puedes
+   crear un guión para el interprete de ordenes que la quite de las bases 
+   donde este (digamos `/tmp/quita-postgis.sh`) y otro que la vuelva a poner 
+   en esas mismas bases (digamos `/tmp/agrega-postgis.sh`).
+   El siguiente guión crea esos guiones:
+
+   ```
+    #!/bin/sh
+    
+    psql -U postgres -h /var/www/var/run/postgresql/ -c "select datname from pg_database;" |\        
+            sed -e "s/^ *datname//g;s/^---*//g;s/^(.*rows.*//g" > /tmp/rp-todas.txt
+    
+    echo "#!/bin/sh" > /tmp/quita-postgis.sh
+    echo "#!/bin/sh" > /tmp/agrega-postgis.sh
+    for i in `cat /tmp/rp-todas.txt `; do
+            if (test "$i" != "template0") then {
+                    psql -U postgres -h /var/www/var/run/postgresql/ $i \
+                            -c "SELECT extname FROM pg_extension WHERE extname='postgis';" | grep postgis
+                    if (test "$?" = "0") then {
+                            echo $i;
+                            echo "psql -U postgres -h /var/www/var/run/postgresql/ $i -c \"DROP EXTENSION postgis;\"" >> /tmp/quita-postgis.sh
+                            echo "psql -U postgres -h /var/www/var/run/postgresql/ $i -c \"CREATE EXTENSION postgis;\"" >> /tmp/agrega-postgis.sh
+                    } fi;
+            } fi;
+    done
+    chmod +x /tmp/quita-postgis.sh
+    chmod +x /tmp/agrega-postgis.sh
+   ```
+
+   Tras ejecutarlo, ejecuta el guión creado que quita extensiones:
+
+   ```
+   /tmp/quita-postgis.sh
+   ```
+
+3. Detén la base anterior:
    ```
    doas rcctl stop postgresql
    ```
@@ -426,14 +464,15 @@ se presenta en la siguiente sección.
    ```
    doas mv /var/postgresql/data /var/postgresql/data-14
    ```
-3. Desinstala paquetes de `postgresql` anteriores. Puedes hacerlo con
+
+4. Desinstala los paquetes de `postgresql` anteriores. Puedes hacerlo con
    la siguiente orden y confirmando que elimine todos los dependientes:
 
    ```
    doas pkg_delete postgresql-client postgresql-docs postgresql-previous
    ```
 
-4. Instala paquetes `postgresql-client`, `postgresql-server`,
+5. Instala los paquetes `postgresql-client`, `postgresql-server`,
    `postgresql-contrib`, `postgresql-previous` y 
    `postgresql-pg_upgrade` (inicialmente no instales `postgresql-docs` 
    porque tiene conflicto con `postgresql-previous`).
@@ -449,9 +488,9 @@ se presenta en la siguiente sección.
    los paquetes `postgresql-previous` y `postgresql-pg_upgrade` en
    <http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/> en un directorio
    de la forma `6.5-extra`. Como no están firmados al momento de instalarlos
-   con `pkg_add` use la opción `-D unsigned`).
+   con `pkg_add` usa la opción `-D unsigned`).
 
-5. Inicializa un nueva base en `/var/postgresql/data` con la clave de 
+6. Inicializa un nueva base en `/var/postgresql/data` con la clave de 
    administrador de la anterior (suponiendo que está en el archivo 
    `.pgpass` de la cuenta `_postgresql` como ocurre por omisión en adJ) con:
    ```
@@ -461,7 +500,7 @@ se presenta en la siguiente sección.
       --pwfile=/tmp/clave.txt  -D/var/postgresql/data
    ```
 
-6. Durante la actualización mantén la configuración por omisión (no muevas
+7. Durante la actualización mantén la configuración por omisión (no muevas
    zócalos --sockets) y edita y cambia `pg_hba.conf` de `data` y de `data-14`
    ```
    $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-14/pg_hba.conf
@@ -475,7 +514,7 @@ se presenta en la siguiente sección.
    local all all trust
    ```
 
-7. Inicia la restauración así:
+8. Inicia la restauración así:
    ```
    doas su - _postgresql
    pg_upgrade -b /usr/local/bin/postgresql-14/ -B /usr/local/bin \
@@ -505,19 +544,22 @@ se presenta en la siguiente sección.
    ```
    y volver a agregarlo después de completar la actualización.
 
-8. Arranca la nueva base con configuración por omisión de manera temporal con 
+9. Arranca la nueva base con la configuración por omisión de manera 
+   temporal con 
+
    ```
    doas rcctl start postgresql
    ```
 
-9. Asegura la clave, revisándola con `cat /tmp/clave.txt` y establecela
+10. Asegura la clave, revisándola con `cat /tmp/clave.txt` y estableciendola
    con:
+
    ```
    psql -U postgres template1
    ALTER USER postgres WITH PASSWORD 'nuevaaqui';
    ```
 
-10. Detén nuevamente el servicio `postgresql`  (i.e
+11. Detén nuevamente el servicio `postgresql`  (i.e
     `doas rcctl stop postgresql`), modifica 
     `/var/postgresql/data/postgresql.conf` para cambiar
     la ubicación del socket y en general rehacer la configuración que tenía
@@ -530,9 +572,20 @@ se presenta en la siguiente sección.
     ```
     En `data/pg_hba.conf` vuelve a dejar `md5` en lugar de `trust`
 
-11. Inicia el servicio y comprueba su operación
 
-12. Una vez completes este procedimiento con éxito puedes eliminar el 
+12. Si tenías PostGIS vuelve a instalar el paquete con algo como:
+
+    ```
+    PKG_PATH=. doas pkg_add -r minizip* curl* sqlite3* nghttp2* \
+      giflib* json-c* lz4* netcdf* openjp* proj* geos* postgis*
+    ```
+
+13. Inicia el servicio PostgreSQL y comprueba su operación
+
+14. Vuelve a activar la extensión PostGIS en las bases donde estaba.
+    Si usaste el procedimiento del paso 2 ejecuta `/tmp/agrega-postgis.sh`
+
+15. Una vez completes este procedimiento con éxito puedes eliminar el 
     cluster anterior ./delete_old_cluster.sh
 
 Si habías detenido la actualización de `inst-adJ.sh` vuelve a
