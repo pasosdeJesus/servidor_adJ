@@ -223,7 +223,6 @@
 <!ENTITY p-inkscape "inkscape-1.2.2">
 <!ENTITY p-intel-firmware "intel-firmware-20230214v0">
 <!ENTITY p-inteldrm-firmware "inteldrm-firmware-20230310">
-<!ENTITY p-intltool "intltool-0.51.0p2">
 <!ENTITY p-iodbc "iodbc-3.52.12p3">
 <!ENTITY p-iso-codes "iso-codes-4.13.0">
 <!ENTITY p-iso8879 "iso8879-1986p1">
@@ -435,7 +434,6 @@
 <!ENTITY p-p5-B-Hooks-EndOfScope "p5-B-Hooks-EndOfScope-0.26">
 <!ENTITY p-p5-BSD-Resource "p5-BSD-Resource-1.2911p0">
 <!ENTITY p-p5-CGI "p5-CGI-4.55">
-<!ENTITY p-p5-Capture-Tiny "p5-Capture-Tiny-0.48p0">
 <!ENTITY p-p5-Class-Data-Inheritable "p5-Class-Data-Inheritable-0.09">
 <!ENTITY p-p5-Class-Inspector "p5-Class-Inspector-1.36p0">
 <!ENTITY p-p5-Class-Load "p5-Class-Load-0.25p0">
@@ -445,8 +443,6 @@
 <!ENTITY p-p5-Class-Tiny "p5-Class-Tiny-1.008">
 <!ENTITY p-p5-Class-XSAccessor "p5-Class-XSAccessor-1.19p0">
 <!ENTITY p-p5-Clone "p5-Clone-0.46">
-<!ENTITY p-p5-Clone-PP "p5-Clone-PP-1.08">
-<!ENTITY p-p5-Config-AutoConf "p5-Config-AutoConf-0.320">
 <!ENTITY p-p5-Config-Tiny "p5-Config-Tiny-2.14p0">
 <!ENTITY p-p5-Cpanel-JSON-XS "p5-Cpanel-JSON-XS-4.36">
 <!ENTITY p-p5-Crypt-OpenSSL-Bignum "p5-Crypt-OpenSSL-Bignum-0.09p0">
@@ -455,7 +451,6 @@
 <!ENTITY p-p5-Crypt-OpenSSL-Random "p5-Crypt-OpenSSL-Random-0.15">
 <!ENTITY p-p5-DBD-MariaDB "p5-DBD-MariaDB-1.21p3">
 <!ENTITY p-p5-DBD-SQLite "p5-DBD-SQLite-1.70v0">
-<!ENTITY p-p5-DBD-mysql "p5-DBD-mysql-4.050p1">
 <!ENTITY p-p5-DBI "p5-DBI-1.643p0">
 <!ENTITY p-p5-DBIx-Simple "p5-DBIx-Simple-1.37p0">
 <!ENTITY p-p5-Data-Dumper-Concise "p5-Data-Dumper-Concise-2.023">
@@ -467,12 +462,10 @@
 <!ENTITY p-p5-DateTime "p5-DateTime-1.59v0">
 <!ENTITY p-p5-DateTime-Locale "p5-DateTime-Locale-1.37">
 <!ENTITY p-p5-DateTime-TimeZone "p5-DateTime-TimeZone-2.56">
-<!ENTITY p-p5-Devel-CheckLib "p5-Devel-CheckLib-1.16">
 <!ENTITY p-p5-Devel-GlobalDestruction "p5-Devel-GlobalDestruction-0.14p0">
 <!ENTITY p-p5-Devel-OverloadInfo "p5-Devel-OverloadInfo-0.007">
 <!ENTITY p-p5-Devel-StackTrace "p5-Devel-StackTrace-2.04">
 <!ENTITY p-p5-Digest-HMAC "p5-Digest-HMAC-1.04">
-<!ENTITY p-p5-Digest-SHA1 "p5-Digest-SHA1-2.13p6">
 <!ENTITY p-p5-Dist-CheckConflicts "p5-Dist-CheckConflicts-0.11p0">
 <!ENTITY p-p5-Email-Abstract "p5-Email-Abstract-3.009">
 <!ENTITY p-p5-Email-Address "p5-Email-Address-1.913">
@@ -496,7 +489,6 @@
 <!ENTITY p-p5-File-Copy-Recursive "p5-File-Copy-Recursive-0.45p0">
 <!ENTITY p-p5-File-HomeDir "p5-File-HomeDir-1.006">
 <!ENTITY p-p5-File-Listing "p5-File-Listing-6.15">
-<!ENTITY p-p5-File-Remove "p5-File-Remove-1.61">
 <!ENTITY p-p5-File-ShareDir "p5-File-ShareDir-1.118">
 <!ENTITY p-p5-File-ShareDir-Install "p5-File-ShareDir-Install-0.14">
 <!ENTITY p-p5-File-Which "p5-File-Which-1.27">
@@ -537,16 +529,12 @@
 <!ENTITY p-p5-Mail-SpamAssassin "p5-Mail-SpamAssassin-4.0.0">
 <!ENTITY p-p5-Mail-Tools "p5-Mail-Tools-2.21p0">
 <!ENTITY p-p5-Math-Base-Convert "p5-Math-Base-Convert-0.11p0">
-<!ENTITY p-p5-Math-Int64 "p5-Math-Int64-0.54p1">
 <!ENTITY p-p5-MaxMind-DB-Common "p5-MaxMind-DB-Common-0.040001p1">
 <!ENTITY p-p5-MaxMind-DB-Reader "p5-MaxMind-DB-Reader-1.000014p1">
 <!ENTITY p-p5-Module-Build "p5-Module-Build-0.4231">
-<!ENTITY p-p5-Module-Build-Tiny "p5-Module-Build-Tiny-0.039p0">
 <!ENTITY p-p5-Module-Implementation "p5-Module-Implementation-0.09p0">
-<!ENTITY p-p5-Module-Install "p5-Module-Install-1.19">
 <!ENTITY p-p5-Module-Pluggable "p5-Module-Pluggable-5.2p0">
 <!ENTITY p-p5-Module-Runtime "p5-Module-Runtime-0.016p0">
-<!ENTITY p-p5-Module-ScanDeps "p5-Module-ScanDeps-1.31">
 <!ENTITY p-p5-Moo "p5-Moo-2.004004">
 <!ENTITY p-p5-MooX-StrictConstructor "p5-MooX-StrictConstructor-0.011">
 <!ENTITY p-p5-MooX-Types-MooseLike "p5-MooX-Types-MooseLike-0.29p0">
@@ -567,14 +555,12 @@
 <!ENTITY p-p5-Net-SSLeay "p5-Net-SSLeay-1.92p3">
 <!ENTITY p-p5-Net-Server "p5-Net-Server-2.010">
 <!ENTITY p-p5-NetAddr-IP "p5-NetAddr-IP-4.079p0">
-<!ENTITY p-p5-PAR-Dist "p5-PAR-Dist-0.51">
 <!ENTITY p-p5-Package-DeprecationManager "p5-Package-DeprecationManager-0.17p0">
 <!ENTITY p-p5-Package-Stash "p5-Package-Stash-0.40">
 <!ENTITY p-p5-Package-Stash-XS "p5-Package-Stash-XS-0.30">
 <!ENTITY p-p5-Params-Util "p5-Params-Util-1.102">
 <!ENTITY p-p5-Params-Validate "p5-Params-Validate-1.31">
 <!ENTITY p-p5-Params-ValidationCompiler "p5-Params-ValidationCompiler-0.31">
-<!ENTITY p-p5-Parse-Yapp "p5-Parse-Yapp-1.21p0">
 <!ENTITY p-p5-Path-Tiny "p5-Path-Tiny-0.122">
 <!ENTITY p-p5-PlRPC "p5-PlRPC-0.2020p0">
 <!ENTITY p-p5-Pod-Parser "p5-Pod-Parser-1.65">
@@ -587,7 +573,6 @@
 <!ENTITY p-p5-SQL-Statement "p5-SQL-Statement-1.414">
 <!ENTITY p-p5-Scope-Guard "p5-Scope-Guard-0.21p0">
 <!ENTITY p-p5-Socket6 "p5-Socket6-0.29p0">
-<!ENTITY p-p5-Sort-Naturally "p5-Sort-Naturally-1.03p0">
 <!ENTITY p-p5-Specio "p5-Specio-0.48">
 <!ENTITY p-p5-Sub-Exporter "p5-Sub-Exporter-0.988">
 <!ENTITY p-p5-Sub-Exporter-Progressive "p5-Sub-Exporter-Progressive-0.001013p0">
@@ -595,10 +580,7 @@
 <!ENTITY p-p5-Sub-Install "p5-Sub-Install-0.928p0">
 <!ENTITY p-p5-Sub-Name "p5-Sub-Name-0.26p0">
 <!ENTITY p-p5-Sub-Quote "p5-Sub-Quote-2.006008">
-<!ENTITY p-p5-Task-Weaken "p5-Task-Weaken-1.06p0">
-<!ENTITY p-p5-Test-Fatal "p5-Test-Fatal-0.017">
 <!ENTITY p-p5-Test-File-ShareDir "p5-Test-File-ShareDir-1.001002p0">
-<!ENTITY p-p5-Test-Requires "p5-Test-Requires-0.11">
 <!ENTITY p-p5-Text-Unidecode "p5-Text-Unidecode-1.30p0">
 <!ENTITY p-p5-Throwable "p5-Throwable-1.000">
 <!ENTITY p-p5-Time-TimeDate "p5-Time-TimeDate-2.33">
@@ -613,8 +595,6 @@
 <!ENTITY p-p5-XML-Parser "p5-XML-Parser-2.46">
 <!ENTITY p-p5-XML-SAX "p5-XML-SAX-1.02p0">
 <!ENTITY p-p5-XML-SAX-Base "p5-XML-SAX-Base-1.09p0">
-<!ENTITY p-p5-YAML-Tiny "p5-YAML-Tiny-1.73p0">
-<!ENTITY p-p5-YAML-XS "p5-YAML-XS-0.86">
 <!ENTITY p-p5-libwww "p5-libwww-6.68">
 <!ENTITY p-p5-namespace-autoclean "p5-namespace-autoclean-0.29p0">
 <!ENTITY p-p5-namespace-clean "p5-namespace-clean-0.27p0">
