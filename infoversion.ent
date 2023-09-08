@@ -405,6 +405,7 @@
 <!ENTITY p-ngtcp2 "ngtcp2-0.13.1">
 <!ENTITY p-ninja "ninja-1.11.1">
 <!ENTITY p-nmap "nmap-7.91p4">
+<!ENTITY p-node "node-18.17.1v0">
 <!ENTITY p-noto-emoji "noto-emoji-20211101">
 <!ENTITY p-noto-fonts "noto-fonts-20201206">
 <!ENTITY p-npth "npth-1.6">
