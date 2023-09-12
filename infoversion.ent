@@ -770,9 +770,7 @@
 <!ENTITY p-rsync "rsync-3.2.7">
 <!ENTITY p-rtorrent "rtorrent-0.9.6p8v0">
 <!ENTITY p-rttr "rttr-0.9.6p1">
-<!ENTITY p-ruby "ruby-3.1.3p0">
 <!ENTITY p-ruby "ruby-3.2.2">
-<!ENTITY p-ruby31-ri_docs "ruby31-ri_docs-3.1.2">
 <!ENTITY p-ruby32-ri_docs "ruby32-ri_docs-3.2.2">
 <!ENTITY p-rust "rust-1.68.0">
 <!ENTITY p-samba "samba-4.17.6v0">
@@ -818,7 +816,7 @@
 <!ENTITY p-tk "tk-8.6.13">
 <!ENTITY p-tl-expected "tl-expected-1.0.0p0">
 <!ENTITY p-ton "ton-20230109">
-<!ENTITY p-ton-toncli "ton-toncli-20230112">
+<!ENTITY p-ton-toncli "ton-toncli-20230112p1">
 <!ENTITY p-transfig "transfig-3.2.8b">
 <!ENTITY p-tree-sitter "tree-sitter-0.20.7">
 <!ENTITY p-twolame "twolame-0.4.0">
