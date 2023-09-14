@@ -159,7 +159,7 @@ Para mejorar desempeño especialmente en sitios que atiendan bastantes
 conexiones simultáneamente, consulte primero
 `/usr/local/share/doc/postgresql/README.OpenBSD`.
 
-En adJ por seguridad (e.g cuando ejecuta Apache con `chroot` en
+En adJ por seguridad (e.g cuando ejecuta nginx con `chroot` en
 `/var/www`) no se permiten conexiones TCP/IP y se emplea una ruta para
 los zócalos diferente a la ruta por defecto (i.e `/tmp`), se trata de
 `/var/www/var/run/postgresql`, que se define en el archivo de configuración de
@@ -174,7 +174,7 @@ Antes de reiniciar PostgreSQL asegúrese de crear el directorio:
         doas chmod +t /var/www/var/run/postgresql
 
 También tenga en cuenta que las diversas herramientas reciben como
-parámetro adicional `-h ruta`. Por ejemplo si ejecuta Apache con
+parámetro adicional `-h ruta`. Por ejemplo si ejecuta nginx con
 `chroot` en `/var/www/` puede tener configurado su directorio para
 zócalos en `/var/www/var/run/postgresql`, en ese caso puede iniciar
 `psql` con la base `prueba` usando:
@@ -184,7 +184,7 @@ zócalos en `/var/www/var/run/postgresql`, en ese caso puede iniciar
 En paquetes anteriores al de adJ 4.1 el superusuario de la base
 coincidía con el usuario del sistema `_postgresql`, desde 4.1 el
 superusuario de la base es `postgres`, así que para realizar operaciones
-debe agregarse la opción `-U postgres`. El instalador de adJ
+debe agregar la opción `-U postgres`. El instalador de adJ
 seleccionará una clave con el programa `apg` y la dejará en el archivo
 `/var/postgresql/.pgpass` en una línea de la forma:
 
@@ -902,7 +902,7 @@ y posteriormente restaurarla con:
 
 ### MariaDB y servidor web con chroot {#chroot-mysql}
 
-Puede emplear aplicaciones para nginx o Apache en modo `chroot` que usen
+Puede emplear aplicaciones para nginx en modo `chroot` que usen
 bases de datos MariaDB de tres formas: (1) Conectando la aplicación web a la
 base de datos mediante un puerto TCP/IP donde responda MariaDB,
 (2) poniendo el zócalo de MariaDB en un directorio dentro de la
@@ -1227,7 +1227,7 @@ $config->custom->jpeg['tmpdir'] = '/tmp';
 ```
 
 También debe asegurar que pueden emplearse los dispositivos de
-generación de números aleatorios en la jaula chroot de Apache (esto lo
+generación de números aleatorios en la jaula chroot de nginx (esto lo
 hace por defecto el instalador de adJ 5.5). Para esto verifique que en
 `/etc/fstab` al montar la partición `/var` este permitiendo dispositivos
 (que no este la opción `nodev`) y ejecute:

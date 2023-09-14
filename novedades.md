@@ -1,4 +1,7 @@
-Versión 7.2
+Versión 7.3
+:   - Mejoras a [xref](#postgresql).
+
+:Versión 7.2
 :   - Mejorada actualización rápida de PostgreSQL ver [xref](#pg-upgrade).
 
 :Versión 7.1
