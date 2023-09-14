@@ -161,7 +161,7 @@
         bastantes conexiones simultáneamente, consulte primero
         <code class="literal">/usr/local/share/doc/postgresql/README.OpenBSD</code>.
       </p><p>
-        En adJ por seguridad (e.g cuando ejecuta Apache con
+        En adJ por seguridad (e.g cuando ejecuta nginx con
         <code class="literal">chroot</code> en <code class="literal">/var/www</code>) no se
         permiten conexiones TCP/IP y se emplea una ruta para los zócalos
         diferente a la ruta por defecto (i.e <code class="literal">/tmp</code>),
@@ -178,7 +178,7 @@
 </pre><p>
         También tenga en cuenta que las diversas herramientas reciben
         como parámetro adicional <code class="literal">-h ruta</code>. Por ejemplo
-        si ejecuta Apache con <code class="literal">chroot</code> en
+        si ejecuta nginx con <code class="literal">chroot</code> en
         <code class="literal">/var/www/</code> puede tener configurado su
         directorio para zócalos en
         <code class="literal">/var/www/var/run/postgresql</code>, en ese caso
@@ -191,7 +191,7 @@
         coincidía con el usuario del sistema
         <code class="literal">_postgresql</code>, desde 4.1 el superusuario de la
         base es <code class="literal">postgres</code>, así que para realizar
-        operaciones debe agregarse la opción
+        operaciones debe agregar la opción
         <code class="literal">-U postgres</code>. El instalador de adJ
         seleccionará una clave con el programa <code class="literal">apg</code> y
         la dejará en el archivo
@@ -222,7 +222,7 @@
       </p><p>
         Otra posibilidad es cambiar la configuración después de haber
         inicializado sin autenticación. Para esto cambie la clave del
-        administrador con<sup>[<a name="idp891085080" href="#ftn.idp891085080">29</a>]</sup>:
+        administrador con<sup>[<a name="idp1650733976" href="#ftn.idp1650733976">29</a>]</sup>:
       </p><pre class="programlisting">
     psql -h /var/www/var/run/postgresql -U postgres template1
     template1=# alter user postgres with password 'MiClave';
@@ -947,7 +947,7 @@ $ sh /tmp/quita_oids.sh
       </p><pre class="programlisting">
     mysql &lt; /respaldomysql/dump-1nov2007.sql
 </pre></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="chroot-mysql"></a>6.3.4. MariaDB y servidor web con chroot</h4></div></div></div><p>
-        Puede emplear aplicaciones para nginx o Apache en modo
+        Puede emplear aplicaciones para nginx en modo
         <code class="literal">chroot</code> que usen bases de datos MariaDB de
         tres formas: (1) Conectando la aplicación web a la base de datos
         mediante un puerto TCP/IP donde responda MariaDB, (2) poniendo
@@ -1032,7 +1032,7 @@ $ sh /tmp/quita_oids.sh
       3, <code class="literal">ldapd</code>. No incluye cliente para LDAP pero
       desde la línea de órdenes puede emplearse el paquete
       <code class="literal">openldap-client</code> o como interfaz web
-      <code class="literal">phpldapadmin</code><sup>[<a name="idp1454140824" href="#ftn.idp1454140824">30</a>]</sup>.
+      <code class="literal">phpldapadmin</code><sup>[<a name="idp1450941080" href="#ftn.idp1450941080">30</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-ldapd"></a>6.4.1. Instalación de ldapd</h4></div></div></div><p>
         No necesita instalar paquetes para la operación como servidor.
       </p><p>
@@ -1264,7 +1264,7 @@ result: 32 No such object
 $config-&gt;custom-&gt;jpeg['tmpdir'] = '/tmp';
 </pre><p>
         También debe asegurar que pueden emplearse los dispositivos de
-        generación de números aleatorios en la jaula chroot de Apache
+        generación de números aleatorios en la jaula chroot de nginx
         (esto lo hace por defecto el instalador de adJ 5.5). Para esto
         verifique que en <code class="literal">/etc/fstab</code> al montar la
         partición <code class="literal">/var</code> este permitiendo dispositivos
@@ -1548,10 +1548,10 @@ echo "conectado= "; print_r($conectado); echo "\n"
           <code class="literal">/etc/ssl/cert.pem</code>
         </p></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias"></a>6.5.5. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
             <a href="https://www.howtoforge.com/postgresql-ssl-certificates" target="_top">https://www.howtoforge.com/postgresql-ssl-certificates</a>
-          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp891085080" href="#idp891085080">29</a>] </sup>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1650733976" href="#idp1650733976">29</a>] </sup>
             Note que de esta forma puede cambiar la clave de otros
             usuarios de PostgreSQL.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1454140824" href="#idp1454140824">30</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.idp1450941080" href="#idp1450941080">30</a>] </sup>
           Si emplea un adJ 5.2 y planea conectarse desde clientes
           digamos en Ubuntu reciente requerirá el parche descrito en
           <a xmlns="" href="http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html" target="_top">http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</a>
