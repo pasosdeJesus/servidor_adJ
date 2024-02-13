@@ -131,3 +131,7 @@ instala:
 		install imp/*ps $(DESTDIR)$(INSDOC);\
 	} fi;
 
+
+actpdJ:
+	rsync --delete -ravzp html/* pasosdeJesus.org:/var/www/pasosdeJesus/doc/servidor_adJ
+	rsync $(PROYECTO)-$(PRY_VERSION)_html.tar.gz pasosdeJesus.org:/var/www/pasosdeJesus/doc/servidor_adJ

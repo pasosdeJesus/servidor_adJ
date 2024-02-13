@@ -405,7 +405,7 @@ pero seguro:
 
 1. Sacar una copia de respaldo antes de actualizar
 2. Actualizar PostgreSQL
-3. Restaurar el respaldo 
+3. Restaurar el respaldo
 
 Sin embargo en ocasiones funciona un método rápido con `pg_upgrade` que
 se presenta en la siguiente sección.
@@ -414,7 +414,7 @@ se presenta en la siguiente sección.
 
 1. Saca los respaldos típicos, i.e si estás actualizando adJ completo y
    usando `inst-adJ.sh` permite que saque
-   volcado (digamos `/var/www/resbase/pga-5.sql` y que copie base binaria 
+   volcado (digamos `/var/www/resbase/pga-5.sql` y que copie base binaria
    digamos en `data--20200319.tar.gz`) y deten
    cuando pregunte `Desea eliminar la actual versión de PostgreSQL`
 
@@ -422,17 +422,17 @@ se presenta en la siguiente sección.
    en alguna base de datos es mejor quitarla antes de actualizar y volver
    a agregarla después de actualizar.  Si tienes muchas bases de datos,
    desde el usuario `_postgresql` puedes
-   crear un guión para el interprete de ordenes que la quite de las bases 
-   donde este (digamos `/tmp/quita-postgis.sh`) y otro que la vuelva a poner 
+   crear un guión para el interprete de ordenes que la quite de las bases
+   donde este (digamos `/tmp/quita-postgis.sh`) y otro que la vuelva a poner
    en esas mismas bases (digamos `/tmp/agrega-postgis.sh`).
    El siguiente guión crea esos guiones:
 
    ```
     #!/bin/sh
-    
-    psql -U postgres -h /var/www/var/run/postgresql/ -c "select datname from pg_database;" |\        
+
+    psql -U postgres -h /var/www/var/run/postgresql/ -c "select datname from pg_database;" |\
             sed -e "s/^ *datname//g;s/^---*//g;s/^(.*rows.*//g" > /tmp/rp-todas.txt
-    
+
     echo "#!/bin/sh" > /tmp/quita-postgis.sh
     echo "#!/bin/sh" > /tmp/agrega-postgis.sh
     for i in `cat /tmp/rp-todas.txt `; do
@@ -460,9 +460,9 @@ se presenta en la siguiente sección.
    ```
    doas rcctl stop postgresql
    ```
-   y mueve directorio con datos de PostgreSQL 14
+   y mueve directorio con datos de PostgreSQL 15
    ```
-   doas mv /var/postgresql/data /var/postgresql/data-14
+   doas mv /var/postgresql/data /var/postgresql/data-15
    ```
 
 4. Desinstala los paquetes de `postgresql` anteriores. Puedes hacerlo con
@@ -473,8 +473,8 @@ se presenta en la siguiente sección.
    ```
 
 5. Instala los paquetes `postgresql-client`, `postgresql-server`,
-   `postgresql-contrib`, `postgresql-previous` y 
-   `postgresql-pg_upgrade` (inicialmente no instales `postgresql-docs` 
+   `postgresql-contrib`, `postgresql-previous` y
+   `postgresql-pg_upgrade` (inicialmente no instales `postgresql-docs`
    porque tiene conflicto con `postgresql-previous`).
 
    ```
@@ -484,14 +484,14 @@ se presenta en la siguiente sección.
           ./postgresql-pg_up*
    ```
 
-   (Si está corriendo una versión de adJ anterior a la 6.6 puede encontrar
+   (Si estás corriendo una versión de adJ anterior a la 6.6 puedes encontrar
    los paquetes `postgresql-previous` y `postgresql-pg_upgrade` en
    <http://adj.pasosdejesus.org/pub/AprendiendoDeJesus/> en un directorio
    de la forma `6.5-extra`. Como no están firmados al momento de instalarlos
    con `pkg_add` usa la opción `-D unsigned`).
 
-6. Inicializa un nueva base en `/var/postgresql/data` con la clave de 
-   administrador de la anterior (suponiendo que está en el archivo 
+6. Inicializa un nueva base en `/var/postgresql/data` con la clave de
+   administrador de la anterior (suponiendo que está en el archivo
    `.pgpass` de la cuenta `_postgresql` como ocurre por omisión en adJ) con:
    ```
    doas su - _postgresql
@@ -501,9 +501,9 @@ se presenta en la siguiente sección.
    ```
 
 7. Durante la actualización mantén la configuración por omisión (no muevas
-   zócalos --sockets) y edita y cambia `pg_hba.conf` de `data` y de `data-14`
+   zócalos --__sockets__) y edita y cambia `pg_hba.conf` de `data` y de `data-15`
    ```
-   $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-14/pg_hba.conf
+   $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-15/pg_hba.conf
    ```
    temporalmente a un modo inseguro, remplazando
    ```
@@ -517,8 +517,8 @@ se presenta en la siguiente sección.
 8. Inicia la restauración así:
    ```
    doas su - _postgresql
-   pg_upgrade -b /usr/local/bin/postgresql-14/ -B /usr/local/bin \
-      -U postgres -d /var/postgresql/data-14/ -D /var/postgresql/data
+   pg_upgrade -b /usr/local/bin/postgresql-15/ -B /usr/local/bin \
+      -U postgres -d /var/postgresql/data-15/ -D /var/postgresql/data
    ```
    Si llega a fallar con un mensaje de error del estilo:
    ```
@@ -528,7 +528,7 @@ se presenta en la siguiente sección.
    Seguramente te faltó instalar `postgresql-contrib` que
    incluye `accent` y otros módulos. Instala y repite.
 
-   Si falla con un error como 
+   Si falla con un error como
    ```
    *failure*
    Consult the last few lines of "pg_upgrade_dump_32486425.log"
@@ -544,8 +544,8 @@ se presenta en la siguiente sección.
    ```
    y volver a agregarlo después de completar la actualización.
 
-9. Arranca la nueva base con la configuración por omisión de manera 
-   temporal con 
+9. Arranca la nueva base con la configuración por omisión de manera
+   temporal con
 
    ```
    doas rcctl start postgresql
@@ -560,7 +560,7 @@ se presenta en la siguiente sección.
    ```
 
 11. Detén nuevamente el servicio `postgresql`  (i.e
-    `doas rcctl stop postgresql`), modifica 
+    `doas rcctl stop postgresql`), modifica
     `/var/postgresql/data/postgresql.conf` para cambiar
     la ubicación del socket y en general rehacer la configuración que tenía
     tu base (e.g conexiones TCP, llaves, etc).
@@ -585,7 +585,7 @@ se presenta en la siguiente sección.
 14. Vuelve a activar la extensión PostGIS en las bases donde estaba.
     Si usaste el procedimiento del paso 2 ejecuta `/tmp/agrega-postgis.sh`
 
-15. Una vez completes este procedimiento con éxito puedes eliminar el 
+15. Una vez completes este procedimiento con éxito puedes eliminar el
     cluster anterior ./delete_old_cluster.sh
 
 Si habías detenido la actualización de `inst-adJ.sh` vuelve a
@@ -599,7 +599,7 @@ En la actualización de PostgreSQL 11 a 12 se ha requerido un
 procedimiento adicional, previo a los pasos que se indicaron.
 
 Por cada tabla, debe ejecutar `ALTER TABLE x SET WITHOUT OIDS;`
-cambiando x por el nombre de cada tabla. 
+cambiando x por el nombre de cada tabla.
 
 Puede automatizarse con:
 ```
@@ -615,7 +615,7 @@ note que se exluyen las bases `postgres`, `template0` y `template1`.
 El script `/usr/local/adJ/pg_quita_oids.sh` está disponible en
 <https://github.com/pasosdeJesus/adJ/blob/master/arboldd/usr/local/adJ/pg_quita_oids.sh>
 
-Tras asegurar que tiene el script `/usr/local/adJ/pg_quita_oids.sh` y 
+Tras asegurar que tiene el script `/usr/local/adJ/pg_quita_oids.sh` y
 generar `/tmp/quitaoids.sh` como se describió, ejecute:
 ```
 $ sh /tmp/quita_oids.sh
@@ -780,7 +780,7 @@ sus bases de datos.
 
 Debe instalar los paquetes &p-mariadb-client; y &p-mariadb-server;. Aunque
 el nombre de los paquetes cambia las órdenes para operarla siguen
-siendo los mismos. 
+siendo los mismos.
 
 Inicialice el directorio donde estarán las bases de datos con
 
@@ -803,7 +803,7 @@ continuación regenere el archivo binario `/etc/login.conf.db` con
 
 Cambie la clase del usuario `_mysql` de `servicio` a `mysqld`.
 
-Después agregue `mysqld` a `pkg_scripts` en `/etc/rc.conf.local` por 
+Después agregue `mysqld` a `pkg_scripts` en `/etc/rc.conf.local` por
 ejemplo con:
 	doas rcctl enable mysqld
 
@@ -923,7 +923,7 @@ zócalo, digamos:
         doas chmod a+w /var/www/var/run/mysql/
         doas chmod +t /var/www/var/run/mysql/
 ```
-y después puede bien iniciar MariaDB indicando la ruta del zócalo con la 
+y después puede bien iniciar MariaDB indicando la ruta del zócalo con la
 opción `--socket` y en cada uso del cliente `mysql` también debe especificar
 ese parámetro, o bien puede configurar en `/etc/my.cnf` en la sección
 `client-server` el zócalo por omisión con:
@@ -1206,8 +1206,8 @@ con:
 
 ### Instalación y configuración de `phpldapadmin` {#phpldapadmin}
 
-Aunque hay un paquete para OpenBSD, la igual que la distribución oficial de 
-phpldapadmin no soporta php-5.5 ni TLS, por lo que 
+Aunque hay un paquete para OpenBSD, la igual que la distribución oficial de
+phpldapadmin no soporta php-5.5 ni TLS, por lo que
 se recomienda emplear <https://github.com/leenooks/phpLDAPadmin> así:
 
 ```
@@ -1242,7 +1242,7 @@ hace por defecto el instalador de adJ 5.5). Para esto verifique que en
 
 Primero cree un grupo `posix` en grupos.
 A continuación cree cuentas de usuario, tenga en cuenta que en la configuración
-por omisión debe emplear cifrado SHA para la clave (que no es tan seguro pero 
+por omisión debe emplear cifrado SHA para la clave (que no es tan seguro pero
 es el común que es soportada tanto por `phpLdapAdmin` como por `ldadpd`).
 
 #### Diferencias con OpenLDAP
@@ -1255,7 +1255,7 @@ Para depurar problemas de conexión de clientes en PHP a ldadp ha servido
 recordar:
 
 * libssl: Realiza conexiones seguras SSL y TLS
-* Librerías de OpenLDAP: son usadas practicamente por todos los programas 
+* Librerías de OpenLDAP: son usadas practicamente por todos los programas
   para realizar conexiones LDAP.
 * Desde el cliente, es buen experimento probar que desde la jauala chroot
   `/var/www` se puedan hacer conexiones SSL con `openssl s_client`  y que
@@ -1279,7 +1279,7 @@ function muestra_est_ldap($ad) {
   echo "network_timeout=$network_timeout\n";
   ldap_get_option($ad, LDAP_OPT_PROTOCOL_VERSION, $protocol_version);
   echo "protocol_version=$protocol_version\n";
-  ldap_get_option($ad, LDAP_OPT_ERROR_NUMBER, $error_number); 
+  ldap_get_option($ad, LDAP_OPT_ERROR_NUMBER, $error_number);
   echo "error_number=$error_number\n";
   ldap_get_option($ad, LDAP_OPT_REFERRALS, $referrals);
   echo "referrals=$referrals\n";
