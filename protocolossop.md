@@ -592,7 +592,7 @@ protocolos auxiliares POP3S e IMAPS para leer correo de manera segura,
 así como de SpamAssassin para combatir spam y el cliente de 
 correo web Roundcube.
 
-En [versiones históricas de este documento](https://github.com/pasosdeJesus/servidor_adJ/blob/servidor_adJ-7.0/protocolossop.md#servidor-de-correo-electr%C3%B3nico-servicios-correo) 
+En [versiones históricas de este documento](https://gitlab.com/pasosdeJesus/servidor_adJ/blob/servidor_adJ-7.0/protocolossop.md#servidor-de-correo-electr%C3%B3nico-servicios-correo) 
 podrá consultar sobre la configuración de sendmail (otro MTA), de couriermail
 (otro sistema que implementa POP3S e IMAPS) y de mailman (para manejar 
 listas de correo).

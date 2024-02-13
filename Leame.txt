@@ -54,5 +54,5 @@ configuración).
 5. Retroalimentación y ayuda
 
 Consulte Desarrollo.txt, contribuya en
-https://github.com/pasosdeJesus/servidor_adJ/
+https://gitlab.com/pasosdeJesus/servidor_adJ/
 

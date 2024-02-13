@@ -14,5 +14,5 @@ Agradecemos las correcciones de Luis Alejandro Cruz
 
 La versión publicada más reciente está tanto en línea como en archivo
 comprimido y como paquete para adJ/OpenBSD. Sus fuentes en DocBook
-están disponibles en https://github.com/pasosdeJesus/servidor_adJ/.
+están disponibles en https://gitlab.com/pasosdeJesus/servidor_adJ/.
 

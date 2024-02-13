@@ -1,5 +1,5 @@
 
-1. Poner Tag en github
+1. Poner Tag en gitlab
 
 	```
 	git tag -a v5.7 -m "Version 5.7"

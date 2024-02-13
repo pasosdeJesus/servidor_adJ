@@ -194,4 +194,4 @@ particular:
 
 Lo invitamos a aportar sus cambios en el repositorio de fuentes
 de este proyecto:
-https://github.com/pasosdeJesus/servidor_adJ/
+https://gitlab.com/pasosdeJesus/servidor_adJ/
