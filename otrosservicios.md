@@ -422,38 +422,21 @@ se presenta en la siguiente sección.
    en alguna base de datos es mejor quitarla antes de actualizar y volver
    a agregarla después de actualizar.  Si tienes muchas bases de datos,
    desde el usuario `_postgresql` puedes
-   crear un guión para el interprete de ordenes que la quite de las bases
-   donde este (digamos `/tmp/quita-postgis.sh`) y otro que la vuelva a poner
-   en esas mismas bases (digamos `/tmp/agrega-postgis.sh`).
-   El siguiente guión crea esos guiones:
+   crear un par de guiones para el interprete de ordenes, 
+   uno que la quite de las bases donde este 
+   (digamos `/var/www/tmp/quita-postgis.sh`) y otro que la vuelva a poner
+   en esas mismas bases (digamos `/var/www/tmp/agrega-postgis.sh`).
+   Para generar ambos guiones adJ incluye un guión en el que te puedes
+   basar para tu caso.  Ejecútalo con:
 
    ```
-    #!/bin/sh
-
-    psql -U postgres -h /var/www/var/run/postgresql/ -c "select datname from pg_database;" |\
-            sed -e "s/^ *datname//g;s/^---*//g;s/^(.*rows.*//g" > /tmp/rp-todas.txt
-
-    echo "#!/bin/sh" > /tmp/quita-postgis.sh
-    echo "#!/bin/sh" > /tmp/agrega-postgis.sh
-    for i in `cat /tmp/rp-todas.txt `; do
-            if (test "$i" != "template0") then {
-                    psql -U postgres -h /var/www/var/run/postgresql/ $i \
-                            -c "SELECT extname FROM pg_extension WHERE extname='postgis';" | grep postgis
-                    if (test "$?" = "0") then {
-                            echo $i;
-                            echo "psql -U postgres -h /var/www/var/run/postgresql/ $i -c \"DROP EXTENSION postgis;\"" >> /tmp/quita-postgis.sh
-                            echo "psql -U postgres -h /var/www/var/run/postgresql/ $i -c \"CREATE EXTENSION postgis;\"" >> /tmp/agrega-postgis.sh
-                    } fi;
-            } fi;
-    done
-    chmod +x /tmp/quita-postgis.sh
-    chmod +x /tmp/agrega-postgis.sh
+    /usr/local/adJ/pg_preact_postgis.sh
    ```
 
-   Tras ejecutarlo, ejecuta el guión creado que quita extensiones:
+   Después ejecuta el guión creado que quita extensiones:
 
    ```
-   /tmp/quita-postgis.sh
+   /var/www/tmp/quita-postgis.sh
    ```
 
 3. Detén la base anterior:
@@ -542,7 +525,8 @@ se presenta en la siguiente sección.
    ```
    DROP EXTENSION postgis;
    ```
-   y volver a agregarlo después de completar la actualización.
+   (como se indicó en el paso 2) y volver a agregarlo después de 
+   completar la actualización.
 
 9. Arranca la nueva base con la configuración por omisión de manera
    temporal con
@@ -573,17 +557,18 @@ se presenta en la siguiente sección.
     En `data/pg_hba.conf` vuelve a dejar `md5` en lugar de `trust`
 
 
-12. Si tenías PostGIS vuelve a instalar el paquete con algo como:
+12. Si tenías PostGIS vuelve a instalar el paquete desde el directorio
+    con los paquetes con:
 
     ```
-    PKG_PATH=. doas pkg_add -r minizip* curl* sqlite3* nghttp2* \
-      giflib* json-c* lz4* netcdf* openjp* proj* geos* postgis*
+    PKG_PATH=. doas pkg_add -r postgis*
     ```
 
 13. Inicia el servicio PostgreSQL y comprueba su operación
 
 14. Vuelve a activar la extensión PostGIS en las bases donde estaba.
-    Si usaste el procedimiento del paso 2 ejecuta `/tmp/agrega-postgis.sh`
+    Si usaste el procedimiento del paso 2 desde la cuenta `_postgresql`
+    ejecuta `/var/www/tmp/agrega-postgis.sh`
 
 15. Una vez completes este procedimiento con éxito puedes eliminar el
     cluster anterior ./delete_old_cluster.sh

@@ -1,10 +1,18 @@
+Versión 7.4
+:   - Mejorada actualización de PostgreSQL con pg_upgrade cuando hay
+      bases con PostGIS con nuevo script `pg_preact_postgis.sh`, 
+      ver [xref](#pg-upgrade).
+    - Repositorio maestro de fuentes movido de github a gitlab:
+      <https://gitlab.com/pasosdeJesus/servidor_adJ>. Se mantiene
+      copia en github.
+
 Versión 7.3
 :   - Mejoras a [xref](#postgresql).
 
-:Versión 7.2
+Versión 7.2
 :   - Mejorada actualización rápida de PostgreSQL ver [xref](#pg-upgrade).
 
-:Versión 7.1
+Versión 7.1
 :   - Se documenta actualización rápida de PostgreSQL ver [xref](#pg-upgrade).
 :   - Mejorada configuración se OpenSMTP [xref](#opensmtpd), eliminados
       temas de correo obsoletos y actualizadas configuraciones relacionadas.
