@@ -447,38 +447,19 @@
             mejor quitarla antes de actualizar y volver a agregarla
             después de actualizar. Si tienes muchas bases de datos,
             desde el usuario <code class="literal">_postgresql</code> puedes crear
-            un guión para el interprete de ordenes que la quite de las
-            bases donde este (digamos
-            <code class="literal">/tmp/quita-postgis.sh</code>) y otro que la
-            vuelva a poner en esas mismas bases (digamos
-            <code class="literal">/tmp/agrega-postgis.sh</code>). El siguiente
-            guión crea esos guiones:
+            un par de guiones para el interprete de ordenes, uno que la
+            quite de las bases donde este (digamos
+            <code class="literal">/var/www/tmp/quita-postgis.sh</code>) y otro que
+            la vuelva a poner en esas mismas bases (digamos
+            <code class="literal">/var/www/tmp/agrega-postgis.sh</code>). Para
+            generar ambos guiones adJ incluye un guión en el que te
+            puedes basar para tu caso. Ejecútalo con:
           </p><pre class="programlisting">
- #!/bin/sh
-
- psql -U postgres -h /var/www/var/run/postgresql/ -c "select datname from pg_database;" |\
-         sed -e "s/^ *datname//g;s/^---*//g;s/^(.*rows.*//g" &gt; /tmp/rp-todas.txt
-
- echo "#!/bin/sh" &gt; /tmp/quita-postgis.sh
- echo "#!/bin/sh" &gt; /tmp/agrega-postgis.sh
- for i in `cat /tmp/rp-todas.txt `; do
-         if (test "$i" != "template0") then {
-                 psql -U postgres -h /var/www/var/run/postgresql/ $i \
-                         -c "SELECT extname FROM pg_extension WHERE extname='postgis';" | grep postgis
-                 if (test "$?" = "0") then {
-                         echo $i;
-                         echo "psql -U postgres -h /var/www/var/run/postgresql/ $i -c \"DROP EXTENSION postgis;\"" &gt;&gt; /tmp/quita-postgis.sh
-                         echo "psql -U postgres -h /var/www/var/run/postgresql/ $i -c \"CREATE EXTENSION postgis;\"" &gt;&gt; /tmp/agrega-postgis.sh
-                 } fi;
-         } fi;
- done
- chmod +x /tmp/quita-postgis.sh
- chmod +x /tmp/agrega-postgis.sh
+ /usr/local/adJ/pg_preact_postgis.sh
 </pre><p>
-            Tras ejecutarlo, ejecuta el guión creado que quita
-            extensiones:
+            Después ejecuta el guión creado que quita extensiones:
           </p><pre class="programlisting">
-/tmp/quita-postgis.sh
+/var/www/tmp/quita-postgis.sh
 </pre></li><li><p>
             Detén la base anterior:
           </p><pre class="programlisting">
@@ -574,7 +555,8 @@ pg_dump: error: query failed: ERROR:  could not access file "$libdir/postgis-3"
           </p><pre class="programlisting">
 DROP EXTENSION postgis;
 </pre><p>
-            y volver a agregarlo después de completar la actualización.
+            (como se indicó en el paso 2) y volver a agregarlo después
+            de completar la actualización.
           </p></li><li><p>
             Arranca la nueva base con la configuración por omisión de
             manera temporal con
@@ -602,17 +584,17 @@ unix_socket_directories = '/var/www/var/run/postgresql'
             En <code class="literal">data/pg_hba.conf</code> vuelve a dejar
             <code class="literal">md5</code> en lugar de <code class="literal">trust</code>
           </p></li><li><p>
-            Si tenías PostGIS vuelve a instalar el paquete con algo
-            como:
+            Si tenías PostGIS vuelve a instalar el paquete desde el
+            directorio con los paquetes con:
           </p><pre class="programlisting">
-PKG_PATH=. doas pkg_add -r minizip* curl* sqlite3* nghttp2* \
-  giflib* json-c* lz4* netcdf* openjp* proj* geos* postgis*
+PKG_PATH=. doas pkg_add -r postgis*
 </pre></li><li><p>
             Inicia el servicio PostgreSQL y comprueba su operación
           </p></li><li><p>
             Vuelve a activar la extensión PostGIS en las bases donde
-            estaba. Si usaste el procedimiento del paso 2 ejecuta
-            <code class="literal">/tmp/agrega-postgis.sh</code>
+            estaba. Si usaste el procedimiento del paso 2 desde la
+            cuenta <code class="literal">_postgresql</code> ejecuta
+            <code class="literal">/var/www/tmp/agrega-postgis.sh</code>
           </p></li><li><p>
             Una vez completes este procedimiento con éxito puedes
             eliminar el cluster anterior ./delete_old_cluster.sh
@@ -1033,7 +1015,7 @@ $ sh /tmp/quita_oids.sh
       3, <code class="literal">ldapd</code>. No incluye cliente para LDAP pero
       desde la línea de órdenes puede emplearse el paquete
       <code class="literal">openldap-client</code> o como interfaz web
-      <code class="literal">phpldapadmin</code><sup>[<a name="id2644" href="#ftn.id2644">30</a>]</sup>.
+      <code class="literal">phpldapadmin</code><sup>[<a name="id2645" href="#ftn.id2645">30</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-ldapd"></a>6.4.1. Instalación de ldapd</h4></div></div></div><p>
         No necesita instalar paquetes para la operación como servidor.
       </p><p>
@@ -1552,7 +1534,7 @@ echo "conectado= "; print_r($conectado); echo "\n"
           </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id2171" href="#id2171">29</a>] </sup>
             Note que de esta forma puede cambiar la clave de otros
             usuarios de PostgreSQL.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id2644" href="#id2644">30</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id2645" href="#id2645">30</a>] </sup>
           Si emplea un adJ 5.2 y planea conectarse desde clientes
           digamos en Ubuntu reciente requerirá el parche descrito en
           <a xmlns="" href="http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html" target="_top">http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</a>

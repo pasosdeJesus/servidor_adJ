@@ -14,7 +14,7 @@ TITLE="Protocolos de soporte y de usuario"
 HREF="x1009.htm"><LINK
 REL="NEXT"
 TITLE="Novedades"
-HREF="a2904.htm"></HEAD
+HREF="a2905.htm"></HEAD
 ><BODY
 CLASS="sect1"
 BGCOLOR="#FFFFFF"
@@ -56,7 +56,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="a2904.htm"
+HREF="a2905.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
@@ -1099,49 +1099,30 @@ CLASS="literal"
 CLASS="literal"
 >_postgresql</TT
 > puedes crear
-            un guión para el interprete de ordenes que la quite de las
-            bases donde este (digamos
+            un par de guiones para el interprete de ordenes, uno que la
+            quite de las bases donde este (digamos
             <TT
 CLASS="literal"
->/tmp/quita-postgis.sh</TT
->) y otro que la
-            vuelva a poner en esas mismas bases (digamos
+>/var/www/tmp/quita-postgis.sh</TT
+>) y otro que
+            la vuelva a poner en esas mismas bases (digamos
             <TT
 CLASS="literal"
->/tmp/agrega-postgis.sh</TT
->). El siguiente
-            guión crea esos guiones:
+>/var/www/tmp/agrega-postgis.sh</TT
+>). Para
+            generar ambos guiones adJ incluye un guión en el que te
+            puedes basar para tu caso. Ejecútalo con:
           </P
 ><PRE
 CLASS="programlisting"
->&#13; #!/bin/sh
-
- psql -U postgres -h /var/www/var/run/postgresql/ -c "select datname from pg_database;" |\
-         sed -e "s/^ *datname//g;s/^---*//g;s/^(.*rows.*//g" &#62; /tmp/rp-todas.txt
-
- echo "#!/bin/sh" &#62; /tmp/quita-postgis.sh
- echo "#!/bin/sh" &#62; /tmp/agrega-postgis.sh
- for i in `cat /tmp/rp-todas.txt `; do
-         if (test "$i" != "template0") then {
-                 psql -U postgres -h /var/www/var/run/postgresql/ $i \
-                         -c "SELECT extname FROM pg_extension WHERE extname='postgis';" | grep postgis
-                 if (test "$?" = "0") then {
-                         echo $i;
-                         echo "psql -U postgres -h /var/www/var/run/postgresql/ $i -c \"DROP EXTENSION postgis;\"" &#62;&#62; /tmp/quita-postgis.sh
-                         echo "psql -U postgres -h /var/www/var/run/postgresql/ $i -c \"CREATE EXTENSION postgis;\"" &#62;&#62; /tmp/agrega-postgis.sh
-                 } fi;
-         } fi;
- done
- chmod +x /tmp/quita-postgis.sh
- chmod +x /tmp/agrega-postgis.sh
+>&#13; /usr/local/adJ/pg_preact_postgis.sh
 </PRE
 ><P
->&#13;            Tras ejecutarlo, ejecuta el guión creado que quita
-            extensiones:
+>&#13;            Después ejecuta el guión creado que quita extensiones:
           </P
 ><PRE
 CLASS="programlisting"
->&#13;/tmp/quita-postgis.sh
+>&#13;/var/www/tmp/quita-postgis.sh
 </PRE
 ></LI
 ><LI
@@ -1364,7 +1345,8 @@ CLASS="programlisting"
 >&#13;DROP EXTENSION postgis;
 </PRE
 ><P
->&#13;            y volver a agregarlo después de completar la actualización.
+>&#13;            (como se indicó en el paso 2) y volver a agregarlo después
+            de completar la actualización.
           </P
 ></LI
 ><LI
@@ -1438,13 +1420,12 @@ CLASS="literal"
 ></LI
 ><LI
 ><P
->&#13;            Si tenías PostGIS vuelve a instalar el paquete con algo
-            como:
+>&#13;            Si tenías PostGIS vuelve a instalar el paquete desde el
+            directorio con los paquetes con:
           </P
 ><PRE
 CLASS="programlisting"
->&#13;PKG_PATH=. doas pkg_add -r minizip* curl* sqlite3* nghttp2* \
-  giflib* json-c* lz4* netcdf* openjp* proj* geos* postgis*
+>&#13;PKG_PATH=. doas pkg_add -r postgis*
 </PRE
 ></LI
 ><LI
@@ -1455,10 +1436,14 @@ CLASS="programlisting"
 ><LI
 ><P
 >&#13;            Vuelve a activar la extensión PostGIS en las bases donde
-            estaba. Si usaste el procedimiento del paso 2 ejecuta
+            estaba. Si usaste el procedimiento del paso 2 desde la
+            cuenta <TT
+CLASS="literal"
+>_postgresql</TT
+> ejecuta
             <TT
 CLASS="literal"
->/tmp/agrega-postgis.sh</TT
+>/var/www/tmp/agrega-postgis.sh</TT
 >
           </P
 ></LI
@@ -2455,8 +2440,8 @@ CLASS="literal"
 CLASS="literal"
 >phpldapadmin</TT
 ><A
-NAME="AEN2643"
-HREF="#FTN.AEN2643"
+NAME="AEN2644"
+HREF="#FTN.AEN2644"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -3636,8 +3621,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN2643"
-HREF="x2050.htm#AEN2643"
+NAME="FTN.AEN2644"
+HREF="x2050.htm#AEN2644"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -3693,7 +3678,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="a2904.htm"
+HREF="a2905.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
