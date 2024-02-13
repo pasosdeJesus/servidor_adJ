@@ -132,6 +132,5 @@ instala:
 	} fi;
 
 
-actpdJ:
-	rsync --delete -ravzp html/* pasosdeJesus.org:/var/www/pasosdeJesus/doc/servidor_adJ
-	rsync $(PROYECTO)-$(PRY_VERSION)_html.tar.gz pasosdeJesus.org:/var/www/pasosdeJesus/doc/servidor_adJ
+actpdJ: all $(PROYECTO)-$(PRY_VERSION)_html.tar.gz 
+	rsync --delete -ravzp $(PROYECTO)-$(PRY_VERSION)_html.tar.gz html/* pasosdeJesus.org:/var/www/pasosdeJesus/doc/servidor_adJ
