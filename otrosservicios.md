@@ -442,7 +442,7 @@ se presenta en la siguiente sección.
           <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_4/arboldd/usr/local/adJ/pg_preact_postgis.sh>
 
 3. Actualiza adJ con el procedimiento normal, primero sistema base después el
-   resto con `/inst-adJ.sh`, pero detén el script /inst-adJ.sh cuando 
+   resto con `/inst-adJ.sh`, pero detenlo cuando 
    pregunte `Desea eliminar la actual versión de PostgreSQL`
 
 4. Detén la base anterior:
@@ -528,26 +528,24 @@ se presenta en la siguiente sección.
    ```
    debes quitar la extensión postgis en las bases del cluster anterior
    con:
-   ```
-   DROP EXTENSION postgis;
-   ```
-   (como se indicó en el paso 2) y volver a agregarlo después de 
+
+       DROP EXTENSION postgis;
+
+   (mejor como se indicó en el paso 2) y volver a agregarlo después de 
    completar la actualización.
 
 10. Arranca la nueva base con la configuración por omisión de manera
    temporal con
 
-   ```
-   doas rcctl start postgresql
-   ```
+        doas rcctl start postgresql
 
 11. Asegura la clave, revisándola con `cat /tmp/clave.txt` y estableciendola
-   con:
+    con:
 
-   ```
-   psql -U postgres template1
-   ALTER USER postgres WITH PASSWORD 'nuevaaqui';
-   ```
+        psql -U postgres template1
+        ALTER USER postgres WITH PASSWORD 'nuevaaqui';
+
+    después elimina el archivo `rm /tmp/clave.txt`
 
 12. Detén nuevamente el servicio `postgresql`  (i.e
     `doas rcctl stop postgresql`), modifica
@@ -567,10 +565,13 @@ se presenta en la siguiente sección.
     con los paquetes con:
 
     ```
-    PKG_PATH=. doas pkg_add -r postgis*
+    PKG_PATH=. doas pkg_add -r sqlite3 nghttp3 ngtcp2 curl geos hdf5 \
+      json-c netcdf proj minizip freexl libspatialite gdal blosc \
+      libwebp postgis*
     ```
 
-14. Inicia el servicio PostgreSQL y comprueba su operación
+14. Inicia el servicio PostgreSQL (`doas rcctl -d start postgresql`) y 
+    comprueba su operación (`pgrep post` y examinando algunas bases).
 
 15. Vuelve a activar la extensión PostGIS en las bases donde estaba.
     Si usaste el procedimiento del paso 2 desde la cuenta `_postgresql`
