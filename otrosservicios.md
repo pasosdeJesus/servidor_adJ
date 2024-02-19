@@ -412,22 +412,19 @@ se presenta en la siguiente sección.
 
 ### Actualización con `pg_upgrade` {#pg-upgrade}
 
-1. Saca los respaldos típicos, i.e si estás actualizando adJ completo y
-   usando `inst-adJ.sh` permite que saque
-   volcado (digamos `/var/www/resbase/pga-5.sql` y que copie base binaria
-   digamos en `data--20200319.tar.gz`) y deten
-   cuando pregunte `Desea eliminar la actual versión de PostgreSQL`
+1. Saca los respaldos típicos antes de comenzar la actualización con:
+    &VER-ADJ;-amd64/util/preact.sh
 
-2. `pg_upgrade` no opera bien con PostGIS, por eso si has usado esa extensión
+2. `pg_upgrade` no operará bien con PostGIS, por eso si has usado esa extensión
    en alguna base de datos es mejor quitarla antes de actualizar y volver
    a agregarla después de actualizar.  Si tienes muchas bases de datos,
    desde el usuario `_postgresql` puedes
    crear un par de guiones para el interprete de ordenes, 
-   uno que la quite de las bases donde este 
+   uno que la quite PostGIS de las bases donde este 
    (digamos `/var/www/tmp/quita-postgis.sh`) y otro que la vuelva a poner
    en esas mismas bases (digamos `/var/www/tmp/agrega-postgis.sh`).
    Para generar ambos guiones adJ incluye un guión en el que te puedes
-   basar para tu caso.  Ejecútalo con:
+   basar para tu caso.  Ejecútalo con[^ubi.1]
 
    ```
     /usr/local/adJ/pg_preact_postgis.sh
@@ -439,7 +436,16 @@ se presenta en la siguiente sección.
    /var/www/tmp/quita-postgis.sh
    ```
 
-3. Detén la base anterior:
+[^ubi.1]: Si no logras ubicar el script en 
+          `/usr/local/adJ/pg_preact_postgis.sh`
+          descargalo de
+          <https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_4/arboldd/usr/local/adJ/pg_preact_postgis.sh>
+
+3. Actualiza adJ con el procedimiento normal, primero sistema base después el
+   resto con `/inst-adJ.sh`, pero detén el script /inst-adJ.sh cuando 
+   pregunte `Desea eliminar la actual versión de PostgreSQL`
+
+4. Detén la base anterior:
    ```
    doas rcctl stop postgresql
    ```
@@ -448,14 +454,14 @@ se presenta en la siguiente sección.
    doas mv /var/postgresql/data /var/postgresql/data-15
    ```
 
-4. Desinstala los paquetes de `postgresql` anteriores. Puedes hacerlo con
+5. Desinstala los paquetes de `postgresql` anteriores. Puedes hacerlo con
    la siguiente orden y confirmando que elimine todos los dependientes:
 
    ```
    doas pkg_delete postgresql-client postgresql-docs postgresql-previous
    ```
 
-5. Instala los paquetes `postgresql-client`, `postgresql-server`,
+6. Instala los paquetes `postgresql-client`, `postgresql-server`,
    `postgresql-contrib`, `postgresql-previous` y
    `postgresql-pg_upgrade` (inicialmente no instales `postgresql-docs`
    porque tiene conflicto con `postgresql-previous`).
@@ -473,7 +479,7 @@ se presenta en la siguiente sección.
    de la forma `6.5-extra`. Como no están firmados al momento de instalarlos
    con `pkg_add` usa la opción `-D unsigned`).
 
-6. Inicializa un nueva base en `/var/postgresql/data` con la clave de
+7. Inicializa un nueva base en `/var/postgresql/data` con la clave de
    administrador de la anterior (suponiendo que está en el archivo
    `.pgpass` de la cuenta `_postgresql` como ocurre por omisión en adJ) con:
    ```
@@ -483,7 +489,7 @@ se presenta en la siguiente sección.
       --pwfile=/tmp/clave.txt  -D/var/postgresql/data
    ```
 
-7. Durante la actualización mantén la configuración por omisión (no muevas
+8. Durante la actualización mantén la configuración por omisión (no muevas
    zócalos --__sockets__) y edita y cambia `pg_hba.conf` de `data` y de `data-15`
    ```
    $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-15/pg_hba.conf
@@ -497,7 +503,7 @@ se presenta en la siguiente sección.
    local all all trust
    ```
 
-8. Inicia la restauración así:
+9. Inicia la restauración así:
    ```
    doas su - _postgresql
    pg_upgrade -b /usr/local/bin/postgresql-15/ -B /usr/local/bin \
@@ -528,14 +534,14 @@ se presenta en la siguiente sección.
    (como se indicó en el paso 2) y volver a agregarlo después de 
    completar la actualización.
 
-9. Arranca la nueva base con la configuración por omisión de manera
+10. Arranca la nueva base con la configuración por omisión de manera
    temporal con
 
    ```
    doas rcctl start postgresql
    ```
 
-10. Asegura la clave, revisándola con `cat /tmp/clave.txt` y estableciendola
+11. Asegura la clave, revisándola con `cat /tmp/clave.txt` y estableciendola
    con:
 
    ```
@@ -543,7 +549,7 @@ se presenta en la siguiente sección.
    ALTER USER postgres WITH PASSWORD 'nuevaaqui';
    ```
 
-11. Detén nuevamente el servicio `postgresql`  (i.e
+12. Detén nuevamente el servicio `postgresql`  (i.e
     `doas rcctl stop postgresql`), modifica
     `/var/postgresql/data/postgresql.conf` para cambiar
     la ubicación del socket y en general rehacer la configuración que tenía
@@ -557,20 +563,20 @@ se presenta en la siguiente sección.
     En `data/pg_hba.conf` vuelve a dejar `md5` en lugar de `trust`
 
 
-12. Si tenías PostGIS vuelve a instalar el paquete desde el directorio
+13. Si tenías PostGIS vuelve a instalar el paquete desde el directorio
     con los paquetes con:
 
     ```
     PKG_PATH=. doas pkg_add -r postgis*
     ```
 
-13. Inicia el servicio PostgreSQL y comprueba su operación
+14. Inicia el servicio PostgreSQL y comprueba su operación
 
-14. Vuelve a activar la extensión PostGIS en las bases donde estaba.
+15. Vuelve a activar la extensión PostGIS en las bases donde estaba.
     Si usaste el procedimiento del paso 2 desde la cuenta `_postgresql`
     ejecuta `/var/www/tmp/agrega-postgis.sh`
 
-15. Una vez completes este procedimiento con éxito puedes eliminar el
+16. Una vez completes este procedimiento con éxito puedes eliminar el
     cluster anterior ./delete_old_cluster.sh
 
 Si habías detenido la actualización de `inst-adJ.sh` vuelve a
