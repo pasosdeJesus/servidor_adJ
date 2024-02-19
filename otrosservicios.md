@@ -468,7 +468,7 @@ se presenta en la siguiente sección.
 
    ```
    cd &VER-ADJ;-amd64/paquetes
-   PKG_PATH=. doas pkg_add ./libxml* ./postgresql-server-* \
+   PKG_PATH=. doas pkg_add ./xz-* ./icu4c-* ./libxml* ./postgresql-server-* \
           ./postgresql-contrib-* postgresql-previous-* \
           ./postgresql-pg_up*
    ```
@@ -547,38 +547,51 @@ se presenta en la siguiente sección.
 
     después elimina el archivo `rm /tmp/clave.txt`
 
-12. Detén nuevamente el servicio `postgresql`  (i.e
-    `doas rcctl stop postgresql`), modifica
-    `/var/postgresql/data/postgresql.conf` para cambiar
-    la ubicación del socket y en general rehacer la configuración que tenía
-    tu base (e.g conexiones TCP, llaves, etc).
+13. Compara cambios en configuración entre versión anterior y actual:
+
+        doas diff /var/postgresql/data-15/postgresql.conf /var/postgresql/data/postgresql.conf
+
+    Y simultaneamente edita `/var/postgresql/data/postgresql.conf` para 
+    aplicar los cambios necesarios.  Por lo menos memoria de trabajo y
+    la ubicación del socket (puede haber otros particulares de tu instalación
+    e.g conexiones TCP, llaves, etc).
 
     ```
     work_mem = 128MB
     ...
     unix_socket_directories = '/var/www/var/run/postgresql'
     ```
-    En `data/pg_hba.conf` vuelve a dejar `md5` en lugar de `trust`
+    Edita `data/pg_hba.conf` para volver a dejar `md5` en lugar de `trust`
+
+12. Si los pasos anteriores han sido exitosos puedes eliminar el
+    cluster anterior con
+
+        ./delete_old_cluster.sh
+
+    y puedes optimizar nuevo cluster con
+
+        /usr/local/bin/vacuumdb -U postgres --all --analyze-in-stages
 
 
-13. Si tenías PostGIS vuelve a instalar el paquete desde el directorio
+13. Detén nuevamente el servicio `postgresql`  (i.e
+    `doas rcctl stop postgresql`), modifica
+
+14. Si tenías PostGIS vuelve a instalar el paquete desde el directorio
     con los paquetes con:
 
     ```
-    PKG_PATH=. doas pkg_add -r sqlite3 nghttp3 ngtcp2 curl geos hdf5 \
-      json-c netcdf proj minizip freexl libspatialite gdal blosc \
-      libwebp postgis*
+    PKG_PATH=. doas pkg_add -r sqlite3 nghttp3 ngtcp2 curl zstd \
+      libarchive tiff lcms2 geos hdf5 json-c netcdf proj minizip freexl \
+      libspatialite gdal blosc libwebp postgis*
     ```
 
-14. Inicia el servicio PostgreSQL (`doas rcctl -d start postgresql`) y 
+15. Inicia el servicio PostgreSQL (`doas rcctl -d start postgresql`) y 
     comprueba su operación (`pgrep post` y examinando algunas bases).
 
-15. Vuelve a activar la extensión PostGIS en las bases donde estaba.
+16. Vuelve a activar la extensión PostGIS en las bases donde estaba.
     Si usaste el procedimiento del paso 2 desde la cuenta `_postgresql`
     ejecuta `/var/www/tmp/agrega-postgis.sh`
 
-16. Una vez completes este procedimiento con éxito puedes eliminar el
-    cluster anterior ./delete_old_cluster.sh
 
 Si habías detenido la actualización de `inst-adJ.sh` vuelve a
 ejecutarla y a la pregunta "Desea eliminar la actual
