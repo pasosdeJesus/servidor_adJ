@@ -574,7 +574,7 @@ se presenta en la siguiente sección.
 
 
 13. Detén nuevamente el servicio `postgresql`  (i.e
-    `doas rcctl stop postgresql`), modifica
+    `doas rcctl stop postgresql`).
 
 14. Si tenías PostGIS vuelve a instalar el paquete desde el directorio
     con los paquetes con:
