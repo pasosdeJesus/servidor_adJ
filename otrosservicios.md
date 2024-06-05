@@ -1271,7 +1271,7 @@ recordar:
   libssl y OpenLDAP usadas en el sistema.
 * Puede probarse con un programa como este:
 ```
-<?php
+<\?php
 
 function muestra_est_ldap($ad) {
   ldap_get_option($ad, LDAP_OPT_DEREF, $deref);
