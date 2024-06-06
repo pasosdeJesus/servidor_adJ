@@ -531,7 +531,7 @@ CLASS="literal"
 >/var/named/master</TT
 >. Pueden configurarse
         archivos como dice en <A
-HREF="a3235.htm"
+HREF="a3242.htm"
 >AA_Linux</A
 > por
         ejemplo los datos un servidor DNS primario del dominio
@@ -869,7 +869,7 @@ NAME="referencias-dns"
 ><P
 >&#13;            Sección sobre DNS de las guías Aprendiendo a aprender Linux.
             <A
-HREF="a3235.htm"
+HREF="a3242.htm"
 >AA_Linux</A
 >
           </P
@@ -878,7 +878,7 @@ HREF="a3235.htm"
 ><P
 >&#13;            Referencia para administradores de BIND 9
             <A
-HREF="a3235.htm"
+HREF="a3242.htm"
 >bind9arm</A
 >.
           </P
@@ -902,7 +902,7 @@ TARGET="_top"
 ><LI
 ><P
 >&#13;            <A
-HREF="a3235.htm"
+HREF="a3242.htm"
 >openbsdDnsDhcp</A
 >.
           </P
@@ -1178,7 +1178,7 @@ NAME="dhcp"
 ><P
 >&#13;      El protocolo DHCP se describen en el RFC 2131 (ver
       <A
-HREF="a3235.htm"
+HREF="a3242.htm"
 >rfc2131</A
 >), se trata de un modelo
       cliente-servidor en el que el servidor DHCP localiza direcciones
@@ -1327,7 +1327,7 @@ NAME="referencias-dhcpd"
       </P
 ><P
 >&#13;        El RFC 2131 (ver <A
-HREF="a3235.htm"
+HREF="a3242.htm"
 >rfc2131</A
 >).
       </P
@@ -3363,7 +3363,7 @@ NAME="servidor-web"
 ></H2
 ><P
 CLASS="literallayout"
->Un&nbsp;servidor&nbsp;web&nbsp;recibe&nbsp;peticiones&nbsp;acordes&nbsp;al&nbsp;protocolo&nbsp;HTTP,&nbsp;las&nbsp;procesa,&nbsp;recolecta&nbsp;la&nbsp;información&nbsp;que&nbsp;va&nbsp;retornar&nbsp;y&nbsp;la&nbsp;retorna&nbsp;típicamente&nbsp;en&nbsp;HTML/CSS/Javascipt&nbsp;también&nbsp;mediante&nbsp;el&nbsp;protocolo&nbsp;HTTP.<br>
+>Un&nbsp;servidor&nbsp;web&nbsp;recibe&nbsp;peticiones&nbsp;acordes&nbsp;al&nbsp;protocolo&nbsp;HTTP,&nbsp;las&nbsp;procesa,&nbsp;recolecta&nbsp;la&nbsp;información&nbsp;que&nbsp;va&nbsp;a&nbsp;retornar&nbsp;y&nbsp;la&nbsp;retorna&nbsp;típicamente&nbsp;en&nbsp;HTML/CSS/Javascipt&nbsp;también&nbsp;mediante&nbsp;el&nbsp;protocolo&nbsp;HTTP.<br>
 Las&nbsp;peticiones&nbsp;pudieron&nbsp;pasar&nbsp;antes&nbsp;por&nbsp;el&nbsp;cortafuegos&nbsp;si&nbsp;lo&nbsp;hay&nbsp;o&nbsp;por&nbsp;otro&nbsp;servidor&nbsp;que&nbsp;actue&nbsp;como&nbsp;proxy.</P
 ><P
 >&#13;      El siguiente diagrama presenta más detalles de los elementos
@@ -4223,12 +4223,12 @@ NAME="letsencrypt"
         gratuita (cada 3 meses debe renovarse con el mismo letsencrypt).
       </P
 ><P
->&#13;        Por ejemplo para un dominio miong.org sólo certificado para
-        el web:
+>&#13;        Por ejemplo para un dominio miong.org puede generarse sólo
+        un certificado para el web con:
       </P
 ><PRE
 CLASS="programlisting"
->&#13;    doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d miong.org -d www.miong.org 
+>&#13;    doas letsencrypt certonly --email micorreo@example.com --webroot -w /var/www/htdocs/ -d miong.org -d www.miong.org 
 </PRE
 ><P
 >&#13;        Si además de los dominios web necesita cubrir con el mismo

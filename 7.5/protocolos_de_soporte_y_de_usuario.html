@@ -1475,7 +1475,7 @@ location /roundcubemail/ {
         nivel de verbosidad.
       </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-ftp"></a>5.6.2. Referencias y lecturas recomendadas</h4></div></div></div><p>
         La página del manual de <code class="literal">ftpd</code>.
-      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-web"></a>5.7. Servidor web</h3></div></div></div><div class="literallayout"><p>Un servidor web recibe peticiones acordes al protocolo HTTP, las procesa, recolecta la información que va retornar y la retorna típicamente en HTML/CSS/Javascipt también mediante el protocolo HTTP.<br>
+      </p></div></div><div class="sect2" lang="es"><div class="titlepage"><div><div><h3 class="title"><a name="servidor-web"></a>5.7. Servidor web</h3></div></div></div><div class="literallayout"><p>Un servidor web recibe peticiones acordes al protocolo HTTP, las procesa, recolecta la información que va a retornar y la retorna típicamente en HTML/CSS/Javascipt también mediante el protocolo HTTP.<br>
 Las peticiones pudieron pasar antes por el cortafuegos si lo hay o por otro servidor que actue como proxy.</p></div><p>
       El siguiente diagrama presenta más detalles de los elementos
       involucrados en servir páginas web generadas por una aplicación
@@ -1860,10 +1860,10 @@ Típicamente usted debe generar ambos archivos y enviar el público a�
         ofrece todo tipo de certificados validos por 3 meses de manera
         gratuita (cada 3 meses debe renovarse con el mismo letsencrypt).
       </p><p>
-        Por ejemplo para un dominio miong.org sólo certificado para
-        el web:
+        Por ejemplo para un dominio miong.org puede generarse sólo
+        un certificado para el web con:
       </p><pre class="programlisting">
-    doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d miong.org -d www.miong.org 
+    doas letsencrypt certonly --email micorreo@example.com --webroot -w /var/www/htdocs/ -d miong.org -d www.miong.org 
 </pre><p>
         Si además de los dominios web necesita cubrir con el mismo
         certificado el servidor de correo: correo.miong.org que
