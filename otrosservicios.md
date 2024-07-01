@@ -1227,7 +1227,8 @@ se recomienda emplear <https://github.com/leenooks/phpLDAPadmin> así:
 para configurarlo (use su editor preferido en lugar de $EDITOR o defina esa
 variable) es importante que por lo menos quite el comentario a la
 línea
-```
+
+```php
 $config->custom->jpeg['tmpdir'] = '/tmp';
 ```
 
@@ -1269,9 +1270,8 @@ recordar:
   como `/etc/openldap/ldap.conf`).
 * PHP: Su móduo ldapd debe estar compilado con las mismas librerías
   libssl y OpenLDAP usadas en el sistema.
-* Puede probarse con un programa como este:
-```
-<\?php
+* Puede probar con un programa php como este:
+```php
 
 function muestra_est_ldap($ad) {
   ldap_get_option($ad, LDAP_OPT_DEREF, $deref);
@@ -1332,10 +1332,6 @@ if (!$conectado) {
 echo "conectado= "; print_r($conectado); echo "\n"
 ```
 
-#### Ayudas para depurar problemas con LDAP y Ruby
-
-
-
 
 ### Referencias y lecturas recomendadas {#referencias-ldapd}
 
@@ -1372,8 +1368,9 @@ certificadora que expide certificados gratuitos para sitios públicos
 pero no para sitios en redes internas por cuanto el proceso de
 expedición de certificados
 requiere resolver por DNS desde sus servidores el dominio para el cual
-se está creando el certificado.  Además sus certificados son de
-3 meses por cuanto deben renovarse cada 3 meses.
+se está creando el certificado.  Además sus certificados 
+deben renovarse cada 3 meses (ver [xref](#letsencrypt)).
+
 
 Esto hace necesario que cada organización que requiere servicios
 cifrados con SSL o TLS en su red interna (como PostgreSQL remoto o

@@ -1,4 +1,8 @@
-Versión 7.4
+Versión 7.5
+:   - Mejora sección de certificados gratuitos con letsencrypt
+      [xref](#letsencrypt).
+
+ Versión 7.4
 :   - Mejorada actualización de PostgreSQL con pg_upgrade cuando hay
       bases con PostGIS con nuevo script `pg_preact_postgis.sh`, 
       ver [xref](#pg-upgrade).

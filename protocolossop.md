@@ -1446,7 +1446,7 @@ La página del manual de `ftpd`.
 ## Servidor web {#servidor-web}
 
 Un servidor web recibe peticiones acordes al protocolo HTTP, las procesa, 
-recolecta la información que va retornar y la retorna típicamente en 
+recolecta la información que va a retornar y la retorna típicamente en 
 HTML/CSS/Javascipt también mediante el protocolo HTTP.     
 Las peticiones pudieron pasar antes por el cortafuegos si lo hay o por otro 
 servidor que actue como proxy.
@@ -1810,9 +1810,10 @@ sin ánimo de lucro, letsencrypt.org es reconocida por los navegadores
 principales y ofrece todo tipo de certificados validos por 3 meses de
 manera gratuita (cada 3 meses debe renovarse con el mismo letsencrypt).
 
-Por ejemplo para un dominio &EDOMINIO; sólo certificado para el web:
+Por ejemplo para un dominio &EDOMINIO; puede generarse
+sólo un certificado para el web con:
 
-        doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO; 
+        doas letsencrypt certonly --email micorreo@example.com --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO; 
 
 Si además de los dominios web necesita cubrir con el mismo certificado
 el servidor de correo: correo.&EDOMINIO; que tiene una raíz diferente:
