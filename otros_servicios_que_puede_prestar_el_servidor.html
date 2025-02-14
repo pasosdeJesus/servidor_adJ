@@ -222,7 +222,7 @@
       </p><p>
         Otra posibilidad es cambiar la configuración después de haber
         inicializado sin autenticación. Para esto cambie la clave del
-        administrador con<sup>[<a name="id2172" href="#ftn.id2172">29</a>]</sup>:
+        administrador con<sup>[<a name="id2111" href="#ftn.id2111">29</a>]</sup>:
       </p><pre class="programlisting">
     psql -h /var/www/var/run/postgresql -U postgres template1
     template1=# alter user postgres with password 'MiClave';
@@ -447,7 +447,7 @@
             la vuelva a poner en esas mismas bases (digamos
             <code class="literal">/var/www/tmp/agrega-postgis.sh</code>). Para
             generar ambos guiones adJ incluye un guión en el que te
-            puedes basar para tu caso. Ejecútalo con<sup>[<a name="id2309" href="#ftn.id2309">30</a>]</sup>
+            puedes basar para tu caso. Ejecútalo con<sup>[<a name="id2248" href="#ftn.id2248">30</a>]</sup>
           </p><pre class="programlisting">
  /usr/local/adJ/pg_preact_postgis.sh
 </pre><p>
@@ -1036,7 +1036,7 @@ $ sh /tmp/quita_oids.sh
       3, <code class="literal">ldapd</code>. No incluye cliente para LDAP pero
       desde la línea de órdenes puede emplearse el paquete
       <code class="literal">openldap-client</code> o como interfaz web
-      <code class="literal">phpldapadmin</code><sup>[<a name="id2661" href="#ftn.id2661">31</a>]</sup>.
+      <code class="literal">phpldapadmin</code><sup>[<a name="id2600" href="#ftn.id2600">31</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="instalacion-ldapd"></a>6.4.1. Instalación de ldapd</h4></div></div></div><p>
         No necesita instalar paquetes para la operación como servidor.
       </p><p>
@@ -1550,15 +1550,15 @@ echo "conectado= "; print_r($conectado); echo "\n"
           <code class="literal">/etc/ssl/cert.pem</code>
         </p></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias"></a>6.5.5. Referencias</h4></div></div></div><div class="itemizedlist"><ul type="disc" compact><li><p>
             <a href="https://www.howtoforge.com/postgresql-ssl-certificates" target="_top">https://www.howtoforge.com/postgresql-ssl-certificates</a>
-          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id2172" href="#id2172">29</a>] </sup>
+          </p></li></ul></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id2111" href="#id2111">29</a>] </sup>
             Note que de esta forma puede cambiar la clave de otros
             usuarios de PostgreSQL.
-          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id2309" href="#id2309">30</a>] </sup>
+          </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id2248" href="#id2248">30</a>] </sup>
                 Si no logras ubicar el script en
                 <code xmlns="" class="literal">/usr/local/adJ/pg_preact_postgis.sh</code>
                 descargalo de
                 <a xmlns="" href="https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_4/arboldd/usr/local/adJ/pg_preact_postgis.sh" target="_top">https://gitlab.com/pasosdeJesus/adJ/-/blob/ADJ_7_4/arboldd/usr/local/adJ/pg_preact_postgis.sh</a>
-              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id2661" href="#id2661">31</a>] </sup>
+              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id2600" href="#id2600">31</a>] </sup>
           Si emplea un adJ 5.2 y planea conectarse desde clientes
           digamos en Ubuntu reciente requerirá el parche descrito en
           <a xmlns="" href="http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html" target="_top">http://openbsd.7691.n7.nabble.com/ldapd-and-quot-The-Diffie-Hellman-prime-sent-by-the-server-is-not-acceptable-quot-td59635.html</a>

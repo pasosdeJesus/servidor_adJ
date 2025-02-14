@@ -14,7 +14,7 @@ TITLE="Direcciones, enrutamiento, transporte y cortafuegos"
 HREF="x792.htm"><LINK
 REL="NEXT"
 TITLE="Otros servicios que puede prestar el servidor"
-HREF="x2051.htm"></HEAD
+HREF="x1990.htm"></HEAD
 ><BODY
 CLASS="sect1"
 BGCOLOR="#FFFFFF"
@@ -56,7 +56,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="x2051.htm"
+HREF="x1990.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD
@@ -153,7 +153,7 @@ CLASS="literal"
 >unbound</TT
 > o <TT
 CLASS="literal"
->named</TT
+>nsd</TT
 >)
           </P
 ></LI
@@ -497,371 +497,6 @@ CLASS="sect3"
 ><H3
 CLASS="sect3"
 ><A
-NAME="named"
->named</A
-></H3
-><P
->&#13;        OpenBSD aún incluye como paquete el servidor BIND 9, bajo el
-        nombre <TT
-CLASS="literal"
->named</TT
->, que por defecto corre con
-        <TT
-CLASS="literal"
->chroot</TT
-> en el directorio
-        <TT
-CLASS="literal"
->/var/named</TT
-> y que puede hacer las labores de
-        unbound y nsd.
-      </P
-><P
->&#13;        Puede configurarse y probarse antes de iniciarlo en cada
-        arranque. Para configurarlo por primera vez pueden seguirse
-        primero los pasos de <TT
-CLASS="literal"
->/etc/rc</TT
->. El archivo de
-        configuración es <TT
-CLASS="literal"
->/var/named/etc/named.conf</TT
->.
-        Se sugiere que se agregue información de zonas de las cuales es
-        maestro en en archivos del directorio
-        <TT
-CLASS="literal"
->/var/named/master</TT
->. Pueden configurarse
-        archivos como dice en <A
-HREF="a3246.htm"
->AA_Linux</A
-> por
-        ejemplo los datos un servidor DNS primario del dominio
-        miong.org pueden quedar en el archivo
-        <TT
-CLASS="literal"
->/var/named/master/miong.org</TT
->:
-      </P
-><PRE
-CLASS="programlisting"
->&#13;    $TTL 1D
-    @ IN  SOA  @  root.localhost. (
-        03091025 ; Serial
-        1D   ; Refresco secundario
-        6H   ; Reintento secundario
-        2D   ; Expiración secundaria
-        1D ) ; Cache de registro de recursos
-
-        NS  @
-
-        A       65.8.9.234
-
-        MX      5      correo.miong.org.
-
-    correo  IN      A       201.2.3.74
-    ns1     IN      A       201.2.3.74
-    www     IN      A       201.2.3.74
-</PRE
-><P
->&#13;        Note que se declara el mismo dominio como servidor de nombre
-        autoritario, se relaciona con la IP (65.8.9.234), el nombre
-        <TT
-CLASS="literal"
->correo.miong.org</TT
-> identificara la misma
-        máquina y es el nombre que se usará para intercambiar correos;
-        el nombre <TT
-CLASS="literal"
->www.miong.org</TT
-> será un alias
-        para el mismo servidor. Note que todo nombre que no termine con
-        punto (.), será completado por <TT
-CLASS="literal"
->bind</TT
-> con el
-        dominio (i.e <TT
-CLASS="literal"
->www</TT
-> será completado a
-        <TT
-CLASS="literal"
->www.miong.org</TT
->, si se olvida el punto
-        después de <TT
-CLASS="literal"
->correo.miong.org</TT
->,
-        <TT
-CLASS="literal"
->bind</TT
-> lo completará a
-        <TT
-CLASS="literal"
->correo.miong.org.miong.org</TT
->).
-        Recuerde aumentar el número serial cada vez que haga algún
-        cambio, para que la información pueda ser actualizada en los
-        servidores secundarios. Puede probar cada archivo de zonas que
-        haga con:
-      </P
-><PRE
-CLASS="programlisting"
->&#13;    named-checkzone miong.org /var/named/master/miong.org
-</PRE
-><P
->&#13;        Agregue una referencia al archivo de zonas maestro en
-        <TT
-CLASS="literal"
->/var/named/etc/named.conf</TT
->, en la sección para
-        zonas maestras algo de la forma:
-      </P
-><PRE
-CLASS="programlisting"
->&#13;    zone "miong.org" {
-      type master;
-      file "master/miong.org";
-    }
-</PRE
-><P
->&#13;        Si desea que un servidor sea secundario de algún servidor
-        primario, agregue en
-        <TT
-CLASS="literal"
->/var/named/etc/named.conf</TT
-> en la sección para
-        zonas esclavas algo como:
-      </P
-><PRE
-CLASS="programlisting"
->&#13;    zone "miong.org" {
-      type slave;
-      file "slave/miong.org";
-      masters { 65.8.9.234; };
-    }
-</PRE
-><P
->&#13;        Cuando <TT
-CLASS="literal"
->named</TT
-> lea de nuevo sus archivos de
-        configuración traerá la información del servidor primario y la
-        dejará en el archivo
-        <TT
-CLASS="literal"
->/var/named/slave/miong.org</TT
->.
-      </P
-><P
->&#13;        El servidor se inicia con
-      </P
-><PRE
-CLASS="programlisting"
->&#13;    doas rcctl -d start named
-</PRE
-><P
->&#13;        Los errores que se produzcan antes de hacer
-        <TT
-CLASS="literal"
->chroot</TT
-> son enviados a
-        <TT
-CLASS="literal"
->/var/log/servicio</TT
->. Para probar el
-        funcionamiento antes de modificar
-        <TT
-CLASS="literal"
->/etc/resolv.conf</TT
-> puede usar:
-      </P
-><PRE
-CLASS="programlisting"
->&#13;    dig @localhost miong.org
-</PRE
-><P
->&#13;        Si requiere volver a leer los archivos de configuración (por
-        ejemplo después de cambiar los archivos de zonas) puede enviar
-        la señal <TT
-CLASS="literal"
->SIGHUP</TT
-> al proceso con:
-      </P
-><PRE
-CLASS="programlisting"
->&#13;    pkill -HUP named
-</PRE
-><P
->&#13;        o con
-      </P
-><PRE
-CLASS="programlisting"
->&#13;    rndc reload
-</PRE
-><P
->&#13;        Una vez compruebe que su servidor DNS está operando
-        correctamente puede indicar que se inicie en cada arranque
-        agregando a <TT
-CLASS="literal"
->/etc/rc.conf.local</TT
->:
-      </P
-><PRE
-CLASS="programlisting"
->&#13;    named_flags=""
-</PRE
-><P
->&#13;        y en el mismo archivo en la definición de
-        <TT
-CLASS="literal"
->pkg_scripts</TT
-> agregando
-        <TT
-CLASS="literal"
->named</TT
->.
-      </P
-><DIV
-CLASS="sect4"
-><H4
-CLASS="sect4"
-><A
-NAME="vistas"
->Vistas para resolver nombres interna y
-        externamente</A
-></H4
-><P
->&#13;          Si cuenta con una LAN conectada a Internet por medio de un
-          cortafuegos con OpenBSD que maneja el DNS de su organización y
-          si además cuenta con una DMZ tal que las peticiones a algunos
-          puertos del cortafuegos son redirigidas a uno o más
-          servidores, seguramente tendrá inconvenientes al resolver
-          nombres de su dominio en la LAN, pues el nombre de su
-          organización (digamos miong.org) será resulto a la
-          dirección externa, la cual conectará al cortafuegos por el
-          puerto pedido y tratará de redirigir la conexión al servidor
-          en la DMZ (i.e se reflejará). Por este motivo desde su LAN en
-          general no resolverá nombres de su dominio.
-        </P
-><P
->&#13;          Una solución (ver
-          <TT
-CLASS="literal"
->/var/named/etc/named-dual.conf</TT
->) es
-          configurar bind para que tenga dos vistas, una para
-          computadores fuera de la LAN y otra para computadores dentro
-          de la LAN. Un posible archivo de configuración (basado en los
-          distribuidos con OpenBSD) es:
-        </P
-><PRE
-CLASS="programlisting"
->&#13;    acl clients {
-        localnets;
-        ::1;
-    };
-    options {
-        version "";
-        listen-on    { any; };
-        listen-on-v6 { any; };
-        allow-recursion { clients; };
-    };
-    logging {
-        category lame-servers { null; };
-    };
-
-    view "internal" {  // Para la red interna
-        match-clients { clients; };
-        match-recursive-only yes;
-        recursion yes;
-
-        zone "." {
-            type hint;
-            file "standard/root.hint";
-        };
-        zone "localhost" {
-            type master;
-        file "standard/localhost";
-        allow-transfer { localhost; };
-        }
-        zone "127.in-addr.arpa" {
-            type master;
-            file "standard/loopback";
-            allow-transfer { localhost; };
-        };
-        zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
-            type master;
-            file "standard/loopback6.arpa";
-            allow-transfer { localhost; };
-        };
-        zone "com" {
-            type delegation-only;
-        };
-        zone "net" {
-            type delegation-only;
-        };
-
-        zone "miong.org" {
-            type master;
-            file "refleja/miong.org.org";
-        };
-    };
-    view "external" { // Para Internet
-        recursion no;
-        additional-from-auth no;
-        additional-from-cache no;
-        zone "miong.org" {
-            type master;
-        file "master/miong.org";
-        };
-        zone "168.74.245.200.IN-ADDR.ARPA" { // Para resolución inversa
-            type master;
-        file "master/db.168.74.245.200";
-        };
-    };
-</PRE
-><P
->&#13;          El archivo <TT
-CLASS="literal"
->master/miong.org</TT
-> sería el
-          típico para resolver externamente, mientras que en
-          <TT
-CLASS="literal"
->refleja/miong.org</TT
-> tendría los mismo
-          nombres del anterior pero con las direcciones de la red local.
-          <TT
-CLASS="literal"
->master/db.167.74.245.200</TT
-> tendría datos para
-          resolución de nombres inversa desde fuera de la organización,
-          por ejemplo:
-        </P
-><PRE
-CLASS="programlisting"
->&#13;    $TTL 1D
-    @ IN  SOA  @  root.localhost. (
-      49   ; Serial de Zona
-      1D   ; Refresco secundario
-      6H   ; Reintento secundario
-      2D   ; Expiración secundaria
-      1D ) ; Cache de registros de recurso
-
-    @       IN      NS      cortafuegos.miong.org.
-        IN      PTR     www.miong.org.
-        IN      PTR     correo.miong.org
-        IN      PTR     ns1.miong.org
-</PRE
-></DIV
-></DIV
-><DIV
-CLASS="sect3"
-><H3
-CLASS="sect3"
-><A
 NAME="referencias-dns"
 >Referencias y lecturas recomendadas</A
 ></H3
@@ -872,7 +507,7 @@ NAME="referencias-dns"
 ><P
 >&#13;            Sección sobre DNS de las guías Aprendiendo a aprender Linux.
             <A
-HREF="a3246.htm"
+HREF="a3185.htm"
 >AA_Linux</A
 >
           </P
@@ -881,7 +516,7 @@ HREF="a3246.htm"
 ><P
 >&#13;            Referencia para administradores de BIND 9
             <A
-HREF="a3246.htm"
+HREF="a3185.htm"
 >bind9arm</A
 >.
           </P
@@ -905,7 +540,7 @@ TARGET="_top"
 ><LI
 ><P
 >&#13;            <A
-HREF="a3246.htm"
+HREF="a3185.htm"
 >openbsdDnsDhcp</A
 >.
           </P
@@ -1181,7 +816,7 @@ NAME="dhcp"
 ><P
 >&#13;      El protocolo DHCP se describen en el RFC 2131 (ver
       <A
-HREF="a3246.htm"
+HREF="a3185.htm"
 >rfc2131</A
 >), se trata de un modelo
       cliente-servidor en el que el servidor DHCP localiza direcciones
@@ -1195,8 +830,8 @@ HREF="a3246.htm"
 >&#13;      En su modo de operación dinámico el servidor le asigna una IP a un
       sólo cliente por cierto periodo de tiempo, al cabo del cual podría
       asignarle otra IP<A
-NAME="AEN1263"
-HREF="#FTN.AEN1263"
+NAME="AEN1202"
+HREF="#FTN.AEN1202"
 ><SPAN
 CLASS="footnote"
 >[1]</SPAN
@@ -1330,7 +965,7 @@ NAME="referencias-dhcpd"
       </P
 ><P
 >&#13;        El RFC 2131 (ver <A
-HREF="a3246.htm"
+HREF="a3185.htm"
 >rfc2131</A
 >).
       </P
@@ -1528,8 +1163,8 @@ CLASS="emphasis"
 >Mail User Agent</I
 ></SPAN
 ><A
-NAME="AEN1336"
-HREF="#FTN.AEN1336"
+NAME="AEN1275"
+HREF="#FTN.AEN1275"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -1568,8 +1203,8 @@ CLASS="literal"
         destino o con otro MTA que actúe de intermediario, típicamente
         en el puerto TCP 25, y transmitir el mensaje siguiendo las
         reglas del protocolo SMTP <A
-NAME="AEN1344"
-HREF="#FTN.AEN1344"
+NAME="AEN1283"
+HREF="#FTN.AEN1283"
 ><SPAN
 CLASS="footnote"
 >[3]</SPAN
@@ -2091,8 +1726,8 @@ CLASS="programlisting"
 CLASS="literal"
 >/var/log/maillog</TT
 ><A
-NAME="AEN1464"
-HREF="#FTN.AEN1464"
+NAME="AEN1403"
+HREF="#FTN.AEN1403"
 ><SPAN
 CLASS="footnote"
 >[4]</SPAN
@@ -2354,8 +1989,8 @@ NAME="protocolos-revisar-correo"
 ><P
 >&#13;        Para extraer correos de un servidor pueden emplearse los
         protocolos inseguros<A
-NAME="AEN1539"
-HREF="#FTN.AEN1539"
+NAME="AEN1478"
+HREF="#FTN.AEN1478"
 ><SPAN
 CLASS="footnote"
 >[5]</SPAN
@@ -2868,7 +2503,7 @@ CLASS="literal"
 >/var/www/var/run/postgresql</TT
 > (ver
               <A
-HREF="x2051.htm#postgresql"
+HREF="x1990.htm#postgresql"
 >???</A
 >) ejecutar:
             </P
@@ -4646,8 +4281,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN1263"
-HREF="x1009.htm#AEN1263"
+NAME="FTN.AEN1202"
+HREF="x1009.htm#AEN1202"
 ><SPAN
 CLASS="footnote"
 >[1]</SPAN
@@ -4674,8 +4309,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN1336"
-HREF="x1009.htm#AEN1336"
+NAME="FTN.AEN1275"
+HREF="x1009.htm#AEN1275"
 ><SPAN
 CLASS="footnote"
 >[2]</SPAN
@@ -4697,8 +4332,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN1344"
-HREF="x1009.htm#AEN1344"
+NAME="FTN.AEN1283"
+HREF="x1009.htm#AEN1283"
 ><SPAN
 CLASS="footnote"
 >[3]</SPAN
@@ -4749,8 +4384,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN1464"
-HREF="x1009.htm#AEN1464"
+NAME="FTN.AEN1403"
+HREF="x1009.htm#AEN1403"
 ><SPAN
 CLASS="footnote"
 >[4]</SPAN
@@ -4784,8 +4419,8 @@ ALIGN="LEFT"
 VALIGN="TOP"
 WIDTH="5%"
 ><A
-NAME="FTN.AEN1539"
-HREF="x1009.htm#AEN1539"
+NAME="FTN.AEN1478"
+HREF="x1009.htm#AEN1478"
 ><SPAN
 CLASS="footnote"
 >[5]</SPAN
@@ -4836,7 +4471,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="x2051.htm"
+HREF="x1990.htm"
 ACCESSKEY="N"
 >Siguiente</A
 ></TD

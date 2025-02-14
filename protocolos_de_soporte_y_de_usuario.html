@@ -19,7 +19,7 @@
         argumentos separados por espacio:
       </p><div class="itemizedlist"><ul type="disc"><li><p>
             <code class="literal">bind</code> que indica usar servidor de nombres
-            (<code class="literal">unbound</code> o <code class="literal">named</code>)
+            (<code class="literal">unbound</code> o <code class="literal">nsd</code>)
           </p></li><li><p>
             <code class="literal">file</code> que indica buscar en
             <code class="literal">/etc/hosts</code>
@@ -175,224 +175,7 @@ access-control: 192.168.100.0/24 allow
     dig @200.201.202.203 correo.miescuela.edu.co
 </pre><p>
         que debería dar la IP pública.
-      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="named"></a>5.1.4. named</h4></div></div></div><p>
-        OpenBSD aún incluye como paquete el servidor BIND 9, bajo el
-        nombre <code class="literal">named</code>, que por defecto corre con
-        <code class="literal">chroot</code> en el directorio
-        <code class="literal">/var/named</code> y que puede hacer las labores de
-        unbound y nsd.
-      </p><p>
-        Puede configurarse y probarse antes de iniciarlo en cada
-        arranque. Para configurarlo por primera vez pueden seguirse
-        primero los pasos de <code class="literal">/etc/rc</code>. El archivo de
-        configuración es <code class="literal">/var/named/etc/named.conf</code>.
-        Se sugiere que se agregue información de zonas de las cuales es
-        maestro en en archivos del directorio
-        <code class="literal">/var/named/master</code>. Pueden configurarse
-        archivos como dice en <a href="biblio.html" title="B. Bibliografía">AA_Linux</a> por
-        ejemplo los datos un servidor DNS primario del dominio
-        miong.org pueden quedar en el archivo
-        <code class="literal">/var/named/master/miong.org</code>:
-      </p><pre class="programlisting">
-    $TTL 1D
-    @ IN  SOA  @  root.localhost. (
-        03091025 ; Serial
-        1D   ; Refresco secundario
-        6H   ; Reintento secundario
-        2D   ; Expiración secundaria
-        1D ) ; Cache de registro de recursos
-
-        NS  @
-
-        A       65.8.9.234
-
-        MX      5      correo.miong.org.
-
-    correo  IN      A       201.2.3.74
-    ns1     IN      A       201.2.3.74
-    www     IN      A       201.2.3.74
-</pre><p>
-        Note que se declara el mismo dominio como servidor de nombre
-        autoritario, se relaciona con la IP (65.8.9.234), el nombre
-        <code class="literal">correo.miong.org</code> identificara la misma
-        máquina y es el nombre que se usará para intercambiar correos;
-        el nombre <code class="literal">www.miong.org</code> será un alias
-        para el mismo servidor. Note que todo nombre que no termine con
-        punto (.), será completado por <code class="literal">bind</code> con el
-        dominio (i.e <code class="literal">www</code> será completado a
-        <code class="literal">www.miong.org</code>, si se olvida el punto
-        después de <code class="literal">correo.miong.org</code>,
-        <code class="literal">bind</code> lo completará a
-        <code class="literal">correo.miong.org.miong.org</code>).
-        Recuerde aumentar el número serial cada vez que haga algún
-        cambio, para que la información pueda ser actualizada en los
-        servidores secundarios. Puede probar cada archivo de zonas que
-        haga con:
-      </p><pre class="programlisting">
-    named-checkzone miong.org /var/named/master/miong.org
-</pre><p>
-        Agregue una referencia al archivo de zonas maestro en
-        <code class="literal">/var/named/etc/named.conf</code>, en la sección para
-        zonas maestras algo de la forma:
-      </p><pre class="programlisting">
-    zone "miong.org" {
-      type master;
-      file "master/miong.org";
-    }
-</pre><p>
-        Si desea que un servidor sea secundario de algún servidor
-        primario, agregue en
-        <code class="literal">/var/named/etc/named.conf</code> en la sección para
-        zonas esclavas algo como:
-      </p><pre class="programlisting">
-    zone "miong.org" {
-      type slave;
-      file "slave/miong.org";
-      masters { 65.8.9.234; };
-    }
-</pre><p>
-        Cuando <code class="literal">named</code> lea de nuevo sus archivos de
-        configuración traerá la información del servidor primario y la
-        dejará en el archivo
-        <code class="literal">/var/named/slave/miong.org</code>.
-      </p><p>
-        El servidor se inicia con
-      </p><pre class="programlisting">
-    doas rcctl -d start named
-</pre><p>
-        Los errores que se produzcan antes de hacer
-        <code class="literal">chroot</code> son enviados a
-        <code class="literal">/var/log/servicio</code>. Para probar el
-        funcionamiento antes de modificar
-        <code class="literal">/etc/resolv.conf</code> puede usar:
-      </p><pre class="programlisting">
-    dig @localhost miong.org
-</pre><p>
-        Si requiere volver a leer los archivos de configuración (por
-        ejemplo después de cambiar los archivos de zonas) puede enviar
-        la señal <code class="literal">SIGHUP</code> al proceso con:
-      </p><pre class="programlisting">
-    pkill -HUP named
-</pre><p>
-        o con
-      </p><pre class="programlisting">
-    rndc reload
-</pre><p>
-        Una vez compruebe que su servidor DNS está operando
-        correctamente puede indicar que se inicie en cada arranque
-        agregando a <code class="literal">/etc/rc.conf.local</code>:
-      </p><pre class="programlisting">
-    named_flags=""
-</pre><p>
-        y en el mismo archivo en la definición de
-        <code class="literal">pkg_scripts</code> agregando
-        <code class="literal">named</code>.
-      </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="vistas"></a>5.1.4.1. Vistas para resolver nombres interna y
-        externamente</h5></div></div></div><p>
-          Si cuenta con una LAN conectada a Internet por medio de un
-          cortafuegos con OpenBSD que maneja el DNS de su organización y
-          si además cuenta con una DMZ tal que las peticiones a algunos
-          puertos del cortafuegos son redirigidas a uno o más
-          servidores, seguramente tendrá inconvenientes al resolver
-          nombres de su dominio en la LAN, pues el nombre de su
-          organización (digamos miong.org) será resulto a la
-          dirección externa, la cual conectará al cortafuegos por el
-          puerto pedido y tratará de redirigir la conexión al servidor
-          en la DMZ (i.e se reflejará). Por este motivo desde su LAN en
-          general no resolverá nombres de su dominio.
-        </p><p>
-          Una solución (ver
-          <code class="literal">/var/named/etc/named-dual.conf</code>) es
-          configurar bind para que tenga dos vistas, una para
-          computadores fuera de la LAN y otra para computadores dentro
-          de la LAN. Un posible archivo de configuración (basado en los
-          distribuidos con OpenBSD) es:
-        </p><pre class="programlisting">
-    acl clients {
-        localnets;
-        ::1;
-    };
-    options {
-        version "";
-        listen-on    { any; };
-        listen-on-v6 { any; };
-        allow-recursion { clients; };
-    };
-    logging {
-        category lame-servers { null; };
-    };
-
-    view "internal" {  // Para la red interna
-        match-clients { clients; };
-        match-recursive-only yes;
-        recursion yes;
-
-        zone "." {
-            type hint;
-            file "standard/root.hint";
-        };
-        zone "localhost" {
-            type master;
-        file "standard/localhost";
-        allow-transfer { localhost; };
-        }
-        zone "127.in-addr.arpa" {
-            type master;
-            file "standard/loopback";
-            allow-transfer { localhost; };
-        };
-        zone "0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa" {
-            type master;
-            file "standard/loopback6.arpa";
-            allow-transfer { localhost; };
-        };
-        zone "com" {
-            type delegation-only;
-        };
-        zone "net" {
-            type delegation-only;
-        };
-
-        zone "miong.org" {
-            type master;
-            file "refleja/miong.org.org";
-        };
-    };
-    view "external" { // Para Internet
-        recursion no;
-        additional-from-auth no;
-        additional-from-cache no;
-        zone "miong.org" {
-            type master;
-        file "master/miong.org";
-        };
-        zone "168.74.245.200.IN-ADDR.ARPA" { // Para resolución inversa
-            type master;
-        file "master/db.168.74.245.200";
-        };
-    };
-</pre><p>
-          El archivo <code class="literal">master/miong.org</code> sería el
-          típico para resolver externamente, mientras que en
-          <code class="literal">refleja/miong.org</code> tendría los mismo
-          nombres del anterior pero con las direcciones de la red local.
-          <code class="literal">master/db.167.74.245.200</code> tendría datos para
-          resolución de nombres inversa desde fuera de la organización,
-          por ejemplo:
-        </p><pre class="programlisting">
-    $TTL 1D
-    @ IN  SOA  @  root.localhost. (
-      49   ; Serial de Zona
-      1D   ; Refresco secundario
-      6H   ; Reintento secundario
-      2D   ; Expiración secundaria
-      1D ) ; Cache de registros de recurso
-
-    @       IN      NS      cortafuegos.miong.org.
-        IN      PTR     www.miong.org.
-        IN      PTR     correo.miong.org
-        IN      PTR     ns1.miong.org
-</pre></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-dns"></a>5.1.5. Referencias y lecturas recomendadas</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
+      </p></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="referencias-dns"></a>5.1.4. Referencias y lecturas recomendadas</h4></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
             Sección sobre DNS de las guías Aprendiendo a aprender Linux.
             <a href="biblio.html" title="B. Bibliografía">AA_Linux</a>
           </p></li><li><p>
@@ -520,7 +303,7 @@ Match group jaulasftp
     </p><p>
       En su modo de operación dinámico el servidor le asigna una IP a un
       sólo cliente por cierto periodo de tiempo, al cabo del cual podría
-      asignarle otra IP<sup>[<a name="id1270" href="#ftn.id1270">24</a>]</sup>.
+      asignarle otra IP<sup>[<a name="id1209" href="#ftn.id1209">24</a>]</sup>.
     </p><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="cliente-DHCP"></a>5.3.1. Configuración de un cliente DHCP</h4></div></div></div><p>
         La configuración de un computador para operar como cliente de
         DHCP depende del sistema operativo, en el caso de Windows en las
@@ -654,7 +437,7 @@ Match group jaulasftp
             Que ambos usuarios tengan un programa con el que puedan leer
             y redactar correos, como por ejemplo mail, mutt,
             mozilla-thunderbird (a ese programa se le llamará MUA -
-            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="id1342" href="#ftn.id1342">25</a>]</sup>).
+            <span class="emphasis"><em>Mail User Agent</em></span><sup>[<a name="id1281" href="#ftn.id1281">25</a>]</sup>).
           </p></li></ul></div><p>
         Si tanto pablo como rodrigo emplean como MUA
         <code class="literal">mail</code>, y ambos computadores tiene como MTA
@@ -675,7 +458,7 @@ Match group jaulasftp
         Enviar un mensaje significa crear una conexión TCP con el MTA
         destino o con otro MTA que actúe de intermediario, típicamente
         en el puerto TCP 25, y transmitir el mensaje siguiendo las
-        reglas del protocolo SMTP <sup>[<a name="id1350" href="#ftn.id1350">26</a>]</sup>. Para establecer el computador con el cual
+        reglas del protocolo SMTP <sup>[<a name="id1289" href="#ftn.id1289">26</a>]</sup>. Para establecer el computador con el cual
         conectarse sendmail revisa con el resolvedor DNS, registros MX
         asociados con el dominio de la dirección, si los hay intenta
         enviar a cada uno en orden de prioridad –los registros MX con
@@ -951,7 +734,7 @@ Match group jaulasftp
     quit
 </pre><p>
           De requerirlo puede rastrear problemas en
-          <code class="literal">/var/log/maillog</code><sup>[<a name="id1470" href="#ftn.id1470">27</a>]</sup>:
+          <code class="literal">/var/log/maillog</code><sup>[<a name="id1409" href="#ftn.id1409">27</a>]</sup>:
         </p></div><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="referencias-opensmtpd"></a>5.5.1.3. Referencias</h5></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
               <code class="literal">man smtpd</code>,
               <code class="literal">man smtpd.conf</code>,
@@ -1023,7 +806,7 @@ table aliasesejemplo db:/etc/mail/aliasesejemplo.db
     doas rcctl -d restart smtpd
 </pre></li></ul></div></div><div class="sect3" lang="es"><div class="titlepage"><div><div><h4 class="title"><a name="protocolos-revisar-correo"></a>5.5.3. Protocolos para revisar correo</h4></div></div></div><p>
         Para extraer correos de un servidor pueden emplearse los
-        protocolos inseguros<sup>[<a name="id1545" href="#ftn.id1545">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
+        protocolos inseguros<sup>[<a name="id1484" href="#ftn.id1484">28</a>]</sup> POP3 e IMAP o bien sus análogos seguros sobre SSL:
         POP3S e IMAPS En esta sección se describe la configuración de
         estos.
       </p><div class="sect4" lang="es"><div class="titlepage"><div><div><h5 class="title"><a name="dovecot"></a>5.5.3.1. Implementación Dovecot de IMAPS y POP3S</h5></div></div></div><p>
@@ -2037,7 +1820,7 @@ index index.php index.html;
 </pre><p>
           El formato de las bitácoras por defecto es similar al de
           <code class="literal">nginx</code>
-        </p></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id1270" href="#id1270">24</a>] </sup>
+        </p></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id1209" href="#id1209">24</a>] </sup>
           Típicamente un cliente enviará un paquete DHCPDISCOVER a toda
           la red (opcionalmente con sugerencia de la IP que quiere), un
           servidor que reciba tal paquete le responderá con un DHCPOFFER
@@ -2045,10 +1828,10 @@ index index.php index.html;
           puede responder con DHCPREQUEST para confirmar los parámetros
           y el servidor responde con un DHCPACK para confirmar
           asignación.
-        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id1342" href="#id1342">25</a>] </sup>
+        </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id1281" href="#id1281">25</a>] </sup>
                 De acuerdo al RFC 1123 los nombre MUA y MTA son propios
                 del protocolo X.400.
-              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id1350" href="#id1350">26</a>] </sup>
+              </p></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id1289" href="#id1289">26</a>] </sup>
             De acuerdo al protocolo SMTP, el MTA de amor se
             conectaría por el puerto 25 al MTA en respeto y
             enviaría los mensajes <code xmlns="" class="literal">EHLO</code>,
@@ -2066,14 +1849,14 @@ index index.php index.html;
 
     Un cortísimo saludo para bendición de nuestro Creador.
     .
-</pre></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id1470" href="#id1470">27</a>] </sup>
+</pre></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id1409" href="#id1409">27</a>] </sup>
               Hemos notado que no funciona <code xmlns="" class="literal">RCPT TO</code> en
               mayúscula sino sólo <code xmlns="" class="literal">rcpto to</code> en
               minúscula. Al usar mayúscula se genera un error del estilo
             </p><pre class="programlisting">
 RENEGOTIATING
 9898059462808:error:1404C042:SSL routines:ST_OK:called a function you should not call:/usr/src/lib/libssl/ssl_lib.c:2435:`
-</pre></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id1545" href="#id1545">28</a>] </sup>
+</pre></div><div class="footnote"><p xmlns="http://www.w3.org/TR/xhtml1/transitional"><sup>[<a name="ftn.id1484" href="#id1484">28</a>] </sup>
             Son inseguros porque transmiten claves y el contenido de los
             mensajes planos por la red
           </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="direcciones_enrutamiento_transporte_y_cortafuegos.html">Anterior</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="otros_servicios_que_puede_prestar_el_servidor.html">Siguiente</a></td></tr><tr><td width="40%" align="left" valign="top">4. Direcciones, enrutamiento, transporte y cortafuegos </td><td width="20%" align="center"><a accesskey="h" href="index.html">Inicio</a></td><td width="40%" align="right" valign="top"> 6. Otros servicios que puede prestar el servidor</td></tr></table></div></body></html>
