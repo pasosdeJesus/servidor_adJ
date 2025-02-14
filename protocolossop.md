@@ -19,7 +19,7 @@ orden (`sortlist`), opciones (`options`). Un ejemplo del archivo
 `lookup` permite especificar un orden para hacer resolución de acuerdo a
 uno o más de los siguientes argumentos separados por espacio:
 
--   `bind` que indica usar servidor de nombres (`named`)
+-   `bind` que indica usar servidor de nombres (`unbound` o `named`)
 
 -   `file` que indica buscar en `/etc/hosts`
 
@@ -69,14 +69,14 @@ Y a la variable `pkg_scripts` agréguele `unbound` Configúrelo en
 
 Inicie el servicio con
 
-        sudo sh  /etc/rc.d/unbound start
+        doas rcctl -d start unbound
 
 Revise posibles errores en las bitácoras `/var/log/messages` y
 `/var/log/servicio`
 
 Pruebe que responde con:
 
-    dig @192.168.100.100 correo.miescuela.edu.co
+        dig @192.168.100.100 correo.miescuela.edu.co
 
 que debería dar la IP privada.
 
@@ -119,14 +119,14 @@ Un ejemplo de un archivo de zona `/var/nsd/zones/miescuela.edu.co` es:
 
         $ORIGIN miescuela.edu.co.
         $TTL 6h
-        
+
         @ IN SOA ns1.miescuela.edu.co. root.localhost. (
             2 ; Serial
             1d ; Refresco secundario
             6h ; Reintento secundario
             2d ; Expiración secundaria
-            1d ) ; Cache 
-        
+            1d ) ; Cache
+
                  NS ns1
                  A  200.201.202.203
                MX 5  correo.miescuela.edu.co.
@@ -143,11 +143,11 @@ secciones del siguiente estilo:
                 name: "miotrozona.org"
                 zonefile: "secundaria/miotrazona.org"
                 allow-notify: 193.98.157.148 NOKEY
-                request-xfr: 193.98.157.148 NOKEY             
+                request-xfr: 193.98.157.148 NOKEY
 
 Inicie el servicio con
 
-        doas sh  /etc/rc.d/nsd start
+        doas rcctl -d start nsd
 
 (o reinícielo con `restart` en lugar de `start`).
 
@@ -182,13 +182,13 @@ servidor DNS primario del dominio &EDOMINIO; pueden quedar en el archivo
             6H   ; Reintento secundario
             2D   ; Expiración secundaria
             1D ) ; Cache de registro de recursos
-        
+
             NS  @
-        
+
             A       65.8.9.234
-        
+
             MX      5      correo.&EDOMINIO;.
-        
+
         correo  IN      A       201.2.3.74
         ns1     IN      A       201.2.3.74
         www     IN      A       201.2.3.74
@@ -232,7 +232,7 @@ información del servidor primario y la dejará en el archivo
 
 El servidor se inicia con
 
-        doas sh /etc/rc.d/named start
+        doas rcctl -d start named
 
 Los errores que se produzcan antes de hacer `chroot` son enviados a
 `/var/log/servicio`. Para probar el funcionamiento antes de modificar
@@ -253,7 +253,7 @@ o con
 Una vez compruebe que su servidor DNS está operando correctamente puede
 indicar que se inicie en cada arranque agregando a `/etc/rc.conf.local`:
 
-        named_flags="" 
+        named_flags=""
 
 y en el mismo archivo en la definición de `pkg_scripts` agregando
 `named`.
@@ -280,7 +280,7 @@ para computadores dentro de la LAN. Un posible archivo de configuración
             ::1;
         };
         options {
-            version "";     
+            version "";
             listen-on    { any; };
             listen-on-v6 { any; };
             allow-recursion { clients; };
@@ -288,12 +288,12 @@ para computadores dentro de la LAN. Un posible archivo de configuración
         logging {
             category lame-servers { null; };
         };
-        
+
         view "internal" {  // Para la red interna
             match-clients { clients; };
             match-recursive-only yes;
             recursion yes;
-        
+
             zone "." {
                 type hint;
                 file "standard/root.hint";
@@ -319,7 +319,7 @@ para computadores dentro de la LAN. Un posible archivo de configuración
             zone "net" {
                 type delegation-only;
             };
-        
+
             zone "&EDOMINIO;" {
                 type master;
                 file "refleja/&EDOMINIO;.org";
@@ -352,7 +352,7 @@ inversa desde fuera de la organización, por ejemplo:
           6H   ; Reintento secundario
           2D   ; Expiración secundaria
           1D ) ; Cache de registros de recurso
-        
+
         @       IN      NS      cortafuegos.&EDOMINIO;.
             IN      PTR     www.&EDOMINIO;.
             IN      PTR     correo.&EDOMINIO;
@@ -410,7 +410,7 @@ sus copias anteriores comprimidas como `/var/log/authlog.0.gz`,
 
 ### Jaula sftp {#jaula-sftp}
 
-Supongamos que requiere que unos usuarios puedan sólo ingresar por sftp a 
+Supongamos que requiere que unos usuarios puedan sólo ingresar por sftp a
 una jaula de archivos que incluya sus archivos y otros directorios y archivos
 pero no al sistema de archivos completo.
 Para esto agregue un grupo, digamos `jaulasftp`, al archivo `/etc/group`
@@ -451,8 +451,8 @@ Cree el directorio `/restovar/jaulasftp/home/uslim` y ponga la información
 del directorio personal del usuario `uslim`.
 
 Cuando ese usuario ingrese vía sftp verá como raíz del sistema de
-archivos lo que haya en `/restovar/jaulasftp`  y podrá ingresar a los 
-directorios y archivos dentro de esa jaula en la medida que el sistema de 
+archivos lo que haya en `/restovar/jaulasftp`  y podrá ingresar a los
+directorios y archivos dentro de esa jaula en la medida que el sistema de
 permisos típico se lo permita.
 
 
@@ -491,7 +491,7 @@ Red puede especificarse que una tarjeta de red usará DHCP. Un OpenBSD
 con una interfaz de red (digamos `rl0`) se configura como cliente de
 DHCP desde la línea de órdenes con:
 
-        doas dhclient rl0 
+        doas dhclient rl0
 
 que lee parámetros de configuración de `/etc/dhclient.conf` (el cual por
 defecto está configurado para solicitar mascara de red, servidores de
@@ -537,7 +537,7 @@ doas mkdir /var/tftp
 doas cp /usr/mdec/pxeboot /var/tftp
 doas cp /bsd.rd /var/tftp
 doas chown -R _tftpd /var/tftp
-cp 
+cp
 
 
 ### Referencias y lecturas recomendadas {#referencias-dhcpd}
@@ -584,17 +584,17 @@ Documentación disponible en <http://www.openntpd.org>.
 
 ## Servidor de correo electrónico {#servicios-correo}
 
-OpenBSD incluye en el sistema base el MTAs OpenSMTPD y cuenta con un 
+OpenBSD incluye en el sistema base el MTAs OpenSMTPD y cuenta con un
 porte de `sendmail`.
 En este capítulo detallamos la configuración de OpenSMTPD,
 así como la configuración del paquete `dovecot` que implementa los
 protocolos auxiliares POP3S e IMAPS para leer correo de manera segura,
-así como de SpamAssassin para combatir spam y el cliente de 
+así como de SpamAssassin para combatir spam y el cliente de
 correo web Roundcube.
 
-En [versiones históricas de este documento](https://gitlab.com/pasosdeJesus/servidor_adJ/blob/servidor_adJ-7.0/protocolossop.md#servidor-de-correo-electr%C3%B3nico-servicios-correo) 
+En [versiones históricas de este documento](https://gitlab.com/pasosdeJesus/servidor_adJ/blob/servidor_adJ-7.0/protocolossop.md#servidor-de-correo-electr%C3%B3nico-servicios-correo)
 podrá consultar sobre la configuración de sendmail (otro MTA), de couriermail
-(otro sistema que implementa POP3S e IMAPS) y de mailman (para manejar 
+(otro sistema que implementa POP3S e IMAPS) y de mailman (para manejar
 listas de correo).
 
 
@@ -654,7 +654,7 @@ la dirección, si los hay intenta enviar a cada uno en orden de prioridad
 [Servicio DNS](#servidor-dns)).
 
 En &ENOMCLIENTE2; debe estar corriendo un proceso que acepte la conexión
-en el puerto 25, i.e. `smtpd` (que es el servicio de OpenSMTP) o algún 
+en el puerto 25, i.e. `smtpd` (que es el servicio de OpenSMTP) o algún
 otro MTA que reciba el mensaje siguiendo el protocolo SMTP.
 
 `smtpd` en &ENOMCLIENTE2; agrega el mensaje que recibe en el archivo tipo
@@ -668,14 +668,14 @@ Este es el esquema básico, aunque hay muchas otras situaciones en las
 que se emplean otras posibilidades de SMTP, protocolos auxiliares y
 programas. Por ejemplo los usuarios de una organización suelen extraer
 sus correos del servidor desde otros computadores con MUAs gráficos
-empleando los protocolos seguros POP3S e IMAPS. 
+empleando los protocolos seguros POP3S e IMAPS.
 También es posible configurar un cliente de correo web (webmail)
-para examinar correos desde el web. 
+para examinar correos desde el web.
 
 #### MTA OpenSMTPD {#opensmtpd}
 
 Se trata de un MTA desarrollado principalmente para OpenBSD por
-desarrolladores de OpenBSD. 
+desarrolladores de OpenBSD.
 
 El servicio se inicia con:
 
@@ -688,7 +688,7 @@ y se detiene con:
 Para que inicie en cada arranque ejecute
         doas rcctl enable smtpd
 
-lo cual modificará el archivo `/etc/rc.conf.local` y agregará `smtpd` a la 
+lo cual modificará el archivo `/etc/rc.conf.local` y agregará `smtpd` a la
 variable `pkg_scripts` y allí mismo agregará la línea
 
         smtdp_flags=""
@@ -732,13 +732,13 @@ Y probar un envío a un usuario local con:
 
         mail &EUSUARIO;@localhost
         Subject: hola
-        
+
         1,2,3
         .
 
-Si prefiere recibir en formato maildir (por defecto en `~/Maildir` de 
-cada usuario) y tener opción de procesar usuario a usuario con procmail 
-vía el archivo `~/.forward` es mejor cambiar 
+Si prefiere recibir en formato maildir (por defecto en `~/Maildir` de
+cada usuario) y tener opción de procesar usuario a usuario con procmail
+vía el archivo `~/.forward` es mejor cambiar
 `action "local_mail" mbox alias <aliases>` por:
 
        action "local_mail" maildir alias <aliases>
@@ -749,14 +749,14 @@ archivo plano genere la base a partir del archivo plano con:
 
         doas newaliases
 
-Y en el archivo de configuración cambie 
+Y en el archivo de configuración cambie
 `table aliases file:/etc/mail/aliases` por:
 
         table aliases db:/etc/mail/aliases.db
 
 Para que permita enviar y recibir desde otros computadores debe habilitar
 TLS, así como generar certificado SSL
-y dejar `&EDOMINIO;.crt` en `/etc/ssl/` 
+y dejar `&EDOMINIO;.crt` en `/etc/ssl/`
 y `&EDOMINIO;.key` en `/etc/ssl/private` para
 después agregar al archivo de configuración:
 
@@ -770,7 +770,7 @@ después agregar al archivo de configuración:
 Así quedará:
 
 * Escuchando conexiones cifradas (SMTPS) por el puerto 465
-* Escuchando conexiones planas con autenticación opcional y la 
+* Escuchando conexiones planas con autenticación opcional y la
   posibilidad de cambiar a conexión cifradas (con STARTTLS) por puerto 25 y
 * Escuchando conexiones planas que requieren paso a cifradas (con STARTTLS)
   y que exigen autenticación por el puerto 587.
@@ -847,11 +847,11 @@ O iniciando sesión de TLS por el puerto 25 o por el puerto 587:
         250 HELP
 
 
-Una vez tenga una conexión con TLS tendrá disponibles autenticación `AUTH` con 
-métodos `PLAIN` y `LOGIN`. 
+Una vez tenga una conexión con TLS tendrá disponibles autenticación `AUTH` con
+métodos `PLAIN` y `LOGIN`.
 Para autenticarse debe dar una identificación y una clave válida en el
 sistema pero codificadas en base 64. Para esto instale el paquete
-`base64` con `pkg_add base64` y para ver la cadena que tendría que emplear 
+`base64` con `pkg_add base64` y para ver la cadena que tendría que emplear
 con `AUTH PLAIN` use:
 
         printf '\0MiUsario\0MiClave' | base64
@@ -859,9 +859,9 @@ con `AUTH PLAIN` use:
 
 o para ver las 2 cadenas por usar con `AUTH LOGIN` use:
 
-        printf 'MiUsario' | base64  
+        printf 'MiUsario' | base64
         TWlVc3Vhcmlv
-        printf 'MiClave' | base64  
+        printf 'MiClave' | base64
         TWlDbGF2ZQ==
 
 Para obtener la codificación de una cadena en base 64 también podría emplear
@@ -901,7 +901,7 @@ puede intentar el envío de un correo por ejemplo con:
         quit
 
 
-De requerirlo puede rastrear problemas en `/var/log/maillog`[^smtp.4]: 
+De requerirlo puede rastrear problemas en `/var/log/maillog`[^smtp.4]:
 
 
 #### Referencias {#referencias-opensmtpd}
@@ -951,7 +951,7 @@ acepte correo para cada dominio. Para esto:
 
     ¡No omita el punto que va a continuación del nombre del servidor MX!
 
--   En el archivo `/etc/mail/smtpd.conf` agregue una tabla de alias, una 
+-   En el archivo `/etc/mail/smtpd.conf` agregue una tabla de alias, una
     línea `action` y una línea `match` por cada dominio, por ejemplo:
 
         table aliasesejemplo db:/etc/mail/aliasesejemplo.db
@@ -997,16 +997,16 @@ que lo dejará en `/etc/ssl/dovecotcert.pem` y
 Edite el archivo `/etc/dovecot/conf.d/auth-system.conf.ext` y asegurse
 de que queden sin comentario las siguientes partes:
 
-        passdb {                                                                        
-            driver = bsdauth    
+        passdb {
+            driver = bsdauth
         }
-        userdb {                                                                        
-            driver = passwd                                                               
+        userdb {
+            driver = passwd
         }
 
 Inicie el servicio con
 
-        /etc/rc.d/dovecot start
+        doas rcctl -d start dovecot
 
 y pruébelo en los puertos 143 (IMAP sin cifrar), 993 (IMAP sobre SSL),
 110 (POP3 sin cifrar) y 995 (POP3 sobre SSL). Por defecto dovecot
@@ -1023,7 +1023,7 @@ emplear una línea de la forma:
 
 Puede probar el funcionamiento del servidor con:
 
-        openssl s_client -connect localhost:995 
+        openssl s_client -connect localhost:995
 
 teniendo en cuenta que el correo debe estar en formato Maildir en el
 directorio `Maildir` del usuario que revisará. Una sesión típica sería:
@@ -1038,7 +1038,7 @@ directorio `Maildir` del usuario que revisará. Una sesión típica sería:
         1 17559
         2 1128
         3 2430
-        . 
+        .
 
 ##### Pruebas a IMAPS {#dovecot-imaps}
 
@@ -1051,7 +1051,7 @@ Si tiene cortafuegos activo asegúrese también de abrir el puerto 993
 agregando a `/etc/pf.conf` algo como:
 
         pass in on $ext_if proto tcp to ($ext_if) port 993 keep state
-            
+
 
 Una vez en ejecución puede hacer una prueba como:
 
@@ -1072,7 +1072,7 @@ Una vez en ejecución puede hacer una prueba como:
 ##### Referencias y lecturas recomendadas {#referencias-dovecot}
 
 * El protocolo POP3 se describe en el RFC 1939
-<http://www.faqs.org/rfcs/rfc1939.html> 
+<http://www.faqs.org/rfcs/rfc1939.html>
 * Más sobre IMAP en <http://www.linux-sec.net/Mail/SecurePop3/ > y
 <http://talk.trekweb.com/~jasonb/articles/exim_maildir_imap.shtml>
 * POP3S e IMAPS en OpenBSD/LDAP/Sendmail
@@ -1103,7 +1103,7 @@ correo y ser tratado como spam envíandolo por ejemplo a la carpeta Junk
 
 Para iniciar el servicio ejecute:
 
-        /usr/local/bin/spamd -u _spamdaemon -d      
+        /usr/local/bin/spamd -u _spamdaemon -d
 
 y para que inicie automáticamente en cada arranque, agregue
 `spamassassin` en la variable `pkg_scripts` de `/etc/rc.local`.
@@ -1117,24 +1117,24 @@ Cada usuario que requiera el uso de SpamAssassin para clasificar
 automáticamente los no solicitados en el buzón `spamagarrado`, debe
 tener configurado `procmail`, esto puede hacerse modificando o creando
 el archivo `~/.procmailrc` para que incluya líneas como las siguientes
-que suponene que el usuario `pablo` maneja su correo en formato `maildir` 
-(para permitir consulta con IMAPS --ver 
+que suponene que el usuario `pablo` maneja su correo en formato `maildir`
+(para permitir consulta con IMAPS --ver
 [Implementación Dovecot de IMAPS y POP3S](#dovecot)):
 
         LINEBUF=4096
         VERBOSE=on
         PMDIR=/home/pablo
         LOGFILE=/home/pablo/proclog
-        
+
         :0fw: spamassassin.lock
         * < 256000
         | spamc
-        
+
         :0:
         * ^X-Spam-Status: Yes
         /home/pablo/Maildir/.Junk/ # This is the mailbox where all spam goes.
-        
-        
+
+
         :0
         * .*
         /home/pablo/Maildir/
@@ -1166,8 +1166,8 @@ obtener correo de servidores IMAP e IMAPS.
 Basta instalar el paquete `roundcubemail` o descargar las fuentes más
 recientes de <http://sourceforge.net/projects/roundcubemail/> e
 instalarlas en `/var/www/roundcubemail`, y seguir instrucciones del
-archivo INSTALL.  Las complementaremos aquí suponiendo que en el 
-mismo servidor (`correo.&EDOMINIO;`) están los servicios IMAPS y 
+archivo INSTALL.  Las complementaremos aquí suponiendo que en el
+mismo servidor (`correo.&EDOMINIO;`) están los servicios IMAPS y
 SMTP y que se empleará el motor de bases de datos PostgreSQL:
 
 1.  Tras instalar, el cliente quedará en `/var/www/roundcubemail` por lo
@@ -1239,7 +1239,7 @@ SMTP y que se empleará el motor de bases de datos PostgreSQL:
             $config['db_dsnw'] = 'pgsql://roundcube:nueva_clave@unix(/var/run/postgresql)/roundcubemail';
 
             $config['default_host'] = 'ssl://correo.&EDOMINIO;';
-            
+
             $config['default_port'] = 993;
 
             $config['imap_conn_options'] = array(
@@ -1337,15 +1337,15 @@ este webmail active el plugin password como se presenta a continuación:
             Subject: Saludo
 
             Un cortísimo saludo para bendición de nuestro Creador.
-            .  
+            .
 
 [^smtp.3]: Son inseguros porque transmiten claves y el contenido de los
     mensajes planos por la red
 
 [^smtp.4]: Hemos notado que no funciona `RCPT TO` en mayúscula sino sólo
     `rcpto to` en minúscula.  Al usar mayúscula se genera un error
-    del estilo 
-    
+    del estilo
+
         RENEGOTIATING
         9898059462808:error:1404C042:SSL routines:ST_OK:called a function you should not call:/usr/src/lib/libssl/ssl_lib.c:2435:`
 
@@ -1377,14 +1377,14 @@ detalles de creación al usar `adduser` se presentan a continuación
         Enter username []: ftp
         Enter full name []: FTP anonimo
         Enter shell csh ksh nologin sh [ksh]: nologin
-        Uid [1008]: 
-        Login group ftp [ftp]: 
-        Login group is ``ftp''. Invite ftp into other groups: guest no 
-        [no]: 
-        Login class auth-defaults auth-ftp-defaults daemon default staff 
+        Uid [1008]:
+        Login group ftp [ftp]:
+        Login group is ``ftp''. Invite ftp into other groups: guest no
+        [no]:
+        Login class auth-defaults auth-ftp-defaults daemon default staff
         [default]: auth-ftp-defaults
-        Enter password []: 
-        Enter password again []: 
+        Enter password []:
+        Enter password again []:
 
 Después puede ubicar lo que desee que aparezca en el servidor ftp en el
 directorio de tal cuenta (e.g `/home/ftp`) y quitar los permisos de
@@ -1445,10 +1445,10 @@ La página del manual de `ftpd`.
 
 ## Servidor web {#servidor-web}
 
-Un servidor web recibe peticiones acordes al protocolo HTTP, las procesa, 
-recolecta la información que va a retornar y la retorna típicamente en 
-HTML/CSS/Javascipt también mediante el protocolo HTTP.     
-Las peticiones pudieron pasar antes por el cortafuegos si lo hay o por otro 
+Un servidor web recibe peticiones acordes al protocolo HTTP, las procesa,
+recolecta la información que va a retornar y la retorna típicamente en
+HTML/CSS/Javascipt también mediante el protocolo HTTP.
+Las peticiones pudieron pasar antes por el cortafuegos si lo hay o por otro
 servidor que actue como proxy.
 
 El siguiente diagrama presenta más detalles de los elementos involucrados
@@ -1457,19 +1457,19 @@ en servir páginas web generadas por una aplicación Ruby on Rails.
 ![](img/diagrama-web.png)
 
 
-Así que la configuración de un servidor web debe tener en cuenta por lo 
+Así que la configuración de un servidor web debe tener en cuenta por lo
 menos:
 
-* Al lado del usuario, la forma de los URL que se espera que emplee. 
-  Por ejemplo es más simple de configurar, pero menos usable, si el 
+* Al lado del usuario, la forma de los URL que se espera que emplee.
+  Por ejemplo es más simple de configurar, pero menos usable, si el
   usuario emplea directamente la dirección IP en lugar de un nombre de servidor.
 * La lado del servidor, de donde provienen el HTML el CSS y el Javascript.
-  Por ejemplo es más simple servir páginas HTML, CSS y Javascript alojadas en 
-  el sistema de archivos, que páginas generadas con PHP o que páginas 
+  Por ejemplo es más simple servir páginas HTML, CSS y Javascript alojadas en
+  el sistema de archivos, que páginas generadas con PHP o que páginas
   generadas con Ruby.
 * Al lado del usuario y del servidor si la conexión será cifrada o no.
 
-adJ y OpenBSD incluyen en el sistema base su propio servidor 
+adJ y OpenBSD incluyen en el sistema base su propio servidor
 OpenBSD httpd.  Es eficiente aunque mínimo, por lo que puede emplearse
 también el paquete nginx, especialmente entre más compleja sea la generación
 de páginas al lado del servidor.
@@ -1481,14 +1481,14 @@ de Let's Encrypt.
 
 nginx es un servidor web que en el caso de adJ está incluido entre
 los paquetes que se instalan por omisión.
-Su binario queda ubicado en `/usr/local/sbin/nginx` y puede consultar la 
+Su binario queda ubicado en `/usr/local/sbin/nginx` y puede consultar la
 versión ejecutando `nginx -v`
 
 Cuando corre en OpenBSD lee el archivo de configuración `/etc/nginx/nginx.conf`
-y después cambia el directorio raíz  con `chroot` a  `/var/www` para correr en 
-esa jaula. Esta es una medida de seguridad para evitar que un atacante que 
-desde el web logre acceso al sistema de archivos pueda ver o escribir en 
-archivos de configuración (como los de `/etc`) o binarios o el kernel mismo, 
+y después cambia el directorio raíz  con `chroot` a  `/var/www` para correr en
+esa jaula. Esta es una medida de seguridad para evitar que un atacante que
+desde el web logre acceso al sistema de archivos pueda ver o escribir en
+archivos de configuración (como los de `/etc`) o binarios o el kernel mismo,
 un atacante vería como raíz lo que este en `/var/www`.
 
 Puede iniciarlo manualmente con:
@@ -1509,20 +1509,20 @@ y que añada `nginx` en `pkg_scripts`.
 
 #### Generalidades del archivo de configuración de nginx
 
-El archivo de configuración consta de directivas que le indican a nginx 
+El archivo de configuración consta de directivas que le indican a nginx
 como responder a solicitudes http.
 
-Algunas de las directivas del archivo de configuración tienen bloques que a su 
-vez tienen directivas. Cada bloque se inicia con `{` y se cierra con `}`.  
+Algunas de las directivas del archivo de configuración tienen bloques que a su
+vez tienen directivas. Cada bloque se inicia con `{` y se cierra con `}`.
 Las directivas que no tienen bloque deben terminar con `;`
 
-Pueden ponerse comentarios a la derecha del símbolo `#` en cualquier línea (el 
+Pueden ponerse comentarios a la derecha del símbolo `#` en cualquier línea (el
 resto de la línea después del `#` es comentario).
 
 El siguiente es un archivo de configuración mínimo para que nginx sirva
-páginas estáticas HTML, CSS y Javascript alojadas en el sistema de 
+páginas estáticas HTML, CSS y Javascript alojadas en el sistema de
 archivos en `/var/www/htdocs/`, iniciando por omisión con `index.html`
-requiriendo que el usuario final acceda desde el mismo servidor con un 
+requiriendo que el usuario final acceda desde el mismo servidor con un
 navegador empleando una dirección de la forma <http://127.0.0.1>
 
 	http {
@@ -1537,14 +1537,14 @@ navegador empleando una dirección de la forma <http://127.0.0.1>
 	  }
 	}
 
-Dentro del bloque de la directiva `http` debe ponerse una directiva 
-`server` por cada sitio web que sea servido por nginx. 
+Dentro del bloque de la directiva `http` debe ponerse una directiva
+`server` por cada sitio web que sea servido por nginx.
 
 La directiva `server` tiene un bloque dentro del cual deben ponerse,
-entre otras, las directivas `server_name` (con nombre de servidor) y 
-`listen` (con puerto) acordes a los URLs que se esperan sean usados 
+entre otras, las directivas `server_name` (con nombre de servidor) y
+`listen` (con puerto) acordes a los URLs que se esperan sean usados
 por los usuarios y otras directivas de acuerdo al contenido que se
-desea servir. En este ejemplo el servidor escucha en el puerto 80 por IPv4 
+desea servir. En este ejemplo el servidor escucha en el puerto 80 por IPv4
 y en el puerto 80 por IPv6.
 
 En este ejemplo la directiva `root` indica que se servirán
@@ -1552,7 +1552,7 @@ contenido alojado en el sistema de archivos en la ruta `/var/www/htdocs`
 (como nginx correo en la jaula `/var/www` basta indicar la ruta
 dentro de esa).  La directiva `index index.html` indica que si
 el usuario no especifica una ruta particular en el URL se servirá
-el archivo `/var/www/htdocs/index.html` que si desea probar puede 
+el archivo `/var/www/htdocs/index.html` que si desea probar puede
 iniciar con el contenido:
 
 	<h1>Bienvenido a servir contenido web con nginx</h1>
@@ -1561,15 +1561,15 @@ iniciar con el contenido:
 #### Configuración de `server_name` y `listen` de acuerdo a URLs que se esperan del usuario
 
 Los URLs que usen que incluyen el protocolo (`http` sin cifrar o
-`https` con cifrado) el nombre del servidor (o dirección IPv4 o IPv6 si 
-no tiene dominos DNS configurados) y el puerto (si el usuario no emplea un 
-puerto y el URL comienza con `http` se usa el puerto 80, o si comienza con 
+`https` con cifrado) el nombre del servidor (o dirección IPv4 o IPv6 si
+no tiene dominos DNS configurados) y el puerto (si el usuario no emplea un
+puerto y el URL comienza con `http` se usa el puerto 80, o si comienza con
 `https` se emplea por omisión el puerto 443).
 
 Otro caso sencillo de configurar es servir contenido estático HTML, CSS
 y Javascript a usuarios ubicados en computadores en una red local en
 la que el servidor tiene una IP estática asignada (digamos
-192.168.20.20) o si ha contratado una IP pública con su proveedor de 
+192.168.20.20) o si ha contratado una IP pública con su proveedor de
 Internet digamos 125.125.123.1 como en el siguiente ejemplo que supone
 que sólo configura IPv4:
 
@@ -1585,15 +1585,15 @@ que sólo configura IPv4:
 	}
 
 En caso de usar IPv6 tras configurar nginx, para abrir la página desde un
-navegador deberá seguir el estándar de encerrar la dirección IPv6 entre 
+navegador deberá seguir el estándar de encerrar la dirección IPv6 entre
 paréntesis cuadrados.
 
-Si prefiere usar un nombre en lugar de una IP (digamos &EDOMINIO;) 
-deberá tramitar el registro del dominio ante un registrador y pagar la 
+Si prefiere usar un nombre en lugar de una IP (digamos &EDOMINIO;)
+deberá tramitar el registro del dominio ante un registrador y pagar la
 anualidad.  En tal caso la sección `server` para el puerto 80 por IPv4
-y 80 por IPv6 sería 
-(cambiando `www` por el registro que hay configurado en su dominio y 
-`minombre.org` por el dominio que haya contratado): 
+y 80 por IPv6 sería
+(cambiando `www` por el registro que hay configurado en su dominio y
+`minombre.org` por el dominio que haya contratado):
 
 	  server {
 	    server_name www.minombre.org;
@@ -1606,8 +1606,8 @@ y 80 por IPv6 sería
 
 ##### Pruebas cambiando resolución local en un computador
 
-Si en su red local el servidor nginx corre en la dirección 192.168.10.2, 
-en otro computador con adJ (digamos con IP 192.168.10.15) podría configurar 
+Si en su red local el servidor nginx corre en la dirección 192.168.10.2,
+en otro computador con adJ (digamos con IP 192.168.10.15) podría configurar
 la resolución local para asociar www.midominio.org a la IP 192.168.10.2.
 
 Eso lo puede hacer en el archivo `/etc/hosts` con una línea de la forma
@@ -1623,12 +1623,12 @@ a `/etc/hosts` sería una línea de la forma:
 
 ##### Pruebas en una red cambiando resolución local para la red
 
-Para cambiar la resolución de nombres en una red local podría emplear un 
-servidor de nombres completo como `nsd`, pero basta con un resolvedor 
+Para cambiar la resolución de nombres en una red local podría emplear un
+servidor de nombres completo como `nsd`, pero basta con un resolvedor
 como `unbound`.
 
-Por ejemplo si `unbound` corre en el servidor 192.168.10.1 para su 
-dominio `midominio.org`, puede configurarlo para que dirija a 192.168.10.2 
+Por ejemplo si `unbound` corre en el servidor 192.168.10.1 para su
+dominio `midominio.org`, puede configurarlo para que dirija a 192.168.10.2
 cuando desde la red local alguien solicite `www.mindominio.org`, modificando
 el archivo `/var/unbound/etc/unbound.conf` para que incluya:
 
@@ -1646,25 +1646,25 @@ Si además (o en cambio) el servidor tiene una dirección IPv6 debe agregar otro
 
 	local-data: "midominio.org IN A fd4d:da20:9e54::10:10"
 
-Cada vez que haga modificaciones al archivo de configuración de unbound 
+Cada vez que haga modificaciones al archivo de configuración de unbound
 debe reiniciarlo por ejemplo con:
 
 	doas rcctl -d restart unbound
 
-Y en cada computador de la red local debe configurar que el servidor DNS 
+Y en cada computador de la red local debe configurar que el servidor DNS
 sea 192.168.10.1.
 
 
 ##### Pruebas cambiando configuración de servidor DNS
 
-Si está pagando a su proveedor de Internet una IP pública (digamos 
-125.125.121.1) y si pagó el registro de un dominio (digamos www.midominio.org) 
+Si está pagando a su proveedor de Internet una IP pública (digamos
+125.125.121.1) y si pagó el registro de un dominio (digamos www.midominio.org)
 ante un registrador de dominios, debe editar la configuración del servidor DNS
 que haya configurado con el registrador (muchos registradores ofrecen
-servidores DNS editables desde el web). 
+servidores DNS editables desde el web).
 
 Debe agregar un registro que indique que las peticiones a su dominio
-y al subdominio `www.midominio.org` se dirigen a la IP pública de 
+y al subdominio `www.midominio.org` se dirigen a la IP pública de
 su servidor.  Tanto con `bind` como con `nsd` que son 2 servidores DNS
 populares se harían con líneas de la forma:
 
@@ -1684,24 +1684,24 @@ Hay varias posibilidades:
 - Servir archivos HTML del sistema de archivos, para lo que bastan
   las directivas `root`  e `index` antes introducidas.
 
-- Generar automáticamente páginas HTML para permitir ver directorios y 
+- Generar automáticamente páginas HTML para permitir ver directorios y
   archivos y descargar archivos, para lo que basta que agregue
   la directiva `autoindex on;`
 
-- Redirigir la petición a un proceso que corre en el mismo servidor mediante 
+- Redirigir la petición a un proceso que corre en el mismo servidor mediante
   un socket, por ejemplo para servir páginas con un programa en PHP o para
   servir páginas generadas con una aplicacińo sobre Ruby on Rails.
 
-- Redirigir la petición a otro computador donde corra un servidor web 
+- Redirigir la petición a otro computador donde corra un servidor web
   operando así como un proxy
 
 ##### Caso: Servir archivos HTML ubicados en el sistema de archivos
 
-Este es el caso de uso original, se espera que organice los contenidos HTML 
-(junto con gráficas, documentos que referencien, hojas de éstilo CSS, fuentes 
-Javascript, etc) en un directorio (tal vez con subidrectorios).  Como debe 
-ser servidor por nginx debe estar dentro de `/var/www` y el lugar por omisión 
-y recomendado es dentro de `/var/www/htdocs`.  El archivo inicial suele 
+Este es el caso de uso original, se espera que organice los contenidos HTML
+(junto con gráficas, documentos que referencien, hojas de éstilo CSS, fuentes
+Javascript, etc) en un directorio (tal vez con subidrectorios).  Como debe
+ser servidor por nginx debe estar dentro de `/var/www` y el lugar por omisión
+y recomendado es dentro de `/var/www/htdocs`.  El archivo inicial suele
 llamarse `index.html`.
 
 Por ejemplo:
@@ -1712,12 +1712,12 @@ Por ejemplo:
 	A Dios sea la gloria
 	EOF
 
-Después debe editar el archivo de configuración de nginx para agregar una 
-sección para su nuevo servicio.   Suponiendo que los usuarios usarán la 
-IP 192.168.10.50 y el puerto 8080 (i.e con una URL de la forma 
+Después debe editar el archivo de configuración de nginx para agregar una
+sección para su nuevo servicio.   Suponiendo que los usuarios usarán la
+IP 192.168.10.50 y el puerto 8080 (i.e con una URL de la forma
 <http://192.168.10.50:8080>:
 
-	server { 
+	server {
 	  listen 8080;
 	  server_name 192.168.10.50;
 	  root /var/www/htdocs/miproyecto1;
@@ -1725,7 +1725,7 @@ IP 192.168.10.50 y el puerto 8080 (i.e con una URL de la forma
 
 	  error_log logs/miproyecto1-error.log;
 	  access_log logs/miproyecto1-access.log ;
-	} 
+	}
 
 Note que  se agregan las directivas `error_log` y `acces_log` que
 indican que las bitácoras de errores y de acceso quedarán
@@ -1736,7 +1736,7 @@ en `/var/www/logs/miproyecto1-error.log` y
 ##### Caso: Servir páginas generadas por un programa en PHP {#nginx-php}
 
 En el caso de adJ, se recomienda emplear php con nginx mediante Fast-CGI
-comunicandose con un zócalo (socket) ubicado en 
+comunicandose con un zócalo (socket) ubicado en
 `/var/www/var/run/php-fpm.sock`
 
 Para esto una vez instalado el paquete &p-php; configure:
@@ -1745,18 +1745,18 @@ Para esto una vez instalado el paquete &p-php; configure:
 
     doas rcctl enable php73_fpm
 
-2. Que `php73_fpm` use el socket en la ubicación correcta, para esto cambie 
-el archivo `/etc/php-fpm.ini` para que en lugar de la línea con comentario 
+2. Que `php73_fpm` use el socket en la ubicación correcta, para esto cambie
+el archivo `/etc/php-fpm.ini` para que en lugar de la línea con comentario
 `;listen =` tenga:
 
     listen = /var/www/var/run/php-fpm.sock
 
-En un servidor los archivos de PHP suelen mezclarse con archivos HTML así 
-que la configuración del caso anterior servirá, pero además debe añadir 
-dentro de la misma sección server una directiva `location` que le indique a 
-nginx que debe tratar de manera especial los archivos que terminen con la 
-extensión php, esos archivos debe servirlos con el protocolo FastCGI usando 
-el servicio que respone en el socket apropiado (recordando quitar el 
+En un servidor los archivos de PHP suelen mezclarse con archivos HTML así
+que la configuración del caso anterior servirá, pero además debe añadir
+dentro de la misma sección server una directiva `location` que le indique a
+nginx que debe tratar de manera especial los archivos que terminen con la
+extensión php, esos archivos debe servirlos con el protocolo FastCGI usando
+el servicio que respone en el socket apropiado (recordando quitar el
 `/var/www` de la ruta por lo que nginx corre dentro de la jaula `/var/www`):
 
 	location ~ ^(.+\.php)$ {
@@ -1771,27 +1771,27 @@ el servicio que respone en el socket apropiado (recordando quitar el
 
 Si además prefiere que el archivo de inicio por omisión sea
 `index.php` en lugar de `index.html` cambie la directiva `index` para
-que primero intente con `index.php` y si este falta intente con 
+que primero intente con `index.php` y si este falta intente con
 `index.html`:
 	
 	index index.php index.html;	
- 
+
 #### Soportar cifrado entre cliente y servidor
 
 El cifrado con TLS requiere en el servidor un certificado firmado por una
-autoridad certificadora que consta de un archivo público y uno privado.   
+autoridad certificadora que consta de un archivo público y uno privado.
 Típicamente usted debe generar ambos archivos y enviar el público a una
 autoridad certificadora, que por un pago, lo devolverá firmado.
 
 Otra posibilidad es que emplee los certificados gratuitos generados por
 Let's Encrypt como se describe más adelante.
 
-Supongamos que tiene un certificado con parte pública en 
-`/etc/ssl/midominio.org.crt` y para privada en 
+Supongamos que tiene un certificado con parte pública en
+`/etc/ssl/midominio.org.crt` y para privada en
 `/etc/ssl/private/midominio.org.key`.
 
-Como se ha mencionado el bloque de la directiva `server` posiblemente 
-tendrá `listen 443;` (si escucha en puerto estándar), el mismo bloque debe 
+Como se ha mencionado el bloque de la directiva `server` posiblemente
+tendrá `listen 443;` (si escucha en puerto estándar), el mismo bloque debe
 tener:
 
 	  ssl on;
@@ -1813,7 +1813,7 @@ manera gratuita (cada 3 meses debe renovarse con el mismo letsencrypt).
 Por ejemplo para un dominio &EDOMINIO; puede generarse
 sólo un certificado para el web con:
 
-        doas letsencrypt certonly --email micorreo@example.com --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO; 
+        doas letsencrypt certonly --email micorreo@example.com --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO;
 
 Si además de los dominios web necesita cubrir con el mismo certificado
 el servidor de correo: correo.&EDOMINIO; que tiene una raíz diferente:
@@ -1945,7 +1945,7 @@ instalar con:
 
 e iniciar con:
 
-        doas sh /etc/rc.d/php-fpm start
+        doas rcctl -d start php-fpm
 
 o mejor en cada arranque de su sistema editando `/etc/rc.conf.local` y
 agregando

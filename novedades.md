@@ -1,3 +1,6 @@
+Versión 7.6
+:   - Acorta sección [xref](#servidor-dns).
+
 Versión 7.5
 :   - Mejora sección de certificados gratuitos con letsencrypt
       [xref](#letsencrypt).

@@ -717,7 +717,7 @@ y asegúrese de agregar una línea para el usuario y el computador cliente:
 
 Reinicie PostgreSQL.
 
-        doas sh /etc/rc.d/postgresql -d restart
+        doas rcctl -d restart postgresql
 
 Desde el cliente ejecute:
 
@@ -814,7 +814,7 @@ ejemplo con:
 
 A continuación lance el servidor con:
 
-        doas sh /etc/rc.d/mysqld start
+        doas rcctl -d start mysqld
 
 Los errores quedarán en `/var/mysql/host.err`.
 
@@ -1071,8 +1071,8 @@ servidor puede agregar a `/etc/rc.conf.local`:
         ldapd_flags=""
         pkg_scripts = "ldapd"
 
-E iniciar el servicio con `/etc/rc.d/ldapd start` y detenerlo con
-`/etc/rc.d/ldapd stop`
+E iniciar el servicio con `rcctl -d start ldapd` y detenerlo con
+`rcctl  -d stop ldapd`
 
 Es muy recomendable que agregue el esquema LDAP de Courier, de esta
 forma tomada de {3}:
@@ -1471,7 +1471,7 @@ cliente:
 
 Reinicie PostgreSQL.
 
-        doas sh /etc/rc.d/postgresql -d restart
+        doas rcclt -d restart postgresql
 
 Desde el cliente ejecute:
 
