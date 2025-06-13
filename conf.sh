@@ -28,7 +28,7 @@ if (test ! -f confv.sh) then {
 . herram_confsh/confaux.sh
 . herram_confsh/misc.sh
 
-# Reconociendo línea de ordenes
+# Reconociendo línea de ordenes 
 
 BASENAME=$(basename $0)
 USAGE="$BASENAME [-v] [-h] [-M] [-p prefijo]"
@@ -235,11 +235,11 @@ check "DOCBOOK_XSL" "optional" "test -f \$DOCBOOK_XSL/html/docbook.xsl" "/usr/lo
 if (test "$HTML_PROC" = "dbrep_html_jade" -o "$HTML_PROC" = "dbrep_html_jade_single") then {
 }
 elif (test -f $DOCBOOK_XSL/html/docbook.xsl) then {
-        isfm=`grep "<fm:project>" $DOCBOOK_XSL/VERSION`;
+        isfm=`grep "<fm:project>" $DOCBOOK_XSL/VERSION.xsl`;
         if (test "$isfm" != "") then {
-                v=`grep "fm:Version>" $DOCBOOK_XSL/VERSION | sed -e "s|.*fm:Version>\([.0-9]*\)</fm:Version.*|\1|g"`;
+                v=`grep "fm:Version>" $DOCBOOK_XSL/VERSION.xsl | sed -e "s|.*fm:Version>\([.0-9]*\)</fm:Version.*|\1|g"`;
         } else {
-                v=`grep -i "VERSION\"" $DOCBOOK_XSL/VERSION | tr [a-z] [A-Z] | sed -e "s/^.*VERSION[^>]*>\([0-9]*[.][0-9]*\)[.].*$/\1/g"`;
+                v=`grep -i "VERSION\"" $DOCBOOK_XSL/VERSION.xsl | tr [a-z] [A-Z] | sed -e "s/^.*VERSION[^>]*>\([0-9]*[.][0-9]*\)[.].*$/\1/g"`;
         } fi;
 	if (test "$v" = "") then {
 		echo "** Falta archivo VERSION en directorio $DOCBOOK_XSL";
