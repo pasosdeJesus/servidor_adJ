@@ -1,3 +1,6 @@
+Versión 7.7
+:   - 
+
 Versión 7.6
 :   - Mejora [xref](#servidor-dns).
 
