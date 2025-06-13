@@ -451,7 +451,7 @@ se presenta en la siguiente sección.
    ```
    y mueve directorio con datos de PostgreSQL 15
    ```
-   doas mv /var/postgresql/data /var/postgresql/data-15
+   doas mv /var/postgresql/data /var/postgresql/data-16
    ```
 
 5. Desinstala los paquetes de `postgresql` anteriores. Puedes hacerlo con
@@ -490,9 +490,9 @@ se presenta en la siguiente sección.
    ```
 
 8. Durante la actualización mantén la configuración por omisión (no muevas
-   zócalos --__sockets__) y edita y cambia `pg_hba.conf` de `data` y de `data-15`
+   zócalos --__sockets__) y edita y cambia `pg_hba.conf` de `data` y de `data-16`
    ```
-   $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-15/pg_hba.conf
+   $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-16/pg_hba.conf
    ```
    temporalmente a un modo inseguro, remplazando
    ```
@@ -506,8 +506,8 @@ se presenta en la siguiente sección.
 9. Inicia la restauración así:
    ```
    doas su - _postgresql
-   pg_upgrade -b /usr/local/bin/postgresql-15/ -B /usr/local/bin \
-      -U postgres -d /var/postgresql/data-15/ -D /var/postgresql/data
+   pg_upgrade -b /usr/local/bin/postgresql-16/ -B /usr/local/bin \
+      -U postgres -d /var/postgresql/data-16/ -D /var/postgresql/data
    ```
    Si llega a fallar con un mensaje de error del estilo:
    ```
@@ -549,7 +549,7 @@ se presenta en la siguiente sección.
 
 13. Compara cambios en configuración entre versión anterior y actual:
 
-        doas diff /var/postgresql/data-15/postgresql.conf /var/postgresql/data/postgresql.conf
+        doas diff /var/postgresql/data-16/postgresql.conf /var/postgresql/data/postgresql.conf
 
     Y simultaneamente edita `/var/postgresql/data/postgresql.conf` para 
     aplicar los cambios necesarios.  Por lo menos memoria de trabajo y
