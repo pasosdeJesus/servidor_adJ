@@ -1,0 +1,1117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Direcciones, enrutamiento, transporte y cortafuegos</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="La distribución Aprendiendo de Jesús como servidor y cortafuegos"
+HREF="t1.htm"><LINK
+REL="PREVIOUS"
+TITLE="Dispositivos de interconexión"
+HREF="x238.htm"><LINK
+REL="NEXT"
+TITLE="Protocolos de soporte y de usuario"
+HREF="x1009.htm"></HEAD
+><BODY
+CLASS="sect1"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>La distribución Aprendiendo de Jesús como servidor y cortafuegos</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="x238.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x1009.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="sect1"
+><H1
+CLASS="sect1"
+><A
+NAME="direcciones_enrutamiento_transporte_y_cortafuegos"
+>Direcciones, enrutamiento, transporte y cortafuegos</A
+></H1
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ipv4"
+>Introducción a TCP/IPv4</A
+></H2
+><P
+>&#13;      En una red TCP/IPv4, cada computador tiene como identificación una
+      dirección IP única. Esta dirección consta de 32 bits, y suele
+      escribirse como 4 números/bytes separando unos de otros por punto
+      (cada uno es un número entre 0 y 255), por ejemplo 66.35.250.209.
+      Cómo TCP/IP se diseño para interconectar redes, una dirección IP
+      consta de una parte que identifica de forma única la red y otra
+      que identifica de forma única el computador dentro de la red. Una
+      máscara de red determina que parte identifica la red y cuáles
+      computadores en la red puede denotarse con el número de bits del
+      comienzo de la dirección que identifican la red (e.g 16 si los
+      primeros 16 bits identifican la red) o como otra dirección que al
+      hacer la operación lógica y con la dirección IP dará la dirección
+      de red (por ejemplo 255.255.0.0 es una máscara que indica que los
+      primeros 16 bits de una dirección IP son la dirección de red).
+    </P
+><P
+>&#13;      mascara de red Indica que parte de una dirección IP corresponde a
+      la dirección de red.
+    </P
+><P
+>&#13;      Al diseñar una red debe escogerse una dirección de red junto con
+      la máscara de acuerdo al número de computadores, algunas
+      posibilidades son:
+    </P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>/8 o 255.0.0.0</DT
+><DD
+><P
+>&#13;            16777216 computadores
+          </P
+></DD
+><DT
+>/12 o 255.242.0.0</DT
+><DD
+><P
+>&#13;            1048576 computadores
+          </P
+></DD
+><DT
+>/16 o 255.255.0.0</DT
+><DD
+><P
+>&#13;            65536 computadores
+          </P
+></DD
+><DT
+>/24 o 255.255.255.0</DT
+><DD
+><P
+>&#13;            255 computadores
+          </P
+></DD
+></DL
+></DIV
+><P
+>&#13;      Cuantos computadores pueden instalarse en una red con mascara de
+      red /24 o 255.255.255.0.
+    </P
+><P
+>&#13;      Además la dirección de red que escoja debe ser única para no
+      producir conflictos con otras redes en caso de conectarse a
+      Internet y puede facilitar la interconexión de diversas redes y el
+      enrutamiento al interior de una organización. La labor de
+      asignación de direcciones IP en una red local la puede hacer un
+      administrador de red o puede hacerse dinámicamente con el
+      protocolo DHCP.
+    </P
+><P
+>&#13;      Para facilitar la adopción de redes TCP/IPv4 en organizaciones, el
+      RFC 1918 destinó algunas direcciones de red para usar al interior
+      de organizaciones (no puede haber computadores en Internet con
+      esas direcciones):
+    </P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+>10.0.0.0 - 10.255.255.255</DT
+><DD
+><P
+>&#13;            máscara /8
+          </P
+></DD
+><DT
+>172.16.0.0 - 172.31.255.255</DT
+><DD
+><P
+>&#13;            máscara /12
+          </P
+></DD
+><DT
+>192.168.0.0 - 192.168.255.255</DT
+><DD
+><P
+>&#13;            máscara /16
+          </P
+></DD
+></DL
+></DIV
+><P
+>&#13;      Por ejemplo en su red local puede emplear direcciones entre
+      192.168.1.1 y 192.168.1.255 con máscara de red /24 o
+      255.255.255.0. O en caso de contar con más redes en la misma
+      organización, la segunda con direcciones entre 192.168.2.1 y
+      192.168.2.255 y así sucesivamente. Además de usar direcciones
+      privadas, se facilita el crecimiento de la infraestructura de
+      redes y la configuración del enrutamiento entre unas y otras.
+    </P
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="tabla-enrutamiento"
+>Tabla de Enrutamiento</A
+></H3
+><P
+>&#13;        Como se presentó en la descripción de las capas en redes TCP/IP
+        (ver <A
+HREF="x21.htm"
+>la sección de nombre <I
+>Redes, protocolos e Internet</I
+></A
+>),
+        el protocolo IP mantiene una tabla de enrutamiento que asocia
+        direcciones de red con compuertas, es decir con computadores
+        conectados a la misma red que pueden retransmitir información a
+        la red destino. En una red de área local no es necesario
+        configurarla, pero si se requiere por ejemplo para interconectar
+        varias redes de área local en una misma organización.
+      </P
+><P
+>&#13;        Puede ver la tabla de enrutamiento estático en con
+        <TT
+CLASS="literal"
+>route -n show</TT
+> o con
+        <TT
+CLASS="literal"
+>netstat -r</TT
+>. Entre los campos de cada entrada
+        de esta tabla están: red destino, puerta de enlace, banderas,
+        uso, MTU, interfaz por la cual enviar/recibir paquetes con ese
+        destino,
+      </P
+><P
+>&#13;        Hay un destino por defecto (<TT
+CLASS="literal"
+>default</TT
+>) al que
+        se envía todo paquete que no tiene un destino en la tabla de
+        enrutamiento. Este destino por defecto o puerta de enlace se
+        configura en el archivo <TT
+CLASS="literal"
+>/etc/mygate</TT
+>. En una
+        red local conectada a Internet, el servidor debe emplear como
+        puerta de enlace la que le haya dado el proveedor de Internet, y
+        cada computador de la red local debe emplear la IP del servidor.
+      </P
+><P
+>&#13;        De requerirse pueden agregarse compuertas con
+        <TT
+CLASS="literal"
+>route add</TT
+> por ejemplo, para agregar una ruta
+        a la red 192.168.2.0/24 usando como compuerta 192.168.1.60 que
+        está en la misma red:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas route add 192.168.2/24 192.168.1.60
+</PRE
+><P
+>&#13;        Y pueden eliminarse de forma análoga con
+        <TT
+CLASS="literal"
+>route       delete</TT
+>.
+      </P
+><P
+>&#13;        Para determinar problemas de enrutamiento o en general de la
+        red, puede emplear algunas herramientas de diagnóstico por
+        ejemplo:
+      </P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="literal"
+>traceroute</TT
+></DT
+><DD
+><P
+>&#13;              Presenta las direcciones de los computadores y enrutadores
+              que transmiten un paquete hasta llegar a su destino. Por
+              ejemplo
+            </P
+><PRE
+CLASS="programlisting"
+>&#13;traceroute 192.168.2.2
+</PRE
+><P
+>&#13;              traceroute Este programa permite rastrear la ruta que
+              sigue un paquete para llegar a su destino.
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>netstat -s</TT
+></DT
+><DD
+><P
+>&#13;              Éste presenta estadísticas sobre IP, ICMP y TCP
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>arp -an</TT
+></DT
+><DD
+><P
+>&#13;              Que presenta direcciones MAC junto con IPs asociadas
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>tcpdump</TT
+></DT
+><DD
+><P
+>&#13;              Permite analizar el tráfico de una red TCP/IP. Desde la
+              cuenta root puede usarse este programa para examinar todo
+              el tráfico que circule por una red. Por ejemplo para
+              verificar lo que se transmite por la interfaz re0:
+            </P
+><PRE
+CLASS="programlisting"
+>&#13;doas tcpdump -i re0 -n -ttt
+</PRE
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="pf"
+>Otros aspectos de configuración de redes en OpenBSD</A
+></H3
+><P
+>&#13;        Fuera de las tablas de enrutamiento y ARP, la funcionalidad de
+        redes a nivel de kernel se puede controlar con:
+      </P
+><P
+></P
+><DIV
+CLASS="variablelist"
+><DL
+><DT
+><TT
+CLASS="literal"
+>/etc/hosts</TT
+></DT
+><DD
+><P
+>&#13;              En este archivo se listan nombres asociados a la dirección
+              IP de algunos computadores, por ejemplo:
+            </P
+><PRE
+CLASS="programlisting"
+>&#13;127.0.0.1       localhost
+192.168.1.1    Jesus.miong.org Jesus
+</PRE
+></DD
+><DT
+><TT
+CLASS="literal"
+>sysctl</TT
+></DT
+><DD
+><P
+>&#13;              Para configurar algunas variables del kernel relacionadas
+              con redes. Los cambios pueden hacerse permanentes
+              modificando el archivo
+              <TT
+CLASS="literal"
+>/etc/sysctl.conf</TT
+>. Resaltamos la
+              variable <TT
+CLASS="literal"
+>net.inet.ip.forwarding</TT
+> que
+              debe activarse para que un sistema opere como enrutador.
+            </P
+></DD
+><DT
+><TT
+CLASS="literal"
+>pf</TT
+></DT
+><DD
+><P
+>&#13;              Que permite controlar el tráfico de paquetes en el kernel
+              y por tanto controlar la funcionalidad de
+              cortafuegos<A
+NAME="AEN895"
+HREF="#FTN.AEN895"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+>. Se configura de manera permanente en el
+              archivo <TT
+CLASS="literal"
+>/etc/pf.conf</TT
+> (o el archivo
+              especificado en la variable <TT
+CLASS="literal"
+>pf_rules</TT
+> de
+              <TT
+CLASS="literal"
+>rc.conf.local</TT
+> o
+              <TT
+CLASS="literal"
+>rc.conf</TT
+>). Para que
+              <TT
+CLASS="literal"
+>pf</TT
+> entre en operación en cada arranque
+              del sistema, agregue a <TT
+CLASS="literal"
+>rc.conf.local</TT
+> la
+              línea:
+            </P
+><PRE
+CLASS="programlisting"
+>&#13;pf=""
+</PRE
+><P
+>&#13;              Una vez esté operando si hace cambios al archivo de
+              configuración puede lograr que reinicie y vuelva a leerlo
+              con:
+            </P
+><PRE
+CLASS="programlisting"
+>&#13;doas pfctl -f /etc/pf.conf
+</PRE
+><P
+>&#13;              El archivo de configuración
+              <TT
+CLASS="literal"
+>/etc/pf.conf</TT
+> tiene una sintaxis
+              bastante entendible que permite definir variables y
+              tablas.
+            </P
+></DD
+></DL
+></DIV
+><P
+>&#13;        Las secciones de este capítulo explican algunas configuraciones
+        típicas que pueden hacerse con pf y los correspondientes cambios
+        a su archivo de configuración.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="nat"
+>NAT (Network Address Translation)</A
+></H2
+><P
+>&#13;      Puede emplear NAT para que un computador conectado a una red
+      privada y que se conecte a Internet, sea pasarela de los
+      computadores de la red interna y así estos puedan emplear
+      Internet.
+    </P
+><P
+>&#13;      Para activarlo debe estar corriendo <TT
+CLASS="literal"
+>pf</TT
+> (como se
+      explica al comienzo de este capítulo) y debe activar reenvío de IP
+      con:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas sysctl -w net.inet.ip.forwarding=1
+</PRE
+><P
+>&#13;      o mejor aún de manera más permanente verificando que el archivo
+      <TT
+CLASS="literal"
+>/etc/sysctl.conf</TT
+> tenga la línea:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    net.inet.ip.forwarding=1    
+</PRE
+><P
+>&#13;      Como el computador que hará NAT debe tener dos interfaces de red
+      una para conectarlo a la red interna (con IP de la red interna) y
+      otra para conectarlo a Internet (con IP pública). En el archivo
+      <TT
+CLASS="literal"
+>/etc/pf.conf</TT
+> configure las variables
+      <TT
+CLASS="literal"
+>ext_if</TT
+> e <TT
+CLASS="literal"
+>int_if</TT
+> con los
+      nombres de las interfaces externa (conectada a Internet) e interna
+      respectivamente (verifíquelas antes con
+      <TT
+CLASS="literal"
+>ifconfig</TT
+>). Por ejemplo un archivo de
+      configuración mínimo que hace NAT, suponiendo que la interfaz
+      interna es <TT
+CLASS="literal"
+>fxp0</TT
+> y la externa es
+      <TT
+CLASS="literal"
+>nfe0</TT
+> es:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    int_if="fxp0"
+    ext_if="nfe0"
+    
+    set skip on lo
+    
+    match out on $ext_if from !($ext_if) nat-to ($ext_if:0)
+pass out on $ext_if proto {icmp, tcp, udp} all keep state
+
+    pass in quick on $int_if
+</PRE
+><P
+>&#13;      Esta configuración podría cargarse con:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas pfctl -f /etc/pf.conf.
+</PRE
+><P
+>&#13;      NAT es sigla de <SPAN
+CLASS="QUOTE"
+>"Network Address Translation"</SPAN
+>
+      (Traducción de direcciones de red) lo que hace es
+      <SPAN
+CLASS="QUOTE"
+>"traducir"</SPAN
+> las direcciones privadas de la red interna
+      a la dirección pública del cortafuegos para que el cortafuegos
+      haga la petición a su nombre y la respuesta que reciba la vuelve a
+      traducir a la dirección privada en la red interna para enviarla al
+      computador de la red interna que corresponde.
+    </P
+><P
+>&#13;      Una vez realizada, un computador en la red interna debería poder
+      ejecutar
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    ping 8.8.8.8 
+</PRE
+><P
+>&#13;      y recibir respuesta.
+    </P
+><P
+>&#13;      Mientras se hace el ping en en computador de la red interna, si en
+      el cortafuegos se examinara el tráfico de la interfaz interna:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    doas tcpdump -i fxp0 -n host 8.8.8.8
+</PRE
+><P
+>&#13;      Se verían peticiones como
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    07:09:59.262358 192.168.44.93 &#62; 8.8.8.8: icmp: echo request (DF)
+</PRE
+><P
+>&#13;      y al examinar en otra terminal el tráfico de la interfaz conectada
+      a Internet
+      (<TT
+CLASS="literal"
+>doas tcpdump -i nfe0 -n host 8.8.8.8</TT
+>) se
+      verían las mismas peticiones pero con la dirección traducida, por
+      ejemplo:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    07:09:59.262414 182.188.122.211 &#62; 8.8.8.8: icmp: echo request (DF)
+</PRE
+><P
+>&#13;      Las respuestas en la interfaz externa se verían como:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    07:09:59.359408 8.8.8.8 &#62; 182.188.122.211: icmp: echo reply
+</PRE
+><P
+>&#13;      y en la interfaz interna se vería nuevamente traducidas como:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    07:09:59.359474 8.8.8.8 &#62; 192.168.44.93: icmp: echo reply
+</PRE
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-nat"
+>Referencias y lecturas recomendadas</A
+></H3
+><P
+>&#13;        Las siguientes páginas man: pf 4, pfctl 4.
+      </P
+><P
+>&#13;        Guía del usuario de PF <A
+HREF="a3185.htm"
+>PF</A
+>.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="cortafuegos"
+>Cortafuegos: filtrado y túneles</A
+></H2
+><P
+>&#13;      Un cortafuegos permite filtrar tráfico que puede llegar o salir a
+      un computador conectado a una red como Internet.
+    </P
+><P
+>&#13;      El siguiente ejemplo muestra parte del archivo
+      <TT
+CLASS="literal"
+>/etc/pf.conf</TT
+> para que permita toda conexión que
+      salga de la red privada hacia Internet, y para que bloquee toda
+      conexión que llegue excepto tráfico TCP por los puertos para ssh
+      (22) y dns (53), también permite llegada de tráfico UDP por el
+      puerto 53 y tráfico ICMP (para responder <TT
+CLASS="literal"
+>ping</TT
+>).
+      Suponemos que ya se han configurado las variables
+      <TT
+CLASS="literal"
+>int_if</TT
+> y <TT
+CLASS="literal"
+>ext_if</TT
+> con las
+      interfaces de red interna y externa respectivamente:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    servicios_tcp="{ssh,domain}"
+    servicios_udp="{domain}"
+    servicios_icmp="echoreq"
+
+    block in log all
+    pass out keep state
+
+    pass quick on { lo $int_if }
+    antispoof quick for { lo $int_if }
+
+    pass in on $ext_if inet proto tcp from any to ($ext_if) \
+    port $servicios_tcp keep state
+    pass in on $ext_if inet proto udp from any to ($ext_if) \
+    port $servicios_udp keep state
+    pass in inet proto icmp all icmp-type $servicios_icmp keep state
+</PRE
+><P
+>&#13;      Si tiene un servidor interno (por ejemplo en una DMZ con IP
+      192.168.2.2) y necesita que este preste servicios visibles al
+      exterior como: web (80), https (443), imaps (993), smtp (25) y
+      ldap (389), deberá establecer un túnel para cada uno de estos
+      puertos, de forma que las conexiones que lleguen al cortafuegos
+      sean redirigidas al servidor interno. El siguiente ejemplo
+      presenta como puede hacerse:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    serv_ip="192.168.2.2"
+    servicios_serv="{ldap,smtp,www,https,imaps, 389}"
+
+    match in on $ext_if proto tcp from any to any port www rdr-to $serv_ip port www
+    match in on $ext_if proto tcp from any to any port https rdr-to $serv_ip port https
+    match in on $ext_if proto tcp from any to any port 993 rdr-to $serv_ip port 993
+    match in on $ext_if proto tcp from any to any port smtp rdr-to $serv_ip port smtp
+    match in on $ext_if proto tcp from any to any port 389 rdr-to $serv_ip port 389
+
+
+    pass in on $ext_if proto tcp from any to $serv_ip port $servicios_serv \
+    flags S/SA synproxy state
+</PRE
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-cortafuegos"
+>Referencias y lecturas recomendadas</A
+></H3
+><P
+>&#13;        Las siguientes páginas man: pf 4, pfctl 4.
+      </P
+><P
+>&#13;        Guía del usuario de PF <A
+HREF="a3185.htm"
+>PF</A
+>.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ftpproxy"
+>ftp-proxy: para usar ftp desde la red interna</A
+></H2
+><P
+>&#13;      Las características del protocolo ftp hacen que sea difícil
+      emplearlo desde una red interna con un cortafuegos que hace NAT.
+      pf ofrece facilidades para lograrlo en conjunto con el programa
+      <TT
+CLASS="literal"
+>/usr/sbin/ftp-proxy</TT
+> que redirige conexiones ftp
+      a su destino y automáticamente agrega reglas a pf que permitan la
+      conexión.
+    </P
+><P
+>&#13;      El siguiente ejemplo ejemplifica parte del archivo
+      <TT
+CLASS="literal"
+>/etc/pf.conf</TT
+> para esto:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    # En la sección nat/rdr
+    pass on $int_if proto tcp from $lan to any port 21 
+    match in on $int_if proto tcp from $lan to any port 21 rdr-to 127.0.0.1 port 8021
+    
+    # En la sección de reglas de filtrado
+    pass out proto tcp from $ext_ip to any port 21
+</PRE
+><A
+NAME="AEN974"
+></A
+><BLOCKQUOTE
+CLASS="BLOCKQUOTE"
+><P
+>&#13;        <SPAN
+CLASS="strong"
+><B
+CLASS="emphasis"
+>Advertencia</B
+></SPAN
+>
+      </P
+><P
+>&#13;        Para emplear ftp-proxy asegúrese que entre las reglas de su
+        cortafuegos no esté:
+      </P
+><PRE
+CLASS="programlisting"
+>&#13;    set skip $int_if
+</PRE
+><P
+>&#13;        porque esto impediría la redirección al puerto 8021 (por defecto
+        usado por ftp-proxy) del cortafuegos cuando se hacen peticiones
+        de ftp.
+      </P
+></BLOCKQUOTE
+><P
+>&#13;      Además de las reglas del cortafuegos (recuerde reiniciar pf con
+      <TT
+CLASS="literal"
+>pfctl -f /etc/pf.conf</TT
+> para que surtan efecto)
+      debe iniciar el proxy con:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    /usr/sbin/ftp-proxy
+</PRE
+><P
+>&#13;      y para que se efectúe en cada arranque del servidor agregar a
+      <TT
+CLASS="literal"
+>/etc/rc.conf.local</TT
+>:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    ftpproxy_flags=""
+</PRE
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-ftpproxy"
+>Referencias y lecturas recomendadas</A
+></H3
+><P
+>&#13;        Las siguientes páginas man: ftp-proxy 8, pf 4.
+      </P
+><P
+>&#13;        Guía del usuario de PF <A
+HREF="a3185.htm"
+>PF</A
+>.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="ejemplopf"
+>Ejemplo del uso de PF en una DMZ</A
+></H2
+><P
+>&#13;      De las secciones anteriores resultaría un archivo
+      <TT
+CLASS="literal"
+>/etc/pf.conf</TT
+> (adaptado de la Guía de PF) como
+      el siguiente:
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    # Recordar poner net.inet.ip.forwarding=1 and/or net.inet6.ip6.forwarding=1
+    # en /etc/sysctl.conf 
+    
+    ext_if="dc1"  # Cambiar por interfaz externa
+    int_if="dc0"  # Cambiar por interfaz interna
+    
+    int_ip="192.168.1.1"  # Cambiar por dirección en LAN
+    ext_ip="200.93.171.42"  # Cambiar por IP pública
+    
+    # LAN. Segmento de red
+    lan="192.168.1/24"  
+    
+    # Servicios que presta cortafuegos
+    servicios_tcp="{ssh,domain}" 
+    servicios_udp="{domain}" 
+    servicios_icmp="echoreq"
+    
+    # Servidor interno
+    serv_ip="192.168.2.2"
+    servicios_serv="{ldap,smtp,www,https,imaps}"
+    
+    
+    set block-policy return
+    set loginterface $ext_if
+    
+    set skip on {lo enc0}
+    scrub in all
+    
+    match out on $ext_if from !($ext_if) nat-to ($ext_if:0)
+    
+    block in log all 
+    pass out keep state
+    pass quick on { lo }
+    antispoof quick for { lo $int_if }
+    
+    pass in on $int_if proto tcp from $lan to any port ftp
+    pass out proto tcp from $ext_ip to any port 21
+    
+    match in on $int_if proto tcp from $lan to any port ftp rdr-to \
+        127.0.0.1 port 8021
+    
+    pass in quick on $int_if
+    
+    match in on $ext_if proto tcp from any to any port 80 rdr-to \
+        $serv_ip port 80
+    match in on $ext_if proto tcp from any to any port 443 rdr-to \
+        $serv_ip port 443
+    match in on $ext_if proto tcp from any to any port 993 rdr-to \
+        $serv_ip port 993
+    match in on $ext_if proto tcp from any to any port smtp rdr-to \
+        $serv_ip port smtp
+    match in on $ext_if proto tcp from any to any port 389 rdr-to \
+        $serv_ip port 389 
+    
+    match in on $ext_if proto tcp from any to any port 10022 rdr-to \
+        $serv_ip port 22
+    pass on $ext_if proto tcp from any to any port 10022 
+    
+    match in on $ext_if proto tcp from any to any port 10465 rdr-to \
+        $serv_ip port 465
+    pass on $ext_if proto tcp from any to any port 10465 
+    
+    
+    pass in on $ext_if inet proto tcp from any to ($ext_if) \
+        port $servicios_tcp keep state
+    pass in on $ext_if inet proto udp from any to ($ext_if) \
+        port $servicios_udp keep state
+    pass in on $ext_if inet proto icmp all icmp-type 8 code 0 # permite ping
+
+
+    pass in on $ext_if proto tcp from any to $serv_ip port $servicios_serv \
+        flags S/SA synproxy state
+</PRE
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-ejemplopf"
+>Referencias y lecturas recomendadas</A
+></H3
+><P
+>&#13;        Guía del usuario de PF <A
+HREF="a3185.htm"
+>PF</A
+>.
+      </P
+></DIV
+></DIV
+><DIV
+CLASS="sect2"
+><H2
+CLASS="sect2"
+><A
+NAME="control-de-ancho-de-banda"
+>Control de ancho de banda</A
+></H2
+><P
+>&#13;      El siguiente ejemplo presenta cómo puede configurarse un servidor
+      NAT para controlar ancho de banda de diversos computadores de la
+      red interna. La conexión de la red interna es a 100MB, mientras
+      que la conexión a Internet es de 300KB. De todos los computadores
+      de la red interna el ancho de banda se limita sólo a 4
+      computadores, cada uno máximo 30KB. Los demás comparten el resto
+      del ancho de banda.
+    </P
+><PRE
+CLASS="programlisting"
+>&#13;    table &#60;interna&#62; {192.168.2.2, 192.168.2.1, 192.168.1.1, 192.168.1.8, 192.168.1.21, 192.168.1.23, 192.168.1.30, 192.168.1.31, 192.168.1.37, 192.168.1.40, 192.168.1.41, 192.168.1.42, 192.168.1.43, 192.168.1.95, 192.168.1.70}
+    
+    set loginterface $int_if
+    set fingerprints "/etc/pf.os"
+    
+    altq on $int_if bandwidth 100Mb cbq queue { dflt_in, uext1_in, uext2_in, uext3_in, uext4_in}
+    altq on $ext_if bandwidth 300Kb cbq queue { dflt_out }
+    
+    queue dflt_in cbq(default) bandwidth 80%
+    queue dflt_out cbq(default)
+    
+    queue uext1_in bandwidth 30Kb
+    queue uext2_in bandwidth 30Kb
+    queue uext3_in bandwidth 30Kb
+    queue uext4_in bandwidth 30Kb
+    
+    uext1="192.168.1.70" 
+    uext2="192.168.1.23" 
+    uext3="192.168.1.95"
+    uext4="192.168.1.30"
+    
+    match out on $ext_if from &#60;interna&#62; to any nat-to ($ext_if)
+    
+    pass  out on $int_if from any to $uext1 queue uext1_in
+    pass  out on $int_if from any to $uext2 queue uext2_in
+    pass  out on $int_if from any to $uext3 queue uext3_in
+    pass  out on $int_if from any to $uext4 queue uext4_in
+</PRE
+><DIV
+CLASS="sect3"
+><H3
+CLASS="sect3"
+><A
+NAME="referencias-control-ancho-banda"
+>Referencias y lecturas recomendadas</A
+></H3
+><P
+>&#13;        Las siguientes páginas man: pf 4, pfctl 4.
+      </P
+><P
+>&#13;        Guía del usuario de PF <A
+HREF="a3185.htm"
+>PF</A
+>.
+      </P
+></DIV
+></DIV
+></DIV
+><H3
+CLASS="FOOTNOTES"
+>Notas</H3
+><TABLE
+BORDER="0"
+CLASS="FOOTNOTES"
+WIDTH="100%"
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="5%"
+><A
+NAME="FTN.AEN895"
+HREF="x792.htm#AEN895"
+><SPAN
+CLASS="footnote"
+>[1]</SPAN
+></A
+></TD
+><TD
+ALIGN="LEFT"
+VALIGN="TOP"
+WIDTH="95%"
+><P
+>&#13;                  Cortafuego del inglés <SPAN
+CLASS="emphasis"
+><I
+CLASS="emphasis"
+>firewall</I
+></SPAN
+>
+                </P
+></TD
+></TR
+></TABLE
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="x238.htm"
+ACCESSKEY="P"
+>Anterior</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="t1.htm"
+ACCESSKEY="H"
+>Inicio</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x1009.htm"
+ACCESSKEY="N"
+>Siguiente</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Dispositivos de interconexión</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Protocolos de soporte y de usuario</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
