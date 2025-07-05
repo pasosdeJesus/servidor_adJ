@@ -3,9 +3,8 @@
 <!ENTITY VER-OPENBSD "7.7">
 <!ENTITY VER-OPENBSD-S "77">
 <!ENTITY VER-OPENBSD-U "7_7">
-<!ENTITY VER-XORG "">
-<!ENTITY p-mailman "mailman">
-<!ENTITY p-jdk-linux "jdk-linux">
+<!ENTITY VER-XORG "1.21.1.16">
+<!ENTITY VER-PHP "83">
 <!ENTITY p-AnimalesI "AnimalesI-1.1p1">
 <!ENTITY p-AprestamientoI "AprestamientoI-1.0p1">
 <!ENTITY p-GraphicsMagick "GraphicsMagick-1.3.45">
@@ -671,6 +670,7 @@
 <!ENTITY p-ps2eps "ps2eps-1.70">
 <!ENTITY p-psutils "psutils-3.3.9">
 <!ENTITY p-pugixml "pugixml-1.15p0">
+<!ENTITY p-pulseaudio "pulseaudio-17.0p3">
 <!ENTITY p-py3-ConfigArgParse "py3-ConfigArgParse-1.7p0">
 <!ENTITY p-py3-MarkupSafe "py3-MarkupSafe-2.1.5p0">
 <!ENTITY p-py3-acme "py3-acme-3.3.0">
@@ -751,6 +751,7 @@
 <!ENTITY p-py3-urllib3 "py3-urllib3-1.26.18p1">
 <!ENTITY p-py3-werkzeug "py3-werkzeug-3.1.3p0v0">
 <!ENTITY p-py3-wheel "py3-wheel-0.45.1p1">
+<!ENTITY p-py3-xcbgen "py3-xcbgen-1.17.0p2">
 <!ENTITY p-py3-zipp "py3-zipp-3.21.0p0">
 <!ENTITY p-py3-zopecomponent "py3-zopecomponent-6.0">
 <!ENTITY p-py3-zopeevent "py3-zopeevent-5.0">

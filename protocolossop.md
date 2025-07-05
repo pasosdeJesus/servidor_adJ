@@ -1279,7 +1279,7 @@ de páginas al lado del servidor.
 Ambos pueden emplear certificados SSL tanto comprados como los gratuitos
 de Let's Encrypt.
 
-### nginx
+### nginx {#nginx}
 
 nginx es un servidor web que en el caso de adJ está incluido entre
 los paquetes que se instalan por omisión.
@@ -1362,18 +1362,20 @@ iniciar con el contenido:
 
 #### Configuración de `server_name` y `listen` de acuerdo a URLs que se esperan del usuario
 
-Los URLs que usen que incluyen el protocolo (`http` sin cifrar o
+Las URLs que emplean los usuarios incluyen el protocolo (`http` sin cifrar o
 `https` con cifrado) el nombre del servidor (o dirección IPv4 o IPv6 si
 no tiene dominos DNS configurados) y el puerto (si el usuario no emplea un
 puerto y el URL comienza con `http` se usa el puerto 80, o si comienza con
-`https` se emplea por omisión el puerto 443).
+`https` se emplea por omisión el puerto 443).  nginx debe configurarse 
+con base en la URL que se espera del usuario.
 
-Otro caso sencillo de configurar es servir contenido estático HTML, CSS
-y Javascript a usuarios ubicados en computadores en una red local en
-la que el servidor tiene una IP estática asignada (digamos
-192.168.20.20) o si ha contratado una IP pública con su proveedor de
-Internet digamos 125.125.123.1 como en el siguiente ejemplo que supone
-que sólo configura IPv4:
+Por ejemplo un caso sencillo de configurar es servir contenido estático HTML, 
+CSS y Javascript usando una IP estática, que debería ser usada por los
+usuarios para acceder al contenido WEB. Una posibilidad es una red LAN con 
+IP estática privada asignada para el servidor WEB (digamos 192.168.20.20) u
+otra es un servidor conectado a internet con una IP estática y pública 
+proporcionada por el proveedor de Internet, digamos 125.125.123.1, 
+como en el siguiente ejemplo que supone que sólo configura IPv4:
 
 	http {
 	  include mime.types;
@@ -1391,7 +1393,8 @@ navegador deberá seguir el estándar de encerrar la dirección IPv6 entre
 paréntesis cuadrados.
 
 Si prefiere usar un nombre en lugar de una IP (digamos &EDOMINIO;)
-deberá tramitar el registro del dominio ante un registrador y pagar la
+deberá tramitar el registro del dominio ante un registrador (como
+gandi.net, godaddy.com u otro) y pagar la
 anualidad.  En tal caso la sección `server` para el puerto 80 por IPv4
 y 80 por IPv6 sería
 (cambiando `www` por el registro que hay configurado en su dominio y
@@ -1426,8 +1429,8 @@ a `/etc/hosts` sería una línea de la forma:
 ##### Pruebas en una red cambiando resolución local para la red
 
 Para cambiar la resolución de nombres en una red local podría emplear un
-servidor de nombres completo como `nsd`, pero basta con un resolvedor
-como `unbound`.
+servidor de nombres completo como `nsd`, pero es más simple y basta 
+con un resolvedor como `unbound`.
 
 Por ejemplo si `unbound` corre en el servidor 192.168.10.1 para su
 dominio `midominio.org`, puede configurarlo para que dirija a 192.168.10.2
@@ -1435,7 +1438,7 @@ cuando desde la red local alguien solicite `www.mindominio.org`, modificando
 el archivo `/var/unbound/etc/unbound.conf` para que incluya:
 
 	interface: 127.0.0.1
-	interface: 192.168.10.2
+	interface: 192.168.10.1
 
 	access-control: 192.168.10.0/24 allow
 
@@ -1462,7 +1465,7 @@ sea 192.168.10.1.
 Si está pagando a su proveedor de Internet una IP pública (digamos
 125.125.121.1) y si pagó el registro de un dominio (digamos www.midominio.org)
 ante un registrador de dominios, debe editar la configuración del servidor DNS
-que haya configurado con el registrador (muchos registradores ofrecen
+que haya configurado con el registrador (los registradores ofrecen
 servidores DNS editables desde el web).
 
 Debe agregar un registro que indique que las peticiones a su dominio
@@ -1529,10 +1532,10 @@ IP 192.168.10.50 y el puerto 8080 (i.e con una URL de la forma
 	  access_log logs/miproyecto1-access.log ;
 	}
 
-Note que  se agregan las directivas `error_log` y `acces_log` que
+Note que  se agregan las directivas `error_log` y `access_log` que
 indican que las bitácoras de errores y de acceso quedarán
 en `/var/www/logs/miproyecto1-error.log` y
-`/var/www/logs/miproyecto1-access.log`
+`/var/www/logs/miproyecto1-access.log` respectivamente.
 
 
 ##### Caso: Servir páginas generadas por un programa en PHP {#nginx-php}
@@ -1543,22 +1546,22 @@ comunicandose con un zócalo (socket) ubicado en
 
 Para esto una vez instalado el paquete &p-php; configure:
 
-1. Que en cada arranque se inicie el servicio `php73_fpm` por ejemplo con:
+1. Que en cada arranque se inicie el servicio `php&VER-PHP;_fpm` por ejemplo con:
 
-    doas rcctl enable php73_fpm
+    doas rcctl enable php&VER-PHP;_fpm
 
-2. Que `php73_fpm` use el socket en la ubicación correcta, para esto cambie
-el archivo `/etc/php-fpm.ini` para que en lugar de la línea con comentario
-`;listen =` tenga:
+2. Que `php&VER-PHP;_fpm` use el socket en la ubicación correcta, para esto 
+   cambie el archivo `/etc/php-fpm.ini` para que en lugar de la línea con 
+   comentario `;listen =` tenga:
 
     listen = /var/www/var/run/php-fpm.sock
 
 En un servidor los archivos de PHP suelen mezclarse con archivos HTML así
 que la configuración del caso anterior servirá, pero además debe añadir
-dentro de la misma sección server una directiva `location` que le indique a
+dentro de la misma sección `server` una directiva `location` que le indique a
 nginx que debe tratar de manera especial los archivos que terminen con la
-extensión php, esos archivos debe servirlos con el protocolo FastCGI usando
-el servicio que respone en el socket apropiado (recordando quitar el
+extensión `.php`, esos archivos debe servirlos con el protocolo FastCGI usando
+el servicio que responde en el socket apropiado (recordando quitar el
 `/var/www` de la ruta por lo que nginx corre dentro de la jaula `/var/www`):
 
 	location ~ ^(.+\.php)$ {
@@ -1589,14 +1592,15 @@ Otra posibilidad es que emplee los certificados gratuitos generados por
 Let's Encrypt como se describe más adelante.
 
 Supongamos que tiene un certificado con parte pública en
-`/etc/ssl/midominio.org.crt` y para privada en
+`/etc/ssl/midominio.org.crt` y parte privada en
 `/etc/ssl/private/midominio.org.key`.
 
 Como se ha mencionado el bloque de la directiva `server` posiblemente
-tendrá `listen 443;` (si escucha en puerto estándar), el mismo bloque debe
+tendrá `listen 443;` (si escucha en puerto estándar) y  el mismo bloque debe
 tener:
 
-	  ssl on;
+	  listen       443 ssl;
+	  listen       [::]:443 ssl;
 	  ssl_certificate /etc/ssl/midominio.org.crt;
 	  ssl_certificate_key /etc/ssl/private/midominio.org.key;
 
@@ -1607,12 +1611,12 @@ Hasta hace un tiempo era impensable contar con un certificado SSL válido
 para los diversos navegadores (candadito verde) y que fuese gratuito.
 Sin embargo algunas empresas empezaron a ofrecerlos (e.g Gandi da
 certificado gratuito por un año para un dominio por la compra de un
-dominio), y finalmente de diversos intentos por parte de organizaciones
+dominio), y finalmente tras diversos intentos por parte de organizaciones
 sin ánimo de lucro, letsencrypt.org es reconocida por los navegadores
 principales y ofrece todo tipo de certificados validos por 3 meses de
 manera gratuita (cada 3 meses debe renovarse con el mismo letsencrypt).
 
-Por ejemplo para un dominio &EDOMINIO; puede generarse
+Por ejemplo para un dominio &EDOMINIO; puede generar
 sólo un certificado para el web con:
 
         doas letsencrypt certonly --email micorreo@example.com --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO;
@@ -1623,12 +1627,11 @@ el servidor de correo: correo.&EDOMINIO; que tiene una raíz diferente:
         doas letsencrypt certonly --webroot -w /var/www/htdocs/ -d &EDOMINIO; -d www.&EDOMINIO;  -w /var/www/roundcubemail -d correo.&EDOMINIO;
 
 
-
-
 ### OpenBSD httpd
 
-A continuación describimos algunos casos de uso del nuevo `httpd` que
-soporta contenido estático, FastCGI sin reescritura y SSL. Sus fuentes
+A continuación describimos algunos casos de uso del servidor web
+propio de OpenBSD `httpd` que soporta contenido estático, FastCGI sin 
+reescritura y TSL. Sus fuentes
 se basan en las de `relayd` que fue introducido y madurado en OpenBSD
 desde la versión 4.1 (inicialmente llamado `hoststated`).
 

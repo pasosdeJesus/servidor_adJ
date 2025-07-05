@@ -582,7 +582,7 @@ se presenta en la siguiente sección.
     ```
     PKG_PATH=. doas pkg_add -r sqlite3 nghttp3 ngtcp2 curl zstd \
       libarchive tiff lcms2 geos hdf5 json-c netcdf proj minizip freexl \
-      libspatialite gdal blosc libwebp postgis*
+      dav1d* aom* highway* pcre* libspatialite gdal blosc libwebp postgis*
     ```
 
 15. Inicia el servicio PostgreSQL (`doas rcctl -d start postgresql`) y 

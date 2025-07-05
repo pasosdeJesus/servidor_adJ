@@ -103,12 +103,12 @@ limpia:
 	rm -f $(PROYECTO)-4.1.*
 	rm -f $(FUENTESDB)
 
+
 infoversion.ent:
 	echo '<?xml version="1.0" encoding="ISO-8859-1"?>' > infoversion.ent
 	export v=`uname -r` && echo "<!ENTITY VER-ADJ \"$$v\">" >> infoversion.ent && echo "<!ENTITY VER-OPENBSD \"$$v\">" >> infoversion.ent && export v2=`echo $$v | sed -e "s/\.//g"` && echo "<!ENTITY VER-OPENBSD-S \"$${v2}\">" >> infoversion.ent && export v3=`echo $$v | sed -e s"/\./_/g"`  && echo "<!ENTITY VER-OPENBSD-U \"$${v3}\">" >> infoversion.ent
-	Xorg -version 2> /tmp/Xver && v=`grep "Version [0-9]*\." /tmp/Xver | sed -e "s/.*Version //g"` && echo "<!ENTITY VER-XORG \"$${v}\">" >> infoversion.ent
-	echo '<!ENTITY p-mailman "mailman">' >> infoversion.ent
-	echo '<!ENTITY p-jdk-linux "jdk-linux">' >> infoversion.ent
+	Xorg -version 2> /tmp/Xver && export v=`grep "X.Org X Server [0-9]*" /tmp/Xver | sed -e "s/.*Server //g"` && echo "<!ENTITY VER-XORG \"$${v}\">" >> infoversion.ent
+	export vphp=`ls /etc/rc.d/php*fpm | head -n1 | sed -e "s/.*php\([0-9]*\)_.*/\1/g"` && echo "<!ENTITY VER-PHP \"$$vphp\">" >> infoversion.ent
 	n=`pkg_info | sed -e "s/^\([^ ]*\) .*/ \1 /g"`; \
 	for i in $$n; do \
 	  q=`echo $$i | sed -e "s/^\(.*\)-[0-9].*/\1/g" | tr "+" "p"`; \

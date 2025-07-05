@@ -1,5 +1,5 @@
 Versión 7.7
-:   - 
+:   - Mejora [xref](#nginx).
 
 Versión 7.6
 :   - Mejora [xref](#servidor-dns).
