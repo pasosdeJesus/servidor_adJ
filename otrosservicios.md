@@ -449,7 +449,7 @@ se presenta en la siguiente sección.
    ```
    doas rcctl stop postgresql
    ```
-   y mueve directorio con datos de PostgreSQL 15
+   y mueve directorio con datos de PostgreSQL
    ```
    doas mv /var/postgresql/data /var/postgresql/data-16
    ```
