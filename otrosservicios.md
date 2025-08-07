@@ -580,7 +580,9 @@ se presenta en la siguiente sección.
     con los paquetes con:
 
     ```
-    PKG_PATH=. doas pkg_add -r sqlite3 nghttp3 ngtcp2 curl zstd \
+    PKG_PATH=. doas pkg_add -r libavif* libgeotiff* \
+      nghttp2* lz4* zstd* poppler*\
+      sqlite3 nghttp3 ngtcp2 curl libffi \
       libarchive tiff lcms2 geos hdf5 json-c netcdf proj minizip freexl \
       dav1d* aom* highway* pcre* libspatialite gdal blosc libwebp postgis*
     ```
