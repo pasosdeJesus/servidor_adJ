@@ -102,8 +102,9 @@ para agregar una ruta a la red 192.168.2.0/24 usando como compuerta
 
         doas route add 192.168.2/24 192.168.1.60
 
-Y pueden eliminarse de forma análoga con `route
-      delete`.
+Y pueden eliminarse de forma análoga con `route delete` por ejemplo:
+        
+        doas route delete 192.168.2/24
 
 Para determinar problemas de enrutamiento o en general de la red, puede
 emplear algunas herramientas de diagnóstico por ejemplo:
@@ -270,12 +271,39 @@ Guía del usuario de PF [PF](#biblio).
 
 ## Cortafuegos: filtrado y túneles {#cortafuegos}
 
-Un cortafuegos permite filtrar tráfico que puede llegar o salir a un
+Es posible activar filtrado y túneles en un computador conectado a
+una LAN que no obra como pasarela de toda la LAN con una configuración
+como esta que supone que la interfaz conectada a la LAN es `ix0` y que
+cierra todos los puertos TCP excepto 443 (https según `/etc/services`), 
+22 (ssh), 80 (www), 13022 y 15443 y que permite ping.
+
+
+        int_if="ix0"
+        servicios_tcp="{https,ssh,www,13022,15443}"
+        servicios_icmp="{echoreq}"
+        
+        set skip on lo
+        
+        block in log all
+        pass out keep state
+        
+        pass quick on { lo }
+        antispoof quick for { lo $int_if }
+        
+        pass in on {egress,enc0} proto tcp from any to (egress) \
+                port $servicios_tcp keep state
+        pass in inet proto icmp all icmp-type $servicios_icmp keep state
+        pass quick on {egress} inet proto icmp all icmp-type $servicios_icmp keep state
+
+
+Un computador cortafuegos permite filtrar tráfico que puede llegar o salir a un
 computador conectado a una red como Internet.
 
-El siguiente ejemplo muestra parte del archivo `/etc/pf.conf` para que
-permita toda conexión que salga de la red privada hacia Internet, y para
-que bloquee toda conexión que llegue excepto tráfico TCP por los puertos
+Por otra parte si tiene un computador que sea pasarela para la LAN, el 
+siguiente ejemplo complementa un archivo `/etc/pf.conf` donde ya
+se haya configurado NAT, para que permita toda conexión que salga de 
+la red privada hacia Internet, y para que bloquee toda conexión que 
+llegue excepto tráfico TCP por los puertos
 para ssh (22) y dns (53), también permite llegada de tráfico UDP por el
 puerto 53 y tráfico ICMP (para responder `ping`). Suponemos que ya se
 han configurado las variables `int_if` y `ext_if` con las interfaces de
@@ -297,7 +325,7 @@ red interna y externa respectivamente:
         port $servicios_udp keep state
         pass in inet proto icmp all icmp-type $servicios_icmp keep state
 
-Si tiene un servidor interno (por ejemplo en una DMZ con IP 192.168.2.2)
+Además Si tiene un servidor interno (por ejemplo en una DMZ con IP 192.168.2.2)
 y necesita que este preste servicios visibles al exterior como: web
 (80), https (443), imaps (993), smtp (25) y ldap (389), deberá
 establecer un túnel para cada uno de estos puertos, de forma que las
@@ -349,8 +377,8 @@ esto:
 >
 >         set skip $int_if
 >
-> porque esto impediría la redirección al puerto 8021 (por defecto usado
-> por ftp-proxy) del cortafuegos cuando se hacen peticiones de ftp.
+> porque esto evita que pf procese cualquier regla, incluyendo las de
+> redirección (`rdr`) para la interfaz interna.
 
 Además de las reglas del cortafuegos (recuerde reiniciar pf con
 `pfctl -f /etc/pf.conf` para que surtan efecto) debe iniciar el proxy

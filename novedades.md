@@ -1,3 +1,7 @@
+Versión 7.8
+
+:  - Mejoras en precisión y estilo a lo largo del documento
+
 Versión 7.7
 :   - Mejora [xref](#nginx).
 

@@ -577,6 +577,7 @@ Así quedará:
 * Escuchando conexiones planas que requieren paso a cifradas (con STARTTLS)
   y que exigen autenticación por el puerto 587.
 
+
 Para asegurar el relevo de correos provenientes de &EDOMINIO; o de la IP
 192.168.1.2, basta agregar al mismo archivo de configuración:
 
@@ -962,8 +963,9 @@ para el usuario final, con buen rango de posibilidades (libreta de
 direcciones LDAP, búsquedas, corrección ortográfica) y facilidad de
 configuración e instalación.
 
-Requiere una base de datos para almacenar parte de la información, puede
-obtener correo de servidores IMAP e IMAPS.
+Requiere una base de datos (para almacenar su configuración y las
+libretas de direcciones) y  puede obtener correo de servidores 
+IMAP e IMAPS.
 
 Basta instalar el paquete `roundcubemail` o descargar las fuentes más
 recientes de <http://sourceforge.net/projects/roundcubemail/> e
@@ -1333,8 +1335,8 @@ navegador empleando una dirección de la forma <http://127.0.0.1>
 	  index index.html;
 	  server {
 	    server_name 127.0.0.1;
-	    listen 80:
-	    listen [::]:80:
+	    listen 80;
+	    listen [::]:80;
 	    root htdocs;
 	  }
 	}
@@ -1675,7 +1677,7 @@ que vería el archivo `/var/www/htdocs/index.html` y notaría que:
     `server` y después del macro con la opción `chroot directorio`
 
 -   Iniciaría 3 procesos para servir páginas. Esto puede modificarse en
-    la sección de configuración con la opción `prefork numero`
+    la sección de configuración con la opción `prefork número`
 
 -   Que serviría los archivos de `/var/www/htdocs`. Esto puede
     modificarse agregando la opción `root directorio_relativo_a_jaula`
@@ -1738,7 +1740,7 @@ archivos en `/var/www/htdcos/sivel` y con SSL es:
             location "*.php" {
                 fastcgi socket "/run/php-fpm.sock"
             }
-            root "/htdocs/sivel/"
+            root "/htdocs/sivel"
             include "/etc/nginx/mime.types"
         }
 

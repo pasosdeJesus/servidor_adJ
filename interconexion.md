@@ -238,7 +238,8 @@ más fáciles de configurar, algunos módems USB también son soportados
 (los que tengan órdenes multiplexadas y datos --como indica la página
 del manual del controlador `umodem`) y eventualmente es posible hacer
 funcionar tarjetas ISDN ISA o PCI
-([http://people.freebsd.org/~hm/i4b-home/](http://people.freebsd.org/~hm/i4b-home/)).
+(ver
+[isdn4bsd](https://web.archive.org/web/20250526012527/https://people.freebsd.org/~hm/i4b-home/)).
 
 Los módems y los módems ISDN reciben órdenes AT y se configuran
 empleando `ppp`. Por ejemplo el archivo `/etc/ppp/ppp.conf` podría

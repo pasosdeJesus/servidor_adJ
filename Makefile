@@ -134,3 +134,9 @@ instala:
 
 actpdJ: all $(PROYECTO)-$(PRY_VERSION)_html.tar.gz 
 	rsync --delete -ravzp $(PROYECTO)-$(PRY_VERSION)_html.tar.gz html/* pasosdeJesus.org:/var/www/pasosdeJesus/doc/servidor_adJ
+
+genmd:
+	mkdir -p tmp
+	rm -f tmp/uno.md
+	for i in $(FUENTESDB) ;do echo $$i; md=`echo $$i | sed -e "s/.xdbk/.md/g"`; echo $$md; cat $$md >> tmp/uno.md; done
+

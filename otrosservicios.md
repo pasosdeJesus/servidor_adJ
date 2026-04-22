@@ -1043,12 +1043,7 @@ el grupo `_ldapd` y edite `/etc/ldapd.conf`:
         }
 
 Recuerde que la clave del directorio debe ser mejor que la presentada
-(i.e remplace `secret` por una buena clave). En lugar de poner la clave
-plana también es posible poner la cadena generada con:
-
-        doas slappasswd -v -u -h {CRYPT} -s secret
-
-que en el caso de la clave '`secret`' es '`{CRYPT}uPUCy906TIu/k`'
+(i.e remplace `secret` por una buena clave). 
 
 La configuración por defecto emplea `/var/db/ldap` como directorio para
 mantener las bases de datos y mantiene una por cada espacio de nombres
