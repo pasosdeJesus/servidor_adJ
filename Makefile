@@ -110,6 +110,8 @@ infoversion.ent:
 	Xorg -version 2> /tmp/Xver && export v=`grep "X.Org X Server [0-9]*" /tmp/Xver | sed -e "s/.*Server //g"` && echo "<!ENTITY VER-XORG \"$${v}\">" >> infoversion.ent
 	export vphp=`ls /etc/rc.d/php*fpm | head -n1 | sed -e "s/.*php\([0-9]*\)_.*/\1/g"` && echo "<!ENTITY VER-PHP \"$$vphp\">" >> infoversion.ent && export vphpdot=`echo $$vphp | sed -e "s/^\([0-9]\)/\1./"` && echo "<!ENTITY VER-PHP-DOT \"$$vphpdot\">" >> infoversion.ent
 	export prevpg=`pkg_info | grep "^postgresql-previous" | head -n1 | sed -e "s/^postgresql-previous-\([0-9]*\).*/\1/g"` && echo "<!ENTITY PREV-PGMAYOR \"$$prevpg\">" >> infoversion.ent
+	export rubymayor=`ruby -v | sed -e "s/ruby \([0-9]\)\.\([0-9]\).*/\1.\2/g"` && echo "<!ENTITY rubymayor \"$$rubymayor\">" >> infoversion.ent && export rubymayorsinpunto=`echo $$rubymayor | sed -e "s/[.]//g"` && echo "<!ENTITY rubymayorsinpunto \"$$rubymayorsinpunto\">" >> infoversion.ent
+	export dirvim=`pkg_info | grep "^vim-[0-9]" | head -n1 | sed -e "s/^vim-\([0-9]\)\.\([0-9]\).*/vim\1\2/g"` && echo "<!ENTITY dirvim \"$$dirvim\">" >> infoversion.ent && if (test ! -f "/usr/local/share/vim/$$dirvim/vimrc_example.vim") then { echo "Se esperaba /usr/local/share/vim/$$dirvim/vimrc_example.vim"; exit 1; } fi;
 	n=`pkg_info | sed -e "s/^\([^ ]*\) .*/ \1 /g"`; \
 	for i in $$n; do \
 	  q=`echo $$i | sed -e "s/^\(.*\)-[0-9].*/\1/g" | tr "+" "p"`; \
