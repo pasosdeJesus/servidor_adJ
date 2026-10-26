@@ -8,7 +8,7 @@ Si durante el arranque algún dispositivo no es detectado
 o es detectado incorrectamente, puede intentar hacer modificaciones
 durante el arranque iniciando con ```bsd -c``` cuando
 esté en el prompt de arranque del programa ```boot```
-(ver [usuario_OpenBSD](#biblio)).
+(ver [usuario_adJ](#biblio)).
 
 ## Conexión con un módem nulo {#modem-nulo}
 
@@ -856,7 +856,7 @@ interfaz de red podrá verificar conexión con:
 
 -   Páginas `man` de `arp`, `route`, `ifconfig`, `hostname.if`
 
--   Sobre cables Ethernet puede consultarse en [ethernet_cables](#biblio)
+-   Sobre cables Ethernet puede consultarse en [ethernet-cables](#biblio)
 
 [^lan.1]: Pueden ponerse concentradores en cascada.
 

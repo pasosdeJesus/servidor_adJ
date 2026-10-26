@@ -418,7 +418,7 @@ BGP
 ## Lecturas recomendadas {#lecturas-redes-protocolos-internet}
 
 -   Puede consultar más sobre el IETF y otras organizaciones que
-    mantienen Internet en [taioetf](#biblio) y en [osietf](#biblio).
+    mantienen Internet en [taoietf](#biblio) y en [osietf](#biblio).
 
 -   Puede consultar los RFC en [rfceditor](#biblio). También puede
     consultar versiones en castellano en [rfces](#biblio)

@@ -345,6 +345,31 @@ interno. El siguiente ejemplo presenta como puede hacerse:
         pass in on $ext_if proto tcp from any to $serv_ip port $servicios_serv \
         flags S/SA synproxy state
 
+### nmap {#nmap}
+
+`nmap` permite examinar los puertos abiertos de un computador, útil para
+auditar la configuración del cortafuegos y verificar qué servicios son
+visibles desde la red. Por ejemplo, para examinar los puertos TCP de un
+servidor use:
+
+        nmap -sT 192.168.1.10
+
+Empléelo únicamente para auditar computadores propios o sobre los que
+tenga autorización explícita.
+
+
+### john {#john}
+
+`john` (John the Ripper) permite auditar la fortaleza de las claves de
+los usuarios. Empléelo solo sobre cuentas propias o con autorización
+explícita. Para auditar las claves locales, como administrador puede
+ejecutar:
+
+        doas john /etc/master.passwd
+
+y ver los resultados con `john --show`.
+
+
 ### Referencias y lecturas recomendadas {#referencias-cortafuegos}
 
 Las siguientes páginas man: pf 4, pfctl 4.

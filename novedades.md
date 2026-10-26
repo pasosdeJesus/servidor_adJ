@@ -1,3 +1,8 @@
+Versión 7.9
+
+:  - Nueva subsección sobre nmap [xref](#nmap)
+   - Nueva subsección sobre auditoría de claves con john [xref](#john)
+
 Versión 7.8
 
 :  - Mejoras en precisión y estilo a lo largo del documento

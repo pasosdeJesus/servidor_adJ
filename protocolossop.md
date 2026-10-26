@@ -339,7 +339,6 @@ doas mkdir /var/tftp
 doas cp /usr/mdec/pxeboot /var/tftp
 doas cp /bsd.rd /var/tftp
 doas chown -R _tftpd /var/tftp
-cp
 
 
 ### Referencias y lecturas recomendadas {#referencias-dhcpd}
@@ -1004,7 +1003,7 @@ SMTP y que se empleará el motor de bases de datos PostgreSQL:
 
 
 2.  Para configurar una base de datos en PostgreSQL con socket en
-    `/var/www/var/run/postgresql` (ver [???](#postgresql)) ejecutar:
+    `/var/www/var/run/postgresql` (ver [postgresql](#postgresql)) ejecutar:
 
             doas su - _postgresql
             createuser -h /var/www/var/run/postgresql -Upostgres roundcube
@@ -1353,7 +1352,7 @@ y en el puerto 80 por IPv6.
 
 En este ejemplo la directiva `root` indica que se servirán
 contenido alojado en el sistema de archivos en la ruta `/var/www/htdocs`
-(como nginx correo en la jaula `/var/www` basta indicar la ruta
+(como nginx corre en la jaula `/var/www` basta indicar la ruta
 dentro de esa).  La directiva `index index.html` indica que si
 el usuario no especifica una ruta particular en el URL se servirá
 el archivo `/var/www/htdocs/index.html` que si desea probar puede
@@ -1385,7 +1384,7 @@ como en el siguiente ejemplo que supone que sólo configura IPv4:
 	  index index.html;
 	  server {
 	    server_name 125.125.123.1;
-	    listen 80:
+	    listen 80;
 	    root htdocs;
 	  }
 	}
@@ -1404,8 +1403,8 @@ y 80 por IPv6 sería
 
 	  server {
 	    server_name www.minombre.org;
-	    listen 80:
-	    listen [::]:80:
+	    listen 80;
+	    listen [::]:80;
 	    root htdocs;
 	  }
 
@@ -1727,7 +1726,7 @@ tiene las páginas de cada dominio en `/var/www/htdocs/miescuela` y
 #### Sitio con PHP {#httpd-php}
 
 Es posible que sirva contenidos PHP usando php-fpm como FastCGI. Sin
-embargo debe asegurar haber aplicado los parches más recientes para 5.6
+embargo debe asegurar haber aplicado los parches más recientes de php
 (ya incluidos en binarios de adJ) y tener en cuenta que no soporta, y
 posiblemente no soportará reescritura de URLs.
 
@@ -1747,19 +1746,19 @@ archivos en `/var/www/htdcos/sivel` y con SSL es:
 Operará bien con la configuración por defecto de php-fpm, que puede
 instalar con:
 
-        doas pkg_add php-fpm
-        doas cp /usr/local/share/examples/php-5.4/php-fpm.conf /etc/
+        doas pkg_add php
+        doas cp /usr/local/share/examples/php-&VER-PHP-DOT;/php-fpm.conf /etc/
 
 e iniciar con:
 
-        doas rcctl -d start php-fpm
+        doas rcctl -d start php&VER-PHP;_fpm
 
 o mejor en cada arranque de su sistema editando `/etc/rc.conf.local` y
 agregando
 
--   Agregar `php_fpm_flags=""`
+-   Agregar `php&VER-PHP;_fpm_flags=""`
 
--   A la variable `pkg_scripts` añadir `php-fpm`
+-   A la variable `pkg_scripts` añadir `php&VER-PHP;_fpm`
 
 #### Otros detalles de uso {#httpd-otros}
 

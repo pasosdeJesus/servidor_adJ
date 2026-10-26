@@ -233,14 +233,14 @@ El listado de bases de datos puede consultarse con:
 
 y el listado de los usuarios con:
 
-        SELECT username FROM pg_users;
+        SELECT usename FROM pg_user;
 
 Las claves de los diversos usuarios pueden cambiarse de forma análoga a
 la presentada para `postgres`:
 
-        ALTER ROLE &EUSUARIO; with UNENCRYPTED PASSWORD 'clave-plana';
+        ALTER ROLE &EUSUARIO; with PASSWORD 'clave-plana';
 
-Desde PostgreSQL 8.1 se emplea un esquema de roles que unifica los
+PostgreSQL emplea un esquema de roles que unifica los
 conceptos de usuario y grupo. Además de exigir clave para cada ingreso,
 cada rol de PostgreSQL que crea objetos puede modificar permisos para
 restringir o dar acceso a otros roles. Por ejemplo para restringir el
@@ -382,7 +382,7 @@ o cambiar las existentes:
 También podrá renombrar cotejaciones que haya creado con
 `ALTER COLLATION esp RENAME TO es_CO_ISO8859_1;`, así como borrarlas con
 `DROP COLLATION esp;`. Puede consultar más en
-<http://www.postgresql.org/docs/9.1/static/collation.html>.
+<https://www.postgresql.org/docs/current/collation.html>.
 
 ### Copias de respaldo {#respaldo-postgresql}
 
@@ -451,7 +451,7 @@ se presenta en la siguiente sección.
    ```
    y mueve directorio con datos de PostgreSQL
    ```
-   doas mv /var/postgresql/data /var/postgresql/data-16
+   doas mv /var/postgresql/data /var/postgresql/data-&PREV-PGMAYOR;
    ```
 
 5. Desinstala los paquetes de `postgresql` anteriores. Puedes hacerlo con
@@ -490,9 +490,9 @@ se presenta en la siguiente sección.
    ```
 
 8. Durante la actualización mantén la configuración por omisión (no muevas
-   zócalos --__sockets__) y edita y cambia `pg_hba.conf` de `data` y de `data-16`
+   zócalos --__sockets__) y edita y cambia `pg_hba.conf` de `data` y de `data-&PREV-PGMAYOR;`
    ```
-   $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-16/pg_hba.conf
+   $EDITOR /var/postgresql/data/pg_hba.conf /var/postgresql/data-&PREV-PGMAYOR;/pg_hba.conf
    ```
    temporalmente a un modo inseguro, remplazando
    ```
@@ -506,8 +506,8 @@ se presenta en la siguiente sección.
 9. Inicia la restauración así:
    ```
    doas su - _postgresql
-   pg_upgrade -b /usr/local/bin/postgresql-16/ -B /usr/local/bin \
-      -U postgres -d /var/postgresql/data-16/ -D /var/postgresql/data
+   pg_upgrade -b /usr/local/bin/postgresql-&PREV-PGMAYOR;/ -B /usr/local/bin \
+      -U postgres -d /var/postgresql/data-&PREV-PGMAYOR;/ -D /var/postgresql/data
    ```
    Si llega a fallar con un mensaje de error del estilo:
    ```
@@ -549,7 +549,7 @@ se presenta en la siguiente sección.
 
 13. Compara cambios en configuración entre versión anterior y actual:
 
-        doas diff /var/postgresql/data-16/postgresql.conf /var/postgresql/data/postgresql.conf
+        doas diff /var/postgresql/data-&PREV-PGMAYOR;/postgresql.conf /var/postgresql/data/postgresql.conf
 
     Y simultaneamente edita `/var/postgresql/data/postgresql.conf` para 
     aplicar los cambios necesarios.  Por lo menos memoria de trabajo y
@@ -599,34 +599,6 @@ Si habías detenido la actualización de `inst-adJ.sh` vuelve a
 ejecutarla y a la pregunta "Desea eliminar la actual
 versión de PostgreSQL y los datos asociados para
 actualizarla" responde No.
-
-#### Quitar `OIDS` para actualizar de PostgreSQL 11 a 12
-
-En la actualización de PostgreSQL 11 a 12 se ha requerido un
-procedimiento adicional, previo a los pasos que se indicaron.
-
-Por cada tabla, debe ejecutar `ALTER TABLE x SET WITHOUT OIDS;`
-cambiando x por el nombre de cada tabla.
-
-Puede automatizarse con:
-```
-$ doas su - _postgresql
-$ psql -U postgres -h /var/www/var/run/postgresql/
-postgres=# \t on
-postgres=# \o /tmp/quitaoids.sh
-postgres=# SELECT '/usr/local/adJ/pg_quita_oids.sh ' || datname FROM
-  pg_database WHERE datname NOT IN ('template0', 'template1', 'postgres');
-postgres=# \q
-```
-note que se exluyen las bases `postgres`, `template0` y `template1`.
-El script `/usr/local/adJ/pg_quita_oids.sh` está disponible en
-<https://github.com/pasosdeJesus/adJ/blob/master/arboldd/usr/local/adJ/pg_quita_oids.sh>
-
-Tras asegurar que tiene el script `/usr/local/adJ/pg_quita_oids.sh` y
-generar `/tmp/quitaoids.sh` como se describió, ejecute:
-```
-$ sh /tmp/quita_oids.sh
-```
 
 ### Base PostgreSQL remota {#base-postgresql-remota}
 
@@ -962,7 +934,7 @@ una conexión con:
         $dbhost  = "localhost";
         $dbuname = "miusuario";
         $dbpass  = "miclave";
-        mysql_connect($dbhost, $dbuname, $dbpass);
+        mysqli_connect($dbhost, $dbuname, $dbpass);
 ```
 
 Tenga en cuenta también que otros binarios de MariaDB también requerirán
@@ -1209,7 +1181,7 @@ con:
 ### Instalación y configuración de `phpldapadmin` {#phpldapadmin}
 
 Aunque hay un paquete para OpenBSD, la igual que la distribución oficial de
-phpldapadmin no soporta php-5.5 ni TLS, por lo que
+phpldapadmin no soporta TLS, por lo que
 se recomienda emplear <https://github.com/leenooks/phpLDAPadmin> así:
 
 ```
