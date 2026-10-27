@@ -136,7 +136,7 @@
 <!ENTITY p-fftw3-common "fftw3-common-3.3.10p0">
 <!ENTITY p-filezilla "filezilla-3.69.6">
 <!ENTITY p-findutils "findutils-4.10.0p0">
-<!ENTITY p-firefox-esr "firefox-esr-140.10.0">
+<!ENTITY p-firefox-esr "firefox-esr-140.17.0">
 <!ENTITY p-firefox-esr-i18n-es-AR "firefox-esr-i18n-es-AR-140.10.0">
 <!ENTITY p-flac "flac-1.5.0">
 <!ENTITY p-flite "flite-2.2">

@@ -503,9 +503,13 @@ se presenta en la siguiente sección.
    local all all trust
    ```
 
-9. Inicia la restauración así:
+9. Si actualizas de 17 a 18 la restauración requerirá sumas de chequeo en la 
+   base versión 17, agréguelas con:
+   ```sh
+   /usr/local/bin/postgresql-17/pg_checksums --enable -D /var/postgresql/data-17/
    ```
-   doas su - _postgresql
+  Inicia la restauración así:
+   ```
    pg_upgrade -b /usr/local/bin/postgresql-&PREV-PGMAYOR;/ -B /usr/local/bin \
       -U postgres -d /var/postgresql/data-&PREV-PGMAYOR;/ -D /var/postgresql/data
    ```
@@ -570,7 +574,8 @@ se presenta en la siguiente sección.
 
     y puedes optimizar nuevo cluster con
 
-        /usr/local/bin/vacuumdb -U postgres --all --analyze-in-stages
+        /usr/local/bin/vacuumdb -U postgres --all --analyze-in-stages --missing-stats-only
+        /usr/local/bin/vacuumdb -U postgres --all --analyze-only
 
 
 13. Detén nuevamente el servicio `postgresql`  (i.e
@@ -580,8 +585,9 @@ se presenta en la siguiente sección.
     con los paquetes con:
 
     ```
-    PKG_PATH=. doas pkg_add -r libavif* libgeotiff* \
-      nghttp2* lz4* zstd* poppler*\
+    PKG_PATH=. doas pkg_add -r boost brotli gettext-runtime \
+      libavif* libgeotiff* \
+      nghttp2* lz4* zstd* poppler* \
       sqlite3 nghttp3 ngtcp2 curl libffi \
       libarchive tiff lcms2 geos hdf5 json-c netcdf proj minizip freexl \
       dav1d* aom* highway* pcre* libspatialite gdal blosc libwebp postgis*
